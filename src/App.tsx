@@ -6,12 +6,15 @@ import Locales from 'ui-component/Locales';
 import NavigationScroll from 'layout/NavigationScroll';
 import RTLLayout from 'ui-component/RTLLayout';
 import ThemeCustomization from 'themes';
+import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
 
 const App = () => (
   <ThemeCustomization>
     <RTLLayout>
       <Locales>
-        <NavigationScroll></NavigationScroll>
+        <NavigationScroll>
+          <AuthProvider></AuthProvider>
+        </NavigationScroll>
       </Locales>
     </RTLLayout>
   </ThemeCustomization>
