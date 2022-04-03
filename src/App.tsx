@@ -2,12 +2,15 @@
 import React from 'react';
 
 // PROJECT IMPORTS
-import ThemeCustomization from 'themes';
+import Locales from 'ui-component/Locales';
 import RTLLayout from 'ui-component/RTLLayout';
+import ThemeCustomization from 'themes';
 
 const App = () => (
   <ThemeCustomization>
-    <RTLLayout></RTLLayout>
+    <RTLLayout>
+      <Locales></Locales>
+    </RTLLayout>
   </ThemeCustomization>
 );
 
