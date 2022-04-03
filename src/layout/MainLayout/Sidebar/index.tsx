@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material/styles';
 // PROJECT IMPORTS
 import Chip from 'ui-component/extended/Chip';
 import LogoSection from '../LogoSection';
-import MenuCard from './MenuCard';
 import MenuList from './MenuList';
 import { drawerWidth } from 'store/constant';
 import { openDrawer } from 'store/slices/menu';
@@ -46,7 +45,6 @@ const Sidebar = ({ window }: SidebarProps) => {
         }}
       >
         <MenuList />
-        <MenuCard />
         <Stack direction="row" justifyContent="center" sx={{ mb: 2 }}>
           <Chip label={process.env.REACT_APP_VERSION} disabled chipcolor="secondary" size="small" sx={{ cursor: 'pointer' }} />
         </Stack>

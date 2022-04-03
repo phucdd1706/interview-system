@@ -4,6 +4,15 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { ChipProps, SvgIconTypeMap } from '@mui/material';
 import { TablerIcon } from '@tabler/icons';
 
+// PROJECT IMPORTS
+import { SnackbarProps } from 'types/snackbar';
+import { UserStateProps } from 'types/user';
+
+export interface DefaultRootStateProps {
+  snackbar: SnackbarProps;
+  user: UserStateProps;
+}
+
 export interface ColorProps {
   readonly [key: string]: string;
 }

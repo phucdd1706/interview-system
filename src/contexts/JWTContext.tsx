@@ -1,7 +1,6 @@
 // THIRD-PARTY
 import jwtDecode from 'jwt-decode';
 import React, { createContext, useEffect, useReducer } from 'react';
-import { Chance } from 'chance';
 
 // PROJECT IMPORTS
 import accountReducer from 'store/accountReducer';
@@ -10,8 +9,6 @@ import Loader from 'ui-component/Loader';
 import { InitialLoginContextProps, JWTContextType } from 'types/auth';
 import { KeyedObject } from 'types';
 import { LOGIN, LOGOUT } from 'store/actions';
-
-const chance = new Chance();
 
 const initialState: InitialLoginContextProps = {
   isLoggedIn: false,

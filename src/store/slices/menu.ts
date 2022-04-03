@@ -1,8 +1,8 @@
-// THIRD-PARTY
-import { createSlice } from '@reduxjs/toolkit';
-
 // PROJECT IMPORTS
 import { MenuProps } from 'types/menu';
+
+// THIRD-PARTY
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: MenuProps = {
   openItem: ['dashboard'],
