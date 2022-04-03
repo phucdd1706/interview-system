@@ -8,6 +8,7 @@ import Routes from 'routes';
 import RTLLayout from 'ui-component/RTLLayout';
 import ThemeCustomization from 'themes';
 import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
+import Snackbar from 'ui-component/extended/Snackbar';
 
 const App = () => (
   <ThemeCustomization>
@@ -17,6 +18,7 @@ const App = () => (
           <AuthProvider>
             <>
               <Routes />
+              <Snackbar />
             </>
           </AuthProvider>
         </NavigationScroll>
