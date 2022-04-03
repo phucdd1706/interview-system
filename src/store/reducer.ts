@@ -1,6 +1,11 @@
 // THIRD-PARTY
 import { combineReducers } from 'redux';
 
-const reducer = combineReducers({});
+// PROJECT IMPORTS
+import menuReducer from './slices/menu';
+
+const reducer = combineReducers({
+  menu: menuReducer
+});
 
 export default reducer;
