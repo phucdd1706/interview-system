@@ -14,30 +14,20 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-import TranslateTwoToneIcon from '@mui/icons-material/TranslateTwoTone';
+import { deepOrange } from '@mui/material/colors';
 
 // PROJECT IMPORTS
 import Transitions from 'ui-component/extended/Transitions';
 import useConfig from 'hooks/useConfig';
 
-const LocalizationSection = () => {
-  const { borderRadius, locale, onChangeLocale } = useConfig();
+const UserAvatar = () => {
+  const { borderRadius } = useConfig();
 
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<any>(null);
-  const [language, setLanguage] = useState<string>(locale);
-
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLDivElement, MouseEvent> | undefined,
-    lng: string
-  ) => {
-    setLanguage(lng);
-    onChangeLocale(lng);
-    setOpen(false);
-  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -58,10 +48,6 @@ const LocalizationSection = () => {
     prevOpen.current = open;
   }, [open]);
 
-  useEffect(() => {
-    setLanguage(locale);
-  }, [locale]);
-
   return (
     <>
       <Box
@@ -69,37 +55,18 @@ const LocalizationSection = () => {
           ml: 2,
           [theme.breakpoints.down('md')]: {
             ml: 1
-          }
+          },
+          cursor: 'pointer'
         }}
       >
         <Avatar
-          variant="rounded"
-          sx={{
-            ...theme.typography.commonAvatar,
-            ...theme.typography.mediumAvatar,
-            border: '1px solid',
-            borderColor: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.primary.light,
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.primary.light,
-            color: theme.palette.primary.dark,
-            transition: 'all .2s ease-in-out',
-            '&[aria-controls="menu-list-grow"],&:hover': {
-              borderColor: theme.palette.primary.main,
-              background: theme.palette.primary.main,
-              color: theme.palette.primary.light
-            }
-          }}
           ref={anchorRef}
           aria-controls={open ? 'menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
-          color="inherit"
+          sx={{ bgcolor: deepOrange[500] }}
         >
-          {language !== 'en' && (
-            <Typography variant="h5" sx={{ textTransform: 'uppercase' }} color="inherit">
-              {language}
-            </Typography>
-          )}
-          {language === 'en' && <TranslateTwoToneIcon sx={{ fontSize: '1.3rem' }} />}
+          M
         </Avatar>
       </Box>
 
@@ -130,35 +97,29 @@ const LocalizationSection = () => {
                     component="nav"
                     sx={{
                       width: '100%',
-                      minWidth: 200,
-                      maxWidth: 280,
+                      minWidth: 150,
+                      maxWidth: 250,
                       bgcolor: theme.palette.background.paper,
                       borderRadius: `${borderRadius}px`,
                       [theme.breakpoints.down('md')]: {
-                        maxWidth: 250
+                        maxWidth: 200
                       }
                     }}
                   >
-                    <ListItemButton selected={language === 'en'} onClick={(event) => handleListItemClick(event, 'en')}>
+                    <ListItemButton>
                       <ListItemText
                         primary={
                           <Grid container>
-                            <Typography color="textPrimary">English</Typography>
-                            <Typography variant="caption" color="textSecondary" sx={{ ml: '8px' }}>
-                              (UK)
-                            </Typography>
+                            <Typography color="textPrimary">Profile</Typography>
                           </Grid>
                         }
                       />
                     </ListItemButton>
-                    <ListItemButton selected={language === 'vi'} onClick={(event) => handleListItemClick(event, 'vi')}>
+                    <ListItemButton>
                       <ListItemText
                         primary={
                           <Grid container>
-                            <Typography color="textPrimary">Tiếng việt</Typography>
-                            <Typography variant="caption" color="textSecondary" sx={{ ml: '8px' }}>
-                              (Vietnamese)
-                            </Typography>
+                            <Typography color="textPrimary">Logout</Typography>
                           </Grid>
                         }
                       />
@@ -174,4 +135,4 @@ const LocalizationSection = () => {
   );
 };
 
-export default LocalizationSection;
+export default UserAvatar;

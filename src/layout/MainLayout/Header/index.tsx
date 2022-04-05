@@ -7,13 +7,15 @@ import { IconMenu2 } from '@tabler/icons';
 import LocalizationSection from 'layout/MainLayout/Header/LocalizationSection';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
+import UserAvatar from 'layout/MainLayout/Header/UserAvatar';
+import LogoSection from 'layout/MainLayout/LogoSection';
 
 const Header = () => {
   const theme = useTheme();
 
   const dispatch = useDispatch();
-  const { drawerOpen } = useSelector((state) => state.menu);
 
+  const { drawerOpen } = useSelector((state) => state.menu);
   return (
     <>
       <Box
@@ -45,12 +47,12 @@ const Header = () => {
           <IconMenu2 stroke={1.5} size="1.3rem" />
         </Avatar>
       </Box>
-
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
-
-      <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+      <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+        <LogoSection />
+      </Box>
+      <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
         <LocalizationSection />
+        <UserAvatar />
       </Box>
     </>
   );
