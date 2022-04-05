@@ -6,14 +6,12 @@ import { useTheme } from '@mui/material/styles';
 // PROJECT IMPORTS
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthFooter from 'ui-component/cards/AuthFooter';
-import AuthLogin from '../auth-forms/AuthLogin';
+import AuthForgot from '../auth-forms/AuthForgot';
 import AuthWrapper from '../AuthWrapper';
 import Logo from 'ui-component/Logo';
-import useAuth from 'hooks/useAuth';
 
-const Login = () => {
+const Forgot = () => {
   const theme = useTheme();
-  const { isLoggedIn } = useAuth();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -34,33 +32,28 @@ const Login = () => {
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
                           <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                            Hi, Welcome Back
+                            Forgot password?
                           </Typography>
-                          <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
-                            Enter your credentials to continue
+                          <Typography variant="caption" fontSize="16px" textAlign="center">
+                            Enter your email address below and we&apos;ll send you password reset OTP.
                           </Typography>
                         </Stack>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item xs={12}>
-                    <AuthLogin />
+                    <AuthForgot />
                   </Grid>
                   <Grid item xs={12}>
                     <Divider />
                   </Grid>
-                  {/* <Grid item xs={12}>
+                  <Grid item xs={12}>
                     <Grid item container direction="column" alignItems="center" xs={12}>
-                      <Typography
-                        component={Link}
-                        to={isLoggedIn ? '/dashboard' : '/register'}
-                        variant="subtitle1"
-                        sx={{ textDecoration: 'none' }}
-                      >
-                        Don&apos;t have an account?
+                      <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: 'none' }}>
+                        Already have an account?
                       </Typography>
                     </Grid>
-                  </Grid> */}
+                  </Grid>
                 </Grid>
               </AuthCardWrapper>
             </Grid>
@@ -74,4 +67,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Forgot;
