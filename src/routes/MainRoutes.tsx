@@ -7,6 +7,7 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
+const QlAdmin = Loadable(lazy(() => import('views/pages/quan-ly-admin/ds-admin')));
 
 const MainRoutes = {
   path: '/',
@@ -23,6 +24,10 @@ const MainRoutes = {
     {
       path: '/dashboard',
       element: <Dashboard />
+    },
+    {
+      path: '/ds-admin',
+      element: <QlAdmin />
     }
   ]
 };
