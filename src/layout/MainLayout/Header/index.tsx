@@ -20,7 +20,7 @@ const Header = () => {
     <>
       <Box
         sx={{
-          width: 228,
+          width: 150,
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
@@ -50,10 +50,19 @@ const Header = () => {
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
         <LogoSection />
       </Box>
-      <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }}>
+      <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', width: 150, justifyContent: 'flex-end' }}>
         <LocalizationSection />
         <UserAvatar />
       </Box>
+      <Box
+        sx={{
+          width: 150,
+          display: { xs: 'flex', sm: 'none' },
+          [theme.breakpoints.down('md')]: {
+            width: 34
+          }
+        }}
+      />
     </>
   );
 };
