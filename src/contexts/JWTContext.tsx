@@ -10,6 +10,8 @@ import { InitialLoginContextProps, JWTContextType } from 'types/auth';
 import { KeyedObject } from 'types';
 import { LOGIN, LOGOUT } from 'store/actions';
 
+export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/api/v1/operator/login`;
+
 const initialState: InitialLoginContextProps = {
   isLoggedIn: false,
   isInitialized: false,
@@ -73,9 +75,24 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     return <Loader />;
   }
 
-  const login = async (email: string, password: string) => {};
+  const login = async (email: string, password: string) => {
+    const response = await axios.post(LOGIN_URL, { email, password });
+    const { token, user } = response.data;
+    setSession(token);
+    dispatch({
+      type: LOGIN,
+      payload: {
+        isLoggedIn: true,
+        user
+      }
+    });
+  };
 
-  const logout = () => {};
+  const logout = () => {
+    dispatch({
+      type: LOGOUT
+    });
+  };
 
   return <JWTContext.Provider value={{ ...state, login, logout }}>{children}</JWTContext.Provider>;
 };

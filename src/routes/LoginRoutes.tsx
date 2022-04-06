@@ -8,6 +8,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 import NavMotion from 'layout/NavMotion';
 
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/auth/Login')));
+const AuthForgot = Loadable(lazy(() => import('views/pages/authentication/auth/Forgot')));
 
 const LoginRoutes = {
   path: '/',
@@ -22,6 +23,10 @@ const LoginRoutes = {
     {
       path: '/login',
       element: <AuthLogin />
+    },
+    {
+      path: '/forgot',
+      element: <AuthForgot />
     }
   ]
 };
