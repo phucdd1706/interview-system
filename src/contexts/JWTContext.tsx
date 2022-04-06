@@ -10,6 +10,8 @@ import { InitialLoginContextProps, JWTContextType } from 'types/auth';
 import { KeyedObject } from 'types';
 import { LOGIN, LOGOUT } from 'store/actions';
 
+export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/api/v1/operator/login`;
+
 const initialState: InitialLoginContextProps = {
   isLoggedIn: false,
   isInitialized: false,
@@ -74,20 +76,16 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
   }
 
   const login = async (email: string, password: string) => {
-    const encodeEmail = encodeURIComponent(email);
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'React Hooks POST Request Example' })
-    };
-    fetch(`http://13.251.110.92/api/v1/operator/login?email=${encodeEmail}&password=${password}`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const userToken = data.success.token;
-        console.log(userToken);
-        localStorage.setItem('userData', JSON.stringify(data));
-      });
+    const response = await axios.post(LOGIN_URL, { email, password });
+    const { token, user } = response.data;
+    setSession(token);
+    dispatch({
+      type: LOGIN,
+      payload: {
+        isLoggedIn: true,
+        user
+      }
+    });
   };
 
   const logout = () => {
