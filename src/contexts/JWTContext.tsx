@@ -73,9 +73,28 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     return <Loader />;
   }
 
-  const login = async (email: string, password: string) => {};
+  const login = async (email: string, password: string) => {
+    const encodeEmail = encodeURIComponent(email);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'React Hooks POST Request Example' })
+    };
+    fetch(`http://13.251.110.92/api/v1/operator/login?email=${encodeEmail}&password=${password}`, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const userToken = data.success.token;
+        console.log(userToken);
+        localStorage.setItem('userData', JSON.stringify(data));
+      });
+  };
 
-  const logout = () => {};
+  const logout = () => {
+    dispatch({
+      type: LOGOUT
+    });
+  };
 
   return <JWTContext.Provider value={{ ...state, login, logout }}>{children}</JWTContext.Provider>;
 };
