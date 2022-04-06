@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { HiPlus, HiOutlineXCircle, HiOutlineNewspaper, HiOutlinePencil } from 'react-icons/hi';
@@ -7,6 +7,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { QLAdmin } from 'types/manage-admin';
+import QLAdminService, { AdminParams } from 'contexts/admin';
 
 const DanhSachAdmin = () => {
   const columns = [
@@ -108,7 +110,10 @@ const DanhSachAdmin = () => {
     { id: 9, name: 'Nguyễn Tuna', bod: 'Phòng nhân sự', phone: '0336532566', email: 'tuna123@gmail.com', gender: 'nam', status: 'active' }
   ];
   const [open, setOpen] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>('');
+  const [status, setStatus] = useState<number>();
 
+  const [dsAdmin, setDsAdmin] = useState<QLAdmin>();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -116,6 +121,23 @@ const DanhSachAdmin = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const getDsAdmin = async () => {
+    try {
+      const params: AdminParams = {
+        search,
+        status
+      };
+      const resp = await QLAdminService.getDsAdmin(params);
+      console.log(12222, resp);
+
+      // setDsAdmin(resp?.data?.success?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDsAdmin();
+  }, []);
   return (
     <>
       <MainCard
