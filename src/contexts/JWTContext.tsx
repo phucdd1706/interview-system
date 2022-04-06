@@ -10,8 +10,8 @@ import { InitialLoginContextProps, JWTContextType } from 'types/auth';
 import { KeyedObject } from 'types';
 import { LOGIN, LOGOUT } from 'store/actions';
 
-export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/v1/operator/login`;
-export const ME_URL = `${process.env.REACT_APP_API_URL}/v1/operator/me`;
+export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/v1/login`;
+export const ME_URL = `${process.env.REACT_APP_API_URL}/v1/me`;
 
 const initialState: InitialLoginContextProps = {
   isLoggedIn: false,
@@ -91,9 +91,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
   };
 
   const logout = () => {
-    dispatch({
-      type: LOGOUT
-    });
+    setSession(null);
+    dispatch({ type: LOGOUT });
   };
 
   return <JWTContext.Provider value={{ ...state, login, logout }}>{children}</JWTContext.Provider>;
