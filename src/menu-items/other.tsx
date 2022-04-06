@@ -2,12 +2,16 @@
 import { FormattedMessage } from 'react-intl';
 import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
 import { GrUserAdmin } from 'react-icons/gr';
+import { FcDepartment } from 'react-icons/fc';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
 const icons = {
   IconBrandChrome,
   IconHelp,
   IconSitemap,
-  GrUserAdmin
+  GrUserAdmin,
+  FcDepartment,
+  CorporateFareIcon
 };
 
 const other = {
@@ -24,10 +28,18 @@ const other = {
     },
     {
       id: 'admin',
-      title: <FormattedMessage id="admin" />,
+      title: <FormattedMessage id="Admin" />,
       type: 'item',
       url: '/ds-admin',
       icon: icons.GrUserAdmin,
+      breadcrumbs: false
+    },
+    {
+      id: 'question',
+      title: <FormattedMessage id="Department" />,
+      type: 'item',
+      url: '/ds-department',
+      icon: icons.CorporateFareIcon,
       breadcrumbs: false
     }
   ]

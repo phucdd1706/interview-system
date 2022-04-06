@@ -8,6 +8,7 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const QlAdmin = Loadable(lazy(() => import('views/pages/admin/list-admin')));
+const Department = Loadable(lazy(() => import('views/pages/department/list-department')));
 
 const MainRoutes = {
   path: '/',
@@ -28,6 +29,10 @@ const MainRoutes = {
     {
       path: '/ds-admin',
       element: <QlAdmin />
+    },
+    {
+      path: '/ds-department',
+      element: <Department />
     }
   ]
 };
