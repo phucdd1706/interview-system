@@ -1,25 +1,8 @@
 import React from 'react';
 import * as Yup from 'yup';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Snackbar,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput, Snackbar } from '@mui/material';
 import { Formik } from 'formik';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS

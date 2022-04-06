@@ -9,11 +9,9 @@ import AuthFooter from 'ui-component/cards/AuthFooter';
 import AuthLogin from '../auth-forms/AuthLogin';
 import AuthWrapper from '../AuthWrapper';
 import Logo from 'ui-component/Logo';
-import useAuth from 'hooks/useAuth';
 
 const Login = () => {
   const theme = useTheme();
-  const { isLoggedIn } = useAuth();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
