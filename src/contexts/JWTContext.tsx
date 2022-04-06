@@ -91,9 +91,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
   };
 
   const logout = () => {
-    dispatch({
-      type: LOGOUT
-    });
+    setSession(null);
+    dispatch({ type: LOGOUT });
   };
 
   return <JWTContext.Provider value={{ ...state, login, logout }}>{children}</JWTContext.Provider>;
