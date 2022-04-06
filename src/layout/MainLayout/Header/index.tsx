@@ -5,6 +5,7 @@ import { IconMenu2 } from '@tabler/icons';
 
 // PROJECT IMPORTS
 import LocalizationSection from 'layout/MainLayout/Header/LocalizationSection';
+import ProfileSection from 'layout/MainLayout/Header/ProfileSection';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
 
@@ -52,6 +53,8 @@ const Header = () => {
       <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
         <LocalizationSection />
       </Box>
+
+      <ProfileSection />
     </>
   );
 };

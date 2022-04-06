@@ -67,8 +67,9 @@ const LocalizationSection = () => {
       <Box
         sx={{
           ml: 2,
+          mr: 3,
           [theme.breakpoints.down('md')]: {
-            ml: 1
+            ml: 2
           }
         }}
       >
@@ -151,7 +152,7 @@ const LocalizationSection = () => {
                         }
                       />
                     </ListItemButton>
-                    <ListItemButton selected={language === 'vi'} onClick={(event) => handleListItemClick(event, 'fr')}>
+                    <ListItemButton selected={language === 'vi'} onClick={(event) => handleListItemClick(event, 'vi')}>
                       <ListItemText
                         primary={
                           <Grid container>
