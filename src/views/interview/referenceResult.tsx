@@ -4,11 +4,12 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 
 const ResponseResult = {
-  passedQuestion: '10/12',
-  failedQuestion: '2',
-  score: '80%',
+  totalQuestions: 12,
+  passedQuestions: 10,
+  failedQuestions: 2,
+  passedPercentage: '80%',
   result: 'Passed',
-  salary: '10,000,000'
+  salary: 10000000
 };
 
 type keyType = keyof typeof ResponseResult;

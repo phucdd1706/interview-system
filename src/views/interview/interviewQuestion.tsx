@@ -11,15 +11,21 @@ const questionListData = [
     questions: [
       {
         questionId: '1',
-        question: 'What is your name?'
+        question: 'What is your name?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '2',
-        question: 'What is your age?'
+        question: 'What is your age?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '3',
-        question: 'Expected salary?'
+        question: 'Expected salary?',
+        answerStatus: '',
+        notes: ''
       }
     ]
   },
@@ -28,19 +34,27 @@ const questionListData = [
     questions: [
       {
         questionId: '4',
-        question: 'What is ReactJS?'
+        question: 'What is ReactJS?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '5',
-        question: 'What is Redux?'
+        question: 'What is Redux?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '6',
-        question: 'What is J1?'
+        question: 'What is J1?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '9',
-        question: 'explain about React lifecycle?'
+        question: 'explain about React lifecycle?',
+        answerStatus: '',
+        notes: ''
       }
     ]
   },
@@ -49,11 +63,15 @@ const questionListData = [
     questions: [
       {
         questionId: '7',
-        question: 'How to increase performance?'
+        question: 'How to increase performance?',
+        answerStatus: '',
+        notes: ''
       },
       {
         questionId: '8',
-        question: 'How to increase security?'
+        question: 'How to increase security?',
+        answerStatus: '',
+        notes: ''
       }
     ]
   }

@@ -106,6 +106,13 @@ const initialEmployeeForm = {
       level: ''
     }
   ],
+  experiences: [
+    {
+      id: uuidv4(),
+      position: '',
+      duration: ''
+    }
+  ],
   notes: '',
   interviewTime: `${new Date().toISOString().split('T')[0]}T00:00`
 };
@@ -118,10 +125,17 @@ const EmployeeForm = () => {
   const AddMoreApplyPosition = () => {
     setEmployeeForm({ ...employeeForm, applyPosition: [...employeeForm.applyPosition, { id: uuidv4(), positionName: '', level: '' }] });
   };
+  const AddMoreExperiences = () => {
+    setEmployeeForm({ ...employeeForm, experiences: [...employeeForm.experiences, { id: uuidv4(), position: '', duration: '' }] });
+  };
 
-  const RemoveApplyPosition = (index: number) => {
-    const newApplyPosition = [...employeeForm.applyPosition];
-    newApplyPosition.splice(index, 1);
+  const RemoveExperience = (id: string) => {
+    const newExperiences = employeeForm.experiences.filter((experience) => experience.id !== id);
+    setEmployeeForm({ ...employeeForm, experiences: newExperiences });
+  };
+
+  const RemoveApplyPosition = (id: string) => {
+    const newApplyPosition = employeeForm.applyPosition.filter((applyPosition) => applyPosition.id !== id);
     setEmployeeForm({ ...employeeForm, applyPosition: newApplyPosition });
   };
 
@@ -181,6 +195,57 @@ const EmployeeForm = () => {
                 </Stack>
               );
             })}
+            <LegendWrapper legend="Experiences">
+              <Box>
+                {values.experiences.map((item: { id: string; position: string; duration: string }, index: number) => (
+                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
+                    <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
+                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
+                        <Autocomplete
+                          options={jobPosition}
+                          onChange={(event: any, value: any) => {
+                            const newExperiences = [...values.experiences];
+                            newExperiences[index].position = value;
+                            setEmployeeForm({ ...employeeForm, experiences: newExperiences });
+                          }}
+                          getOptionLabel={(option) => option.title}
+                          renderInput={(params) => <TextField {...params} variant="standard" label="Position" placeholder="Position" />}
+                          sx={{ flexGrow: 1 }}
+                        />
+                      </FormControl>
+                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
+                        <Autocomplete
+                          options={workingExperiences}
+                          onChange={(event, value) => {
+                            const newExperiences = [...values.experiences];
+                            newExperiences[index].duration = (value && value.title) || '';
+                            setEmployeeForm({ ...employeeForm, experiences: newExperiences });
+                          }}
+                          getOptionLabel={(option) => option.title}
+                          renderInput={(params) => <TextField {...params} variant="standard" label="Duration" placeholder="Duration" />}
+                          sx={{ flexGrow: 1 }}
+                        />
+                      </FormControl>
+                    </Stack>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => {
+                        RemoveExperience(item.id);
+                      }}
+                      sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
+                    >
+                      <IconX />
+                    </Button>
+                  </Stack>
+                ))}
+                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                  <Button variant="outlined" onClick={AddMoreExperiences} sx={{ marginTop: 2 }}>
+                    + Add more experiences
+                  </Button>
+                </Stack>
+              </Box>
+            </LegendWrapper>
             <LegendWrapper legend="Apply Position">
               <Box>
                 {values.applyPosition.map((item: { id: string; positionName: string; level: string }, index: number) => (
@@ -220,7 +285,7 @@ const EmployeeForm = () => {
                       variant="outlined"
                       color="error"
                       onClick={() => {
-                        RemoveApplyPosition(index);
+                        RemoveApplyPosition(item.id);
                       }}
                       sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
                     >
@@ -276,3 +341,4 @@ const jobPosition = [
 ];
 
 const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];
+const workingExperiences = [{ title: '1 year' }, { title: '2 years' }, { title: '3 years' }, { title: '4 years' }];

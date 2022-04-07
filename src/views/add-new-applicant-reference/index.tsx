@@ -33,9 +33,80 @@ import { activeItem } from 'store/slices/menu';
 //   interviewTime: ''
 // };
 
+const questionListData = [
+  {
+    type: 'Basic',
+    questions: [
+      {
+        questionId: '1',
+        question: 'What is your name?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '2',
+        question: 'What is your age?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '3',
+        question: 'Expected salary?',
+        answerStatus: '',
+        notes: ''
+      }
+    ]
+  },
+  {
+    type: 'React J1',
+    questions: [
+      {
+        questionId: '4',
+        question: 'What is ReactJS?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '5',
+        question: 'What is Redux?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '6',
+        question: 'What is J1?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '9',
+        question: 'explain about React lifecycle?',
+        answerStatus: '',
+        notes: ''
+      }
+    ]
+  },
+  {
+    type: 'Advanced',
+    questions: [
+      {
+        questionId: '7',
+        question: 'How to increase performance?',
+        answerStatus: '',
+        notes: ''
+      },
+      {
+        questionId: '8',
+        question: 'How to increase security?',
+        answerStatus: '',
+        notes: ''
+      }
+    ]
+  }
+];
+
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(activeItem(['applicant']));
   }, [dispatch]);
@@ -45,7 +116,7 @@ const AddApplicantReference = () => {
         <EmployeeForm />
       </MainCard>
       <MainCard title="Question List" sx={{ margin: '1em 0' }}>
-        <QuestionList />
+        <QuestionList questionList={questionListData} />
       </MainCard>
       <MainCard sx={{ margin: '1em 0' }}>
         <AnimateButton>

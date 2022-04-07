@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   root: {
     position: 'relative',
     width: '100%',
-    margin: '1em 0',
+    margin: '2em 0',
     padding: '1em',
     border: 'solid 1px',
     borderColor: '#bdbdbd',

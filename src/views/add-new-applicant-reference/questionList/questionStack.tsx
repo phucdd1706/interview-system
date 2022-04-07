@@ -7,11 +7,11 @@ import React from 'react';
 // PROJECT IMPORTS
 import QuestionTag from './questionTag';
 
+// TYPE IMPORTS
+import { QuestionStackInterface } from 'types/question';
+
 interface Props {
-  questionStack: {
-    type: string;
-    questions: Array<{ questionId: string; question: string }>;
-  };
+  questionStack: QuestionStackInterface;
   onClickAddButton?: () => void;
   onClickDeleteButton?: (id: string) => void;
   interviewing?: boolean;

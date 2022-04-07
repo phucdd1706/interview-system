@@ -7,62 +7,14 @@ import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
 
-const questionListData = [
-  {
-    type: 'Basic',
-    questions: [
-      {
-        questionId: '1',
-        question: 'What is your name?'
-      },
-      {
-        questionId: '2',
-        question: 'What is your age?'
-      },
-      {
-        questionId: '3',
-        question: 'Expected salary?'
-      }
-    ]
-  },
-  {
-    type: 'React J1',
-    questions: [
-      {
-        questionId: '4',
-        question: 'What is ReactJS?'
-      },
-      {
-        questionId: '5',
-        question: 'What is Redux?'
-      },
-      {
-        questionId: '6',
-        question: 'What is J1?'
-      },
-      {
-        questionId: '9',
-        question: 'explain about React lifecycle?'
-      }
-    ]
-  },
-  {
-    type: 'Advanced',
-    questions: [
-      {
-        questionId: '7',
-        question: 'How to increase performance?'
-      },
-      {
-        questionId: '8',
-        question: 'How to increase security?'
-      }
-    ]
-  }
-];
+// TYPE IMPORTS
+import { QuestionStackInterface } from 'types/question';
 
-const QuestionList = () => {
-  const [questions] = useState(questionListData);
+interface Props {
+  questionList: QuestionStackInterface[];
+}
+
+const QuestionList = ({ questionList }: Props) => {
   const [open, setOpen] = useState(false);
 
   const handleModalOpen = () => {
@@ -78,7 +30,7 @@ const QuestionList = () => {
   return (
     <>
       <Stack direction="column" spacing={2}>
-        {questions.map((type) => (
+        {questionList.map((type) => (
           <QuestionStack questionStack={type} onClickAddButton={handleModalOpen} onClickDeleteButton={deleteQuestion} key={type.type} />
         ))}
       </Stack>
