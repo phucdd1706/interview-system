@@ -1,4 +1,5 @@
 // PROJECT IMPORTS
+import React from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Input } from '@mui/material';
@@ -19,16 +20,8 @@ const ListUser = () => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    console.log(res.data.success.data);
     setUser(res.data.success.data);
   };
-  const handleDelete = (id: number) => {
-    console.log(id);
-    //axiosServices.delete(`${process.env.REACT_APP_API_URL}/users/${id}`);
-
-    //window.location.reload();
-  };
-  console.log(process.env.REACT_APP_API_URL);
   useEffect(() => {
     fetchUser();
   }, []);
@@ -56,7 +49,7 @@ const ListUser = () => {
               Edit
             </Button>
           </Link>
-          <Button className="btn btnDel" variant="outlined" color="error" onClick={() => handleDelete(param.user.id)}>
+          <Button className="btn btnDel" variant="outlined" color="error">
             Delete
           </Button>
         </>

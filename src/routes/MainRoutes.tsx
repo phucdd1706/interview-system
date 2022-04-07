@@ -5,7 +5,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
-import ListUser from 'views/users/listUsers/ListUser';
+import ListUser from 'views/user/ListUser';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 
