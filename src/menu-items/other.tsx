@@ -19,6 +19,14 @@ const other = {
       url: '/dashboard',
       icon: icons.IconBrandChrome,
       breadcrumbs: false
+    },
+    {
+      id: 'qlrank',
+      title: <FormattedMessage id="rank" />,
+      type: 'item',
+      url: '/views/pages/qlrank/index',
+      icon: icons.IconBrandChrome,
+      breadcrumbs: false
     }
   ]
 };

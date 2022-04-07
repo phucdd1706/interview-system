@@ -8,6 +8,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 import NavMotion from 'layout/NavMotion';
 
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/auth/Login')));
+// const AuthLogin = Loadable(lazy(() => import('views/pages/qlrank/index')));
 
 const LoginRoutes = {
   path: '/',
