@@ -13,7 +13,7 @@ import { QuestionStackInterface } from 'types/question';
 interface Props {
   questionStack: QuestionStackInterface;
   onClickAddButton?: () => void;
-  onClickDeleteButton?: (id: string) => void;
+  onClickDeleteButton?: (type: string, questionId: string) => void;
   interviewing?: boolean;
 }
 const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickDeleteButton }: Props) => (
@@ -37,7 +37,15 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
     <Stack direction="column" spacing={2}>
       {questionStack.questions.map((data) => {
         const { questionId } = data;
-        return <QuestionTag value={data} onDeleteTag={onClickDeleteButton} interviewing={interviewing} key={questionId} />;
+        return (
+          <QuestionTag
+            value={data}
+            type={questionStack.type}
+            onDeleteTag={onClickDeleteButton}
+            interviewing={interviewing}
+            key={questionId}
+          />
+        );
       })}
     </Stack>
   </Box>

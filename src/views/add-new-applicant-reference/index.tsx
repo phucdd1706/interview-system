@@ -9,6 +9,7 @@ import EmployeeForm from './employeeForm';
 import QuestionList from './questionList/index';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
+import { useSelector } from 'store';
 
 // const state = {
 //   firstName: '',
@@ -40,19 +41,19 @@ const questionListData = [
       {
         questionId: '1',
         question: 'What is your name?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '2',
         question: 'What is your age?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '3',
         question: 'Expected salary?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       }
     ]
@@ -63,25 +64,25 @@ const questionListData = [
       {
         questionId: '4',
         question: 'What is ReactJS?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '5',
         question: 'What is Redux?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '6',
         question: 'What is J1?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '9',
         question: 'explain about React lifecycle?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       }
     ]
@@ -92,13 +93,13 @@ const questionListData = [
       {
         questionId: '7',
         question: 'How to increase performance?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       },
       {
         questionId: '8',
         question: 'How to increase security?',
-        answerStatus: '',
+        answerScore: '',
         notes: ''
       }
     ]
@@ -107,6 +108,7 @@ const questionListData = [
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
+  const interviewQuestions = useSelector((state) => state.applicant.interviewQuestions);
   useEffect(() => {
     dispatch(activeItem(['applicant']));
   }, [dispatch]);
@@ -115,16 +117,20 @@ const AddApplicantReference = () => {
       <MainCard title="Applicant Reference Form" sx={{ margin: '1em 0' }}>
         <EmployeeForm />
       </MainCard>
-      <MainCard title="Question List" sx={{ margin: '1em 0' }}>
-        <QuestionList questionList={questionListData} />
-      </MainCard>
-      <MainCard sx={{ margin: '1em 0' }}>
-        <AnimateButton>
-          <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
-            Submit
-          </Button>
-        </AnimateButton>
-      </MainCard>
+      {interviewQuestions.length > 0 && (
+        <>
+          <MainCard title="Question List" sx={{ margin: '1em 0' }}>
+            <QuestionList questionList={interviewQuestions} />
+          </MainCard>
+          <MainCard sx={{ margin: '1em 0' }}>
+            <AnimateButton>
+              <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+                Submit
+              </Button>
+            </AnimateButton>
+          </MainCard>
+        </>
+      )}
     </Box>
   );
 };

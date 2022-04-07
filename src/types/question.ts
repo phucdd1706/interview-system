@@ -1,7 +1,7 @@
 export interface questionInterface {
   questionId: string;
   question: string;
-  answerStatus: string;
+  answerScore: string;
   notes: string;
 }
 

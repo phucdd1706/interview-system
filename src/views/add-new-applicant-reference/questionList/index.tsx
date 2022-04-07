@@ -6,9 +6,10 @@ import { useState } from 'react';
 import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
-
+import { addInterviewQuestions, deleteInterviewQuestions } from 'store/slices/applicantReferences';
 // TYPE IMPORTS
-import { QuestionStackInterface } from 'types/question';
+import { QuestionStackInterface, questionInterface } from 'types/question';
+import { useDispatch } from 'store';
 
 interface Props {
   questionList: QuestionStackInterface[];
@@ -16,15 +17,18 @@ interface Props {
 
 const QuestionList = ({ questionList }: Props) => {
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const handleModalOpen = () => {
     setOpen(true);
   };
   const handleModalClose = () => {
     setOpen(false);
   };
-  const deleteQuestion = (id: string) => {
-    console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ id', id);
+  const deleteQuestion = (type: string, questionId: string) => {
+    dispatch(deleteInterviewQuestions({ type, questionId }));
+  };
+  const addQuestion = (type: string, question: { questionId: string; question: string }) => {
+    dispatch(addInterviewQuestions({ type, question: { ...question, answerScore: '', notes: '' } }));
   };
 
   return (
@@ -52,13 +56,7 @@ const QuestionList = ({ questionList }: Props) => {
         <Divider />
         <Stack direction="column" spacing={1} sx={{ padding: '1em 0', overflowY: 'auto', marginBottom: 2, height: 'calc(90vh - 200px)' }}>
           {ListQuestions.map((data, index) => (
-            <QuestionTag
-              key={data.questionId}
-              value={data}
-              onAddTag={(id: string) => {
-                console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ id', id);
-              }}
-            />
+            <QuestionTag key={data.questionId} type="basic" value={data} onAddTag={addQuestion} />
           ))}
         </Stack>
       </ModalStyled>
@@ -70,43 +68,43 @@ export default QuestionList;
 
 const ListQuestions = [
   {
-    questionId: '1',
+    questionId: '1234',
     question: 'What is your name?'
   },
   {
-    questionId: '2',
+    questionId: '21234',
     question: 'What is your age?'
   },
   {
-    questionId: '3',
+    questionId: '3sdf',
     question: 'Expected salary?'
   },
   {
-    questionId: '4',
+    questionId: '412',
     question: 'What is ReactJS?'
   },
   {
-    questionId: '5',
+    questionId: '524',
     question: 'What is Redux?'
   },
   {
-    questionId: '6',
+    questionId: '623',
     question: 'What is J1?'
   },
   {
-    questionId: '7',
+    questionId: '754',
     question: 'How to increase performance?'
   },
   {
-    questionId: '8',
+    questionId: '83',
     question: 'How to increase security?'
   },
   {
-    questionId: '9',
+    questionId: '9654',
     question: 'explain about React lifecycle?'
   },
   {
-    questionId: '10',
+    questionId: '1340',
     question: 'What is ReactJS?'
   }
 ];

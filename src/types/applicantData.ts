@@ -26,7 +26,7 @@ export interface ApplicantDataInterface {
     level: string;
   }>;
   employment: Employment[];
-  interviewQuestion: QuestionStackInterface[];
+  interviewQuestions: QuestionStackInterface[];
   referenceEvaluate: {
     totalQuestions: number;
     passedQuestions: number;
@@ -40,6 +40,6 @@ export interface ApplicantDataInterface {
     expectedSalary: number;
     result: string;
     salary: number;
-    notes: number;
+    notes: string;
   };
 }

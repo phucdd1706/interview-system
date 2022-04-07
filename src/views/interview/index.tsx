@@ -7,7 +7,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import ApplicantInfo from './applicantInfo';
 import FinalResult from './finalResult';
-import InterviewQuestion from './interviewQuestion';
+import InterviewQuestions from './interviewQuestions';
 import ReferenceResult from './referenceResult';
 
 const state = {
@@ -47,7 +47,7 @@ const InterviewPage = () => {
         <ApplicantInfo />
       </MainCard>
       <MainCard title="Interview Question">
-        <InterviewQuestion />
+        <InterviewQuestions />
       </MainCard>
       <MainCard sx={{ margin: '1em 0' }}>
         <AnimateButton>
