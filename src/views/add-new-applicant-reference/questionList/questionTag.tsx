@@ -1,6 +1,9 @@
+// THIRD-PARTY
 import React from 'react';
-import { Paper, Stack, Typography, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Paper, Stack, Typography, Button, FormControl, MenuItem, Select } from '@mui/material';
 import { IconX, IconPlus, IconDotsVertical } from '@tabler/icons';
+
+// PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 
 interface Props {
@@ -47,7 +50,7 @@ const QuestionTag = ({ value, interviewing = false, onDeleteTag, onAddTag }: Pro
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 100, height: 30 }}>
-              <Select labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" label="Age">
+              <Select labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" label="Evaluate" value="">
                 <MenuItem value="">
                   <em>Evaluate</em>
                 </MenuItem>

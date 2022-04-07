@@ -1,3 +1,4 @@
+// THIRD-PARTY
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
@@ -17,7 +18,7 @@ const ReferenceResult = () => {
   return (
     <Box>
       {Object.keys(result).map((key) => (
-        <Stack direction="row" sx={{ alignItems: 'center', marginBottom: 1 }}>
+        <Stack direction="row" sx={{ alignItems: 'center', marginBottom: 1 }} key={key}>
           <Typography variant="h4" component="h4" sx={{ lineHeight: 1 }}>
             {key}:&nbsp;
           </Typography>

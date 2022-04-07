@@ -1,5 +1,8 @@
+// THIRD-PARTY
 import { Modal } from '@mui/material';
 import { ReactNode } from 'react';
+
+// PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 
 interface ModalProps {

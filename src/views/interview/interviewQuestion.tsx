@@ -1,5 +1,8 @@
+// THIRD-PARTY
 import { Stack } from '@mui/material';
 import { useState } from 'react';
+
+// PROJECT IMPORTS
 import QuestionStack from 'views/add-new-applicant-reference/questionList/questionStack';
 
 const questionListData = [

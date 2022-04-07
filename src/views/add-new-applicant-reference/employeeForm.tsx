@@ -1,3 +1,4 @@
+// THIRD-PARTY
 import { useState } from 'react';
 import { Formik } from 'formik';
 import { useTheme } from '@mui/material/styles';
@@ -16,6 +17,8 @@ import {
 import { IconX } from '@tabler/icons';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+
+// PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import LegendWrapper from './legend';
 
@@ -53,7 +56,7 @@ const personalDetail = [
       {
         key: 'phone',
         label: 'Phone Number',
-        type: 'number'
+        type: 'tel'
       }
     ]
   },

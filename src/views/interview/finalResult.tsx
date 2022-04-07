@@ -1,4 +1,5 @@
-import { Box, FormControl, FormHelperText, InputLabel, MenuItem, OutlinedInput, Select, Stack } from '@mui/material';
+// THIRD-PARTY
+import { Box, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -8,7 +9,7 @@ const FinalResult = () => (
       enableReinitialize
       initialValues={{
         passed: true,
-        salary: '10,000,000',
+        salary: '10000000',
         notes: ''
       }}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -19,10 +20,10 @@ const FinalResult = () => (
         <form noValidate onSubmit={handleSubmit}>
           <Stack direction="row" spacing={2}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Status</InputLabel>
-              <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Status">
-                <MenuItem value={10}>Fail</MenuItem>
-                <MenuItem value={20}>Pass</MenuItem>
+              <InputLabel id="passed">Status</InputLabel>
+              <Select id="passed" name="passed" label="Status" value={+values.passed} onChange={handleChange}>
+                <MenuItem value={0}>Fail</MenuItem>
+                <MenuItem value={1}>Pass</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>

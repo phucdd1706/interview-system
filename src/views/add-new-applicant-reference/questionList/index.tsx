@@ -1,7 +1,9 @@
-import QuestionStack from './questionStack';
-import useStyles from '../useStylesHook/makeStyle';
-import { Autocomplete, Divider, Modal, Paper, Stack, TextField, Typography } from '@mui/material';
+// THIRD-PARTY
+import { Autocomplete, Divider, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
+
+// PROJECT IMPORTS
+import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
 
@@ -62,7 +64,6 @@ const questionListData = [
 const QuestionList = () => {
   const [questions] = useState(questionListData);
   const [open, setOpen] = useState(false);
-  const classes = useStyles();
 
   const handleModalOpen = () => {
     setOpen(true);

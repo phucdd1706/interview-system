@@ -1,3 +1,4 @@
+// THIRD-PARTY
 import { Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ReactElement } from 'react';

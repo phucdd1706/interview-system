@@ -1,7 +1,10 @@
+// THIRD-PARTY
 import { Stack, Typography, Button } from '@mui/material';
 import { Box } from '@mui/system';
 import { IconPlus } from '@tabler/icons';
 import React from 'react';
+
+// PROJECT IMPORTS
 import QuestionTag from './questionTag';
 
 interface Props {
@@ -14,8 +17,8 @@ interface Props {
   interviewing?: boolean;
 }
 const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickDeleteButton }: Props) => (
-  <Box sx={{ marginBottom: 2 }}>
-    <Stack direction="row" sx={{ marginBottom: '1.5em' }}>
+  <Box>
+    <Stack direction="row" marginBottom={2}>
       <Typography variant="h3" component="h3" sx={{ flexGrow: 1 }}>
         {questionStack.type}
       </Typography>

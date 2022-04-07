@@ -1,4 +1,5 @@
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
+// THIRD-PARTY
+import { Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 const initialEmployeeForm = {
@@ -76,10 +77,10 @@ const ApplicantInfo = () => {
         <Stack direction={matchDownSM ? 'column' : 'row'} spacing={3} key={index}>
           {RenderRow[row as rowKey].map((data: { key: string; label: string }) => (
             <Stack direction="row" key={data.key} sx={{ flexGrow: 1 }}>
-              <Typography variant="h4" component="h4" key={data.key}>
+              <Typography variant="h4" component="h4">
                 {data.label}: &nbsp;
               </Typography>
-              <Typography variant="body1" component="span" key={data.key}>
+              <Typography variant="body1" component="span">
                 {initialEmployeeForm[data.key as dataKey]}
               </Typography>
             </Stack>
@@ -91,12 +92,10 @@ const ApplicantInfo = () => {
           Apply Position:
         </Typography>
         {initialEmployeeForm.applyPosition.map((data: { id: string; positionName: string; level: string }, index) => (
-          <>
-            <Typography variant="body1" component="span" key={index}>
-              &nbsp;{data.positionName} - {data.level}&nbsp;
-            </Typography>
+          <Typography variant="body1" component="span" key={index}>
+            &nbsp;{data.positionName} - {data.level}&nbsp;
             {index < initialEmployeeForm.applyPosition.length - 1 && !matchDownSM && '/'}
-          </>
+          </Typography>
         ))}
       </Stack>
     </Stack>

@@ -1,8 +1,6 @@
 // THIRD-PARTY
-import { Button, Stack, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { Button, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { activeItem } from 'store/slices/menu';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -12,7 +10,35 @@ import FinalResult from './finalResult';
 import InterviewQuestion from './interviewQuestion';
 import ReferenceResult from './referenceResult';
 
-const DashboardPage = () => {
+const state = {
+  applicantId: '',
+  questionAnswered: [
+    {
+      questionId: '',
+      evaluate: '',
+      notes: ''
+    },
+    {
+      questionId: '',
+      evaluate: '',
+      notes: ''
+    }
+  ],
+  interviewReferenceResult: {
+    passedQuestion: '10/12',
+    failedQuestion: '2',
+    score: '80%',
+    result: 'Passed',
+    salary: '10,000,000'
+  },
+  interviewerResult: {
+    passed: true,
+    salary: '10000000',
+    notes: ''
+  }
+};
+
+const InterviewPage = () => {
   const dispatch = useDispatch();
 
   return (
@@ -47,4 +73,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default InterviewPage;
