@@ -7,6 +7,7 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
+const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 
 const MainRoutes = {
   path: '/',
@@ -19,6 +20,10 @@ const MainRoutes = {
     {
       path: '/dashboard/analytics',
       element: <Dashboard />
+    },
+    {
+      path: '/user/administrator',
+      element: <Administrator />
     }
   ]
 };
