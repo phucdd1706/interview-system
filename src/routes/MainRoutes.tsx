@@ -7,8 +7,8 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-const AddEmployeeInfo = Loadable(lazy(() => import('views/add-employee-info')));
-
+const AddApplicantReference = Loadable(lazy(() => import('views/add-new-applicant-reference')));
+const InterviewScreen = Loadable(lazy(() => import('views/interview')));
 const MainRoutes = {
   path: '/',
   element: (
@@ -26,8 +26,12 @@ const MainRoutes = {
       element: <Dashboard />
     },
     {
-      path: '/employee',
-      element: <AddEmployeeInfo />
+      path: '/add-new-applicant',
+      element: <AddApplicantReference />
+    },
+    {
+      path: '/interview/:id',
+      element: <InterviewScreen />
     }
   ]
 };

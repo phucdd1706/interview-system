@@ -23,10 +23,10 @@ const other = {
       breadcrumbs: false
     },
     {
-      id: 'employee',
-      title: <FormattedMessage id="add new employee info" />,
+      id: 'applicant',
+      title: <FormattedMessage id="add new applicant reference" />,
       type: 'item',
-      url: '/employee',
+      url: '/add-new-applicant',
       icon: icons.IconFilePlus,
       breadcrumbs: false
     }
