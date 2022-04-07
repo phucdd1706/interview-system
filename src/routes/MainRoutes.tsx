@@ -7,6 +7,8 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
+const Complete = Loadable(lazy(() => import('views/complete/complete')));
+const Inprogress = Loadable(lazy(() => import('views/inProgress/inprogress')));
 
 const MainRoutes = {
   path: '/',
@@ -23,6 +25,14 @@ const MainRoutes = {
     {
       path: '/dashboard',
       element: <Dashboard />
+    },
+    {
+      path: '/complete',
+      element: <Complete />
+    },
+    {
+      path: '/inprogress',
+      element: <Inprogress />
     }
   ]
 };

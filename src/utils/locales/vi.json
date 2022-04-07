@@ -1,3 +1,6 @@
 {
-  "dashboard": "Bảng điều khiển"
+  "dashboard": "Bảng điều khiển",
+  "history": "Lịch sử",
+  "complete": "Hoàn thành",
+  "inProgress": "Trong tiến trình"
 }

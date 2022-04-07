@@ -1,3 +1,6 @@
 {
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "history": "History",
+  "complete": "Complete",
+  "inProgress": "InProgress"
 }
