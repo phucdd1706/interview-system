@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
-import { HiPlus, HiOutlineXCircle, HiOutlineNewspaper, HiOutlinePencil } from 'react-icons/hi';
+
 import { DataGrid } from '@mui/x-data-grid';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,6 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { QLAdmin } from 'types/manage-admin';
 import QLAdminService, { AdminParams } from 'contexts/admin';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
 
 const DanhSachAdmin = () => {
   const columns = [
@@ -37,16 +41,6 @@ const DanhSachAdmin = () => {
       headerName: 'Trạng thái',
       sortable: true,
       width: 150
-    },
-    {
-      field: 'edit',
-      headerName: '',
-      width: 140,
-      render: (text: string, record: any) => (
-        <Button variant="contained" size="small" startIcon={<HiOutlinePencil className="mr-1 mb-1" />} autoFocus>
-          Lưu
-        </Button>
-      )
     }
   ];
 
@@ -146,7 +140,7 @@ const DanhSachAdmin = () => {
         title={
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h2">Quản lý phòng ban</Typography>
-            <Button variant="contained" size="medium" startIcon={<HiPlus className="mr-1 mb-1" />} onClick={handleClickOpen}>
+            <Button variant="contained" size="medium" startIcon={<AddIcon className="mr-1 mb-1" />} onClick={handleClickOpen}>
               Thêm mới
             </Button>
           </div>
@@ -204,13 +198,13 @@ const DanhSachAdmin = () => {
           <Button
             variant="contained"
             size="small"
-            startIcon={<HiOutlineXCircle className="mr-1 mb-1" />}
+            startIcon={<DeleteIcon className="mr-1 mb-1" />}
             style={{ backgroundColor: 'gray' }}
             onClick={handleClose}
           >
             Hủy
           </Button>
-          <Button variant="contained" size="small" startIcon={<HiOutlineNewspaper className="mr-1 mb-1" />} onClick={handleClose} autoFocus>
+          <Button variant="contained" size="small" startIcon={<SaveIcon className="mr-1 mb-1" />} onClick={handleClose} autoFocus>
             Lưu
           </Button>
         </DialogActions>
