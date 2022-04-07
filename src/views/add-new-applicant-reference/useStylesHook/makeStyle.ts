@@ -7,9 +7,6 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: '#c6f9ff'
     },
-    '& button': {
-      opacity: 0
-    },
     '&:hover button': {
       transition: '0.7s',
       opacity: 1,

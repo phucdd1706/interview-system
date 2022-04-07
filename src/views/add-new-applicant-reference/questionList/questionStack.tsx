@@ -9,29 +9,32 @@ interface Props {
     type: string;
     questions: Array<{ questionId: string; question: string }>;
   };
-  onClickAddButton: () => void;
+  onClickAddButton?: () => void;
   onClickDeleteButton?: (id: string) => void;
+  interviewing?: boolean;
 }
-const QuestionStack = ({ questionStack, onClickAddButton, onClickDeleteButton }: Props) => (
+const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickDeleteButton }: Props) => (
   <Box sx={{ marginBottom: 2 }}>
     <Stack direction="row" sx={{ marginBottom: '1.5em' }}>
       <Typography variant="h3" component="h3" sx={{ flexGrow: 1 }}>
         {questionStack.type}
       </Typography>
-      <Button
-        color="success"
-        sx={{ width: '32px', height: '24px', padding: 0, minWidth: 'auto' }}
-        onClick={() => {
-          onClickAddButton();
-        }}
-      >
-        <IconPlus />
-      </Button>
+      {onClickAddButton && (
+        <Button
+          color="success"
+          sx={{ width: '32px', height: '24px', padding: 0, minWidth: 'auto' }}
+          onClick={() => {
+            onClickAddButton();
+          }}
+        >
+          <IconPlus />
+        </Button>
+      )}
     </Stack>
     <Stack direction="column" spacing={2}>
       {questionStack.questions.map((data) => {
-        const { questionId, question } = data;
-        return <QuestionTag value={data} onDeleteTag={onClickDeleteButton} key={questionId} />;
+        const { questionId } = data;
+        return <QuestionTag value={data} onDeleteTag={onClickDeleteButton} interviewing={interviewing} key={questionId} />;
       })}
     </Stack>
   </Box>
