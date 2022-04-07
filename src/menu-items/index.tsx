@@ -1,9 +1,9 @@
 // PROJECT IMPORTS
-import other from './other';
+import dashboard from 'menu-items/dashboard';
 import { NavItemType } from 'types';
 
 const menuItems: { items: NavItemType[] } = {
-  items: [other]
+  items: [dashboard]
 };
 
 export default menuItems;
