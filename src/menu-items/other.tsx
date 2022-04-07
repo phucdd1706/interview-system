@@ -1,17 +1,16 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
 import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
-import { GrUserAdmin } from 'react-icons/gr';
-import { FcDepartment } from 'react-icons/fc';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const icons = {
   IconBrandChrome,
   IconHelp,
   IconSitemap,
-  GrUserAdmin,
-  FcDepartment,
-  CorporateFareIcon
+
+  CorporateFareIcon,
+  AdminPanelSettingsIcon
 };
 
 const other = {
@@ -31,7 +30,7 @@ const other = {
       title: <FormattedMessage id="Admin" />,
       type: 'item',
       url: '/ds-admin',
-      icon: icons.GrUserAdmin,
+      icon: icons.AdminPanelSettingsIcon,
       breadcrumbs: false
     },
     {
