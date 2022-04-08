@@ -8,6 +8,7 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
+const Customer = Loadable(lazy(() => import('views/pages/customer')));
 
 const MainRoutes = {
   path: '/',
@@ -24,6 +25,10 @@ const MainRoutes = {
     {
       path: '/user/administrator',
       element: <Administrator />
+    },
+    {
+      path: '/user/customer',
+      element: <Customer />
     }
   ]
 };
