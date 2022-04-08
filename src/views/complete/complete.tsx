@@ -16,10 +16,16 @@ import {
   Grid,
   FormControl,
   Popover,
-  Typography
+  Typography,
+  Chip,
+  IconButton
 } from '@mui/material';
 import { Formik } from 'formik';
 import moment from 'moment';
+import { useTheme } from '@mui/material/styles';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -32,6 +38,7 @@ import CandidateDrawer from 'components/DrawerPage/CandidateDrawer';
 
 const Complete = () => {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const token = localStorage.getItem('serviceToken');
   const complete = useSelector((state: RootState) => state.complete);
 
@@ -119,32 +126,28 @@ const Complete = () => {
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={{ xl: 2, sx: 1 }}>
               <Grid item xl={4} xs={12}>
-                <Box sx={{ mb: 2 }}>
-                  <FormControl size="small" fullWidth>
-                    <TextField
-                      id="outlined-basic"
-                      name="search"
-                      value={values?.search}
-                      label={<span>Tên ứng viên</span>}
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      inputProps={{}}
-                    />
-                  </FormControl>
-                </Box>
+                <FormControl size="small" fullWidth>
+                  <TextField
+                    id="outlined-basic"
+                    name="search"
+                    value={values?.search}
+                    label={<span>Tên ứng viên</span>}
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    inputProps={{}}
+                  />
+                </FormControl>
               </Grid>
               <Grid item xl={4} xs={12}>
-                <Box sx={{ mb: 2 }}>
-                  <FormControl size="small" fullWidth>
-                    <RankSelect blur={handleBlur} change={handleChange} values={values} />
-                  </FormControl>
-                </Box>
+                <FormControl size="small" fullWidth>
+                  <RankSelect blur={handleBlur} change={handleChange} values={values} />
+                </FormControl>
               </Grid>
               <Grid item xl={4} xs={12}>
-                <Box sx={{ mb: 2, position: 'relative' }}>
+                <Box sx={{ position: 'relative' }}>
                   <Button
                     disableElevation
                     disabled={isSubmitting}
@@ -174,101 +177,127 @@ const Complete = () => {
 
   return (
     <>
-      <MainCard title={<span>Complete</span>}>
-        {renderSearchForm()}
-        <Box sx={{ mt: 2 }}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Họ tên</TableCell>
-                  <TableCell>Số điện thoại</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Ngày tạo</TableCell>
-                  <TableCell align="center">#</TableCell>
+      <MainCard title={renderSearchForm()}>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Mobile</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Created</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {candidate?.map((row) => (
+                <TableRow key={row?.id}>
+                  <TableCell component="th" scope="row">
+                    {row?.name}
+                  </TableCell>
+                  <TableCell>{row?.phone}</TableCell>
+                  <TableCell>{row?.email}</TableCell>
+                  <TableCell>{moment(row.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+                  <TableCell>
+                    {row.status === 1 && (
+                      <Chip
+                        label="Inactive"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
+                          color: theme.palette.warning.dark
+                        }}
+                      />
+                    )}
+                    {row.status === 2 && (
+                      <Chip
+                        label="Active"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
+                          color: theme.palette.success.dark
+                        }}
+                      />
+                    )}
+                    {row.status === 3 && (
+                      <Chip
+                        label="Blocked"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
+                          color: theme.palette.orange.dark
+                        }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell align="center" sx={{ pr: 3 }}>
+                    <IconButton
+                      color="primary"
+                      size="large"
+                      onClick={() => {
+                        setDataEdit(row);
+                        setVisibleModal(!visibleModal);
+                      }}
+                    >
+                      <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      size="large"
+                      onClick={() => {
+                        setDataEdit(row);
+                        setVisibleAdd(!visibleAdd);
+                      }}
+                    >
+                      <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    </IconButton>
+                    <span>
+                      <IconButton
+                        color="error"
+                        size="large"
+                        onClick={(e) => {
+                          handleClick(e);
+                          setIdRecord(row.id);
+                        }}
+                      >
+                        <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                      </IconButton>
+                      <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'left'
+                        }}
+                      >
+                        <Typography sx={{ p: 1.5 }}>Bạn có chắc chắn muốn xóa?</Typography>
+                        <Box sx={{ p: 1.5, display: 'flex', justifyContent: 'space-between' }}>
+                          <Button size="small" variant="outlined" onClick={handleClose}>
+                            Hủy
+                          </Button>
+                          <Button size="small" color="error" variant="outlined" onClick={() => deleteRecord()}>
+                            Xóa
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </span>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {candidate?.map((row) => (
-                  <TableRow key={row?.id}>
-                    <TableCell component="th" scope="row">
-                      {row?.name}
-                    </TableCell>
-                    <TableCell>{row?.phone}</TableCell>
-                    <TableCell>{row?.email}</TableCell>
-                    <TableCell>{moment().format('L')}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        sx={{ textTransform: 'inherit' }}
-                        onClick={() => {
-                          setDataEdit(row);
-                          setVisibleModal(!visibleModal);
-                        }}
-                      >
-                        Chi tiết
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        sx={{ textTransform: 'inherit', ml: 1 }}
-                        onClick={() => {
-                          setDataEdit(row);
-                          setVisibleAdd(!visibleAdd);
-                        }}
-                      >
-                        Sửa
-                      </Button>
-                      <span>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          sx={{ textTransform: 'inherit', ml: 1 }}
-                          onClick={(e) => {
-                            handleClick(e);
-                            setIdRecord(row.id);
-                          }}
-                          color="error"
-                        >
-                          Xóa
-                        </Button>
-                        <Popover
-                          id={id}
-                          open={open}
-                          anchorEl={anchorEl}
-                          onClose={handleClose}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left'
-                          }}
-                        >
-                          <Typography sx={{ p: 1.5 }}>Bạn có chắc chắn muốn xóa?</Typography>
-                          <Box sx={{ p: 1.5, display: 'flex', justifyContent: 'space-between' }}>
-                            <Button size="small" variant="outlined" onClick={handleClose}>
-                              Hủy
-                            </Button>
-                            <Button size="small" color="error" variant="outlined" onClick={() => deleteRecord()}>
-                              Xóa
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            component="div"
-            count={100}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          count={100}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </MainCard>
       <CandidateDrawer visible={visibleAdd} dataEdit={dataEdit} />
       <CandidateModal visible={visibleModal} dataEdit={dataEdit} />

@@ -22,6 +22,26 @@ const application = {
           url: '/user/administrator'
         }
       ]
+    },
+    {
+      id: 'history',
+      title: <FormattedMessage id="history" />,
+      type: 'collapse',
+      icon: icons.IconUserCheck,
+      children: [
+        {
+          id: 'complete',
+          title: <FormattedMessage id="complete" />,
+          type: 'item',
+          url: '/complete'
+        },
+        {
+          id: 'inprogress',
+          title: <FormattedMessage id="inProgress" />,
+          type: 'item',
+          url: '/inprogress'
+        }
+      ]
     }
   ]
 };

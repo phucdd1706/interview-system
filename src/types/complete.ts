@@ -5,6 +5,7 @@ export interface Candidates {
   email: string;
   rank: number | string;
   created_at: string;
+  status: number;
 }
 
 export interface SearchValues {
