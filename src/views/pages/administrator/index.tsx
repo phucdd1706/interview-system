@@ -44,7 +44,7 @@ const Administrator = () => {
   const filterData = async () => {
     setTimeout(async () => {
       await dispatch(getAdministratorList(filter));
-    }, 2000);
+    }, 400);
   };
 
   useEffect(() => {
