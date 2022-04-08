@@ -2,16 +2,33 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import {
+  Button,
+  Fab,
+  Grid,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  Pagination,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
+import AddAdministrator from 'views/pages/administrator/AddAdministrator';
 import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
 import { dispatch } from 'store';
 import { getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
+import { gridSpacing } from '../../../store/constant';
 
 const Administrator = () => {
   const theme = useTheme();
@@ -20,6 +37,14 @@ const Administrator = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
   const spacingMD = matchDownMD ? 1 : 1.5;
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpenDialog = () => {
+    setOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
 
   const initialState: UserFilter = {
     search: '',
@@ -59,11 +84,13 @@ const Administrator = () => {
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
+  const handleClickPagination = (event: React.MouseEvent) => {};
+
   return (
     <MainCard
       title={
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
               <Grid item>
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
@@ -129,11 +156,62 @@ const Administrator = () => {
               </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+            <Tooltip title="Add">
+              <Fab
+                color="primary"
+                size="small"
+                onClick={handleClickOpenDialog}
+                sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
+              >
+                <AddIcon fontSize="small" />
+              </Fab>
+            </Tooltip>
+          </Grid>
         </Grid>
       }
       content={false}
     >
+      <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
       <AdministratorList />
+      <Grid item xs={12} sx={{ p: 3 }}>
+        <Grid container justifyContent="space-between" spacing={gridSpacing}>
+          <Grid item>
+            <Pagination count={10} color="primary" />
+          </Grid>
+          <Grid item>
+            <Button
+              size="large"
+              sx={{ color: theme.palette.grey[900] }}
+              color="secondary"
+              endIcon={<ExpandMoreRoundedIcon />}
+              onClick={handleClickPagination}
+            >
+              10 Rows
+            </Button>
+            <Menu
+              id="menu-user-list-style1"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              variant="selectedMenu"
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
+              }}
+            >
+              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
+              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
+              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
+            </Menu>
+          </Grid>
+        </Grid>
+      </Grid>
     </MainCard>
   );
 };
