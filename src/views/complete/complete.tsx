@@ -148,14 +148,8 @@ const Complete = () => {
               </Grid>
               <Grid item xl={4} xs={12}>
                 <Box sx={{ position: 'relative' }}>
-                  <Button
-                    disableElevation
-                    disabled={isSubmitting}
-                    variant="contained"
-                    sx={{ position: 'absolute', right: 0 }}
-                    type="submit"
-                  >
-                    Tìm kiếm
+                  <Button disableElevation disabled={isSubmitting} variant="contained" type="submit">
+                    Search
                   </Button>
                 </Box>
               </Grid>

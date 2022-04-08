@@ -1,8 +1,8 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
-import { IconUserCheck } from '@tabler/icons';
+import { IconUserCheck, IconHistory } from '@tabler/icons';
 
-const icons = { IconUserCheck };
+const icons = { IconUserCheck, IconHistory };
 
 const application = {
   id: 'application',
@@ -33,7 +33,7 @@ const application = {
       id: 'history',
       title: <FormattedMessage id="history" />,
       type: 'collapse',
-      icon: icons.IconUserCheck,
+      icon: icons.IconHistory,
       children: [
         {
           id: 'complete',

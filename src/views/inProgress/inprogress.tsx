@@ -18,8 +18,11 @@ import {
   Popover,
   Typography,
   Chip,
-  IconButton
+  IconButton,
+  Fab,
+  Tooltip
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/AddTwoTone';
 import { Formik } from 'formik';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
@@ -146,9 +149,24 @@ const InProgress = () => {
             </Grid>
             <Grid item xl={4} xs={12}>
               <Box sx={{ position: 'relative' }}>
-                <Button disableElevation disabled={isSubmitting} variant="contained" sx={{ position: 'absolute', right: 0 }} type="submit">
-                  Tìm kiếm
+                <Button disableElevation disabled={isSubmitting} variant="contained" type="submit">
+                  Search
                 </Button>
+                <Box sx={{ position: 'absolute', right: 0, top: 0 }}>
+                  <Tooltip title="Add">
+                    <Fab
+                      color="primary"
+                      size="small"
+                      onClick={() => {
+                        setVisibleAdd(!visibleAdd);
+                        setDataEdit({});
+                      }}
+                      sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
+                    >
+                      <AddIcon fontSize="small" />
+                    </Fab>
+                  </Tooltip>
+                </Box>
               </Box>
             </Grid>
           </Grid>
@@ -168,25 +186,7 @@ const InProgress = () => {
 
   return (
     <>
-      <MainCard
-        title={
-          <>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-              <span />
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setVisibleAdd(!visibleAdd);
-                  setDataEdit({});
-                }}
-              >
-                Thêm mới
-              </Button>
-            </div>
-            {renderSearchForm()}
-          </>
-        }
-      >
+      <MainCard title={renderSearchForm()}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
