@@ -1,3 +1,7 @@
 {
-  "dashboard": "Bảng điều khiển"
+  "dashboard": "Bảng điều khiển",
+  "analytics": "Thống kê",
+  "application": "Ứng dụng",
+  "manage-member": "Quản lý thành viên",
+  "administrator": "Quản trị viên"
 }

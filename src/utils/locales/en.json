@@ -1,3 +1,7 @@
 {
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "analytics": "Analytics",
+  "application": "Application",
+  "manage-member": "Manage Member",
+  "administrator": "Administrator"
 }
