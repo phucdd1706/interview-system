@@ -6,14 +6,13 @@ import { Button, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Typogra
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
-import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
 import { dispatch } from 'store';
 import { getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
 
-const Administrator = () => {
+const Customer = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -133,9 +132,9 @@ const Administrator = () => {
       }
       content={false}
     >
-      <AdministratorList />
+      <p>custommer</p>
     </MainCard>
   );
 };
 
-export default Administrator;
+export default Customer;

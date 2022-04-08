@@ -20,6 +20,12 @@ const application = {
           title: <FormattedMessage id="administrator" />,
           type: 'item',
           url: '/user/administrator'
+        },
+        {
+          id: 'customer',
+          title: <FormattedMessage id="customer" />,
+          type: 'item',
+          url: '/user/customer'
         }
       ]
     },
