@@ -2,5 +2,9 @@
   "dashboard": "Dashboard",
   "history": "History",
   "complete": "Complete",
-  "inProgress": "InProgress"
+  "inProgress": "InProgress",
+  "analytics": "Analytics",
+  "application": "Application",
+  "manage-member": "Manage Member",
+  "administrator": "Administrator"
 }

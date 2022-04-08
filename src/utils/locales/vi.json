@@ -2,5 +2,9 @@
   "dashboard": "Bảng điều khiển",
   "history": "Lịch sử",
   "complete": "Hoàn thành",
-  "inProgress": "Trong tiến trình"
+  "inProgress": "Trong tiến trình",
+  "analytics": "Thống kê",
+  "application": "Ứng dụng",
+  "manage-member": "Quản lý thành viên",
+  "administrator": "Quản trị viên"
 }
