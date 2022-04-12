@@ -15,9 +15,9 @@ import { UserProfile } from 'types/user-profile';
 
 interface Props {
   handleInfor?: React.MouseEventHandler<HTMLButtonElement>;
-  onSelected?: any;
+  handleCallBack?: any;
 }
-const AdministratorList = ({ handleInfor, onSelected }: Props) => {
+const AdministratorList = ({ handleInfor, handleCallBack }: Props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -47,7 +47,7 @@ const AdministratorList = ({ handleInfor, onSelected }: Props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>Id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Username</TableCell>
               <TableCell>Email</TableCell>
@@ -106,7 +106,7 @@ const AdministratorList = ({ handleInfor, onSelected }: Props) => {
                     )}
                   </TableCell>
                   <TableCell align="center" sx={{ pr: 3 }}>
-                    <IconButton color="primary" size="large" onClick={handleInfor}>
+                    <IconButton color="primary" size="large" onClick={handleCallBack(row.id)}>
                       <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                     <IconButton color="secondary" size="large" onClick={handleInfor}>

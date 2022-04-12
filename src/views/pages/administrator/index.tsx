@@ -33,14 +33,14 @@ import InfoAdmin from './EditAdmin';
 
 const Administrator = () => {
   const theme = useTheme();
-
+  const [id, setId] = useState('');
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const [open, setOpen] = React.useState(false);
-  const [openInfo, setOpenInfo] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const handleClickOpenDialog = () => {
     setOpen(true);
   };
@@ -53,7 +53,9 @@ const Administrator = () => {
   const handleClickOpenInfo = () => {
     setOpenInfo(true);
   };
-
+  const handleCallBack = (adminId: string) => {
+    setId(adminId);
+  };
   const initialState: UserFilter = {
     search: '',
     status: ''
@@ -181,8 +183,8 @@ const Administrator = () => {
       content={false}
     >
       <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
-      <AdministratorList handleInfor={handleClickOpenInfo} />
-      <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} />
+      <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
+      <AdministratorList handleInfor={handleClickOpenInfo} handleCallBack={handleCallBack} />
 
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
