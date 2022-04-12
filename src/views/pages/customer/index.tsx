@@ -103,10 +103,11 @@ const Customer = () => {
 
   const handleClickPagination = (event: React.MouseEvent) => {};
 
-  const [id, setId] = useState<number>(1);
-  const handleCallBack = (Id: number) => {
-    setId(Id);
+  const [id, setId] = useState('');
+  const handleCallback = (customerId: string) => {
+    setId(customerId);
   };
+
   return (
     <MainCard
       title={
@@ -196,7 +197,7 @@ const Customer = () => {
       <AddCustomer open={open} handleCloseDialog={handleCloseDialog} />
       <InfoCustomer open={openInfo} handleCloseDialog={handleCloseInfo} />
       <EditCustomer open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <CustomerList handleEdit={handleClickOpenEdit} handleInfor={handleClickOpenInfo} />
+      <CustomerList handleEdit={handleClickOpenEdit} handleCallback={handleCallback} />
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>

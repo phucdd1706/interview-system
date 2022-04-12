@@ -14,12 +14,12 @@ import { UserProfile } from 'types/user-profile';
 
 interface IProps {
   handleEdit?: React.MouseEventHandler<HTMLButtonElement>;
-  handleInfor?: React.MouseEventHandler<HTMLButtonElement>;
+  handleCallback?: any;
   handleDelete?: React.MouseEventHandler<HTMLButtonElement>;
   // onSelected?: any;
 }
 
-const CustomerList = ({ handleEdit, handleDelete, handleInfor }: IProps) => {
+const CustomerList = ({ handleEdit, handleDelete, handleCallback }: IProps) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -34,6 +34,7 @@ const CustomerList = ({ handleEdit, handleDelete, handleInfor }: IProps) => {
     dispatch(getCustomerList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <TableContainer>
       <Table>
@@ -98,7 +99,7 @@ const CustomerList = ({ handleEdit, handleDelete, handleInfor }: IProps) => {
                   )}
                 </TableCell>
                 <TableCell align="center" sx={{ pr: 3 }}>
-                  <IconButton color="primary" size="large" onClick={handleInfor}>
+                  <IconButton color="primary" size="large" onClick={() => handleCallback(row.id)}>
                     <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
                   <IconButton color="secondary" size="large" onClick={handleEdit}>

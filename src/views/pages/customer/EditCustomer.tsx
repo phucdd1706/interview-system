@@ -12,7 +12,7 @@ const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left
 interface AddCustomerProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
-  id: number;
+  id: string;
 }
 
 const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
