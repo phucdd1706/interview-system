@@ -7,10 +7,12 @@ import { TablerIcon } from '@tabler/icons';
 // PROJECT IMPORTS
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
+import { RankStateProps } from 'types/rank';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
+  rank: RankStateProps;
 }
 
 export interface ColorProps {

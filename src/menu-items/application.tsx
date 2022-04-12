@@ -1,8 +1,8 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
-import { IconUserCheck } from '@tabler/icons';
+import { IconStairsUp, IconUserCheck } from '@tabler/icons';
 
-const icons = { IconUserCheck };
+const icons = { IconStairsUp, IconUserCheck };
 
 const application = {
   id: 'application',
@@ -28,6 +28,14 @@ const application = {
           url: '/user/customer'
         }
       ]
+    },
+    {
+      id: 'manage-rank',
+      title: <FormattedMessage id="manage-rank" />,
+      type: 'item',
+      url: '/ranks',
+      icon: icons.IconStairsUp,
+      breadcrumbs: false
     }
   ]
 };
