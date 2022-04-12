@@ -1,34 +1,22 @@
 // THIRD-PARTY
-import React, { forwardRef, SyntheticEvent } from 'react';
-
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, Slide, SlideProps, TextField } from '@mui/material';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
+import { forwardRef, SyntheticEvent } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-
-import DatePicker from '@mui/lab/DatePicker';
-import { Administrator } from 'types/user';
-import { postAdministrator } from 'store/slices/user';
 import { gridSpacing } from 'store/constant';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
-interface AddAdministratorProps {
+interface AddCustomerProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
 }
 
-const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) => {
-  const [value, setValue] = React.useState<Date | null>(null);
-  // const Submit = async (data: Administrator) => {
-  //   try {
-  //     await postAdministrator({ ...data });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+const InfoCustomer = ({ open, handleCloseDialog }: AddCustomerProps) => {
+  const theme = useTheme();
+
   return (
     <Dialog
       open={open}
@@ -49,7 +37,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
     >
       {open && (
         <>
-          <DialogTitle>Add Administrator</DialogTitle>
+          <DialogTitle>Edit Customer</DialogTitle>
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
@@ -89,4 +77,4 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
   );
 };
 
-export default AddAdministrator;
+export default InfoCustomer;
