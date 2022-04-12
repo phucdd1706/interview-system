@@ -16,10 +16,10 @@ interface IProps {
   handleEdit?: React.MouseEventHandler<HTMLButtonElement>;
   handleInfor?: React.MouseEventHandler<HTMLButtonElement>;
   handleDelete?: React.MouseEventHandler<HTMLButtonElement>;
-  onSelected?: any;
+  // onSelected?: any;
 }
 
-const CustomerList = ({ handleEdit, handleDelete, handleInfor, onSelected }: IProps) => {
+const CustomerList = ({ handleEdit, handleDelete, handleInfor }: IProps) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -57,9 +57,7 @@ const CustomerList = ({ handleEdit, handleDelete, handleInfor, onSelected }: IPr
           {data &&
             data.map((row, index) => (
               <TableRow hover key={index}>
-                <TableCell onSelect={onSelected} sx={{ pl: 3 }}>
-                  {row.id}
-                </TableCell>
+                <TableCell sx={{ pl: 3 }}>{row.id}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.username}</TableCell>
                 <TableCell>{row.email}</TableCell>

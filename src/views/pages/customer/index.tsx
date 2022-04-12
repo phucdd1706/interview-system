@@ -102,8 +102,10 @@ const Customer = () => {
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
   const handleClickPagination = (event: React.MouseEvent) => {};
-  const handleDeleteCustomte = (id: number) => {
-    console.log(id);
+
+  const [id, setId] = useState<number>(1);
+  const handleCallBack = (Id: number) => {
+    setId(Id);
   };
   return (
     <MainCard
@@ -193,8 +195,8 @@ const Customer = () => {
     >
       <AddCustomer open={open} handleCloseDialog={handleCloseDialog} />
       <InfoCustomer open={openInfo} handleCloseDialog={handleCloseInfo} />
-      <EditCustomer open={openEdit} handleCloseDialog={handleCloseEdit} />
-      <CustomerList handleEdit={handleClickOpenEdit} handleInfor={handleClickOpenInfo} handleDelete={() => handleDeleteCustomte(1)} />
+      <EditCustomer open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
+      <CustomerList handleEdit={handleClickOpenEdit} handleInfor={handleClickOpenInfo} />
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
