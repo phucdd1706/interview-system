@@ -13,7 +13,11 @@ import { getAdministratorList } from 'store/slices/user';
 import { useDispatch, useSelector } from 'store';
 import { UserProfile } from 'types/user-profile';
 
-const AdministratorList = () => {
+interface Props {
+  handleInfor?: React.MouseEventHandler<HTMLButtonElement>;
+  onSelected?: any;
+}
+const AdministratorList = ({ handleInfor, onSelected }: Props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -102,10 +106,10 @@ const AdministratorList = () => {
                     )}
                   </TableCell>
                   <TableCell align="center" sx={{ pr: 3 }}>
-                    <IconButton color="primary" size="large">
+                    <IconButton color="primary" size="large" onClick={handleInfor}>
                       <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="secondary" size="large">
+                    <IconButton color="secondary" size="large" onClick={handleInfor}>
                       <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                     <IconButton color="error" size="large">

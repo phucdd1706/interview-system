@@ -46,7 +46,7 @@ export function getAdministratorList(filter?: UserFilter) {
 export function postAdministrator(data?: Administrator) {
   return async () => {
     try {
-      await axios.post(ADMINISTRATOR_URL, data);
+      await axios.post(`${ADMINISTRATOR_URL}`, data);
       dispatch(slice.actions.postAdministratorSuccess);
     } catch (error) {
       dispatch(slice.actions.hasError(error));

@@ -29,6 +29,7 @@ import { dispatch } from 'store';
 import { getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
 import { gridSpacing } from '../../../store/constant';
+import InfoAdmin from './EditAdmin';
 
 const Administrator = () => {
   const theme = useTheme();
@@ -39,11 +40,18 @@ const Administrator = () => {
   const spacingMD = matchDownMD ? 1 : 1.5;
 
   const [open, setOpen] = React.useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
   const handleClickOpenDialog = () => {
     setOpen(true);
   };
   const handleCloseDialog = () => {
     setOpen(false);
+  };
+  const handleCloseInfo = () => {
+    setOpenInfo(false);
+  };
+  const handleClickOpenInfo = () => {
+    setOpenInfo(true);
   };
 
   const initialState: UserFilter = {
@@ -173,7 +181,9 @@ const Administrator = () => {
       content={false}
     >
       <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
-      <AdministratorList />
+      <AdministratorList handleInfor={handleClickOpenInfo} />
+      <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} />
+
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>{/* <Pagination count={10} color="primary" /> */}</Grid>
