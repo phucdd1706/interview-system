@@ -9,12 +9,12 @@ import { gridSpacing } from 'store/constant';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
-interface AddAdministratorProps {
+interface AddCustomerProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
 }
 
-const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
+const InfoCustomer = ({ open, handleCloseDialog }: AddCustomerProps) => {
   const theme = useTheme();
 
   return (
