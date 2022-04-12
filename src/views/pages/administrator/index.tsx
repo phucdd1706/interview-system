@@ -53,7 +53,7 @@ const Administrator = () => {
   const handleClickOpenInfo = () => {
     setOpenInfo(true);
   };
-  const handleCallBack = (adminId: string) => {
+  const handleCallback = (adminId: string) => {
     setId(adminId);
   };
   const initialState: UserFilter = {
@@ -184,7 +184,7 @@ const Administrator = () => {
     >
       <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
       <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <AdministratorList handleInfor={handleClickOpenInfo} handleCallBack={handleCallBack} />
+      <AdministratorList handleInfor={handleClickOpenInfo} handleCallback={handleCallback} />
 
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>

@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { forwardRef, SyntheticEvent } from 'react';
+import { forwardRef, SyntheticEvent, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
@@ -15,7 +15,7 @@ interface InfoAdminProps {
   id: string;
 }
 
-const InfoAdmin = ({ open, id, handleCloseDialog }: InfoAdminProps) => {
+const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
   const theme = useTheme();
   console.log(111, id);
 

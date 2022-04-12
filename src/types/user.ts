@@ -17,6 +17,7 @@ export type SortStatusProps = {
 };
 
 export type Administrator = {
+  id?: string;
   name?: string;
   username?: string;
   email?: string;
