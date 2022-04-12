@@ -37,7 +37,7 @@ const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
     >
       {open && (
         <>
-          <DialogTitle>Add Administrator</DialogTitle>
+          <DialogTitle>Add Department</DialogTitle>
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item xs={12}>
