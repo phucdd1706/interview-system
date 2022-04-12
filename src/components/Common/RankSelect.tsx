@@ -44,6 +44,7 @@ const RankSelect = (props: any) => {
         onChange={change}
         inputProps={{}}
         value={values?.rank}
+        fullWidth
       >
         {rank?.map((row: Rank) => (
           <MenuItem value={row?.id} key={row?.id}>

@@ -10,7 +10,7 @@ import {
   TableContainer,
   TableHead,
   Button,
-  TablePagination,
+  Pagination,
   Box,
   TextField,
   Grid,
@@ -20,7 +20,11 @@ import {
   Chip,
   IconButton,
   Fab,
-  Tooltip
+  Tooltip,
+  Menu,
+  MenuItem,
+  Stack,
+  useMediaQuery
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import { Formik } from 'formik';
@@ -29,6 +33,8 @@ import { useTheme } from '@mui/material/styles';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -38,10 +44,16 @@ import { fetchCandidates, filter } from 'store/slices/inProgress';
 import RankSelect from 'components/Common/RankSelect';
 import CandidateDrawer from 'components/DrawerPage/CandidateDrawer';
 import CandidateModal from 'components/ModalPage/CandidateModal';
+import { gridSpacing } from '../../store/constant';
+import SortStatus from 'views/inProgress/SortStatus';
 
 const InProgress = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+  const spacingMD = matchDownMD ? 1 : 1.5;
+
   const token = localStorage.getItem('serviceToken');
   const inProgress = useSelector((state: RootState) => state.inProgress);
 
@@ -52,10 +64,20 @@ const InProgress = () => {
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [dataEdit, setDataEdit] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl2, setAnchorEl2] = useState(null);
   const [idRecord, setIdRecord] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [anchorElSoft, setAnchorElSoft] = useState(null);
+  const initialState: SearchValues = {
+    search: '',
+    rank: '',
+    status: ''
+  };
+  const [filters, setFilters] = useState(initialState);
 
   const open = Boolean(anchorEl);
+  const openSort = Boolean(anchorElSoft);
+
   const id = open ? 'simple-popover' : undefined;
 
   useEffect(() => {
@@ -112,83 +134,149 @@ const InProgress = () => {
     handleClose();
   };
 
-  const renderSearchForm = () => (
-    <Formik
-      initialValues={{
-        search: '',
-        rank: ''
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        handleSearch(values);
-        setSubmitting(false);
-      }}
-    >
-      {({ handleBlur, handleChange, handleSubmit, isSubmitting, values }) => (
-        <form noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={{ xl: 2, xs: 1 }}>
-            <Grid item xl={4} xs={12}>
-              <FormControl size="small" fullWidth>
-                <TextField
-                  id="outlined-basic"
-                  name="search"
-                  value={values?.search}
-                  label={<span>Tên ứng viên</span>}
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  inputProps={{}}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xl={4} xs={12}>
-              <FormControl size="small" fullWidth>
-                <RankSelect blur={handleBlur} change={handleChange} values={values} />
-              </FormControl>
-            </Grid>
-            <Grid item xl={4} xs={12}>
-              <Box sx={{ position: 'relative' }}>
-                <Button disableElevation disabled={isSubmitting} variant="contained" type="submit">
-                  Search
-                </Button>
-                <Box sx={{ position: 'absolute', right: 0, top: 0 }}>
-                  <Tooltip title="Add">
-                    <Fab
-                      color="primary"
-                      size="small"
-                      onClick={() => {
-                        setVisibleAdd(!visibleAdd);
-                        setDataEdit({});
-                      }}
-                      sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
-                    >
-                      <AddIcon fontSize="small" />
-                    </Fab>
-                  </Tooltip>
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Formik>
-  );
-
-  const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
+  const handleSort = (event: any) => {
+    setAnchorElSoft(event.currentTarget);
   };
 
-  const handleChangeRowsPerPage = (event: any) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleCloseSort = () => {
+    setAnchorElSoft(null);
+  };
+
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
+    setFilters({ ...filters, status: index });
+    setAnchorElSoft(null);
+  };
+
+  const renderSearchForm = () => {
+    const sortLabel = SortStatus.filter((items) => items.value === filters.status);
+
+    return (
+      <Formik
+        initialValues={{
+          search: '',
+          rank: ''
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          handleSearch(values);
+          setSubmitting(false);
+        }}
+      >
+        {({ handleBlur, handleChange, handleSubmit, isSubmitting, values }) => (
+          <form noValidate onSubmit={handleSubmit}>
+            <Grid container spacing={{ xl: 2, xs: 1 }}>
+              <Grid item xl={10} xs={12}>
+                <Stack direction="row" alignItems="center" justifyContent="flex-start" spacing={matchDownSM ? 0.5 : spacingMD}>
+                  <FormControl size="small" sx={{ width: { xl: 236, md: 'auto', xs: 140 } }}>
+                    <TextField
+                      id="outlined-basic"
+                      name="search"
+                      value={values?.search}
+                      label={<span>Tên ứng viên</span>}
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      inputProps={{}}
+                    />
+                  </FormControl>
+
+                  <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
+                    |
+                  </Typography>
+
+                  <FormControl size="small" sx={{ width: { xl: 236, md: 'auto', xs: 140 } }}>
+                    <RankSelect blur={handleBlur} change={handleChange} values={values} />
+                  </FormControl>
+
+                  <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
+                    |
+                  </Typography>
+                  <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                    <Typography variant="h5">Sort by: </Typography>
+                    <Button
+                      id="demo-positioned-button"
+                      aria-controls="demo-positioned-menu"
+                      aria-haspopup="true"
+                      aria-expanded={openSort ? 'true' : undefined}
+                      onClick={handleSort}
+                      sx={{ color: 'grey.500', fontWeight: 400 }}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    >
+                      {sortLabel.length > 0 && sortLabel[0].label}
+                    </Button>
+                    <Menu
+                      id="demo-positioned-menu"
+                      aria-labelledby="demo-positioned-button"
+                      anchorEl={anchorElSoft}
+                      open={openSort}
+                      onClose={handleCloseSort}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right'
+                      }}
+                    >
+                      {SortStatus.map((status, index) => (
+                        <MenuItem
+                          sx={{ p: 1.5 }}
+                          key={index}
+                          selected={status.value === filters.status}
+                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
+                        >
+                          {status.label}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Stack>
+                </Stack>
+              </Grid>
+              <Grid item xl={2} xs={12}>
+                <Box sx={{ position: 'relative' }}>
+                  <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Tooltip title="Add">
+                      <Fab
+                        color="primary"
+                        size="small"
+                        onClick={() => {
+                          setVisibleAdd(!visibleAdd);
+                          setDataEdit({});
+                        }}
+                        sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
+                      >
+                        <AddIcon fontSize="small" />
+                      </Fab>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Formik>
+    );
+  };
+
+  const handleTableChange = (e: any, pageTable: number) => {
+    console.log('pageTable', pageTable);
+  };
+
+  const handleClickPagination = (event: any) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleClosePagination = () => {
+    setAnchorEl2(null);
   };
 
   return (
     <>
       <MainCard title={renderSearchForm()}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer>
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -201,10 +289,8 @@ const InProgress = () => {
             </TableHead>
             <TableBody>
               {candidate?.map((row) => (
-                <TableRow key={row?.id}>
-                  <TableCell component="th" scope="row">
-                    {row?.name}
-                  </TableCell>
+                <TableRow hover key={row?.id}>
+                  <TableCell>{row?.name}</TableCell>
                   <TableCell>{row?.phone}</TableCell>
                   <TableCell>{row?.email}</TableCell>
                   <TableCell>{moment(row.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
@@ -299,14 +385,44 @@ const InProgress = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          component="div"
-          count={100}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Grid item xs={12} sx={{ p: 3 }}>
+          <Grid container justifyContent="space-between" spacing={gridSpacing}>
+            <Grid item>
+              <Pagination count={10} color="primary" onChange={handleTableChange} />
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                sx={{ color: theme.palette.grey[900] }}
+                color="secondary"
+                endIcon={<ExpandMoreRoundedIcon />}
+                onClick={handleClickPagination}
+              >
+                10 Rows
+              </Button>
+              <Menu
+                id="menu-user-list-style1"
+                anchorEl={anchorEl2}
+                keepMounted
+                open={Boolean(anchorEl2)}
+                onClose={handleClosePagination}
+                variant="selectedMenu"
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right'
+                }}
+              >
+                <MenuItem onClick={handleClosePagination}> 10 Rows</MenuItem>
+                <MenuItem onClick={handleClosePagination}> 20 Rows</MenuItem>
+                <MenuItem onClick={handleClosePagination}> 30 Rows </MenuItem>
+              </Menu>
+            </Grid>
+          </Grid>
+        </Grid>
       </MainCard>
       <CandidateDrawer visible={visibleAdd} dataEdit={dataEdit} />
       <CandidateModal visible={visibleModal} dataEdit={dataEdit} />

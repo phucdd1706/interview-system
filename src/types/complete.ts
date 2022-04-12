@@ -11,6 +11,7 @@ export interface Candidates {
 export interface SearchValues {
   search?: string;
   rank?: number | string;
+  status?: number | string;
 }
 
 export interface Rank {

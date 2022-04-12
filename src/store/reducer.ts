@@ -9,6 +9,7 @@ import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
 import completeReducer from 'store/slices/complete';
 import inProgressReducer from 'store/slices/inProgress';
+import rankReducer from 'store/slices/rank';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -22,7 +23,8 @@ const reducer = combineReducers({
   ),
   menu: menuReducer,
   complete: completeReducer,
-  inProgress: inProgressReducer
+  inProgress: inProgressReducer,
+  rank: rankReducer
 });
 
 export default reducer;

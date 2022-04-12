@@ -7,5 +7,6 @@
   "application": "Ứng dụng",
   "manage-member": "Quản lý thành viên",
   "administrator": "Quản trị viên",
-  "customer": "Người dùng"
+  "customer": "Người dùng",
+  "manage-rank": "Quản lý Rank"
 }

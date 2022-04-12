@@ -11,6 +11,7 @@ const Complete = Loadable(lazy(() => import('views/complete/complete')));
 const Inprogress = Loadable(lazy(() => import('views/inProgress/inprogress')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
+const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
 
 const MainRoutes = {
   path: '/',
@@ -43,6 +44,10 @@ const MainRoutes = {
     {
       path: '/user/customer',
       element: <Customer />
+    },
+    {
+      path: 'ranks',
+      element: <Ranks />
     }
   ]
 };
