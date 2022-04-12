@@ -14,7 +14,7 @@ interface AddAdministratorProps {
   handleCloseDialog: (e: SyntheticEvent) => void;
 }
 
-const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) => {
+const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
   const theme = useTheme();
 
   return (
@@ -37,7 +37,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
     >
       {open && (
         <>
-          <DialogTitle>Add Administrator</DialogTitle>
+          <DialogTitle>Info Customer</DialogTitle>
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
@@ -77,4 +77,4 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
   );
 };
 
-export default AddAdministrator;
+export default InfoCustomer;
