@@ -15,3 +15,14 @@ export type SortStatusProps = {
   value?: string;
   label: string;
 };
+
+export type Administrator = {
+  name?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  dob?: string;
+  gender?: string;
+  status?: number;
+  type?: number;
+};
