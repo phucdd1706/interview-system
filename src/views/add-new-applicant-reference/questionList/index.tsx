@@ -17,8 +17,10 @@ interface Props {
 
 const QuestionList = ({ questionList }: Props) => {
   const [open, setOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState('basic');
   const dispatch = useDispatch();
-  const handleModalOpen = () => {
+  const handleModalOpen = (type: string) => {
+    setSelectedType(type);
     setOpen(true);
   };
   const handleModalClose = () => {
@@ -56,7 +58,7 @@ const QuestionList = ({ questionList }: Props) => {
         <Divider />
         <Stack direction="column" spacing={1} sx={{ padding: '1em 0', overflowY: 'auto', marginBottom: 2, height: 'calc(90vh - 200px)' }}>
           {ListQuestions.map((data, index) => (
-            <QuestionTag key={data.questionId} type="basic" value={data} onAddTag={addQuestion} />
+            <QuestionTag key={data.questionId} type={selectedType} value={data} onAddTag={addQuestion} />
           ))}
         </Stack>
       </ModalStyled>
@@ -69,35 +71,35 @@ export default QuestionList;
 const ListQuestions = [
   {
     questionId: '1234',
-    question: 'What is your name?'
+    question: 'What is your 23423?'
   },
   {
     questionId: '21234',
-    question: 'What is your age?'
+    question: 'What is werweyour age?'
   },
   {
     questionId: '3sdf',
-    question: 'Expected salary?'
+    question: 'erwer salary?'
   },
   {
     questionId: '412',
-    question: 'What is ReactJS?'
+    question: 'What is RwerwfeactJS?'
   },
   {
     questionId: '524',
-    question: 'What is Redux?'
+    question: 'What is sdfRedux?'
   },
   {
     questionId: '623',
-    question: 'What is J1?'
+    question: 'What is werJ1?'
   },
   {
     questionId: '754',
-    question: 'How to increase performance?'
+    question: 'How to increafwese performance?'
   },
   {
     questionId: '83',
-    question: 'How to increase security?'
+    question: 'How to increweqase security?'
   },
   {
     questionId: '9654',
@@ -105,7 +107,7 @@ const ListQuestions = [
   },
   {
     questionId: '1340',
-    question: 'What is ReactJS?'
+    question: 'What is RefwwactJS?'
   }
 ];
 

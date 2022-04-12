@@ -12,7 +12,7 @@ import { QuestionStackInterface } from 'types/question';
 
 interface Props {
   questionStack: QuestionStackInterface;
-  onClickAddButton?: () => void;
+  onClickAddButton?: (type: string) => void;
   onClickDeleteButton?: (type: string, questionId: string) => void;
   interviewing?: boolean;
 }
@@ -27,7 +27,7 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
           color="success"
           sx={{ width: '32px', height: '24px', padding: 0, minWidth: 'auto' }}
           onClick={() => {
-            onClickAddButton();
+            onClickAddButton(questionStack.type);
           }}
         >
           <IconPlus />

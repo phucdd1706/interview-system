@@ -114,7 +114,7 @@ const applicantReferences = createSlice({
     deleteInterviewQuestions(state, action: { payload: { type: string; questionId: string } }) {
       const { type, questionId } = action.payload;
       state.interviewQuestions.filter((item) => {
-        if (item.type === type) {
+        if (item.type.toLowerCase() === type.toLowerCase()) {
           item.questions = item.questions.filter((question) => question.questionId !== questionId);
         }
         return item;
@@ -123,7 +123,10 @@ const applicantReferences = createSlice({
     addInterviewQuestions(state, action: { payload: { type: string; question: questionInterface } }) {
       const { type, question } = action.payload;
       state.interviewQuestions.filter((item) => {
-        if (item.type.toLowerCase() === type && item.questions.every((element) => element.questionId !== question.questionId)) {
+        if (
+          item.type.toLowerCase() === type.toLowerCase() &&
+          item.questions.every((element) => element.questionId !== question.questionId)
+        ) {
           item.questions.push(question);
         }
         return item;
