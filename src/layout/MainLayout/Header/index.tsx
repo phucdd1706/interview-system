@@ -5,9 +5,9 @@ import { IconMenu2 } from '@tabler/icons';
 
 // PROJECT IMPORTS
 import LocalizationSection from 'layout/MainLayout/Header/LocalizationSection';
+import ProfileSection from 'layout/MainLayout/Header/ProfileSection';
 import { useDispatch, useSelector } from 'store';
 import { openDrawer } from 'store/slices/menu';
-import UserAvatar from 'layout/MainLayout/Header/UserAvatar';
 import LogoSection from 'layout/MainLayout/LogoSection';
 
 const Header = () => {
@@ -50,19 +50,10 @@ const Header = () => {
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
         <LogoSection />
       </Box>
-      <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', width: 150, justifyContent: 'flex-end' }}>
+      <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
         <LocalizationSection />
-        <UserAvatar />
       </Box>
-      <Box
-        sx={{
-          width: 150,
-          display: { xs: 'flex', sm: 'none' },
-          [theme.breakpoints.down('md')]: {
-            width: 34
-          }
-        }}
-      />
+      <ProfileSection />
     </>
   );
 };

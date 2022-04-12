@@ -67,8 +67,9 @@ const LocalizationSection = () => {
       <Box
         sx={{
           ml: 2,
+          mr: 3,
           [theme.breakpoints.down('md')]: {
-            ml: 1
+            ml: 2
           }
         }}
       >

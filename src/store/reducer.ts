@@ -8,6 +8,7 @@ import menuReducer from 'store/slices/menu';
 import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
 import applicantReferences from 'store/slices/applicantReferences';
+import rankReducer from 'store/slices/rank';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -19,8 +20,9 @@ const reducer = combineReducers({
     },
     userReducer
   ),
-  menu: menuReducer,
-  applicant: applicantReferences
+  applicant: applicantReferences,
+  rank: rankReducer,
+  menu: menuReducer
 });
 
 export default reducer;

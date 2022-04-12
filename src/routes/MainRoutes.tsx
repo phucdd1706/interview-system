@@ -7,8 +7,12 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-const AddApplicantReference = Loadable(lazy(() => import('views/add-new-applicant-reference')));
-const InterviewScreen = Loadable(lazy(() => import('views/interview')));
+const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
+const Customer = Loadable(lazy(() => import('views/pages/customer')));
+const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
+const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
+const Interview = Loadable(lazy(() => import('views/pages/interview')));
+
 const MainRoutes = {
   path: '/',
   element: (
@@ -18,20 +22,28 @@ const MainRoutes = {
   ),
   children: [
     {
-      path: '/',
+      path: '/dashboard/analytics',
       element: <Dashboard />
     },
     {
-      path: '/dashboard',
-      element: <Dashboard />
+      path: '/user/administrator',
+      element: <Administrator />
     },
     {
-      path: '/add-new-applicant',
-      element: <AddApplicantReference />
+      path: '/user/customer',
+      element: <Customer />
+    },
+    {
+      path: 'ranks',
+      element: <Ranks />
+    },
+    {
+      path: '/applicant',
+      element: <AddNewApplicant />
     },
     {
       path: '/interview/:id',
-      element: <InterviewScreen />
+      element: <Interview />
     }
   ]
 };

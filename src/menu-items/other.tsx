@@ -26,7 +26,7 @@ const other = {
       id: 'applicant',
       title: <FormattedMessage id="add new applicant reference" />,
       type: 'item',
-      url: '/add-new-applicant',
+      url: '/applicant',
       icon: icons.IconFilePlus,
       breadcrumbs: false
     }

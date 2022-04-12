@@ -10,6 +10,9 @@ import { InitialLoginContextProps, JWTContextType } from 'types/auth';
 import { KeyedObject } from 'types';
 import { LOGIN, LOGOUT } from 'store/actions';
 
+export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/v1/login`;
+export const ME_URL = `${process.env.REACT_APP_API_URL}/v1/me`;
+
 const initialState: InitialLoginContextProps = {
   isLoggedIn: false,
   isInitialized: false,
@@ -45,8 +48,9 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
         const serviceToken = window.localStorage.getItem('serviceToken');
         if (serviceToken && verifyToken(serviceToken)) {
           setSession(serviceToken);
-          const response = await axios.get('/api/me');
-          const { user } = response.data;
+          const response = await axios.get(ME_URL);
+          const user = response.data.success;
+
           dispatch({
             type: LOGIN,
             payload: {
@@ -73,9 +77,23 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     return <Loader />;
   }
 
-  const login = async (email: string, password: string) => {};
+  const login = async (email: string, password: string) => {
+    const response = await axios.post(LOGIN_URL, { email, password });
+    const { token, user } = response.data.success;
+    setSession(token);
+    dispatch({
+      type: LOGIN,
+      payload: {
+        isLoggedIn: true,
+        user
+      }
+    });
+  };
 
-  const logout = () => {};
+  const logout = () => {
+    setSession(null);
+    dispatch({ type: LOGOUT });
+  };
 
   return <JWTContext.Provider value={{ ...state, login, logout }}>{children}</JWTContext.Provider>;
 };

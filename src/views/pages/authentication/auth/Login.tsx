@@ -9,11 +9,9 @@ import AuthFooter from 'ui-component/cards/AuthFooter';
 import AuthLogin from '../auth-forms/AuthLogin';
 import AuthWrapper from '../AuthWrapper';
 import Logo from 'ui-component/Logo';
-import useAuth from 'hooks/useAuth';
 
 const Login = () => {
   const theme = useTheme();
-  const { isLoggedIn } = useAuth();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
@@ -48,18 +46,6 @@ const Login = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Divider />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Grid item container direction="column" alignItems="center" xs={12}>
-                      <Typography
-                        component={Link}
-                        to={isLoggedIn ? '/dashboard' : '/register'}
-                        variant="subtitle1"
-                        sx={{ textDecoration: 'none' }}
-                      >
-                        Don&apos;t have an account?
-                      </Typography>
-                    </Grid>
                   </Grid>
                 </Grid>
               </AuthCardWrapper>

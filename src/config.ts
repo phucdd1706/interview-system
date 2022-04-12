@@ -8,7 +8,7 @@ export const JWT_API = {
 
 export const BASE_PATH = '';
 
-export const DASHBOARD_PATH = '/dashboard';
+export const DASHBOARD_PATH = '/dashboard/analytics';
 
 const config: ConfigProps = {
   fontFamily: `'Roboto', sans-serif`,

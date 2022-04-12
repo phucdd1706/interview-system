@@ -1,15 +1,15 @@
 // THIRD PARTY
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // PROJECT IMPORTS
 import App from 'App';
-import reportWebVitals from './reportWebVitals';
-import * as serviceWorker from './serviceWorker';
+import reportWebVitals from 'reportWebVitals';
+import * as serviceWorker from 'serviceWorker';
 import { BASE_PATH } from 'config';
-import { ConfigProvider } from './contexts/ConfigContext';
+import { ConfigProvider } from 'contexts/ConfigContext';
 import { persister, store } from 'store';
 
 ReactDOM.render(
