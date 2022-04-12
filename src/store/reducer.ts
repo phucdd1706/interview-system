@@ -7,6 +7,7 @@ import { persistReducer } from 'redux-persist';
 import menuReducer from 'store/slices/menu';
 import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
+import customerReducer from './slices/customer';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -17,6 +18,14 @@ const reducer = combineReducers({
       keyPrefix: 'beetsoft-'
     },
     userReducer
+  ),
+  customer: persistReducer(
+    {
+      key: 'customer',
+      storage,
+      keyPrefix: 'beetsoft-'
+    },
+    customerReducer
   ),
   menu: menuReducer
 });
