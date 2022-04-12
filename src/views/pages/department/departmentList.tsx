@@ -1,140 +1,132 @@
 // THIRD-PARTY
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import React, { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import moment from 'moment';
+import React from 'react';
+import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import { Chip, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import TablePagination from '@mui/material/TablePagination';
 
 // PROJECT IMPORTS
-import MainCard from 'ui-component/cards/MainCard';
-import SortStatus from 'views/pages/administrator/SortStatus';
-import { dispatch } from 'store';
 import { getAdministratorList } from 'store/slices/user';
-import { UserFilter } from 'types/user';
+import { useDispatch, useSelector } from 'store';
+import { UserProfile } from 'types/user-profile';
 
-const Department = () => {
+const DepartmentList = () => {
   const theme = useTheme();
-
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
-  const spacingMD = matchDownMD ? 1 : 1.5;
-
-  const initialState: UserFilter = {
-    search: '',
-    status: ''
+  const dispatch = useDispatch();
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = React.useState(0);
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
-  const [filter, setFilter] = useState(initialState);
-
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
   };
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openSort = Boolean(anchorEl);
-  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [data, setData] = React.useState<UserProfile[]>([]);
+  const { users } = useSelector((state) => state.user);
+  React.useEffect(() => {
+    setData(users);
+  }, [users]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getAdministratorList(filter));
-    }, 400);
-  };
-
-  useEffect(() => {
-    filterData();
+  React.useEffect(() => {
+    dispatch(getAdministratorList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
-    setFilter({ ...filter, status: index });
-    setAnchorEl(null);
-  };
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
+  }, []);
 
   return (
-    <MainCard
-      title={
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
-              <Grid item>
-                <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
-                  <TextField
-                    sx={{ width: { xs: 140, md: 'auto' } }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon fontSize="small" />
-                        </InputAdornment>
-                      )
-                    }}
-                    value={filter.search}
-                    placeholder="Search...."
-                    size="small"
-                    onChange={handleSearch}
-                  />
-
-                  <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
-                    |
-                  </Typography>
-                  <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                    <Typography variant="h5">Sort by: </Typography>
-                    <Button
-                      id="demo-positioned-button"
-                      aria-controls="demo-positioned-menu"
-                      aria-haspopup="true"
-                      aria-expanded={openSort ? 'true' : undefined}
-                      onClick={handleClickListItem}
-                      sx={{ color: 'grey.500', fontWeight: 400 }}
-                      endIcon={<KeyboardArrowDownIcon />}
-                    >
-                      {sortLabel.length > 0 && sortLabel[0].label}
-                    </Button>
-                    <Menu
-                      id="demo-positioned-menu"
-                      aria-labelledby="demo-positioned-button"
-                      anchorEl={anchorEl}
-                      open={openSort}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right'
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                      }}
-                    >
-                      {SortStatus.map((status, index) => (
-                        <MenuItem
-                          sx={{ p: 1.5 }}
-                          key={index}
-                          selected={status.value === filter.status}
-                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
-                        >
-                          {status.label}
-                        </MenuItem>
-                      ))}
-                    </Menu>
-                  </Stack>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      }
-      content={false}
-    >
-      <p>custommer</p>
-    </MainCard>
+    <>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Code</TableCell>
+              <TableCell>Management</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>CreateAt</TableCell>
+              <TableCell>Note</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data &&
+              data.map((row, index) => (
+                <TableRow hover key={index}>
+                  <TableCell sx={{ pl: 3 }}>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.username}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.phone}</TableCell>
+                  <TableCell>{row.dob ?? 'N/A'}</TableCell>
+                  <TableCell>{row.gender ?? 'N/A'}</TableCell>
+                  <TableCell>{moment(row.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+                  <TableCell>
+                    {row.status === 1 && (
+                      <Chip
+                        label="Inactive"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
+                          color: theme.palette.warning.dark
+                        }}
+                      />
+                    )}
+                    {row.status === 2 && (
+                      <Chip
+                        label="Active"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
+                          color: theme.palette.success.dark
+                        }}
+                      />
+                    )}
+                    {row.status === 3 && (
+                      <Chip
+                        label="Blocked"
+                        size="small"
+                        sx={{
+                          background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
+                          color: theme.palette.orange.dark
+                        }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell align="center" sx={{ pr: 3 }}>
+                    <IconButton color="primary" size="large">
+                      <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    </IconButton>
+                    <IconButton color="secondary" size="large">
+                      <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    </IconButton>
+                    <IconButton color="error" size="large">
+                      <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[1, 2, 3]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </>
   );
 };
 
-export default Department;
+export default DepartmentList;

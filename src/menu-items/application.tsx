@@ -1,8 +1,9 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
 import { IconUserCheck } from '@tabler/icons';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
-const icons = { IconUserCheck };
+const icons = { IconUserCheck, CorporateFareIcon };
 
 const application = {
   id: 'application',
@@ -28,6 +29,14 @@ const application = {
           url: '/user/customer'
         }
       ]
+    },
+    {
+      id: 'manage-department',
+      title: <FormattedMessage id="Department" />,
+      type: 'item',
+      url: '/department',
+      icon: icons.CorporateFareIcon,
+      breadcrumbs: true
     }
   ]
 };

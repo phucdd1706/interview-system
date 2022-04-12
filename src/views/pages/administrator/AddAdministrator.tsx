@@ -1,11 +1,12 @@
 // THIRD-PARTY
-import { forwardRef, SyntheticEvent } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
+import React, { forwardRef, SyntheticEvent } from 'react';
+
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { gridSpacing } from 'store/constant';
+
+import DatePicker from '@mui/lab/DatePicker';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
@@ -15,7 +16,7 @@ interface AddAdministratorProps {
 }
 
 const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) => {
-  const theme = useTheme();
+  const [value, setValue] = React.useState<Date | null>(null);
 
   return (
     <Dialog
@@ -39,9 +40,53 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
         <>
           <DialogTitle>Add Administrator</DialogTitle>
           <DialogContent>
-            <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} style={{ marginTop: '5px' }}>
+                <InputLabel style={{ color: 'black' }}>Name</InputLabel>
+                <TextField name="name1" fullWidth autoFocus size="small" placeholder="Name" />
+              </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Name*" />
+                <InputLabel style={{ color: 'black' }}>UserName</InputLabel>
+                <TextField name="bod1" fullWidth autoFocus size="small" placeholder="UserName" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Gender</InputLabel>
+                <TextField name="gender" fullWidth autoFocus size="small" placeholder="Gender" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Phone</InputLabel>
+                <TextField name="phone" fullWidth autoFocus size="small" placeholder="Phone" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Email</InputLabel>
+                <TextField name="email" fullWidth autoFocus size="small" placeholder="Email" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>PassWord</InputLabel>
+                <TextField name="passWord" type="password" fullWidth autoFocus size="small" placeholder="PassWord" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Confirm PassWord</InputLabel>
+                <TextField name="passConfirm" type="password" fullWidth autoFocus size="small" placeholder="Email" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Date of birth</InputLabel>
+                {/* <DatePicker
+                  label="date of birth"
+                  value={value}
+                  onChange={(newValue) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                /> */}
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Due Date</InputLabel>
+                <TextField name="duedate" fullWidth autoFocus size="small" placeholder="" />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel style={{ color: 'black' }}>Status</InputLabel>
+                <TextField name="status" fullWidth autoFocus size="small" />
               </Grid>
             </Grid>
           </DialogContent>

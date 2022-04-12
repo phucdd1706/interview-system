@@ -2,7 +2,8 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Typography, useMediaQuery } from '@mui/material';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
@@ -11,13 +12,21 @@ import SortStatus from 'views/pages/administrator/SortStatus';
 import { dispatch } from 'store';
 import { getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
+import DepartmentList from './departmentList';
+import AddDepartment from './addDepartment';
 
 const Department = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpenDialog = () => {
+    setOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
   const spacingMD = matchDownMD ? 1 : 1.5;
 
   const initialState: UserFilter = {
@@ -62,7 +71,7 @@ const Department = () => {
     <MainCard
       title={
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
               <Grid item>
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
@@ -128,11 +137,24 @@ const Department = () => {
               </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+            <Tooltip title="Add">
+              <Fab
+                color="primary"
+                size="small"
+                onClick={handleClickOpenDialog}
+                sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
+              >
+                <AddIcon fontSize="small" />
+              </Fab>
+            </Tooltip>
+          </Grid>
         </Grid>
       }
       content={false}
     >
-      <p>custommer</p>
+      <AddDepartment open={open} handleCloseDialog={handleCloseDialog} />
+      <DepartmentList />
     </MainCard>
   );
 };
