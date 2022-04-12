@@ -9,6 +9,7 @@ import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
 import completeReducer from 'store/slices/complete';
 import inProgressReducer from 'store/slices/inProgress';
+import customerReducer from './slices/customer';
 import rankReducer from 'store/slices/rank';
 
 const reducer = combineReducers({
@@ -24,7 +25,15 @@ const reducer = combineReducers({
   menu: menuReducer,
   complete: completeReducer,
   inProgress: inProgressReducer,
-  rank: rankReducer
+  rank: rankReducer,
+  customer: persistReducer(
+    {
+      key: 'customer',
+      storage,
+      keyPrefix: 'beetsoft-'
+    },
+    customerReducer
+  )
 });
 
 export default reducer;
