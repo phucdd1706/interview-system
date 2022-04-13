@@ -1,15 +1,13 @@
 // THIRD-PARTY
 import React, { forwardRef, SyntheticEvent } from 'react';
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, Slide, SlideProps, TextField } from '@mui/material';
-import { Form, Formik, useFormik } from 'formik';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
-import DatePicker from '@mui/lab/DatePicker';
-import { Administrator } from 'types/user';
 import { postAdministrator } from 'store/slices/user';
 import { gridSpacing } from 'store/constant';
 import { useDispatch } from 'react-redux';
@@ -26,7 +24,7 @@ const validationSchema = Yup.object({
   username: Yup.string().required('UserName is required'),
   password: Yup.string().required('Password is required'),
   email: Yup.string().required('Email is required'),
-  passwordConfirmation: Yup.string().required('Password Confirmation is required'),
+  password_confirmation: Yup.string().required('Password Confirmation is required'),
   phone: Yup.string().required('Phone is required'),
   type: Yup.string().required('Type is required')
 });

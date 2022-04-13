@@ -55,6 +55,7 @@ const Administrator = () => {
   };
   const handleCallback = (adminId: string) => {
     setId(adminId);
+    setOpenInfo(true);
   };
   const initialState: UserFilter = {
     search: '',

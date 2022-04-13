@@ -109,7 +109,7 @@ const AdministratorList = ({ handleInfor, handleCallback }: Props) => {
                     <IconButton color="primary" size="large" onClick={() => handleCallback(row.id)}>
                       <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="secondary" size="large" onClick={handleInfor}>
+                    <IconButton color="secondary" size="large" onClick={() => handleCallback(row.id)}>
                       <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                     <IconButton color="error" size="large">

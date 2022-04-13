@@ -75,8 +75,8 @@ export function putAdministrator(data?: Administrator) {
 export function getDetailAdministrator() {
   return async (id: string) => {
     try {
-      await axios.get(ADMINISTRATOR_URL.detailAdmin(id));
-      dispatch(slice.actions.getAdministratorListSuccess);
+      const response = await axios.get(ADMINISTRATOR_URL.detailAdmin(id));
+      dispatch(slice.actions.getAdministratorListSuccess(response.data.success.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
