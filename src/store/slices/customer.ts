@@ -11,8 +11,10 @@ import { UserProfile } from 'types/user-profile';
 export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/client/users`;
 
 const initialState: DefaultRootStateProps['customer'] = {
-  error: null,
-  customers: []
+  customers: [],
+  pageCount: 0,
+  currentPage: 1,
+  error: null
 };
 
 const slice = createSlice({
@@ -24,7 +26,9 @@ const slice = createSlice({
     },
 
     getCustomerListSuccess(state, action) {
-      state.customers = action.payload;
+      state.customers = action.payload.data;
+      state.pageCount = action.payload.last_page;
+      state.currentPage = action.payload.current_page;
     },
 
     editCustomerSuccess(state, action) {
@@ -52,7 +56,7 @@ export function getCustomerList(filter?: UserFilter) {
   return async () => {
     try {
       const response = await axios.get(`${CUSTOMER_URL}${query}`);
-      dispatch(slice.actions.getCustomerListSuccess(response.data.success.data));
+      dispatch(slice.actions.getCustomerListSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

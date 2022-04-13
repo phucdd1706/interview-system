@@ -77,7 +77,13 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required')
+  name: yup.string().required('Name is required'),
+  username: yup.string().required('Username is required'),
+  email: yup.string().email('Enter a valid email').required('Email is required'),
+  phone: yup.string().required('Phone is required'),
+  gender: yup.string().required('Gender is required'),
+  type: yup.string().required('Type is required'),
+  status: yup.string().required('Status is required')
 });
 
 const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
