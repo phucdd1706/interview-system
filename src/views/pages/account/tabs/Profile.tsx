@@ -1,3 +1,4 @@
+// THIRD-PARTY
 import React from 'react';
 import {
   Avatar,
@@ -30,10 +31,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/system';
-import MainCard from 'ui-component/cards/MainCard';
-import User from 'assets/images/users/user-round.svg';
 import { useTheme } from '@mui/material/styles';
+
+// PROJECT IMPORTS
 import useAuth from '../../../../hooks/useAuth';
+// import { getProfile } from '../../../../store/slices/profile';
+import User from 'assets/images/users/user-round.svg';
+import MainCard from 'ui-component/cards/MainCard';
 
 export default function Profile() {
   const theme = useTheme();
@@ -47,6 +51,10 @@ export default function Profile() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  // const onGetProfile = () => {
+  //   getProfile();
+  // };
 
   return (
     <Box>

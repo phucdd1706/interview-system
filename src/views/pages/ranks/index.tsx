@@ -1,36 +1,20 @@
 // THIRD-PARTY
+import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import MainCard from 'ui-component/cards/MainCard';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/AddTwoTone';
-import {
-  Button,
-  Fab,
-  Grid,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  Pagination,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-  useMediaQuery
-} from '@mui/material';
+import SortStatus from 'views/pages/ranks/SortStatus';
+import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
-import AddAdministrator from 'views/pages/administrator/AddAdministrator';
-import AdministratorList from 'views/pages/administrator/AdministratorList';
-import MainCard from 'ui-component/cards/MainCard';
-import SortStatus from 'views/pages/administrator/SortStatus';
+import RanksList from 'views/pages/ranks/RanksList';
 import { dispatch } from 'store';
-import { getAdministratorList } from 'store/slices/user';
-import { UserFilter } from 'types/user';
-import { gridSpacing } from '../../../store/constant';
+import { getRanksList } from 'store/slices/rank';
+import { RankFilter } from 'types/rank';
 
-const Administrator = () => {
+const Ranks = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -46,7 +30,7 @@ const Administrator = () => {
     setOpen(false);
   };
 
-  const initialState: UserFilter = {
+  const initialState: RankFilter = {
     search: '',
     status: ''
   };
@@ -69,7 +53,7 @@ const Administrator = () => {
 
   const filterData = async () => {
     setTimeout(async () => {
-      await dispatch(getAdministratorList(filter));
+      await dispatch(getRanksList(filter));
     }, 400);
   };
 
@@ -78,13 +62,11 @@ const Administrator = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
     setFilter({ ...filter, status: index });
     setAnchorEl(null);
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
-
-  const handleClickPagination = (event: React.MouseEvent) => {};
 
   return (
     <MainCard
@@ -145,7 +127,7 @@ const Administrator = () => {
                           sx={{ p: 1.5 }}
                           key={index}
                           selected={status.value === filter.status}
-                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
+                          onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
                         </MenuItem>
@@ -172,48 +154,9 @@ const Administrator = () => {
       }
       content={false}
     >
-      <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
-      <AdministratorList />
-      <Grid item xs={12} sx={{ p: 3 }}>
-        <Grid container justifyContent="space-between" spacing={gridSpacing}>
-          <Grid item>
-            <Pagination count={10} color="primary" />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              sx={{ color: theme.palette.grey[900] }}
-              color="secondary"
-              endIcon={<ExpandMoreRoundedIcon />}
-              onClick={handleClickPagination}
-            >
-              10 Rows
-            </Button>
-            <Menu
-              id="menu-user-list-style1"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              variant="selectedMenu"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
-            </Menu>
-          </Grid>
-        </Grid>
-      </Grid>
+      <RanksList />
     </MainCard>
   );
 };
 
-export default Administrator;
+export default Ranks;
