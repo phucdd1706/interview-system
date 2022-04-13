@@ -6,12 +6,13 @@ import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
 import { UserFilter } from 'types/user';
+import { UserProfile } from 'types/user-profile';
 
 export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/client/users`;
 
-const initialState: DefaultRootStateProps['user'] = {
+const initialState: DefaultRootStateProps['customer'] = {
   error: null,
-  users: []
+  customers: []
 };
 
 const slice = createSlice({
@@ -22,8 +23,17 @@ const slice = createSlice({
       state.error = action.payload;
     },
 
-    getCusomterListSuccess(state, action) {
-      state.users = action.payload;
+    getCustomerListSuccess(state, action) {
+      state.customers = action.payload;
+    },
+
+    editCustomerSuccess(state, action) {
+      state.customers = state.customers.map((customer) => {
+        if (customer.id === action.payload.id) {
+          return action.payload;
+        }
+        return customer;
+      });
     }
   }
 });
@@ -31,10 +41,29 @@ const slice = createSlice({
 export default slice.reducer;
 
 export function getCustomerList(filter?: UserFilter) {
+  let query: string;
+
+  if (filter !== undefined) {
+    query = `?search=${filter?.search}&status=${filter?.status}`;
+  } else {
+    query = '';
+  }
+
   return async () => {
     try {
-      const response = await axios.get(`${CUSTOMER_URL}?search=${filter?.search}&status=${filter?.status}`);
-      dispatch(slice.actions.getCusomterListSuccess(response.data.success.data));
+      const response = await axios.get(`${CUSTOMER_URL}${query}`);
+      dispatch(slice.actions.getCustomerListSuccess(response.data.success.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function editCustomer(customer: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`, customer);
+      dispatch(slice.actions.editCustomerSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

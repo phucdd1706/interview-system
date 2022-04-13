@@ -20,14 +20,7 @@ const reducer = combineReducers({
     },
     userReducer
   ),
-  customer: persistReducer(
-    {
-      key: 'customer',
-      storage,
-      keyPrefix: 'beetsoft-'
-    },
-    customerReducer
-  ),
+  customer: customerReducer,
   rank: rankReducer,
   menu: menuReducer
 });
