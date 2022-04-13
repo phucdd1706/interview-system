@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-import { useDispatch } from 'store';
+import { useDispatch, useSelector } from 'store';
 import { EditCustomer } from 'store/slices/customer';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
@@ -19,26 +19,20 @@ interface AddCustomerProps {
   id: string;
 }
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  username: Yup.string().required('User name is required'),
-  email: Yup.string()
-    .required('Required')
-    .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Sai địa chỉ Email'),
-  password: Yup.string().required('Required'),
-  password_confirmation: Yup.string()
-    .required('Required')
-    .oneOf([Yup.ref('password'), null], 'Password must match'),
-  phone: Yup.string()
-    .required('Required')
-    .matches(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/, 'Sai số điện thoại'),
-  type: Yup.string().required('Type is required')
+  name: Yup.string(),
+  username: Yup.string(),
+  email: Yup.string().matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Sai địa chỉ Email'),
+  password: Yup.string(),
+  password_confirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
+  phone: Yup.string().matches(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/, 'Sai số điện thoại'),
+  type: Yup.string()
 });
 
 const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
   const theme = useTheme();
   console.log(id);
-  // const { users } = useSelector((state) => state.customer);
-  // // const userById = users.filter((item) => item.id === id);
+  const { users } = useSelector((state) => state.customer);
+  const userById = users.filter((item) => item.id === id);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -87,7 +81,8 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
                     id="name"
                     name="name"
                     label="Name"
-                    value={formik.values.name}
+                    defaultValue={userById[0].name}
+                    // value={formik.values.name}
                     onChange={formik.handleChange}
                     error={formik.touched.name && Boolean(formik.errors.name)}
                     helperText={formik.touched.name && formik.errors.name}
@@ -99,7 +94,8 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
                     id="username"
                     name="username"
                     label="User Name"
-                    value={formik.values.username}
+                    defaultValue={userById[0].username}
+                    // value={formik.values.username}
                     onChange={formik.handleChange}
                     error={formik.touched.username && Boolean(formik.errors.username)}
                     helperText={formik.touched.username && formik.errors.username}
@@ -111,7 +107,8 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
                     id="email"
                     name="email"
                     label="Email"
-                    value={formik.values.email}
+                    defaultValue={userById[0].email}
+                    // value={formik.values.email}
                     onChange={formik.handleChange}
                     error={formik.touched.email && Boolean(formik.errors.email)}
                     helperText={formik.touched.email && formik.errors.email}
@@ -147,7 +144,8 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
                     id="phone"
                     name="phone"
                     label="Phone"
-                    value={formik.values.phone}
+                    defaultValue={userById[0].phone}
+                    // value={formik.values.phone}
                     onChange={formik.handleChange}
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
@@ -159,7 +157,8 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddCustomerProps) => {
                     id="type"
                     name="type"
                     label="Type"
-                    value={formik.values.type}
+                    defaultValue={userById[0].type}
+                    // value={formik.values.type}
                     onChange={formik.handleChange}
                     error={formik.touched.type && Boolean(formik.errors.type)}
                     helperText={formik.touched.type && formik.errors.type}

@@ -43,19 +43,19 @@ const InfoCustomer = ({ open, handleCloseDialog, id }: AddAdministratorProps) =>
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Name" defaultValue={userById[0].name} />
+                <TextField id="outlined-basic1" fullWidth label="Name" value={userById[0].name} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="User name" defaultValue={userById[0].username} />
+                <TextField id="outlined-basic1" fullWidth label="User name" value={userById[0].username} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Email" defaultValue={userById[0].email} />
+                <TextField id="outlined-basic1" fullWidth label="Email" value={userById[0].email} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Phone" defaultValue={userById[0].phone} />
+                <TextField id="outlined-basic1" fullWidth label="Phone" value={userById[0].phone} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Type" defaultValue={userById[0].type} />
+                <TextField id="outlined-basic1" fullWidth label="Type" value={userById[0].type} />
               </Grid>
             </Grid>
           </DialogContent>
