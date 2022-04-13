@@ -1,6 +1,6 @@
 // THIRD-PARTY
-import { forwardRef, SyntheticEvent, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { forwardRef, SyntheticEvent } from 'react';
+
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
@@ -8,10 +8,9 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 // import { useDispatch } from 'store';
 
-import { getDetailAdministrator, putAdministrator } from 'store/slices/user';
-import { Form, Formik, useFormik } from 'formik';
+import { putAdministrator } from 'store/slices/user';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { UserProfile } from 'types/user-profile';
 import { useDispatch } from 'react-redux';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
@@ -31,9 +30,7 @@ const validationSchema = Yup.object({
   // type: Yup.string().required('Type is required')
 });
 const EditAdmin = ({ open, handleCloseDialog, id }: EditAdminProps) => {
-  const theme = useTheme();
   const dispatch = useDispatch();
-
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -91,7 +88,7 @@ const EditAdmin = ({ open, handleCloseDialog, id }: EditAdminProps) => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    id="username"
+                    id="username1"
                     fullWidth
                     label="Enter Username*"
                     onChange={formik.handleChange}

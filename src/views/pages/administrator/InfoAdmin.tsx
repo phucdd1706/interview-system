@@ -1,18 +1,18 @@
 // THIRD-PARTY
 import { forwardRef, SyntheticEvent, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
+
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import { gridSpacing } from 'store/constant';
-import { useSelector } from 'store';
 
-import { getDetailAdministrator, putAdministrator } from 'store/slices/user';
-import { Form, Formik, useFormik } from 'formik';
-import * as Yup from 'yup';
-import { UserProfile } from 'types/user-profile';
+import { gridSpacing } from 'store/constant';
+
+import { getDetailAdministrator } from 'store/slices/user';
+
 import { useDispatch } from 'react-redux';
+import QLAdminService from 'contexts/admin';
+import { dispatch } from 'store';
+import { Formik } from 'formik';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
@@ -23,9 +23,23 @@ interface InfoAdminProps {
 }
 
 const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
-  const { users } = useSelector((state) => state.user);
-  const userById = users.filter((item) => item.id === id);
-
+  // const { users } = useSelector((state) => state.user);
+  // const userById = users.filter((item) => item.id === id);
+  // const dispatch = useDispatch();
+  const getDetailAdmin = async () => {
+    if (id) {
+      try {
+        const resp = await QLAdminService.getDetailAdmin(id);
+        // form.setFieldsValue(resp?.data?.success?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    getDetailAdmin();
+    dispatch(getDetailAdministrator(id));
+  });
   return (
     <Dialog
       open={open}
@@ -51,20 +65,20 @@ const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
-                <TextField id="name1" fullWidth label="Enter Name*" defaultValue={userById[0].name} disabled />
+                <TextField id="name" fullWidth label="Enter Name*" name="name" />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="username1" fullWidth label="Enter Username*" defaultValue={userById[0].username} disabled />
+                <TextField id="username" fullWidth label="Enter Username*" name="username" />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="email1" fullWidth label="Enter Email*" defaultValue={userById[0].email} disabled />
+                <TextField id="email" fullWidth label="Enter Email*" />
               </Grid>
 
               <Grid item xs={12}>
-                <TextField id="phone1" fullWidth label="Enter phone*" defaultValue={userById[0].phone} disabled />
+                <TextField id="phone" fullWidth label="Enter phone*" />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="typ1e" fullWidth label="Enter type*" defaultValue={userById[0].type} disabled />
+                <TextField id="type" fullWidth label="Enter type*" />
               </Grid>
             </Grid>
           </DialogContent>

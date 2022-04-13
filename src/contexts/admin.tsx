@@ -32,12 +32,18 @@ const QLAdmin_api = {
   dsAdmin: `v1/operator/users`,
   addAdmin: `v1/operator/users`,
   updateAdmin: (id: string) => `v1/operator/users/${id}`,
-  delAdmin: (id: string) => `v1/operator/users/${id}`
+  delAdmin: (id: string) => `v1/operator/users/${id}`,
+  detailAdmin: (id: string) => `v1/operator/users/${id}`
 };
 
 const QLAdminService = {
   getDsAdmin: async (params: AdminParams) => {
     const resp: AxiosResponse<QLAdminResponse> = await axiosServices.get(QLAdmin_api.dsAdmin, { params });
+    console.log(1111, resp);
+    return resp;
+  },
+  getDetailAdmin: async (id: string) => {
+    const resp: AxiosResponse<QLAdminResponse> = await axiosServices.get(QLAdmin_api.detailAdmin(id));
     console.log(1111, resp);
     return resp;
   },
