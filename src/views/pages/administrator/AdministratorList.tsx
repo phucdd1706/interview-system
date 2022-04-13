@@ -15,9 +15,12 @@ import { UserProfile } from 'types/user-profile';
 
 interface Props {
   handleInfor?: React.MouseEventHandler<HTMLButtonElement>;
-  handleCallback?: any;
+  handleCallbackInfo?: any;
+  handleCallbackEdit?: any;
+  handleCallbackDel?: any;
+  id: string;
 }
-const AdministratorList = ({ handleInfor, handleCallback }: Props) => {
+const AdministratorList = ({ handleInfor, handleCallbackInfo, handleCallbackEdit, handleCallbackDel, id }: Props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -106,10 +109,10 @@ const AdministratorList = ({ handleInfor, handleCallback }: Props) => {
                     )}
                   </TableCell>
                   <TableCell align="center" sx={{ pr: 3 }}>
-                    <IconButton color="primary" size="large" onClick={() => handleCallback(row.id)}>
+                    <IconButton color="primary" size="large" onClick={() => handleCallbackInfo(row.id)}>
                       <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="secondary" size="large" onClick={() => handleCallback(row.id)}>
+                    <IconButton color="secondary" size="large" onClick={() => handleCallbackEdit(row.id)}>
                       <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                     <IconButton color="error" size="large">

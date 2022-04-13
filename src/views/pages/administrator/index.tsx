@@ -26,10 +26,11 @@ import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
 import { dispatch } from 'store';
-import { getAdministratorList } from 'store/slices/user';
+import { delAdministrator, getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
 import { gridSpacing } from '../../../store/constant';
-import InfoAdmin from './EditAdmin';
+import EditAdmin from './EditAdmin';
+import InfoAdmin from './InfoAdmin';
 
 const Administrator = () => {
   const theme = useTheme();
@@ -41,6 +42,7 @@ const Administrator = () => {
 
   const [open, setOpen] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const handleClickOpenDialog = () => {
     setOpen(true);
   };
@@ -53,9 +55,21 @@ const Administrator = () => {
   const handleClickOpenInfo = () => {
     setOpenInfo(true);
   };
-  const handleCallback = (adminId: string) => {
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+  const handleCallbackInfo = (adminId: string) => {
     setId(adminId);
     setOpenInfo(true);
+  };
+  const handleCallbackEdit = (adminId: string) => {
+    setId(adminId);
+    setOpenEdit(true);
+  };
+  const handleCallbackDel = (adminId: string) => {
+    setId(adminId);
+    // dispatch(delAdministrator(adminId));
+    window.location.reload();
   };
   const initialState: UserFilter = {
     search: '',
@@ -185,7 +199,14 @@ const Administrator = () => {
     >
       <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
       <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <AdministratorList handleInfor={handleClickOpenInfo} handleCallback={handleCallback} />
+      <EditAdmin open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
+      <AdministratorList
+        handleInfor={handleClickOpenInfo}
+        handleCallbackInfo={handleCallbackInfo}
+        handleCallbackEdit={handleCallbackEdit}
+        handleCallbackDel={handleCallbackDel}
+        id={id}
+      />
 
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
