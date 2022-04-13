@@ -36,6 +36,9 @@ const slice = createSlice({
     },
     putAdministratorSuccess(state, action) {
       state.users = action.payload;
+    },
+    delAdministratorSuccess(state, action) {
+      state.users = action.payload;
     }
   }
 });
@@ -85,8 +88,8 @@ export function getDetailAdministrator() {
 export function delAdministrator(id: string) {
   return async () => {
     try {
-      const response = await axios.delete(ADMINISTRATOR_URL.detailAdmin(id));
-      dispatch(slice.actions.putAdministratorSuccess(response.data.success.data));
+      const response = await axios.delete(ADMINISTRATOR_URL.delAdmin(id));
+      dispatch(slice.actions.delAdministratorSuccess(response.data.success.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -115,7 +115,7 @@ const AdministratorList = ({ handleInfor, handleCallbackInfo, handleCallbackEdit
                     <IconButton color="secondary" size="large" onClick={() => handleCallbackEdit(row.id)}>
                       <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="error" size="large">
+                    <IconButton color="error" size="large" onClick={() => handleCallbackDel(row.id)}>
                       <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                   </TableCell>

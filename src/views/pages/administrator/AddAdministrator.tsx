@@ -113,6 +113,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
                     value={formik.values.password}
                     error={formik.touched.password && Boolean(formik.errors.password)}
                     helperText={formik.touched.password && formik.errors.password}
+                    type="password"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -124,6 +125,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
                     value={formik.values.password_confirmation}
                     error={formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)}
                     helperText={formik.touched.password_confirmation && formik.errors.password_confirmation}
+                    type="password"
                   />
                 </Grid>
                 <Grid item xs={12}>
