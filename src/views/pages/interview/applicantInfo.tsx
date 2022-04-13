@@ -1,29 +1,7 @@
 // THIRD-PARTY
 import { Stack, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
-const initialEmployeeForm = {
-  firstName: 'Minh',
-  lastName: 'Nguyen',
-  age: '21',
-  email: 'minhnv@beetsoft.com.vn',
-  phone: '123412345',
-  address: 'Minh Khai, Bac Tu Liem, Ha Noi',
-  applyPosition: [
-    {
-      id: '12',
-      positionName: 'ReactJS',
-      level: 'J1'
-    },
-    {
-      id: '12',
-      positionName: 'NodeJS',
-      level: 'J2'
-    }
-  ],
-  notes: '',
-  interviewTime: `${new Date().toISOString().split('T')[0]}T00:00`
-};
+import { ApplicantInfo } from 'types/applicantData';
 
 const RenderRow = {
   row1: [
@@ -64,10 +42,14 @@ const RenderRow = {
   ]
 };
 
-type dataKey = keyof typeof initialEmployeeForm;
+type dataKey = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
 type rowKey = keyof typeof RenderRow;
 
-const ApplicantInfo = () => {
+interface Props {
+  applicantInfo: ApplicantInfo;
+}
+
+const ApplicantInformation = ({ applicantInfo }: Props) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -80,8 +62,8 @@ const ApplicantInfo = () => {
               <Typography variant="h4" component="h4">
                 {data.label}: &nbsp;
               </Typography>
-              <Typography variant="body1" component="span">
-                {initialEmployeeForm[data.key as dataKey]}
+              <Typography variant="h4" component="h4" sx={{ fontWeight: '400' }}>
+                {applicantInfo[data.key as dataKey]}
               </Typography>
             </Stack>
           ))}
@@ -91,10 +73,10 @@ const ApplicantInfo = () => {
         <Typography variant="h4" component="h4">
           Apply Position:
         </Typography>
-        {initialEmployeeForm.applyPosition.map((data: { id: string; positionName: string; level: string }, index) => (
-          <Typography variant="body1" component="span" key={index}>
-            &nbsp;{data.positionName} - {data.level}&nbsp;
-            {index < initialEmployeeForm.applyPosition.length - 1 && !matchDownSM && '/'}
+        {applicantInfo.applyPosition.map((data: { id: string; position: string; level: string }, index) => (
+          <Typography variant="h4" component="h4" sx={{ fontWeight: '400' }} key={index}>
+            &nbsp;{data.position} - {data.level}&nbsp;
+            {index < applicantInfo.applyPosition.length - 1 && !matchDownSM && '/'}
           </Typography>
         ))}
       </Stack>
@@ -102,4 +84,4 @@ const ApplicantInfo = () => {
   );
 };
 
-export default ApplicantInfo;
+export default ApplicantInformation;

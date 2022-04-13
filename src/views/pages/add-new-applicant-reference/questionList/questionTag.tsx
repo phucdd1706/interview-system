@@ -59,13 +59,13 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
                 label="Evaluate"
-                value={value.answerScore}
+                value={value.answerScore || ''}
                 onChange={(e) => {
                   dispatch(handleAnswerScore({ questionId: value.questionId, answerScore: e.target.value }));
                 }}
               >
                 <MenuItem value="">
-                  <em>Evaluate</em>
+                  <em>Do not enter</em>
                 </MenuItem>
                 <MenuItem value="bad">Bad</MenuItem>
                 <MenuItem value="good">Good</MenuItem>

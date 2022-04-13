@@ -1,27 +1,37 @@
 // THIRD-PARTY
+import { useEffect } from 'react';
 import { Box, Button, Stack, Divider } from '@mui/material';
+import { useIntl } from 'react-intl';
+
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import ApplicantInfo from './applicantInfo';
+import ApplicantInformation from './applicantInfo';
 import InterviewerResult from './interviewerResult';
 import InterviewQuestions from './interviewQuestions';
 import ReferenceResult from './referenceResult';
 import { useSelector, useDispatch } from 'store';
-import { getReferenceEvaluate } from 'store/slices/applicantReferences';
+import { getReferenceEvaluateThunk, applicantReferenceInit } from 'store/slices/applicantReferences';
+import { ApplicantDataInterface } from 'types/applicantData';
 
 const InterviewPage = () => {
-  const applicantReferences = useSelector((state) => state.applicant);
+  const applicantReferences: ApplicantDataInterface = useSelector((state) => state.applicant);
   const dispatch = useDispatch();
-  const GetReferenceEvaluate = async () => {
-    dispatch(getReferenceEvaluate(applicantReferences));
+  const intl = useIntl();
+
+  useEffect(() => {
+    dispatch(applicantReferenceInit());
+  }, [dispatch]);
+
+  const getReferenceEvaluate = async () => {
+    dispatch(getReferenceEvaluateThunk(applicantReferences));
   };
   return (
     <Stack direction="column" spacing={2}>
-      <MainCard title="Interview">
-        <ApplicantInfo />
+      <MainCard title={intl.formatMessage({ id: 'applicant information' })}>
+        <ApplicantInformation applicantInfo={applicantReferences.applicantInfo} />
       </MainCard>
-      <MainCard title="Interview Question">
+      <MainCard title={intl.formatMessage({ id: 'interview questions' })}>
         {applicantReferences.interviewQuestions.length > 0 && (
           <>
             <InterviewQuestions interviewQuestions={applicantReferences.interviewQuestions} />
@@ -32,7 +42,7 @@ const InterviewPage = () => {
               <AnimateButton>
                 <Button
                   disableElevation
-                  onClick={GetReferenceEvaluate}
+                  onClick={getReferenceEvaluate}
                   fullWidth
                   size="large"
                   type="submit"
@@ -48,10 +58,10 @@ const InterviewPage = () => {
       </MainCard>
       {applicantReferences.referenceEvaluate && (
         <>
-          <MainCard title="Reference Result" sx={{ margin: '1em 0' }}>
-            <ReferenceResult />
+          <MainCard title={intl.formatMessage({ id: 'reference results' })} sx={{ margin: '1em 0' }}>
+            <ReferenceResult result={applicantReferences.referenceEvaluate} />
           </MainCard>
-          <MainCard title="Interviewer Result" sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'interviewer results' })} sx={{ margin: '1em 0' }}>
             <InterviewerResult />
           </MainCard>
         </>

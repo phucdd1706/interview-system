@@ -20,80 +20,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import LegendWrapper from './legend';
+import LegendWrapper from '../legend';
 import { useDispatch } from 'store';
 import { ApplicantInfo } from 'types/applicantData';
-import { getInterviewQuestion } from 'store/slices/applicantReferences';
+import { getInterviewQuestionThunk } from 'store/slices/applicantReferences';
+import personalDetail from './layoutMapping';
+import { jobPosition, jobLevel, workingExperiences } from './constant';
 
 type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
-
-const personalDetail = [
-  {
-    label: 'Information',
-    render: [
-      {
-        key: 'firstName',
-        label: 'First Name',
-        type: 'text'
-      },
-      {
-        key: 'lastName',
-        label: 'Last Name',
-        type: 'text'
-      },
-      {
-        key: 'age',
-        label: 'Age',
-        type: 'number'
-      }
-    ]
-  },
-  {
-    label: 'Contact',
-    render: [
-      {
-        key: 'email',
-        label: 'Email',
-        type: 'email'
-      },
-      {
-        key: 'phone',
-        label: 'Phone Number',
-        type: 'tel'
-      }
-    ]
-  },
-  {
-    label: 'Address',
-    render: [
-      {
-        key: 'address',
-        label: 'Address',
-        type: 'text'
-      }
-    ]
-  },
-  {
-    label: 'Interview Time',
-    render: [
-      {
-        key: 'interviewTime',
-        label: 'Interview Time',
-        type: 'datetime-local'
-      }
-    ]
-  },
-  {
-    label: 'Notes',
-    render: [
-      {
-        key: 'notes',
-        label: 'Notes',
-        type: 'text'
-      }
-    ]
-  }
-];
 
 const initialEmployeeForm: ApplicantInfo = {
   id: '',
@@ -125,21 +59,19 @@ const EmployeeForm = () => {
   const [employeeForm, setEmployeeForm] = useState(initialEmployeeForm);
   const theme = useTheme();
   const dispatch = useDispatch();
-
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const AddMoreApplyPosition = () => {
+
+  const addMoreApplyPosition = () => {
     setEmployeeForm({ ...employeeForm, applyPosition: [...employeeForm.applyPosition, { id: uuidv4(), position: '', level: '' }] });
   };
-  const AddMoreExperiences = () => {
+  const addMoreExperiences = () => {
     setEmployeeForm({ ...employeeForm, experiences: [...employeeForm.experiences, { id: uuidv4(), position: '', durations: '' }] });
   };
-
-  const RemoveExperience = (id: string) => {
+  const removeExperience = (id: string) => {
     const newExperiences = employeeForm.experiences.filter((experience) => experience.id !== id);
     setEmployeeForm({ ...employeeForm, experiences: newExperiences });
   };
-
-  const RemoveApplyPosition = (id: string) => {
+  const removeApplyPosition = (id: string) => {
     const newApplyPosition = employeeForm.applyPosition.filter((applyPosition) => applyPosition.id !== id);
     setEmployeeForm({ ...employeeForm, applyPosition: newApplyPosition });
   };
@@ -165,7 +97,7 @@ const EmployeeForm = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          await dispatch(getInterviewQuestion(values));
+          await dispatch(getInterviewQuestionThunk(values));
           setSubmitting(false);
         }}
       >
@@ -211,9 +143,9 @@ const EmployeeForm = () => {
                       <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
                         <Autocomplete
                           options={jobPosition}
-                          onChange={(event: any, value: any) => {
+                          onChange={(event, value) => {
                             const newExperiences = [...values.experiences];
-                            newExperiences[index].position = value;
+                            newExperiences[index].position = (value && value.title) || '';
                             setEmployeeForm({ ...employeeForm, experiences: newExperiences });
                           }}
                           getOptionLabel={(option) => option.title}
@@ -239,7 +171,7 @@ const EmployeeForm = () => {
                       variant="outlined"
                       color="error"
                       onClick={() => {
-                        RemoveExperience(item.id);
+                        removeExperience(item.id);
                       }}
                       sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
                     >
@@ -248,7 +180,7 @@ const EmployeeForm = () => {
                   </Stack>
                 ))}
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button variant="outlined" onClick={AddMoreExperiences} sx={{ marginTop: 2 }}>
+                  <Button variant="outlined" onClick={addMoreExperiences} sx={{ marginTop: 2 }}>
                     + Add more experiences
                   </Button>
                 </Stack>
@@ -289,12 +221,11 @@ const EmployeeForm = () => {
                         />
                       </FormControl>
                     </Stack>
-
                     <Button
                       variant="outlined"
                       color="error"
                       onClick={() => {
-                        RemoveApplyPosition(item.id);
+                        removeApplyPosition(item.id);
                       }}
                       sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
                     >
@@ -303,7 +234,7 @@ const EmployeeForm = () => {
                   </Stack>
                 ))}
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button variant="outlined" onClick={AddMoreApplyPosition} sx={{ marginTop: 2 }}>
+                  <Button variant="outlined" onClick={addMoreApplyPosition} sx={{ marginTop: 2 }}>
                     + Add more position
                   </Button>
                 </Stack>
@@ -333,30 +264,3 @@ const EmployeeForm = () => {
 };
 
 export default EmployeeForm;
-
-const jobPosition = [
-  { title: 'ReactJS' },
-  { title: 'NodeJS' },
-  { title: 'AngularJS' },
-  { title: 'VueJS' },
-  { title: 'React Native' },
-  { title: 'Ionic' },
-  { title: 'Flutter' },
-  { title: 'ExpressJS' },
-  { title: 'Laravel' },
-  { title: 'Django' },
-  { title: 'PHP' },
-  { title: 'Python' },
-  { title: 'Java' },
-  { title: 'C#' },
-  { title: 'C++' },
-  { title: 'C' },
-  { title: 'Swift' },
-  { title: 'Objective-C' },
-  { title: 'Kotlin' },
-  { title: 'Ruby' },
-  { title: 'Ruby on Rails' }
-];
-
-const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];
-const workingExperiences = [{ title: '1 year' }, { title: '2 years' }, { title: '3 years' }, { title: '4 years' }];

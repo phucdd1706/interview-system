@@ -3,33 +3,55 @@ import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 
-const ResponseResult = {
-  totalQuestions: 12,
-  passedQuestions: 10,
-  failedQuestions: 2,
-  passedPercentage: '80%',
-  result: 'Passed',
-  salary: 10000000
-};
+// PROJECT IMPORTS
+import { ReferenceEvaluate } from 'types/applicantData';
 
-type keyType = keyof typeof ResponseResult;
+const dataMapping = [
+  {
+    key: 'totalQuestions',
+    label: 'Total Questions'
+  },
+  {
+    key: 'passedQuestions',
+    label: 'Passed Questions'
+  },
+  {
+    key: 'failedQuestions',
+    label: 'Failed Questions'
+  },
+  {
+    key: 'passedPercentage',
+    label: 'Passed Percentage'
+  },
+  {
+    key: 'result',
+    label: 'Result'
+  },
+  {
+    key: 'salary',
+    label: 'Salary'
+  }
+];
 
-const ReferenceResult = () => {
-  const [result] = useState(ResponseResult);
-  return (
-    <Box>
-      {Object.keys(result).map((key) => (
-        <Stack direction="row" sx={{ alignItems: 'center', marginBottom: 1 }} key={key}>
-          <Typography variant="h4" component="h4" sx={{ lineHeight: 1 }}>
-            {key}:&nbsp;
-          </Typography>
-          <Typography variant="body1" component="span" sx={{ lineHeight: 1 }}>
-            {result[key as keyType]}
-          </Typography>
-        </Stack>
-      ))}
-    </Box>
-  );
-};
+interface Props {
+  result: ReferenceEvaluate;
+}
+
+type keyType = keyof ReferenceEvaluate;
+
+const ReferenceResult = ({ result }: Props) => (
+  <Box>
+    {dataMapping.map((element) => (
+      <Stack direction="row" sx={{ alignItems: 'center', marginBottom: 1 }} key={element.key}>
+        <Typography variant="h4" component="h4" sx={{ lineHeight: 1 }}>
+          {element.label}:&nbsp;
+        </Typography>
+        <Typography variant="h4" component="h4" sx={{ lineHeight: 1.25, fontWeight: '400' }}>
+          {result[element.key as keyType]}
+        </Typography>
+      </Stack>
+    ))}
+  </Box>
+);
 
 export default ReferenceResult;

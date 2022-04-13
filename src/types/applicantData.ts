@@ -30,7 +30,7 @@ export interface InterviewerEvaluate {
 }
 
 export interface ApplicantInfo {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   age: string;
