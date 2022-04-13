@@ -104,6 +104,14 @@ const applicantReferences = createSlice({
     setReferenceEvaluate(state, action: { payload: ReferenceEvaluate }) {
       Object.assign(state, { referenceEvaluate: action.payload });
     },
+    setQuestions(state, action: { payload: QuestionInterface[] }) {
+      const questions = action.payload.filter((element) =>
+        state.interviewQuestions.every((questionStack) =>
+          questionStack.questions.every((question) => question.questionId !== element.questionId)
+        )
+      );
+      Object.assign(state, { questions });
+    },
     deleteInterviewQuestions(state, action: { payload: { type: string; questionId: string } }) {
       const { type, questionId } = action.payload;
       state.interviewQuestions.filter((item) => {
@@ -158,7 +166,9 @@ const postData = async <T>(url: string, data: any): Promise<T> => {
   const response = await axios
     .post(url, data)
     .then((res) => res.data)
-    .catch((err) => err);
+    .catch((err) => {
+      throw err;
+    });
   console.log(response);
   return response;
 };
@@ -173,6 +183,8 @@ const getData = async <T>(url: string): Promise<T> => {
 
 const applicantAPI = {
   applicantReferenceInit: () => getData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/init`),
+  getQuestionsThunk: (type: string, value: string) =>
+    postData<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
   getInterviewQuestionThunk: (applicantInfo: ApplicantInfo) =>
     postData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/interview-question`, applicantInfo),
   getReferenceEvaluateThunk: (applicantInfo: ApplicantDataInterface) =>
@@ -182,18 +194,27 @@ const applicantAPI = {
 export default applicantReferences.reducer;
 
 export const {
+  addInterviewQuestions,
+  deleteInterviewQuestions,
+  handleAnswerScore,
+  handleInterviewQuestionNotes,
   setApplicantInfo,
   setReferenceEvaluate,
-  deleteInterviewQuestions,
-  addInterviewQuestions,
-  handleAnswerScore,
-  handleInterviewQuestionNotes
+  setQuestions
 } = applicantReferences.actions;
 
 export const applicantReferenceInit = createAsyncThunk('applicantReferences/applicantReferenceInit', async () => {
   const data = await applicantAPI.applicantReferenceInit();
   return dispatch(setApplicantInfo(data));
 });
+
+export const getQuestionsThunk = createAsyncThunk(
+  'applicantReferences/getQuestionsThunk',
+  async (params: { type: string; value: string }) => {
+    const data = await applicantAPI.getQuestionsThunk(params.type, params.value);
+    return dispatch(setQuestions(data));
+  }
+);
 
 export const getInterviewQuestionThunk = createAsyncThunk(
   'applicant/getInterviewQuestionThunk',

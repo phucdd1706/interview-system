@@ -36,7 +36,7 @@ const AddApplicantReference = () => {
   };
   return (
     <Box>
-      <MainCard title={intl.formatMessage({ id: 'applicant reference form' })} sx={{ margin: '1em 0' }}>
+      <MainCard title={intl.formatMessage({ id: 'applicant reference form' })}>
         <EmployeeForm />
       </MainCard>
       {applicantInfo.interviewQuestions.length > 0 && (

@@ -1,4 +1,4 @@
-import { QuestionStackInterface } from './interviewQuestion';
+import { QuestionStackInterface, QuestionInterface } from './interviewQuestion';
 
 export interface Job {
   id: string;
@@ -52,4 +52,5 @@ export interface ApplicantDataInterface {
   interviewQuestions: QuestionStackInterface[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
+  questions?: QuestionInterface[];
 }
