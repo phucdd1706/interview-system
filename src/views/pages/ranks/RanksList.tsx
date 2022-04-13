@@ -4,13 +4,20 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import React from 'react';
 import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
 import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-
 // PROJECT IMPORTS
 import { getRanksList } from 'store/slices/rank';
 import { Rank } from 'types/rank';
 import { useDispatch, useSelector } from 'store';
 
-const RanksList = () => {
+interface IProps {
+  handleEdit?: any;
+  handleDelete?: any;
+  handleInfo?: any;
+  onSelected?: any;
+  id: string;
+}
+
+const RanksList = ({ handleEdit, handleDelete, handleInfo, onSelected, id }: IProps) => {
   const dispatch = useDispatch();
 
   const [data, setData] = React.useState<Rank[]>([]);
@@ -44,13 +51,13 @@ const RanksList = () => {
                 <TableCell sx={{ pl: 3 }}>{row.id}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell align="center" sx={{ pr: 3 }}>
-                  <IconButton color="primary" size="large">
+                  <IconButton color="primary" size="large" onClick={() => handleInfo(row.id)}>
                     <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
-                  <IconButton color="secondary" size="large">
+                  <IconButton color="secondary" size="large" onClick={() => handleEdit(row.id)}>
                     <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
-                  <IconButton color="error" size="large">
+                  <IconButton color="error" size="large" onClick={() => handleDelete(row.id)}>
                     <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
                 </TableCell>

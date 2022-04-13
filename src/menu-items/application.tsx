@@ -35,7 +35,7 @@ const application = {
       type: 'item',
       url: '/ranks',
       icon: icons.IconStairsUp,
-      breadcrumbs: false
+      breadcrumbs: true
     }
   ]
 };
