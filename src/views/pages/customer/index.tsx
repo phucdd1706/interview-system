@@ -26,7 +26,7 @@ import AddCustomer from 'views/pages/customer/AddCustomer';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
 import { dispatch } from 'store';
-import { getCustomerList } from 'store/slices/customer';
+import { getCustomerList, deleteCustomer } from 'store/slices/customer';
 import { UserFilter } from 'types/user';
 import { gridSpacing } from '../../../store/constant';
 import EditCustomer from './EditCustomer';
@@ -50,14 +50,8 @@ const Customer = () => {
   const handleCloseDialog = () => {
     setOpen(false);
   };
-  const handleClickOpenEdit = () => {
-    setOpenEdit(true);
-  };
   const handleCloseEdit = () => {
     setOpenEdit(false);
-  };
-  const handleClickOpenInfo = () => {
-    setOpenInfo(true);
   };
   const handleCloseInfo = () => {
     setOpenInfo(false);
@@ -106,8 +100,17 @@ const Customer = () => {
   const [id, setId] = useState('');
   const handleCallback = (customerId: string) => {
     setId(customerId);
+    setOpenInfo(true);
   };
-
+  const handleCallbackEdit = (customerId: string) => {
+    setId(customerId);
+    setOpenEdit(true);
+  };
+  const hanldeDelete = (customerId: string) => {
+    setId(customerId);
+    dispatch(deleteCustomer(customerId));
+    window.location.reload();
+  };
   return (
     <MainCard
       title={
@@ -195,9 +198,9 @@ const Customer = () => {
       content={false}
     >
       <AddCustomer open={open} handleCloseDialog={handleCloseDialog} />
-      <InfoCustomer open={openInfo} handleCloseDialog={handleCloseInfo} />
+      <InfoCustomer open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
       <EditCustomer open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <CustomerList handleEdit={handleClickOpenEdit} handleCallback={handleCallback} />
+      <CustomerList handleCallbackEdit={handleCallbackEdit} handleCallback={handleCallback} hanldeDelete={hanldeDelete} id={id} />
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>

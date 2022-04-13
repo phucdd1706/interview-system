@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 import { useDispatch } from 'react-redux';
-import { postAdministrator } from 'store/slices/user';
+import { postCustomer } from 'store/slices/customer';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
@@ -33,7 +33,7 @@ const validationSchema = Yup.object({
   type: Yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleCloseDialog }: AddCustomerProps) => {
+const AddCustomer = ({ open, handleCloseDialog }: AddCustomerProps) => {
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -48,7 +48,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddCustomerProps) => {
     validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      dispatch(postAdministrator(values));
+      dispatch(postCustomer(values));
       window.location.reload();
     }
   });
@@ -179,4 +179,4 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddCustomerProps) => {
   );
 };
 
-export default AddAdministrator;
+export default AddCustomer;

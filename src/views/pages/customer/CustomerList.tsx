@@ -13,16 +13,15 @@ import { useDispatch, useSelector } from 'store';
 import { UserProfile } from 'types/user-profile';
 
 interface IProps {
-  handleEdit?: React.MouseEventHandler<HTMLButtonElement>;
+  handleCallbackEdit?: any;
   handleCallback?: any;
-  handleDelete?: React.MouseEventHandler<HTMLButtonElement>;
-  // onSelected?: any;
+  id?: string;
+  hanldeDelete?: any;
 }
 
-const CustomerList = ({ handleEdit, handleDelete, handleCallback }: IProps) => {
+const CustomerList = ({ handleCallbackEdit, handleCallback, hanldeDelete, id }: IProps) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-
   const [data, setData] = React.useState<UserProfile[]>([]);
   const { users } = useSelector((state) => state.customer);
 
@@ -34,7 +33,6 @@ const CustomerList = ({ handleEdit, handleDelete, handleCallback }: IProps) => {
     dispatch(getCustomerList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <TableContainer>
       <Table>
@@ -102,10 +100,10 @@ const CustomerList = ({ handleEdit, handleDelete, handleCallback }: IProps) => {
                   <IconButton color="primary" size="large" onClick={() => handleCallback(row.id)}>
                     <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
-                  <IconButton color="secondary" size="large" onClick={handleEdit}>
+                  <IconButton color="secondary" size="large" onClick={() => handleCallbackEdit(row.id)}>
                     <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
-                  <IconButton color="error" size="large" onClick={handleDelete}>
+                  <IconButton color="error" size="large" onClick={() => hanldeDelete(row.id)}>
                     <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                   </IconButton>
                 </TableCell>

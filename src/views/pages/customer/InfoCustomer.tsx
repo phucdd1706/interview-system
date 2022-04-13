@@ -4,19 +4,21 @@ import { useTheme } from '@mui/material/styles';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
-import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
+import { useSelector } from 'store';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
 interface AddAdministratorProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
+  id?: string;
 }
 
-const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
+const InfoCustomer = ({ open, handleCloseDialog, id }: AddAdministratorProps) => {
   const theme = useTheme();
-
+  const { users } = useSelector((state) => state.customer);
+  const userById = users.filter((item) => item.id === id);
   return (
     <Dialog
       open={open}
@@ -41,32 +43,23 @@ const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Name*" />
+                <TextField id="outlined-basic1" fullWidth label="Name" defaultValue={userById[0].name} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Username*" />
+                <TextField id="outlined-basic1" fullWidth label="User name" defaultValue={userById[0].username} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Email*" />
+                <TextField id="outlined-basic1" fullWidth label="Email" defaultValue={userById[0].email} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter password*" />
+                <TextField id="outlined-basic1" fullWidth label="Phone" defaultValue={userById[0].phone} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter password_confirmation*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter phone*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter type*" />
+                <TextField id="outlined-basic1" fullWidth label="Type" defaultValue={userById[0].type} />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <AnimateButton>
-              <Button variant="contained">Create</Button>
-            </AnimateButton>
             <Button variant="text" color="error" onClick={handleCloseDialog}>
               Close
             </Button>
