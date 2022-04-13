@@ -68,7 +68,7 @@ const Administrator = () => {
   };
   const handleCallbackDel = (adminId: string) => {
     setId(adminId);
-    // dispatch(delAdministrator(adminId));
+    dispatch(delAdministrator(adminId));
     window.location.reload();
   };
   const initialState: UserFilter = {

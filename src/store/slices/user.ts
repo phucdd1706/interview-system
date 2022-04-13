@@ -62,11 +62,11 @@ export function postAdministrator(data?: Administrator) {
     }
   };
 }
-export function putAdministrator(data?: Administrator) {
-  return async (id: string) => {
+export function putAdministrator(id: string, data?: Administrator) {
+  return async () => {
     try {
-      await axios.put(ADMINISTRATOR_URL.putAdmin(id), data);
-      dispatch(slice.actions.putAdministratorSuccess);
+      const response = await axios.put(ADMINISTRATOR_URL.putAdmin(id), data);
+      dispatch(slice.actions.putAdministratorSuccess(response.data.success.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -82,11 +82,11 @@ export function getDetailAdministrator() {
     }
   };
 }
-export function delAdministrator() {
-  return async (id: string) => {
+export function delAdministrator(id: string) {
+  return async () => {
     try {
-      await axios.delete(ADMINISTRATOR_URL.detailAdmin(id));
-      dispatch(slice.actions.putAdministratorSuccess);
+      const response = await axios.delete(ADMINISTRATOR_URL.detailAdmin(id));
+      dispatch(slice.actions.putAdministratorSuccess(response.data.success.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

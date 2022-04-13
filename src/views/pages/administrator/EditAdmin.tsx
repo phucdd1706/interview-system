@@ -47,7 +47,7 @@ const EditAdmin = ({ open, handleCloseDialog, id }: EditAdminProps) => {
     validationSchema,
     onSubmit: (values) => {
       if (id) {
-        dispatch(putAdministrator(values));
+        dispatch(putAdministrator(id, values));
         window.location.reload();
       }
     }

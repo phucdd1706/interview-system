@@ -43,6 +43,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
     validationSchema,
     onSubmit: (values) => {
       dispatch(postAdministrator(values));
+      window.location.reload();
     }
   });
   return (
