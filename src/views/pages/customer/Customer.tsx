@@ -50,7 +50,7 @@ const Customer = ({ customer, index }: Props) => {
           alert: {
             color: 'success'
           },
-          close: false
+          close: true
         })
       );
     }

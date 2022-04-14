@@ -11,6 +11,7 @@ import applicantReferences from 'store/slices/applicantReferences';
 import customerReducer from 'store/slices/customer';
 import rankReducer from 'store/slices/rank';
 import profileReducer from 'store/slices/profile';
+import departmentReducer from 'store/slices/department';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -22,6 +23,8 @@ const reducer = combineReducers({
     },
     userReducer
   ),
+
+  department: departmentReducer,
   applicant: applicantReferences,
   customer: customerReducer,
   rank: rankReducer,
