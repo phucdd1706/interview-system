@@ -31,7 +31,7 @@ const slice = createSlice({
     },
 
     getDepartmentListSuccess(state, action) {
-      state.department = action.payload;
+      state.department = action.payload.data;
       state.pageCount = action.payload.last_page;
       state.currentPage = action.payload.current_page;
     },
@@ -61,7 +61,7 @@ export function getDepartmentList(filter?: DepartmentFilter) {
   return async () => {
     try {
       const resp = await axios.get(`${DEPARTMENT_URL.getDepartmen}?${params}`);
-      dispatch(slice.actions.getDepartmentListSuccess(resp?.data?.success?.data));
+      dispatch(slice.actions.getDepartmentListSuccess(resp.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -71,7 +71,7 @@ export function postDepartment(data?: Department) {
   return async () => {
     try {
       const resp = await axios.post(`${DEPARTMENT_URL.postDepartment}`, data);
-      dispatch(slice.actions.postDepartmentSuccess(resp?.data?.success?.data));
+      dispatch(slice.actions.postDepartmentSuccess(resp.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -81,7 +81,7 @@ export function putDepartment(depart: Department) {
   return async () => {
     try {
       const resp = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/department/${depart.id}`, depart);
-      dispatch(slice.actions.putDepartmentSuccess(resp?.data?.success?.data));
+      dispatch(slice.actions.putDepartmentSuccess(resp.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -91,7 +91,7 @@ export function delDepartment(depart: Department) {
   return async () => {
     try {
       const resp = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/department/${depart.id}`);
-      dispatch(slice.actions.delDepartmentSuccess(resp?.data?.success?.data));
+      dispatch(slice.actions.delDepartmentSuccess(resp.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

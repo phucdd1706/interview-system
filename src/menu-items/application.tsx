@@ -32,7 +32,7 @@ const application = {
     },
     {
       id: 'manage-department',
-      title: <FormattedMessage id="Department" />,
+      title: <FormattedMessage id="department" />,
       type: 'item',
       url: '/department',
       icon: icons.CorporateFareIcon,
