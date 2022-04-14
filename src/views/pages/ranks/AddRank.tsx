@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { forwardRef, SyntheticEvent } from 'react';
+import { forwardRef } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,12 +9,13 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 import { useDispatch } from 'react-redux';
 import { PostRank } from 'store/slices/rank';
+import { openSnackbar } from 'store/slices/snackbar';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
 interface AddRankProps {
   open: boolean;
-  handleCloseDialog: (e: SyntheticEvent) => void;
+  handleCloseDialog: () => void;
 }
 
 const validationSchema = Yup.object({
@@ -32,6 +33,19 @@ const AddRank = ({ open, handleCloseDialog }: AddRankProps) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(PostRank(values));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Submit Success',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: true
+        })
+      );
+      handleCloseDialog();
     }
   });
 

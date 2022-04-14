@@ -10,8 +10,10 @@ import { Rank, RankFilter } from 'types/rank';
 export const RANKS_URL = `${process.env.REACT_APP_API_URL}/v1/operator/ranks`;
 
 const initialState: DefaultRootStateProps['rank'] = {
-  error: null,
-  ranks: []
+  ranks: [],
+  pageCount: 0,
+  currentPage: 1,
+  error: null
 };
 
 const slice = createSlice({
@@ -23,17 +25,31 @@ const slice = createSlice({
     },
 
     getRanksListSuccess(state, action) {
-      state.ranks = action.payload;
+      state.ranks = action.payload.data;
+      state.pageCount = action.payload.last_page;
+      state.currentPage = action.payload.current_page;
+      // state.customers = action.payload.data;
+      // state.pageCount = action.payload.last_page;
+      // state.currentPage = action.payload.current_page;
     },
 
     postRankSuccess(state, action) {
-      state.ranks = action.payload;
+      state.ranks.unshift(action.payload);
     },
     deleteRankSuccess(state, action) {
       state.ranks = action.payload;
     },
     putRankSuccess(state, action) {
-      state.ranks = action.payload;
+      if (action.payload.type === 1) {
+        state.ranks = state.ranks.filter((rank) => rank.id !== action.payload.id);
+      } else {
+        state.ranks = state.ranks.map((rank) => {
+          if (rank.id === action.payload.id) {
+            return action.payload;
+          }
+          return rank;
+        });
+      }
     },
     getRankSuccess(state, action) {
       state.ranks = action.payload;
@@ -44,17 +60,13 @@ const slice = createSlice({
 export default slice.reducer;
 
 export function getRanksList(filter?: RankFilter) {
-  let query: string;
-
-  if (filter !== undefined) {
-    query = `?search=${filter?.search}&status=${filter?.status}`;
-  } else {
-    query = '';
-  }
+  const queryParams = `${
+    (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+  }&page=${filter?.currentPage}`;
   return async () => {
     try {
-      const response = await axios.get(`${RANKS_URL}${query}`);
-      dispatch(slice.actions.getRanksListSuccess(response.data.success.data));
+      const response = await axios.get(`${RANKS_URL}?${queryParams}`);
+      dispatch(slice.actions.getRanksListSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -64,19 +76,19 @@ export function getRanksList(filter?: RankFilter) {
 export function PostRank(data?: Rank) {
   return async () => {
     try {
-      await axios.post(`${RANKS_URL}`, data);
-      dispatch(slice.actions.postRankSuccess);
+      const response = await axios.post(`${RANKS_URL}`, data);
+      dispatch(slice.actions.postRankSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
 
-export function DeleteRank(rankId: string) {
+export function DeleteRank(rank: Rank) {
   return async () => {
     try {
-      await axios.delete(`${RANKS_URL}/${rankId}`);
-      dispatch(slice.actions.deleteRankSuccess);
+      const response = await axios.delete(`${RANKS_URL}/${rank.id}`);
+      dispatch(slice.actions.deleteRankSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -86,8 +98,8 @@ export function DeleteRank(rankId: string) {
 export function PutRank(rankId: string, data?: Rank) {
   return async () => {
     try {
-      await axios.put(`${RANKS_URL}/${rankId}`, data);
-      dispatch(slice.actions.putRankSuccess);
+      const response = await axios.put(`${RANKS_URL}/${rankId}`, data);
+      dispatch(slice.actions.putRankSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

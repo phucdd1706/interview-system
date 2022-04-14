@@ -20,28 +20,39 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
 import RanksList from 'views/pages/ranks/RanksList';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { DeleteRank, getRanksList } from 'store/slices/rank';
-import { RankFilter } from 'types/rank';
+import { Rank, RankFilter } from 'types/rank';
 import AddRank from './AddRank';
 import { gridSpacing } from 'store/constant';
 import EditRank from './EditRank';
 import InfoRank from './InfoRank';
+import { openSnackbar } from 'store/slices/snackbar';
+import AlertCustomerDelete from '../customer/AlertCustomerDelete';
 
-const Ranks = () => {
+interface Props {
+  rank: Rank;
+}
+const Ranks = ({ rank }: Props) => {
   const theme = useTheme();
   const [id, setId] = useState('');
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
+  const rankState = useSelector((state) => state.rank);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setFilter({ ...filter, currentPage: page! });
+  };
+
   const spacingMD = matchDownMD ? 1 : 1.5;
 
   const [open, setOpen] = React.useState(false);
+  const [openDel, setOpenDel] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openInfo, setOpenInfo] = useState(false);
 
@@ -49,7 +60,7 @@ const Ranks = () => {
     setOpen(true);
   };
   const handleCloseDialog = () => {
-    setOpen(false);
+    setOpen((prevState) => !prevState);
   };
 
   const handleCloseEdit = () => {
@@ -108,10 +119,23 @@ const Ranks = () => {
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const handleClickPagination = (event: React.MouseEvent) => {};
-
-  const handleDeleteRank = (rankId: string) => {
-    dispatch(DeleteRank(rankId));
+  const handleDeleteRank = (status: boolean) => {
+    setOpenDel(false);
+    if (status) {
+      dispatch(DeleteRank(rank));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Deleted successfully!',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: true
+        })
+      );
+    }
   };
 
   return (
@@ -203,42 +227,12 @@ const Ranks = () => {
       <AddRank open={open} handleCloseDialog={handleCloseDialog} />
       <EditRank open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
       <InfoRank open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <RanksList handleDelete={handleDeleteRank} handleEdit={handleEdit} handleInfo={handleInfo} id={id} />
+      <RanksList handleDelete={setOpenDel} handleEdit={handleEdit} handleInfo={handleInfo} id={id} />
+      {openDel && <AlertCustomerDelete name={rank.name} open={openDel} handleClose={handleDeleteRank} />}
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination count={10} color="primary" />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              sx={{ color: theme.palette.grey[900] }}
-              color="secondary"
-              endIcon={<ExpandMoreRoundedIcon />}
-              onClick={handleClickPagination}
-            >
-              10 Rows
-            </Button>
-            <Menu
-              id="menu-user-list-style1"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              variant="selectedMenu"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
-            </Menu>
+            <Pagination count={rankState.pageCount} page={rankState.currentPage} onChange={handleChange} color="primary" />
           </Grid>
         </Grid>
       </Grid>
