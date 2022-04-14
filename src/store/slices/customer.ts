@@ -36,12 +36,16 @@ const slice = createSlice({
     },
 
     editCustomerSuccess(state, action) {
-      state.customers = state.customers.map((customer) => {
-        if (customer.id === action.payload.id) {
-          return action.payload;
-        }
-        return customer;
-      });
+      if (action.payload.type === 1) {
+        state.customers = state.customers.filter((customer) => customer.id !== action.payload.id);
+      } else {
+        state.customers = state.customers.map((customer) => {
+          if (customer.id === action.payload.id) {
+            return action.payload;
+          }
+          return customer;
+        });
+      }
     },
 
     deleteCustomerSuccess(state, action) {

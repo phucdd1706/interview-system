@@ -90,7 +90,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
           alert: {
             color: 'success'
           },
-          close: false
+          close: true
         })
       );
       handleDrawerOpen();

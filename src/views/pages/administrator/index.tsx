@@ -21,7 +21,6 @@ import { useTheme } from '@mui/material/styles';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
-import AddAdministrator from 'views/pages/administrator/AddAdministrator';
 import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
@@ -172,7 +171,6 @@ const Administrator = () => {
       }
       content={false}
     >
-      <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
       <AdministratorList />
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
