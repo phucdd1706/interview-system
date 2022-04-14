@@ -11,6 +11,8 @@ const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
 const Profile = Loadable(lazy(() => import('views/pages/account')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
+const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
+const Interview = Loadable(lazy(() => import('views/pages/interview')));
 
 const MainRoutes = {
   path: '/',
@@ -40,6 +42,15 @@ const MainRoutes = {
       path: '/user/profile',
       element: <Profile />
     },
+    },
+    {
+      path: '/applicant',
+      element: <AddNewApplicant />
+    },
+    {
+      path: '/interview/:id',
+      element: <Interview />
+    }
   ]
 };
 

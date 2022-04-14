@@ -10,7 +10,7 @@ const Logo = () => {
 
   return (
     <Box sx={{ marginLeft: 5 }}>
-      <img src={BeetsoftLogo} alt="Beetsoft" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+      <img src={BeetsoftLogo} alt="Beetsoft" style={{ marginRight: matchDownSM ? 8 : 16, height: '54px' }} />
     </Box>
   );
 };
