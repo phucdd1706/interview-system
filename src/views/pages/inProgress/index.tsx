@@ -1,25 +1,10 @@
 // THIRD-PARTY
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Button,
-  Pagination,
-  Box,
-  TextField,
-  Grid,
-  FormControl,
-  Typography,
-  Fab,
-  Tooltip,
-  Menu,
-  MenuItem,
-  Stack,
-  useMediaQuery
-} from '@mui/material';
+import { Button, Box, TextField, Grid, FormControl, Typography, Fab, Tooltip, Menu, MenuItem, Stack, useMediaQuery } from '@mui/material';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import { Formik } from 'formik';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // PROJECT IMPORTS
@@ -28,7 +13,6 @@ import { RootState } from 'store/index';
 import { Candidates, SearchValues } from 'types/complete';
 import { fetchCandidates, filter } from 'store/slices/inProgress';
 import RankSelect from 'components/Common/RankSelect';
-import { gridSpacing } from '../../../store/constant';
 import SortStatus from 'views/pages/inProgress/SortStatus';
 import InProgressList from './InProgressList';
 
@@ -43,12 +27,7 @@ const InProgress = () => {
   const inProgress = useSelector((state: RootState) => state.inProgress);
 
   const [candidate, setCandidate] = useState<Candidates[]>(inProgress.data.list);
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibleAdd, setVisibleAdd] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const [idRecord, setIdRecord] = useState(0);
   const [anchorElSoft, setAnchorElSoft] = useState(null);
   const initialState: SearchValues = {
     search: '',
@@ -57,10 +36,7 @@ const InProgress = () => {
   };
   const [filters, setFilters] = useState(initialState);
 
-  const open = Boolean(anchorEl);
   const openSort = Boolean(anchorElSoft);
-
-  const id = open ? 'simple-popover' : undefined;
 
   useEffect(() => {
     getList();
@@ -102,20 +78,6 @@ const InProgress = () => {
     );
   };
 
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setIdRecord(0);
-  };
-
-  const deleteRecord = () => {
-    console.log('idRecord', idRecord);
-    handleClose();
-  };
-
   const handleSort = (event: any) => {
     setAnchorElSoft(event.currentTarget);
   };
@@ -153,7 +115,7 @@ const InProgress = () => {
                       id="outlined-basic"
                       name="search"
                       value={values?.search}
-                      label={<span>Tên ứng viên</span>}
+                      label={<span>Name</span>}
                       fullWidth
                       size="small"
                       variant="outlined"
@@ -202,7 +164,7 @@ const InProgress = () => {
                         horizontal: 'right'
                       }}
                     >
-                      {SortStatus.map((status, index) => (
+                      {SortStatus?.map((status, index) => (
                         <MenuItem
                           sx={{ p: 1.5 }}
                           key={index}
@@ -241,60 +203,10 @@ const InProgress = () => {
     );
   };
 
-  const handleTableChange = (e: any, pageTable: number) => {
-    console.log('pageTable', pageTable);
-  };
-
-  const handleClickPagination = (event: any) => {
-    setAnchorEl2(event.currentTarget);
-  };
-
-  const handleClosePagination = () => {
-    setAnchorEl2(null);
-  };
-
   return (
     <>
       <MainCard title={renderSearchForm()}>
         <InProgressList visibleCreate={visibleAdd} />
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={10} color="primary" onChange={handleTableChange} />
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                sx={{ color: theme.palette.grey[900] }}
-                color="secondary"
-                endIcon={<ExpandMoreRoundedIcon />}
-                onClick={handleClickPagination}
-              >
-                10 Rows
-              </Button>
-              <Menu
-                id="menu-user-list-style1"
-                anchorEl={anchorEl2}
-                keepMounted
-                open={Boolean(anchorEl2)}
-                onClose={handleClosePagination}
-                variant="selectedMenu"
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                transformOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right'
-                }}
-              >
-                <MenuItem onClick={handleClosePagination}> 10 Rows</MenuItem>
-                <MenuItem onClick={handleClosePagination}> 20 Rows</MenuItem>
-                <MenuItem onClick={handleClosePagination}> 30 Rows </MenuItem>
-              </Menu>
-            </Grid>
-          </Grid>
-        </Grid>
       </MainCard>
     </>
   );

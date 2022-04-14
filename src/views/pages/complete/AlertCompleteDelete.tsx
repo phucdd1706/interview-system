@@ -8,7 +8,7 @@ interface Props {
   handleClose: (status: boolean) => void;
 }
 
-export default function AlertCustomerDelete({ name, open, handleClose }: Props) {
+export default function AlertCompleteDelete({ name, open, handleClose }: Props) {
   return (
     <Dialog
       open={open}

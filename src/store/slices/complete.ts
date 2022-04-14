@@ -34,6 +34,15 @@ export const getOne: any = createAsyncThunk('complete/getOne', async (payload: P
   return response.data.success.data;
 });
 
+export const removeCandidate: any = createAsyncThunk('complete/delete', async (payload: Payload) => {
+  const { id, token, callback } = payload;
+  const response = await deleteCandidate(id, token);
+  if (callback) {
+    callback(response);
+  }
+  return id;
+});
+
 const completeSlice = createSlice({
   name: 'complete',
   initialState,
@@ -60,9 +69,6 @@ const completeSlice = createSlice({
     })
   },
   extraReducers: {
-    [fetchCandidates.pending]: (state, action) => {
-      console.log('pending');
-    },
     [fetchCandidates.fulfilled]: (state, action) => {
       console.log('success', action.payload);
       state.data.list = action.payload;
@@ -70,14 +76,20 @@ const completeSlice = createSlice({
     [fetchCandidates.rejected]: (state, action) => {
       console.log('error', action.error);
     },
-    [getOne.pending]: (state, action) => {
-      console.log('pending');
-    },
+
     [getOne.fulfilled]: (state, action) => {
       console.log('success', action.payload);
       state.info = action.payload;
     },
     [getOne.rejected]: (state, action) => {
+      console.log('error', action.error);
+    },
+
+    [removeCandidate.fulfilled]: (state, action) => {
+      console.log('success', action.payload);
+      state.data.list = state.data.list.filter((item: any) => item.id !== action.payload);
+    },
+    [removeCandidate.rejected]: (state, action) => {
       console.log('error', action.error);
     }
   }

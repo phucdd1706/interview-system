@@ -2,31 +2,32 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  ButtonBase,
   Table,
   TableBody,
   TableCell,
   TableRow,
   TableContainer,
   TableHead,
-  Button,
-  Box,
-  Popover,
-  Typography,
   Chip,
-  IconButton
+  IconButton,
+  Pagination,
+  Grid,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import VisibilityTwoToneIcon from '@mui/icons-material/VisibilityTwoTone';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 import { RootState } from 'store/index';
 import { Candidates } from 'types/complete';
-import { fetchCandidates } from 'store/slices/complete';
-import CandidateModal from 'components/ModalPage/CandidateModal';
-import CandidateDrawer from 'components/DrawerPage/CandidateDrawer';
+import { fetchCandidates, removeCandidate } from 'store/slices/complete';
+import AddComplete from 'views/pages/complete/AddComplete';
+import { gridSpacing } from '../../../store/constant';
+import AlertCompleteDelete from 'views/pages/complete/AlertCompleteDelete';
+import { openSnackbar } from 'store/slices/snackbar';
 
 const CompleteList = () => {
   const dispatch = useDispatch();
@@ -35,12 +36,12 @@ const CompleteList = () => {
   const complete = useSelector((state: RootState) => state.complete);
 
   const [candidate, setCandidate] = useState<Candidates[]>(complete.data.list);
-  const [visibleModal, setVisibleModal] = useState(false);
+  const [page, setPage] = React.useState(2);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibleAdd, setVisibleAdd] = useState(false);
-  const [dataEdit, setDataEdit] = useState({});
+  const [dataEdit, setDataEdit] = useState<any>({});
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const [idRecord, setIdRecord] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -72,18 +73,65 @@ const CompleteList = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setIdRecord(0);
   };
 
-  const deleteRecord = () => {
-    console.log('idRecord', idRecord);
-    handleClose();
+  const handleModalClose = (status: boolean) => {
+    setOpenModal(false);
+    if (status) {
+      dispatch(removeCandidate({ id: dataEdit.id, token }));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Deleted successfully!',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: true
+        })
+      );
+    }
   };
 
-  const pagination = {
-    current: 1,
-    pageSize: 10
+  const handleTableChange = (e: any, pageTable: number) => {
+    console.log('pageTable', pageTable);
   };
+
+  const renderStatus = (status: number) => (
+    <>
+      {status === 1 && (
+        <Chip
+          label="Inactive"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
+            color: theme.palette.warning.dark
+          }}
+        />
+      )}
+      {status === 2 && (
+        <Chip
+          label="Active"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
+            color: theme.palette.success.dark
+          }}
+        />
+      )}
+      {status === 3 && (
+        <Chip
+          label="Blocked"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
+            color: theme.palette.orange.dark
+          }}
+        />
+      )}
+    </>
+  );
 
   return (
     <>
@@ -101,106 +149,79 @@ const CompleteList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {candidate?.map((row, index) => (
+            {candidate?.map((row) => (
               <TableRow hover key={row?.id}>
-                <TableCell>{index + (pagination.current - 1) * pagination.pageSize + 1}</TableCell>
+                <TableCell>{row?.id}</TableCell>
                 <TableCell>{row?.name}</TableCell>
                 <TableCell>{row?.phone}</TableCell>
                 <TableCell>{row?.email}</TableCell>
                 <TableCell>{moment(row.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-                <TableCell>
-                  {row.status === 1 && (
-                    <Chip
-                      label="Inactive"
-                      size="small"
-                      sx={{
-                        background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
-                        color: theme.palette.warning.dark
-                      }}
-                    />
-                  )}
-                  {row.status === 2 && (
-                    <Chip
-                      label="Active"
-                      size="small"
-                      sx={{
-                        background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
-                        color: theme.palette.success.dark
-                      }}
-                    />
-                  )}
-                  {row.status === 3 && (
-                    <Chip
-                      label="Blocked"
-                      size="small"
-                      sx={{
-                        background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-                        color: theme.palette.orange.dark
-                      }}
-                    />
-                  )}
-                </TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
-                  <IconButton
-                    color="primary"
-                    size="large"
-                    onClick={() => {
-                      setDataEdit(row);
-                      setVisibleModal(!visibleModal);
-                    }}
+                <TableCell>{renderStatus(row.status)}</TableCell>
+
+                <TableCell sx={{ width: 60, minWidth: 60 }}>
+                  <ButtonBase
+                    className="more-button"
+                    sx={{ borderRadius: '12px' }}
+                    onClick={handleClick}
+                    aria-controls="menu-comment"
+                    aria-haspopup="true"
                   >
-                    <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    size="large"
-                    onClick={() => {
-                      setDataEdit(row);
-                      setVisibleAdd(!visibleAdd);
-                    }}
-                  >
-                    <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
-                  </IconButton>
-                  <span>
-                    <IconButton
-                      color="error"
-                      size="large"
-                      onClick={(e) => {
-                        handleClick(e);
-                        setIdRecord(row.id);
-                      }}
-                    >
-                      <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
+                    <IconButton component="span" size="small" disableRipple>
+                      <MoreVertTwoToneIcon fontSize="inherit" />
                     </IconButton>
-                    <Popover
-                      id={id}
-                      open={open}
-                      anchorEl={anchorEl}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left'
+                  </ButtonBase>
+                  <Menu
+                    id="menu-comment"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    variant="selectedMenu"
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        setDataEdit(row);
+                        setVisibleAdd(!visibleAdd);
                       }}
                     >
-                      <Typography sx={{ p: 1.5 }}>Bạn có chắc chắn muốn xóa?</Typography>
-                      <Box sx={{ p: 1.5, display: 'flex', justifyContent: 'space-between' }}>
-                        <Button size="small" variant="outlined" onClick={handleClose}>
-                          Hủy
-                        </Button>
-                        <Button size="small" color="error" variant="outlined" onClick={() => deleteRecord()}>
-                          Xóa
-                        </Button>
-                      </Box>
-                    </Popover>
-                  </span>
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      onClick={(e) => {
+                        handleClose();
+                        setDataEdit(row);
+                        setOpenModal(true);
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                  </Menu>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <CandidateDrawer visible={visibleAdd} dataEdit={dataEdit} getList={getList} />
-      <CandidateModal visible={visibleModal} dataEdit={dataEdit} getList={getList} />
+      <Grid item xs={12} sx={{ p: 3 }}>
+        <Grid container justifyContent="space-between" spacing={gridSpacing}>
+          <Grid item>
+            <Pagination count={10} color="primary" onChange={handleTableChange} />
+          </Grid>
+        </Grid>
+      </Grid>
+
+      {openModal && <AlertCompleteDelete name={dataEdit?.name} open={openModal} handleClose={handleModalClose} />}
+
+      <AddComplete visible={visibleAdd} dataEdit={dataEdit} getList={getList} />
     </>
   );
 };

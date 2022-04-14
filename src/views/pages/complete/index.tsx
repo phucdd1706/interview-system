@@ -1,10 +1,9 @@
 // THIRD-PARTY
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Pagination, TextField, Stack, Grid, FormControl, Typography, MenuItem, Menu, useMediaQuery } from '@mui/material';
+import { Button, TextField, Stack, Grid, FormControl, Typography, MenuItem, Menu, useMediaQuery } from '@mui/material';
 import { Formik } from 'formik';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // PROJECT IMPORTS
@@ -13,7 +12,6 @@ import { RootState } from 'store/index';
 import { Candidates, SearchValues } from 'types/complete';
 import { fetchCandidates, filter } from 'store/slices/complete';
 import RankSelect from 'components/Common/RankSelect';
-import { gridSpacing } from '../../../store/constant';
 import SortStatus from 'views/pages/complete/SortStatus';
 import CompleteList from './CompleteList';
 
@@ -28,10 +26,6 @@ const Complete = () => {
   const complete = useSelector((state: RootState) => state.complete);
 
   const [candidate, setCandidate] = useState<Candidates[]>(complete.data.list);
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorEl2, setAnchorEl2] = useState(null);
   const [anchorElSoft, setAnchorElSoft] = useState(null);
   const initialState: SearchValues = {
     search: '',
@@ -40,9 +34,6 @@ const Complete = () => {
   };
   const [filters, setFilters] = useState(initialState);
 
-  const [idRecord, setIdRecord] = useState(0);
-
-  const open = Boolean(anchorEl);
   const openSort = Boolean(anchorElSoft);
 
   const handleSearch = (values: SearchValues) => {
@@ -104,7 +95,7 @@ const Complete = () => {
                       id="outlined-basic"
                       name="search"
                       value={values?.search}
-                      label={<span>Tên ứng viên</span>}
+                      label={<span>Name</span>}
                       fullWidth
                       size="small"
                       variant="outlined"
@@ -152,7 +143,7 @@ const Complete = () => {
                         horizontal: 'right'
                       }}
                     >
-                      {SortStatus.map((status, index) => (
+                      {SortStatus?.map((status, index) => (
                         <MenuItem
                           sx={{ p: 1.5 }}
                           key={index}
@@ -173,60 +164,10 @@ const Complete = () => {
     );
   };
 
-  const handleTableChange = (e: any, pageTable: number) => {
-    console.log('pageTable', pageTable);
-  };
-
-  const handleClickPagination = (event: any) => {
-    setAnchorEl2(event.currentTarget);
-  };
-
-  const handleClosePagination = () => {
-    setAnchorEl2(null);
-  };
-
   return (
     <>
       <MainCard title={renderSearchForm()}>
         <CompleteList />
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={10} color="primary" onChange={handleTableChange} />
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                sx={{ color: theme.palette.grey[900] }}
-                color="secondary"
-                endIcon={<ExpandMoreRoundedIcon />}
-                onClick={handleClickPagination}
-              >
-                10 Rows
-              </Button>
-              <Menu
-                id="menu-user-list-style1"
-                anchorEl={anchorEl2}
-                keepMounted
-                open={Boolean(anchorEl2)}
-                onClose={handleClosePagination}
-                variant="selectedMenu"
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                transformOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right'
-                }}
-              >
-                <MenuItem onClick={handleClosePagination}> 10 Rows</MenuItem>
-                <MenuItem onClick={handleClosePagination}> 20 Rows</MenuItem>
-                <MenuItem onClick={handleClosePagination}> 30 Rows </MenuItem>
-              </Menu>
-            </Grid>
-          </Grid>
-        </Grid>
       </MainCard>
     </>
   );
