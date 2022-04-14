@@ -1,9 +1,9 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-import { IconStairsUp, IconUserCheck } from '@tabler/icons';
+import { IconStairsUp, IconUserCheck, IconFilePlus } from '@tabler/icons';
 
-const icons = { IconUserCheck, CorporateFareIcon, IconStairsUp };
+const icons = { IconUserCheck, CorporateFareIcon, IconStairsUp, IconFilePlus };
 
 const application = {
   id: 'application',
@@ -44,6 +44,14 @@ const application = {
       type: 'item',
       url: '/ranks',
       icon: icons.IconStairsUp,
+      breadcrumbs: false
+    },
+    {
+      id: 'applicant',
+      title: <FormattedMessage id="add new applicant reference" />,
+      type: 'item',
+      url: '/applicant',
+      icon: icons.IconFilePlus,
       breadcrumbs: false
     }
   ]

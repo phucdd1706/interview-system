@@ -27,3 +27,7 @@ export type Administrator = {
   status?: number;
   type?: number;
 };
+export type SelectProps = {
+  value?: any;
+  label: string;
+};

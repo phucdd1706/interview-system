@@ -8,7 +8,6 @@ import { useTheme } from '@mui/material/styles';
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
-import AddAdministrator from 'views/pages/administrator/AddAdministrator';
 import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
 import SortStatus from 'views/pages/administrator/SortStatus';
@@ -18,6 +17,7 @@ import { UserFilter } from 'types/user';
 import { gridSpacing } from '../../../store/constant';
 import EditAdmin from './EditAdmin';
 import InfoAdmin from './InfoAdmin';
+import AddAdministrator from './AddAdministrator';
 
 const Administrator = () => {
   const theme = useTheme();
