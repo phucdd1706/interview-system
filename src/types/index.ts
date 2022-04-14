@@ -9,12 +9,14 @@ import { CustomerStateProps } from 'types/customer';
 import { RankStateProps } from 'types/rank';
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
+import { ProfileStateProps } from 'types/profile';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
   customer: CustomerStateProps;
   rank: RankStateProps;
+  profile: ProfileStateProps;
 }
 
 export interface ColorProps {
