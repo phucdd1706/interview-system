@@ -12,6 +12,7 @@ import inProgressReducer from 'store/slices/inProgress';
 import customerReducer from './slices/customer';
 import applicantReferences from 'store/slices/applicantReferences';
 import rankReducer from 'store/slices/rank';
+import departmentReducer from 'store/slices/department';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -26,16 +27,11 @@ const reducer = combineReducers({
   menu: menuReducer,
   complete: completeReducer,
   inProgress: inProgressReducer,
-  rank: rankReducer,
-  customer: persistReducer(
-    {
-      key: 'customer',
-      storage,
-      keyPrefix: 'beetsoft-'
-    },
-    customerReducer
-  ),
-  applicant: applicantReferences
+
+  department: departmentReducer,
+  applicant: applicantReferences,
+  customer: customerReducer,
+  rank: rankReducer
 });
 
 export default reducer;

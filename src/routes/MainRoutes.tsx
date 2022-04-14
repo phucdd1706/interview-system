@@ -11,6 +11,7 @@ const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
 const Inprogress = Loadable(lazy(() => import('views/pages/inProgress/index')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
+const Department = Loadable(lazy(() => import('views/pages/department')));
 const Profile = Loadable(lazy(() => import('views/pages/account')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
 const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
@@ -47,6 +48,10 @@ const MainRoutes = {
     {
       path: '/user/customer',
       element: <Customer />
+    },
+    {
+      path: '/department',
+      element: <Department />
     },
     {
       path: 'ranks',

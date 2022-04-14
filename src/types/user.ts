@@ -20,6 +20,19 @@ export type SortStatusProps = {
   label: string;
 };
 
+export type Administrator = {
+  id?: string;
+  name?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  dob?: string;
+  gender?: string;
+  status?: number;
+  type?: number;
+  created_at?: Date;
+  updated_at?: Date;
+};
 export type SelectProps = {
   value?: any;
   label: string;
