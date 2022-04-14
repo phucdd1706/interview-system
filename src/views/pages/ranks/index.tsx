@@ -5,17 +5,36 @@ import MainCard from 'ui-component/cards/MainCard';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/ranks/SortStatus';
-import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import {
+  Button,
+  Fab,
+  Grid,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  Pagination,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
 import RanksList from 'views/pages/ranks/RanksList';
 import { dispatch } from 'store';
-import { getRanksList } from 'store/slices/rank';
+import { DeleteRank, getRanksList } from 'store/slices/rank';
 import { RankFilter } from 'types/rank';
+import AddRank from './AddRank';
+import { gridSpacing } from 'store/constant';
+import EditRank from './EditRank';
+import InfoRank from './InfoRank';
 
 const Ranks = () => {
   const theme = useTheme();
+  const [id, setId] = useState('');
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -23,11 +42,32 @@ const Ranks = () => {
   const spacingMD = matchDownMD ? 1 : 1.5;
 
   const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
+
   const handleClickOpenDialog = () => {
     setOpen(true);
   };
   const handleCloseDialog = () => {
     setOpen(false);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleEdit = (rankId: string) => {
+    setId(rankId);
+    setOpenEdit(true);
+  };
+
+  const handleCloseInfo = () => {
+    setOpenInfo(false);
+  };
+
+  const handleInfo = (rankId: string) => {
+    setId(rankId);
+    setOpenInfo(true);
   };
 
   const initialState: RankFilter = {
@@ -67,6 +107,12 @@ const Ranks = () => {
     setAnchorEl(null);
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
+
+  const handleClickPagination = (event: React.MouseEvent) => {};
+
+  const handleDeleteRank = (rankId: string) => {
+    dispatch(DeleteRank(rankId));
+  };
 
   return (
     <MainCard
@@ -154,7 +200,48 @@ const Ranks = () => {
       }
       content={false}
     >
-      <RanksList />
+      <AddRank open={open} handleCloseDialog={handleCloseDialog} />
+      <EditRank open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
+      <InfoRank open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
+      <RanksList handleDelete={handleDeleteRank} handleEdit={handleEdit} handleInfo={handleInfo} id={id} />
+      <Grid item xs={12} sx={{ p: 3 }}>
+        <Grid container justifyContent="space-between" spacing={gridSpacing}>
+          <Grid item>
+            <Pagination count={10} color="primary" />
+          </Grid>
+          <Grid item>
+            <Button
+              size="large"
+              sx={{ color: theme.palette.grey[900] }}
+              color="secondary"
+              endIcon={<ExpandMoreRoundedIcon />}
+              onClick={handleClickPagination}
+            >
+              10 Rows
+            </Button>
+            <Menu
+              id="menu-user-list-style1"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              variant="selectedMenu"
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
+              }}
+            >
+              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
+              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
+              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
+            </Menu>
+          </Grid>
+        </Grid>
+      </Grid>
     </MainCard>
   );
 };

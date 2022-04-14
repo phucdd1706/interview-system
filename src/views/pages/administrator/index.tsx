@@ -1,8 +1,5 @@
 // THIRD-PARTY
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import React, { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/AddTwoTone';
+import React, { useState } from 'react';
 import {
   Button,
   Fab,
@@ -24,18 +21,19 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SearchIcon from '@mui/icons-material/Search';
 
 // PROJECT IMPORTS
-import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
-
 import { useDispatch, useSelector } from 'store';
-import { getAdministratorList } from 'store/slices/user';
-import { SelectProps, UserFilter } from 'types/user';
-import { gridSpacing } from '../../../store/constant';
-
-import AddAdministrator from './AddAdministrator';
 import { UserProfile } from 'types/user-profile';
+import { gridSpacing } from 'store/constant';
+import { UserFilter, SelectProps } from 'types/user';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import { getAdministratorList } from 'store/slices/user';
+import Administrator from 'views/pages/administrator/Administrator';
+import AddAdministrator from 'views/pages/administrator/AddAdministrator';
 
 const SortStatus: SelectProps[] = [
   {
@@ -56,7 +54,7 @@ const SortStatus: SelectProps[] = [
   }
 ];
 
-const Administrator = () => {
+const Administrators = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -65,8 +63,7 @@ const Administrator = () => {
 
   const dispatch = useDispatch();
   const [data, setData] = React.useState<UserProfile[]>([]);
-  const userState = useSelector((state) => state.user);
-
+  const administratorState = useSelector((state) => state.user);
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setFilter({ ...filter, currentPage: page! });
   };
@@ -88,7 +85,6 @@ const Administrator = () => {
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
@@ -102,11 +98,11 @@ const Administrator = () => {
     await dispatch(getAdministratorList(filter));
   };
 
-  useEffect(() => {
-    setData(userState.users);
-  }, [userState]);
+  React.useEffect(() => {
+    setData(administratorState.users);
+  }, [administratorState]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     filterData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
@@ -179,7 +175,7 @@ const Administrator = () => {
                           sx={{ p: 1.5 }}
                           key={index}
                           selected={status.value === filter.status}
-                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
+                          onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
                         </MenuItem>
@@ -225,7 +221,8 @@ const Administrator = () => {
             </TableRow>
           </TableHead>
           <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((user, index) => <AdministratorList key={user.id} user={user} index={index} />)}
+            {data &&
+              data.map((administrator, index) => <Administrator key={administrator.id} administrator={administrator} index={index} />)}
           </TableBody>
         </Table>
         <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
@@ -233,7 +230,12 @@ const Administrator = () => {
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination count={userState.pageCount} page={userState.currentPage} onChange={handleChange} color="primary" />
+            <Pagination
+              count={administratorState.pageCount}
+              page={administratorState.currentPage}
+              onChange={handleChange}
+              color="primary"
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -241,4 +243,4 @@ const Administrator = () => {
   );
 };
 
-export default Administrator;
+export default Administrators;

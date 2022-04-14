@@ -52,7 +52,7 @@ const application = {
       type: 'item',
       url: '/applicant',
       icon: icons.IconFilePlus,
-      breadcrumbs: false
+      breadcrumbs: true
     }
   ]
 };
