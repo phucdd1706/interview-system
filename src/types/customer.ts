@@ -8,6 +8,13 @@ export interface CustomerStateProps {
   error: object | string | null;
 }
 
+export type CustomerFilter = {
+  search?: string;
+  status?: number | string;
+  currentPage?: number;
+  limit?: number;
+};
+
 export type SelectProps = {
   value?: any;
   label: string;

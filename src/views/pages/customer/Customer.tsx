@@ -7,6 +7,10 @@ import { UserProfile } from 'types/user-profile';
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import EditCustomer from 'views/pages/customer/EditCustomer';
+import { dispatch } from 'store';
+import { openSnackbar } from 'store/slices/snackbar';
+import { deleteCustomer } from 'store/slices/customer';
+import AlertCustomerDelete from 'views/pages/customer/AlertCustomerDelete';
 
 interface Props {
   customer: UserProfile;
@@ -30,6 +34,26 @@ const Customer = ({ customer, index }: Props) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const [openModal, setOpenModal] = useState(false);
+  const handleModalClose = (status: boolean) => {
+    setOpenModal(false);
+    if (status) {
+      dispatch(deleteCustomer(customer));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Deleted successfully!',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: false
+        })
+      );
+    }
   };
 
   return (
@@ -134,7 +158,16 @@ const Customer = ({ customer, index }: Props) => {
             >
               Edit
             </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                setOpenModal(true);
+              }}
+            >
+              Delete
+            </MenuItem>
           </Menu>
+          {openModal && <AlertCustomerDelete name={customer.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
       <EditCustomer customer={customer} open={openCustomerDrawer} handleDrawerOpen={handleCustomerDrawerOpen} />

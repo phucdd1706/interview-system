@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { UserFilter } from 'types/user';
+import { CustomerFilter } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 
 export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/client/users`;
@@ -31,6 +31,10 @@ const slice = createSlice({
       state.currentPage = action.payload.current_page;
     },
 
+    addCustomerSuccess(state, action) {
+      state.customers.unshift(action.payload);
+    },
+
     editCustomerSuccess(state, action) {
       state.customers = state.customers.map((customer) => {
         if (customer.id === action.payload.id) {
@@ -38,25 +42,36 @@ const slice = createSlice({
         }
         return customer;
       });
+    },
+
+    deleteCustomerSuccess(state, action) {
+      state.customers = state.customers.filter((customer) => customer.id !== action.payload.id);
     }
   }
 });
 
 export default slice.reducer;
 
-export function getCustomerList(filter?: UserFilter) {
-  let query: string;
-
-  if (filter !== undefined) {
-    query = `?search=${filter?.search}&status=${filter?.status}`;
-  } else {
-    query = '';
-  }
+export function getCustomerList(filter?: CustomerFilter) {
+  const queryParams = `${
+    (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+  }&page=${filter?.currentPage}`;
 
   return async () => {
     try {
-      const response = await axios.get(`${CUSTOMER_URL}${query}`);
+      const response = await axios.get(`${CUSTOMER_URL}?${queryParams}`);
       dispatch(slice.actions.getCustomerListSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function addCustomer(customer: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, customer);
+      dispatch(slice.actions.addCustomerSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -68,6 +83,18 @@ export function editCustomer(customer: UserProfile) {
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`, customer);
       dispatch(slice.actions.editCustomerSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function deleteCustomer(customer: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`);
+      console.log(response);
+      dispatch(slice.actions.deleteCustomerSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
