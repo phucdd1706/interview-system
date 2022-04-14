@@ -8,7 +8,9 @@ export interface UserStateProps {
 
 export type UserFilter = {
   search?: string;
-  status?: string;
+  status?: number | string;
+  currentPage?: number;
+  limit?: number;
 };
 
 export type SortStatusProps = {

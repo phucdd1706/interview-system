@@ -31,6 +31,10 @@ const slice = createSlice({
 export default slice.reducer;
 
 export function getAdministratorList(filter?: UserFilter) {
+  const queryParams = `${
+    (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+  }&page=${filter?.currentPage}`;
+
   return async () => {
     try {
       const response = await axios.get(`${ADMINISTRATOR_URL}?search=${filter?.search}&status=${filter?.status}`);
