@@ -10,7 +10,7 @@ import userReducer from 'store/slices/user';
 import applicantReferences from 'store/slices/applicantReferences';
 import customerReducer from 'store/slices/customer';
 import rankReducer from 'store/slices/rank';
-import departmentReducer from './slices/department';
+import departmentReducer from 'store/slices/department';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
