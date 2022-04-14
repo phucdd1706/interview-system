@@ -148,7 +148,7 @@ const ProfileSection = () => {
                             {user?.name}
                           </Typography>
                         </Stack>
-                        <Typography variant="subtitle2">{user?.type === 1 ? 'Administrator' : 'Custommer'}</Typography>
+                        <Typography variant="subtitle2">{user?.type === 1 ? 'Administrator' : 'Customer'}</Typography>
                       </Stack>
                       <Divider />
                     </Box>

@@ -7,6 +7,8 @@ import { persistReducer } from 'redux-persist';
 import menuReducer from 'store/slices/menu';
 import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
+import customerReducer from './slices/customer';
+import rankReducer from 'store/slices/rank';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -18,6 +20,8 @@ const reducer = combineReducers({
     },
     userReducer
   ),
+  customer: customerReducer,
+  rank: rankReducer,
   menu: menuReducer
 });
 

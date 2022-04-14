@@ -5,12 +5,16 @@ import { ChipProps, SvgIconTypeMap } from '@mui/material';
 import { TablerIcon } from '@tabler/icons';
 
 // PROJECT IMPORTS
+import { CustomerStateProps } from 'types/customer';
+import { RankStateProps } from 'types/rank';
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
+  customer: CustomerStateProps;
+  rank: RankStateProps;
 }
 
 export interface ColorProps {

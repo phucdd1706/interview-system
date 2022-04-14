@@ -43,6 +43,24 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
               <Grid item xs={12}>
                 <TextField id="outlined-basic1" fullWidth label="Enter Name*" />
               </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter Username*" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter Email*" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter password*" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter password_confirmation*" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter phone*" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField id="outlined-basic1" fullWidth label="Enter type*" />
+              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>

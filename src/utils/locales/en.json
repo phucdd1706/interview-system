@@ -4,5 +4,6 @@
   "application": "Application",
   "manage-member": "Manage Member",
   "administrator": "Administrator",
-  "customer": "Customer"
+  "customer": "Customer",
+  "manage-rank": "Manage Rank"
 }
