@@ -1,22 +1,24 @@
 // THIRD-PARTY
 import { forwardRef, SyntheticEvent } from 'react';
-import { useTheme } from '@mui/material/styles';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
-
 // PROJECT IMPORTS
-import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
+import { useSelector } from 'store';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
-interface AddAdministratorProps {
+interface InfoRankProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
+  id: string;
 }
 
-const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
-  const theme = useTheme();
-
+const InfoRank = ({ open, handleCloseDialog, id }: InfoRankProps) => {
+  const { ranks } = useSelector((state) => state.rank);
+  const rankById = ranks.filter((item) => item.id === id);
+  // useEffect(() => {
+  //   dispatch(GetDetailRank(id));
+  // });
   return (
     <Dialog
       open={open}
@@ -37,36 +39,48 @@ const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
     >
       {open && (
         <>
-          <DialogTitle>Info Customer</DialogTitle>
+          <DialogTitle>Rank Infomation</DialogTitle>
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Name*" />
+                <TextField
+                  id="name"
+                  InputProps={{
+                    readOnly: true
+                  }}
+                  fullWidth
+                  label="Name*"
+                  name="name"
+                  defaultValue={rankById[0].name}
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Username*" />
+                <TextField
+                  id="description"
+                  InputProps={{
+                    readOnly: true
+                  }}
+                  fullWidth
+                  label="Description*"
+                  name="description"
+                  defaultValue={rankById[0].description}
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter Email*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter password*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter password_confirmation*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter phone*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="outlined-basic1" fullWidth label="Enter type*" />
+                <TextField
+                  id="status"
+                  InputProps={{
+                    readOnly: true
+                  }}
+                  fullWidth
+                  label="Status*"
+                  name="status"
+                  defaultValue={rankById[0].status}
+                />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <AnimateButton>
-              <Button variant="contained">Create</Button>
-            </AnimateButton>
             <Button variant="text" color="error" onClick={handleCloseDialog}>
               Close
             </Button>
@@ -77,4 +91,4 @@ const InfoCustomer = ({ open, handleCloseDialog }: AddAdministratorProps) => {
   );
 };
 
-export default InfoCustomer;
+export default InfoRank;

@@ -1,17 +1,19 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
-import { IconBrandChrome, IconHelp, IconSitemap, IconClipboardCheck, IconClipboard } from '@tabler/icons';
+import { IconBrandChrome, IconHelp, IconSitemap, IconClipboardCheck, IconClipboard, IconHistory, IconFilePlus } from '@tabler/icons';
 
 const icons = {
   IconBrandChrome,
   IconHelp,
   IconSitemap,
   IconClipboardCheck,
-  IconClipboard
+  IconClipboard,
+  IconHistory,
+  IconFilePlus
 };
 
 const other = {
-  id: 'dashboard',
+  id: 'home',
   type: 'group',
   children: [
     {
@@ -35,7 +37,14 @@ const other = {
       title: <FormattedMessage id="inProgress" />,
       type: 'item',
       url: '/inprogress',
-      icon: icons.IconClipboard,
+      icon: icons.IconClipboard
+    },
+    {
+      id: 'applicant',
+      title: <FormattedMessage id="add new applicant reference" />,
+      type: 'item',
+      url: '/applicant',
+      icon: icons.IconFilePlus,
       breadcrumbs: false
     }
   ]
