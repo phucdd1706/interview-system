@@ -3,40 +3,81 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/AddTwoTone';
-import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import {
+  Button,
+  Fab,
+  Grid,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
+
 import MainCard from 'ui-component/cards/MainCard';
 
-import { dispatch } from 'store';
-import { DepartmentFilter } from 'types/department';
-import { delDepartment, getDepartmentList } from 'store/slices/department';
-import SortStatus from './SortStatus';
+import { useDispatch, useSelector } from 'store';
 
-import AddDepartment from './AddDepartment';
+import { gridSpacing } from '../../../store/constant';
+import { Department, DepartmentFilter, SelectProps } from 'types/department';
+import { getDepartmentList } from 'store/slices/department';
 import DepartmentList from './DepartmentList';
-import EditDepartment from './EditDepartment';
-import InfoDepartment from './InfoDepartment';
+import AddDepartment from './AddDepartment';
 
-const Department = () => {
+const SortStatus: SelectProps[] = [
+  {
+    value: '',
+    label: 'All'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  },
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 2,
+    label: 'Blocked'
+  }
+];
+
+const Departments = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
   const spacingMD = matchDownMD ? 1 : 1.5;
+
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState<Department[]>([]);
+  const departmentState = useSelector((state) => state.department);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setFilter({ ...filter, currentPage: page! });
+  };
 
   const initialState: DepartmentFilter = {
     search: '',
-    status: ''
+    status: '',
+    currentPage: 1,
+    limit: 20
   };
   const [filter, setFilter] = useState(initialState);
-  const [id, setId] = useState('');
-  const [open, setOpen] = useState(false);
-  const [openInfo, setOpenInfo] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
-
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
@@ -48,51 +89,36 @@ const Department = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+    setFilter({ ...filter, status: index });
+    setAnchorEl(null);
   };
-  const handleClickOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseInfo = () => {
-    setOpenInfo(false);
+  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
+
+  const filterData = async () => {
+    await dispatch(getDepartmentList(filter));
   };
 
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-  const handleCallbackInfo = (adminId: string) => {
-    setId(adminId);
-    setOpenInfo(true);
-  };
-  const handleCallbackEdit = (adminId: string) => {
-    setId(adminId);
-    setOpenEdit(true);
-  };
-  const handleCallbackDel = (adminId: string) => {
-    setId(adminId);
-    dispatch(delDepartment(adminId));
-    window.location.reload();
-  };
-  const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getDepartmentList(filter));
-    }, 400);
-  };
+  useEffect(() => {
+    setData(departmentState.department);
+  }, [departmentState]);
 
   useEffect(() => {
     filterData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
-    setFilter({ ...filter, status: index });
-    setAnchorEl(null);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const handleDrawerOpen = () => {
+    setOpenDrawer((prevState) => !prevState);
   };
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
+
+  const addAdministrator = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
 
   return (
     <MainCard
@@ -138,7 +164,7 @@ const Department = () => {
                       aria-labelledby="demo-positioned-button"
                       anchorEl={anchorEl}
                       open={openSort}
-                      onClose={handleClose}
+                      onClose={handleSortStatusClose}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right'
@@ -169,7 +195,7 @@ const Department = () => {
               <Fab
                 color="primary"
                 size="small"
-                onClick={handleClickOpenDialog}
+                onClick={addAdministrator}
                 sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
               >
                 <AddIcon fontSize="small" />
@@ -180,17 +206,34 @@ const Department = () => {
       }
       content={false}
     >
-      <AddDepartment open={open} handleCloseDialog={handleCloseDialog} />
-      <EditDepartment open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <InfoDepartment open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <DepartmentList
-        handleCallbackInfo={handleCallbackInfo}
-        handleCallbackEdit={handleCallbackEdit}
-        handleCallbackDel={handleCallbackDel}
-        id={id}
-      />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Code</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            {data && data.map((department, index) => <DepartmentList key={department.id} department={department} index={index} />)}
+          </TableBody>
+        </Table>
+        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      </TableContainer>
+      <Grid item xs={12} sx={{ p: 3 }}>
+        <Grid container justifyContent="space-between" spacing={gridSpacing}>
+          <Grid item>
+            <Pagination count={departmentState.pageCount} page={departmentState.currentPage} onChange={handleChange} color="primary" />
+          </Grid>
+        </Grid>
+      </Grid>
     </MainCard>
   );
 };
 
-export default Department;
+export default Departments;

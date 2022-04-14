@@ -2,12 +2,16 @@
 
 export interface DepartmentStateProps {
   department: Department[];
+  pageCount: number;
+  currentPage: number;
   error: object | string | null;
 }
 
 export type DepartmentFilter = {
   search?: string;
-  status?: string;
+  status?: number | string;
+  currentPage?: number;
+  limit?: number;
 };
 
 export type SortStatusProps = {
@@ -19,7 +23,10 @@ export type Department = {
   id?: string;
   name?: string;
   code?: string;
-  note?: string;
   status?: number;
   created_at?: Date;
+};
+export type SelectProps = {
+  value?: any;
+  label: string;
 };

@@ -120,40 +120,6 @@ const Administrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
 
-  // const [open, setOpen] = useState(false);
-  // const [openInfo, setOpenInfo] = useState(false);
-  // const [openEdit, setOpenEdit] = React.useState(false);
-  // const handleClickOpenDialog = () => {
-  //   setOpen(true);
-  // };
-  // const handleCloseDialog = () => {
-  //   setOpen(false);
-  // };
-  // const handleCloseInfo = () => {
-  //   setOpenInfo(false);
-  // };
-  // const handleClickOpenInfo = () => {
-  //   setOpenInfo(true);
-  // };
-  // const handleCloseEdit = () => {
-  //   setOpenEdit(false);
-  // };
-  // const handleCallbackInfo = (adminId: string) => {
-  //   setId(adminId);
-  //   setOpenInfo(true);
-  // };
-  // const handleCallbackEdit = (adminId: string) => {
-  //   setId(adminId);
-  //   setOpenEdit(true);
-  // };
-  // const handleCallbackDel = (adminId: string) => {
-  //   setId(adminId);
-  //   dispatch(delAdministrator(adminId));
-  //   window.location.reload();
-  // };
-
-  // const handleClickPagination = (event: React.MouseEvent) => {};
-
   return (
     <MainCard
       title={
