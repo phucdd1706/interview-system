@@ -6,26 +6,26 @@ import moment from 'moment';
 import { UserProfile } from 'types/user-profile';
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import EditCustomer from 'views/pages/customer/EditCustomer';
+import EditAdministrator from 'views/pages/administrator/EditAdministrator';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { deleteCustomer } from 'store/slices/customer';
-import AlertCustomerDelete from 'views/pages/customer/AlertCustomerDelete';
+import { deleteAdministrator } from 'store/slices/user';
+import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
 
 interface Props {
-  customer: UserProfile;
+  administrator: UserProfile;
   index: number;
 }
 
-const Customer = ({ customer, index }: Props) => {
+const Administrator = ({ administrator, index }: Props) => {
   const theme = useTheme();
-  const [openCustomerDrawer, setOpenCustomerDrawer] = useState<boolean>(false);
-  const handleCustomerDrawerOpen = () => {
-    setOpenCustomerDrawer((prevState) => !prevState);
+  const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
+  const handleAdministratorDrawerOpen = () => {
+    setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
-  const editCustomer = () => {
-    setOpenCustomerDrawer((prevState) => !prevState);
+  const editAdministrator = () => {
+    setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
   const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
@@ -40,7 +40,7 @@ const Customer = ({ customer, index }: Props) => {
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(deleteCustomer(customer));
+      dispatch(deleteAdministrator(administrator));
       dispatch(
         openSnackbar({
           open: true,
@@ -61,7 +61,7 @@ const Customer = ({ customer, index }: Props) => {
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{customer.id}</Typography>
+            <Typography variant="body2">{administrator.id}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -77,21 +77,21 @@ const Customer = ({ customer, index }: Props) => {
               cursor: 'pointer'
             }}
           >
-            {customer.name}
+            {administrator.name}
           </Link>
         </TableCell>
-        <TableCell>{customer.username}</TableCell>
-        <TableCell>{customer.email}</TableCell>
-        <TableCell>{customer.phone}</TableCell>
-        <TableCell>{customer.dob ? moment(customer.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
+        <TableCell>{administrator.username}</TableCell>
+        <TableCell>{administrator.email}</TableCell>
+        <TableCell>{administrator.phone}</TableCell>
+        <TableCell>{administrator.dob ? moment(administrator.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>
-          {customer.gender === 'male' && 'Male'}
-          {customer.gender === 'female' && 'Female'}
-          {(customer.gender === null || customer.gender === 'none') && 'N/A'}
+          {administrator.gender === 'male' && 'Male'}
+          {administrator.gender === 'female' && 'Female'}
+          {(administrator.gender === null || administrator.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(customer.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>
-          {customer.status === 0 && (
+          {administrator.status === 0 && (
             <Chip
               label="Inactive"
               size="small"
@@ -101,7 +101,7 @@ const Customer = ({ customer, index }: Props) => {
               }}
             />
           )}
-          {customer.status === 1 && (
+          {administrator.status === 1 && (
             <Chip
               label="Active"
               size="small"
@@ -111,7 +111,7 @@ const Customer = ({ customer, index }: Props) => {
               }}
             />
           )}
-          {customer.status === 2 && (
+          {administrator.status === 2 && (
             <Chip
               label="Blocked"
               size="small"
@@ -153,7 +153,7 @@ const Customer = ({ customer, index }: Props) => {
             <MenuItem
               onClick={() => {
                 handleClose();
-                editCustomer();
+                editAdministrator();
               }}
             >
               Edit
@@ -167,11 +167,11 @@ const Customer = ({ customer, index }: Props) => {
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertCustomerDelete name={customer.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertAdministratorDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditCustomer customer={customer} open={openCustomerDrawer} handleDrawerOpen={handleCustomerDrawerOpen} />
+      <EditAdministrator administrator={administrator} open={openAdministratorDrawer} handleDrawerOpen={handleAdministratorDrawerOpen} />
     </>
   );
 };
-export default Customer;
+export default Administrator;

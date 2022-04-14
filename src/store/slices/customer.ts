@@ -36,12 +36,16 @@ const slice = createSlice({
     },
 
     editCustomerSuccess(state, action) {
-      state.customers = state.customers.map((customer) => {
-        if (customer.id === action.payload.id) {
-          return action.payload;
-        }
-        return customer;
-      });
+      if (action.payload.type === 1) {
+        state.customers = state.customers.filter((customer) => customer.id !== action.payload.id);
+      } else {
+        state.customers = state.customers.map((customer) => {
+          if (customer.id === action.payload.id) {
+            return action.payload;
+          }
+          return customer;
+        });
+      }
     },
 
     deleteCustomerSuccess(state, action) {
@@ -93,7 +97,6 @@ export function deleteCustomer(customer: UserProfile) {
   return async () => {
     try {
       const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`);
-      console.log(response);
       dispatch(slice.actions.deleteCustomerSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

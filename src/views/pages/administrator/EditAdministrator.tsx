@@ -23,14 +23,14 @@ import { useFormik } from 'formik';
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
-import { editCustomer } from 'store/slices/customer';
+import { editAdministrator } from 'store/slices/user';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { SelectProps } from 'types/customer';
+import { SelectProps } from 'types/user';
 import { UserProfile } from 'types/user-profile';
 
 interface Props {
-  customer: UserProfile;
+  administrator: UserProfile;
   open: boolean;
   handleDrawerOpen: () => void;
 }
@@ -86,23 +86,23 @@ const validationSchema = yup.object({
   status: yup.string().required('Status is required')
 });
 
-const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
+const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      id: customer.id,
-      name: customer.name,
-      username: customer.username,
-      email: customer.email,
-      phone: customer.phone,
-      dob: customer.dob,
-      gender: customer.gender ?? 'none',
-      type: customer.type,
-      status: customer.status
+      id: administrator.id,
+      name: administrator.name,
+      username: administrator.username,
+      email: administrator.email,
+      phone: administrator.phone,
+      dob: administrator.dob,
+      gender: administrator.gender ?? 'none',
+      type: administrator.type,
+      status: administrator.status
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(editCustomer(values));
+      dispatch(editAdministrator(values));
       dispatch(
         openSnackbar({
           open: true,
@@ -163,7 +163,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit "${customer.name}"`}
+                    {`Edit "${administrator.name}"`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -305,4 +305,4 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
   );
 };
 
-export default EditCustomer;
+export default EditAdministrator;
