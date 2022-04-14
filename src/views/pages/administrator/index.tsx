@@ -1,8 +1,5 @@
 // THIRD-PARTY
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import React, { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/AddTwoTone';
+import React, { useState } from 'react';
 import {
   Button,
   Fab,
@@ -12,46 +9,72 @@ import {
   MenuItem,
   Pagination,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography,
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SearchIcon from '@mui/icons-material/Search';
 
 // PROJECT IMPORTS
-import AddAdministrator from 'views/pages/administrator/AddAdministrator';
-import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
-import SortStatus from 'views/pages/administrator/SortStatus';
-import { dispatch } from 'store';
+import { useDispatch, useSelector } from 'store';
+import { UserProfile } from 'types/user-profile';
+import { gridSpacing } from 'store/constant';
+import { UserFilter, SelectProps } from 'types/user';
+import AddIcon from '@mui/icons-material/AddTwoTone';
 import { getAdministratorList } from 'store/slices/user';
-import { UserFilter } from 'types/user';
-import { gridSpacing } from '../../../store/constant';
+import Administrator from 'views/pages/administrator/Administrator';
+import AddAdministrator from 'views/pages/administrator/AddAdministrator';
 
-const Administrator = () => {
+const SortStatus: SelectProps[] = [
+  {
+    value: '',
+    label: 'All'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  },
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 2,
+    label: 'Blocked'
+  }
+];
+
+const Administrators = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState<UserProfile[]>([]);
+  const administratorState = useSelector((state) => state.user);
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setFilter({ ...filter, currentPage: page! });
   };
 
   const initialState: UserFilter = {
     search: '',
-    status: ''
+    status: '',
+    currentPage: 1,
+    limit: 20
   };
   const [filter, setFilter] = useState(initialState);
-
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
@@ -62,29 +85,36 @@ const Administrator = () => {
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleClose = () => {
+  const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
-
-  const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getAdministratorList(filter));
-    }, 400);
-  };
-
-  useEffect(() => {
-    filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setFilter({ ...filter, status: index });
     setAnchorEl(null);
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const handleClickPagination = (event: React.MouseEvent) => {};
+  const filterData = async () => {
+    await dispatch(getAdministratorList(filter));
+  };
+
+  React.useEffect(() => {
+    setData(administratorState.users);
+  }, [administratorState]);
+
+  React.useEffect(() => {
+    filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const handleDrawerOpen = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
+
+  const addAdministrator = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
 
   return (
     <MainCard
@@ -130,7 +160,7 @@ const Administrator = () => {
                       aria-labelledby="demo-positioned-button"
                       anchorEl={anchorEl}
                       open={openSort}
-                      onClose={handleClose}
+                      onClose={handleSortStatusClose}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right'
@@ -145,7 +175,7 @@ const Administrator = () => {
                           sx={{ p: 1.5 }}
                           key={index}
                           selected={status.value === filter.status}
-                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
+                          onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
                         </MenuItem>
@@ -161,7 +191,7 @@ const Administrator = () => {
               <Fab
                 color="primary"
                 size="small"
-                onClick={handleClickOpenDialog}
+                onClick={addAdministrator}
                 sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
               >
                 <AddIcon fontSize="small" />
@@ -172,43 +202,40 @@ const Administrator = () => {
       }
       content={false}
     >
-      <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
-      <AdministratorList />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Username</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Date of Birth</TableCell>
+              <TableCell>Gender</TableCell>
+              <TableCell>Updated</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            {data &&
+              data.map((administrator, index) => <Administrator key={administrator.id} administrator={administrator} index={index} />)}
+          </TableBody>
+        </Table>
+        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination count={10} color="primary" />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              sx={{ color: theme.palette.grey[900] }}
-              color="secondary"
-              endIcon={<ExpandMoreRoundedIcon />}
-              onClick={handleClickPagination}
-            >
-              10 Rows
-            </Button>
-            <Menu
-              id="menu-user-list-style1"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              variant="selectedMenu"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
-            </Menu>
+            <Pagination
+              count={administratorState.pageCount}
+              page={administratorState.currentPage}
+              onChange={handleChange}
+              color="primary"
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -216,4 +243,4 @@ const Administrator = () => {
   );
 };
 
-export default Administrator;
+export default Administrators;
