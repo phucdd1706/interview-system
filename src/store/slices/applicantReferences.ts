@@ -169,7 +169,6 @@ const postData = async <T>(url: string, data: any): Promise<T> => {
     .catch((err) => {
       throw err;
     });
-  console.log(response);
   return response;
 };
 
