@@ -28,14 +28,12 @@ import { useTheme } from '@mui/material/styles';
 // PROJECT IMPORTS
 
 import MainCard from 'ui-component/cards/MainCard';
-
 import { useDispatch, useSelector } from 'store';
-
-import { gridSpacing } from '../../../store/constant';
+import { gridSpacing } from 'store/constant';
 import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
-import DepartmentList from './DepartmentList';
-import AddDepartment from './AddDepartment';
+import DepartmentList from 'views/pages/department/DepartmentList';
+import AddDepartment from 'views/pages/department/AddDepartment';
 
 const SortStatus: SelectProps[] = [
   {
