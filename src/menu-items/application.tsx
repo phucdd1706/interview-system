@@ -1,8 +1,8 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
-import { IconStairsUp, IconUserCheck } from '@tabler/icons';
+import { IconStairsUp, IconUserCheck, IconFilePlus } from '@tabler/icons';
 
-const icons = { IconStairsUp, IconUserCheck };
+const icons = { IconStairsUp, IconUserCheck, IconFilePlus };
 
 const application = {
   id: 'application',
@@ -35,6 +35,14 @@ const application = {
       type: 'item',
       url: '/ranks',
       icon: icons.IconStairsUp,
+      breadcrumbs: false
+    },
+    {
+      id: 'applicant',
+      title: <FormattedMessage id="add new applicant reference" />,
+      type: 'item',
+      url: '/applicant',
+      icon: icons.IconFilePlus,
       breadcrumbs: true
     }
   ]
