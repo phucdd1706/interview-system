@@ -66,6 +66,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
       </Grid>
 
       <Formik
+        enableReinitialize
         initialValues={{
           email: 'contact@trants.io',
           password: '123123',
