@@ -97,7 +97,6 @@ export function deleteCustomer(customer: UserProfile) {
   return async () => {
     try {
       const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`);
-      console.log(response);
       dispatch(slice.actions.deleteCustomerSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

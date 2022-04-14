@@ -3,6 +3,8 @@ import { UserProfile } from 'types/user-profile';
 
 export interface UserStateProps {
   users: UserProfile[];
+  pageCount: number;
+  currentPage: number;
   error: object | string | null;
 }
 
