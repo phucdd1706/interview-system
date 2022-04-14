@@ -119,10 +119,12 @@ const postData = async <T>(url: string, data: any): Promise<T> => {
     .post(url, data)
     .then((res) => res.data)
     .catch((err) => {
+      console.log(err.response);
       dispatch(
         openSnackbar({
           open: true,
-          message: err.response.data,
+          severity: 'error',
+          message: (err.response && err.response.data) || 'Server do not response',
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
           variant: 'alert',
           alert: {
@@ -143,7 +145,8 @@ const getData = async <T>(url: string): Promise<T> => {
       dispatch(
         openSnackbar({
           open: true,
-          message: err.response.data,
+          severity: 'error',
+          message: (err.response && err.response.data) || 'Server do not response',
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
           variant: 'alert',
           alert: {

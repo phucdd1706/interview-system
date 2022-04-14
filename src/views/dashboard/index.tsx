@@ -1,8 +1,5 @@
 // THIRD-PARTY
 import { Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { activeItem } from 'store/slices/menu';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';

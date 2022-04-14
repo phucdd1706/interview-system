@@ -59,7 +59,7 @@ const EmployeeForm = () => {
   const [employeeForm, setEmployeeForm] = useState(initialEmployeeForm);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
 
   const addMoreApplyPosition = () => {
     setEmployeeForm({ ...employeeForm, applyPosition: [...employeeForm.applyPosition, { id: uuidv4(), position: '', level: '' }] });
@@ -106,7 +106,7 @@ const EmployeeForm = () => {
             {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string }[] }) => {
               const { render } = row;
               return (
-                <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
+                <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
                   {render.map((item: { key: string; label: string; type: string }) => {
                     const key: personalDetailType = item.key as personalDetailType;
                     const { label, type } = item;
@@ -139,7 +139,7 @@ const EmployeeForm = () => {
               <Box>
                 {values.experiences.map((item: { id: string; position: string; durations: string }, index: number) => (
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
-                    <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
+                    <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
                         <Autocomplete
                           options={jobPosition}
@@ -191,7 +191,7 @@ const EmployeeForm = () => {
               <Box>
                 {values.applyPosition.map((item: { id: string; position: string; level: string }, index: number) => (
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
-                    <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
+                    <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
                           options={jobPosition}
