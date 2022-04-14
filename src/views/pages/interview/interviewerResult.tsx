@@ -2,7 +2,6 @@
 import { Box, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack, useMediaQuery, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 const InterviewerResult = () => {
