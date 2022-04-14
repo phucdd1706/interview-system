@@ -25,7 +25,7 @@ import { useDispatch } from 'store';
 import { ApplicantInfo } from 'types/applicantData';
 import { getInterviewQuestionThunk } from 'store/slices/applicantReferences';
 import personalDetail from './layoutMapping';
-import { jobPosition, jobLevel, workingExperiences } from './constant';
+import { jobPosition, jobLevel, workingExperiences } from '../constants';
 
 type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
 
@@ -34,7 +34,7 @@ const initialEmployeeForm: ApplicantInfo = {
   firstName: '',
   lastName: '',
   age: '',
-  email: '',
+  email: 'denvl585@gmail.com',
   phone: '',
   address: '',
   applyPosition: [

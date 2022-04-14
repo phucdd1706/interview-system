@@ -24,4 +24,11 @@ export const jobPosition = [
 
 export const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];
 
-export const workingExperiences = [{ title: '1 year' }, { title: '2 years' }, { title: '3 years' }, { title: '4 years' }];
+export const workingExperiences = [
+  { title: '6 months' },
+  { title: '1 year' },
+  { title: '2 years' },
+  { title: '3 years' },
+  { title: '4 years' },
+  { title: '5 years' }
+];

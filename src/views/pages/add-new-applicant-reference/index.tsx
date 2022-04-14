@@ -13,6 +13,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
+import { applicantInit } from 'store/slices/applicantReferences';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const AddApplicantReference = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   useEffect(() => {
     dispatch(activeItem(['applicant']));
+    dispatch(applicantInit());
   }, [dispatch]);
 
   const submitInfo = () => {

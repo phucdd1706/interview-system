@@ -2,7 +2,7 @@
 import { ApplicantDataInterface, ApplicantInfo, ReferenceEvaluate } from 'types/applicantData';
 import { QuestionInterface, QuestionStackInterface } from 'types/interviewQuestion';
 import { dispatch } from 'store';
-
+import { openSnackbar } from './snackbar';
 // THIRD-PARTY
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -21,84 +21,23 @@ const initialState: ApplicantDataInterface = {
     experiences: [],
     applyPosition: []
   },
-  interviewQuestions: [
-    // {
-    //   type: 'Basic',
-    //   questions: [
-    //     {
-    //       questionId: '1',
-    //       question: 'sdfdvbvcxb?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '2',
-    //       question: 'What is dsfasdfqwer age?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '3',
-    //       question: 'Expecteasdfwerd salary?',
-    //
-    //
-    //     }
-    //   ]
-    // },
-    // {
-    //   type: 'React J1',
-    //   questions: [
-    //     {
-    //       questionId: '4',
-    //       question: 'What is ReacqwerqwertJS?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '5',
-    //       question: 'What is sdfqweRedux?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '6',
-    //       question: 'What qweris J1?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '9',
-    //       question: 'explain abfsfqewout React lifecycle?',
-    //
-    //
-    //     }
-    //   ]
-    // },
-    // {
-    //   type: 'Advanced',
-    //   questions: [
-    //     {
-    //       questionId: '7',
-    //       question: 'How to increaseqwer performance?',
-    //
-    //
-    //     },
-    //     {
-    //       questionId: '8',
-    //       question: 'How to incrfgwqerease security?',
-    //
-    //
-    //     }
-    //   ]
-    // }
-  ]
+  interviewQuestions: []
 };
 
 const applicantReferences = createSlice({
   name: 'applicantReferences',
   initialState,
   reducers: {
+    applicantInit: () => initialState,
     setApplicantInfo(state, action: { payload: ApplicantDataInterface }) {
+      action.payload.interviewQuestions.map((item: QuestionStackInterface) => {
+        item.questions.map((question: QuestionInterface) => {
+          question.answerScore = '';
+          question.notes = '';
+          return question;
+        });
+        return item;
+      });
       Object.assign(state, action.payload);
     },
     setReferenceEvaluate(state, action: { payload: ReferenceEvaluate }) {
@@ -160,6 +99,19 @@ const applicantReferences = createSlice({
   }
 });
 
+export default applicantReferences.reducer;
+
+export const {
+  applicantInit,
+  addInterviewQuestions,
+  deleteInterviewQuestions,
+  handleAnswerScore,
+  handleInterviewQuestionNotes,
+  setApplicantInfo,
+  setReferenceEvaluate,
+  setQuestions
+} = applicantReferences.actions;
+
 // ASYNC ACTIONS
 
 const postData = async <T>(url: string, data: any): Promise<T> => {
@@ -167,9 +119,19 @@ const postData = async <T>(url: string, data: any): Promise<T> => {
     .post(url, data)
     .then((res) => res.data)
     .catch((err) => {
-      throw err;
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: err.response.data,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'error'
+          },
+          close: false
+        })
+      );
     });
-  console.log(response);
   return response;
 };
 
@@ -177,7 +139,20 @@ const getData = async <T>(url: string): Promise<T> => {
   const response = await axios
     .get(url)
     .then((res) => res.data)
-    .catch((err) => err);
+    .catch((err) => {
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: err.response.data,
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'error'
+          },
+          close: false
+        })
+      );
+    });
   return response;
 };
 
@@ -191,28 +166,16 @@ const applicantAPI = {
     postData<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
 };
 
-export default applicantReferences.reducer;
-
-export const {
-  addInterviewQuestions,
-  deleteInterviewQuestions,
-  handleAnswerScore,
-  handleInterviewQuestionNotes,
-  setApplicantInfo,
-  setReferenceEvaluate,
-  setQuestions
-} = applicantReferences.actions;
-
 export const applicantReferenceInit = createAsyncThunk('applicantReferences/applicantReferenceInit', async () => {
   const data = await applicantAPI.applicantReferenceInit();
-  return dispatch(setApplicantInfo(data));
+  return data && dispatch(setApplicantInfo(data));
 });
 
 export const getQuestionsThunk = createAsyncThunk(
   'applicantReferences/getQuestionsThunk',
   async (params: { type: string; value: string }) => {
     const data = await applicantAPI.getQuestionsThunk(params.type, params.value);
-    return dispatch(setQuestions(data));
+    return data && dispatch(setQuestions(data));
   }
 );
 
@@ -220,15 +183,7 @@ export const getInterviewQuestionThunk = createAsyncThunk(
   'applicant/getInterviewQuestionThunk',
   async (params: ApplicantInfo, thunkAPI) => {
     const data = await applicantAPI.getInterviewQuestionThunk(params);
-    data.interviewQuestions.map((item: QuestionStackInterface) => {
-      item.questions.map((question: QuestionInterface) => {
-        question.answerScore = '';
-        question.notes = '';
-        return question;
-      });
-      return item;
-    });
-    return dispatch(setApplicantInfo(data));
+    return data && dispatch(setApplicantInfo(data));
   }
 );
 
@@ -236,6 +191,6 @@ export const getReferenceEvaluateThunk = createAsyncThunk(
   'applicant/getReferenceEvaluateThunk',
   async (params: ApplicantDataInterface, thunkAPI) => {
     const data = await applicantAPI.getReferenceEvaluateThunk(params);
-    return dispatch(setReferenceEvaluate(data));
+    return data && dispatch(setReferenceEvaluate(data));
   }
 );

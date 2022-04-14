@@ -7,6 +7,8 @@ import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
 import { addInterviewQuestions, deleteInterviewQuestions, getQuestionsThunk } from 'store/slices/applicantReferences';
+import { jobPosition, jobLevel } from '../constants';
+
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
 import { useDispatch, useSelector } from 'store';
@@ -72,63 +74,3 @@ const QuestionList = ({ questionList }: Props) => {
 };
 
 export default QuestionList;
-
-const ListQuestions = [
-  {
-    questionId: '1234',
-    question: 'What is your 23423?'
-  },
-  {
-    questionId: '21234',
-    question: 'What is werweyour age?'
-  },
-  {
-    questionId: '3sdf',
-    question: 'erwer salary?'
-  },
-  {
-    questionId: '412',
-    question: 'What is RwerwfeactJS?'
-  },
-  {
-    questionId: '524',
-    question: 'What is sdfRedux?'
-  },
-  {
-    questionId: '623',
-    question: 'What is werJ1?'
-  },
-  {
-    questionId: '754',
-    question: 'How to increafwese performance?'
-  },
-  {
-    questionId: '83',
-    question: 'How to increweqase security?'
-  },
-  {
-    questionId: '9654',
-    question: 'explain about React lifecycle?'
-  },
-  {
-    questionId: '1340',
-    question: 'What is RefwwactJS?'
-  }
-];
-
-const jobPosition = [
-  { title: 'ReactJS' },
-  { title: 'NodeJS' },
-  { title: 'AngularJS' },
-  { title: 'VueJS' },
-  { title: 'React Native' },
-  { title: 'Ionic' },
-  { title: 'Flutter' },
-  { title: 'ExpressJS' },
-  { title: 'Laravel' },
-  { title: 'Django' },
-  { title: 'Ruby on Rails' },
-  { title: 'PHP' }
-];
-
-const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];
