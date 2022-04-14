@@ -1,14 +1,13 @@
 // PROJECT IMPORTS
-import { UserProfile } from 'types/user-profile';
 
-export interface UserStateProps {
-  users: UserProfile[];
+export interface DepartmentStateProps {
+  department: Department[];
   pageCount: number;
   currentPage: number;
   error: object | string | null;
 }
 
-export type UserFilter = {
+export type DepartmentFilter = {
   search?: string;
   status?: number | string;
   currentPage?: number;
@@ -16,22 +15,16 @@ export type UserFilter = {
 };
 
 export type SortStatusProps = {
-  value?: string;
+  value?: any;
   label: string;
 };
 
-export type Administrator = {
+export type Department = {
   id?: string;
   name?: string;
-  username?: string;
-  email?: string;
-  phone?: string;
-  dob?: string;
-  gender?: string;
+  code?: string;
   status?: number;
-  type?: number;
   created_at?: Date;
-  updated_at?: Date;
 };
 export type SelectProps = {
   value?: any;

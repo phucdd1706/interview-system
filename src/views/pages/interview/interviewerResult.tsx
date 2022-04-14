@@ -20,9 +20,7 @@ const InterviewerResult = () => {
           level: '',
           notes: ''
         }}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          console.log('values', values);
-        }}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {}}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
