@@ -56,7 +56,6 @@ const DepartmentList = ({ department, index }: Props) => {
       );
     }
   };
-
   return (
     <>
       <TableRow hover key={index}>
