@@ -33,13 +33,13 @@ const MainRoutes = {
       element: <Customer />
     },
     {
+      path: 'ranks',
+      element: <Ranks />
+    },
+    {
       path: '/user/profile',
       element: <Profile />
     },
-    {
-      path: 'ranks',
-      element: <Ranks />
-    }
   ]
 };
 
