@@ -42,7 +42,6 @@ const MainRoutes = {
       path: '/user/profile',
       element: <Profile />
     },
-    },
     {
       path: '/applicant',
       element: <AddNewApplicant />
