@@ -9,6 +9,7 @@ import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
 import customerReducer from './slices/customer';
 import rankReducer from 'store/slices/rank';
+import departmentReducer from './slices/department';
 
 const reducer = combineReducers({
   snackbar: snackbarReducer,
@@ -27,6 +28,14 @@ const reducer = combineReducers({
       keyPrefix: 'beetsoft-'
     },
     customerReducer
+  ),
+  department: persistReducer(
+    {
+      key: 'department',
+      storage,
+      keyPrefix: 'beetsoft-'
+    },
+    departmentReducer
   ),
   rank: rankReducer,
   menu: menuReducer

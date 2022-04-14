@@ -8,11 +8,13 @@ import { TablerIcon } from '@tabler/icons';
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
 import { RankStateProps } from 'types/rank';
+import { DepartmentStateProps } from './department';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
   rank: RankStateProps;
+  department: DepartmentStateProps;
 }
 
 export interface ColorProps {

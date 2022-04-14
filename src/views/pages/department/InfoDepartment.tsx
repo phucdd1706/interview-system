@@ -7,39 +7,26 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide,
 
 import { gridSpacing } from 'store/constant';
 
-import { getDetailAdministrator } from 'store/slices/user';
-
-import { useDispatch } from 'react-redux';
 import QLAdminService from 'contexts/admin';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { Formik } from 'formik';
+import { getDetailDepartment } from 'store/slices/department';
 
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
-interface InfoAdminProps {
+interface InfoDepartmentProps {
   open: boolean;
   handleCloseDialog: (e: SyntheticEvent) => void;
   id: string;
 }
 
-const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
-  // const { users } = useSelector((state) => state.user);
-  // const userById = users.filter((item) => item.id === id);
-  // const dispatch = useDispatch();
-  const getDetailAdmin = async () => {
-    if (id) {
-      try {
-        const resp = await QLAdminService.getDetailAdmin(id);
-        // form.setFieldsValue(resp?.data?.success?.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-  useEffect(() => {
-    getDetailAdmin();
-    // dispatch(getDetailAdministrator(id));
-  });
+const InfoDepartment = ({ open, handleCloseDialog, id }: InfoDepartmentProps) => {
+  const { department } = useSelector((state) => state.department);
+  const DepartmentById = department.filter((item) => item.id === id);
+
+  //   useEffect(() => {
+  //     dispatch(getDetailDepartment(id));
+  //   });
   return (
     <Dialog
       open={open}
@@ -65,20 +52,14 @@ const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
           <DialogContent>
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               <Grid item xs={12}>
-                <TextField id="name" fullWidth label="Enter Name*" name="name" />
+                <TextField id="name" fullWidth label="Department Name*" defaultValue={DepartmentById[0].name} />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="username" fullWidth label="Enter Username*" name="username" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="email" fullWidth label="Enter Email*" />
+                <TextField id="code" fullWidth label="Department Code*" defaultValue={DepartmentById[0].code} />
               </Grid>
 
               <Grid item xs={12}>
-                <TextField id="phone" fullWidth label="Enter phone*" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField id="type" fullWidth label="Enter type*" />
+                <TextField id="status" fullWidth label="Enter Status*" defaultValue={DepartmentById[0].status} />
               </Grid>
             </Grid>
           </DialogContent>
@@ -93,4 +74,4 @@ const InfoAdmin = ({ open, handleCloseDialog, id }: InfoAdminProps) => {
   );
 };
 
-export default InfoAdmin;
+export default InfoDepartment;

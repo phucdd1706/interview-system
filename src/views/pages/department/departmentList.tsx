@@ -9,11 +9,17 @@ import { useTheme } from '@mui/material/styles';
 import TablePagination from '@mui/material/TablePagination';
 
 // PROJECT IMPORTS
-import { getAdministratorList } from 'store/slices/user';
 import { useDispatch, useSelector } from 'store';
-import { UserProfile } from 'types/user-profile';
+import { getDepartmentList } from 'store/slices/department';
+import { Department } from 'types/department';
 
-const DepartmentList = () => {
+interface Props {
+  handleCallbackInfo?: any;
+  handleCallbackEdit?: any;
+  handleCallbackDel?: any;
+  id: string;
+}
+const DepartmentList = ({ handleCallbackInfo, handleCallbackEdit, handleCallbackDel, id }: Props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -26,14 +32,14 @@ const DepartmentList = () => {
     setPage(newPage);
   };
 
-  const [data, setData] = React.useState<UserProfile[]>([]);
-  const { users } = useSelector((state) => state.user);
+  const [data, setData] = React.useState<Department[]>([]);
+  const { department } = useSelector((state) => state.department);
   React.useEffect(() => {
-    setData(users);
-  }, [users]);
+    setData(department);
+  }, [department]);
 
   React.useEffect(() => {
-    dispatch(getAdministratorList());
+    dispatch(getDepartmentList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -46,11 +52,8 @@ const DepartmentList = () => {
               <TableCell sx={{ pl: 3 }}>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Code</TableCell>
-              <TableCell>Management</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Type</TableCell>
               <TableCell>CreateAt</TableCell>
-              <TableCell>Note</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell align="center" sx={{ pr: 3 }}>
                 Actions
               </TableCell>
@@ -62,11 +65,7 @@ const DepartmentList = () => {
                 <TableRow hover key={index}>
                   <TableCell sx={{ pl: 3 }}>{row.id}</TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.username}</TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.dob ?? 'N/A'}</TableCell>
-                  <TableCell>{row.gender ?? 'N/A'}</TableCell>
+                  <TableCell>{row.code}</TableCell>
                   <TableCell>{moment(row.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
                   <TableCell>
                     {row.status === 1 && (
@@ -101,13 +100,13 @@ const DepartmentList = () => {
                     )}
                   </TableCell>
                   <TableCell align="center" sx={{ pr: 3 }}>
-                    <IconButton color="primary" size="large">
+                    <IconButton color="primary" size="large" onClick={() => handleCallbackInfo(row.id)}>
                       <VisibilityTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="secondary" size="large">
+                    <IconButton color="secondary" size="large" onClick={() => handleCallbackEdit(row.id)}>
                       <EditTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
-                    <IconButton color="error" size="large">
+                    <IconButton color="error" size="large" onClick={() => handleCallbackDel(row.id)}>
                       <DeleteTwoToneIcon sx={{ fontSize: '1.3rem' }} />
                     </IconButton>
                   </TableCell>

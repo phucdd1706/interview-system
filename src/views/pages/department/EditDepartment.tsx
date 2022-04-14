@@ -1,27 +1,35 @@
 // THIRD-PARTY
 import { forwardRef, SyntheticEvent } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputLabel, Slide, SlideProps, TextField } from '@mui/material';
+
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
+// import { useDispatch } from 'store';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { postDepartment } from 'store/slices/department';
 import { useDispatch } from 'react-redux';
+import { putDepartment } from 'store/slices/department';
 
-interface AddDepartmentProps {
-  open: boolean;
-  handleCloseDialog: (e: SyntheticEvent) => void;
-}
 const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
+interface EditDepartmentProps {
+  open: boolean;
+  handleCloseDialog: (e: SyntheticEvent) => void;
+  id: string;
+}
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  code: Yup.string().required('Code is required')
+  // name: Yup.string().required('Name is required'),
+  // username: Yup.string().required('UserName is required'),
+  // password: Yup.string().required('Password is required'),
+  // email: Yup.string().required('Email is required'),
+  // password_confirmation: Yup.string().required('Password Confirmation is required'),
+  // phone: Yup.string().required('Phone is required'),
+  // type: Yup.string().required('Type is required')
 });
-const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
+const EditDepartment = ({ open, handleCloseDialog, id }: EditDepartmentProps) => {
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -31,10 +39,13 @@ const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(postDepartment(values));
-      window.location.reload();
+      if (id) {
+        dispatch(putDepartment(id, values));
+        window.location.reload();
+      }
     }
   });
+
   return (
     <Dialog
       open={open}
@@ -55,7 +66,7 @@ const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
     >
       {open && (
         <>
-          <DialogTitle>Add Administrator</DialogTitle>
+          <DialogTitle>Edit Department</DialogTitle>
           <form onSubmit={formik.handleSubmit}>
             <DialogContent>
               <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
@@ -65,25 +76,16 @@ const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
                     name="name"
                     value={formik.values.name}
                     onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
                     fullWidth
                     label="Department Name*"
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    id="code"
-                    fullWidth
-                    label="Department Code*"
-                    onChange={formik.handleChange}
-                    value={formik.values.code}
-                    error={formik.touched.code && Boolean(formik.errors.code)}
-                    helperText={formik.touched.code && formik.errors.code}
-                  />
+                  <TextField id="code" fullWidth label="Department Code*" onChange={formik.handleChange} value={formik.values.code} />
                 </Grid>
+
                 <Grid item xs={12}>
-                  <TextField id="note" fullWidth label="Enter Note*" onChange={formik.handleChange} value={formik.values.note} />
+                  <TextField id="note" fullWidth label="Enter note*" onChange={formik.handleChange} value={formik.values.note} />
                 </Grid>
               </Grid>
             </DialogContent>
@@ -104,4 +106,4 @@ const AddDepartment = ({ open, handleCloseDialog }: AddDepartmentProps) => {
   );
 };
 
-export default AddDepartment;
+export default EditDepartment;

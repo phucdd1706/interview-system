@@ -8,32 +8,34 @@ import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import SortStatus from 'views/pages/administrator/SortStatus';
+
 import { dispatch } from 'store';
-import { getAdministratorList } from 'store/slices/user';
-import { UserFilter } from 'types/user';
-import DepartmentList from './departmentList';
-import AddDepartment from './addDepartment';
+import { DepartmentFilter } from 'types/department';
+import { delDepartment, getDepartmentList } from 'store/slices/department';
+import SortStatus from './SortStatus';
+
+import AddDepartment from './AddDepartment';
+import DepartmentList from './DepartmentList';
+import EditDepartment from './EditDepartment';
+import InfoDepartment from './InfoDepartment';
 
 const Department = () => {
   const theme = useTheme();
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
+
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const initialState: UserFilter = {
+  const initialState: DepartmentFilter = {
     search: '',
     status: ''
   };
   const [filter, setFilter] = useState(initialState);
+  const [id, setId] = useState('');
+  const [open, setOpen] = useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
@@ -49,10 +51,35 @@ const Department = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+  const handleClickOpenDialog = () => {
+    setOpen(true);
+  };
+  const handleCloseInfo = () => {
+    setOpenInfo(false);
+  };
 
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+  const handleCallbackInfo = (adminId: string) => {
+    setId(adminId);
+    setOpenInfo(true);
+  };
+  const handleCallbackEdit = (adminId: string) => {
+    setId(adminId);
+    setOpenEdit(true);
+  };
+  const handleCallbackDel = (adminId: string) => {
+    setId(adminId);
+    dispatch(delDepartment(adminId));
+    window.location.reload();
+  };
   const filterData = async () => {
     setTimeout(async () => {
-      await dispatch(getAdministratorList(filter));
+      await dispatch(getDepartmentList(filter));
     }, 400);
   };
 
@@ -154,7 +181,14 @@ const Department = () => {
       content={false}
     >
       <AddDepartment open={open} handleCloseDialog={handleCloseDialog} />
-      <DepartmentList />
+      <EditDepartment open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
+      <InfoDepartment open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
+      <DepartmentList
+        handleCallbackInfo={handleCallbackInfo}
+        handleCallbackEdit={handleCallbackEdit}
+        handleCallbackDel={handleCallbackDel}
+        id={id}
+      />
     </MainCard>
   );
 };

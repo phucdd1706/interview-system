@@ -139,7 +139,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
                     helperText={formik.touched.phone && formik.errors.phone}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <TextField
                     id="type"
                     fullWidth
@@ -149,7 +149,7 @@ const AddAdministrator = ({ open, handleCloseDialog }: AddAdministratorProps) =>
                     error={formik.touched.type && Boolean(formik.errors.type)}
                     helperText={formik.touched.type && formik.errors.type}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </DialogContent>
             <DialogActions>
