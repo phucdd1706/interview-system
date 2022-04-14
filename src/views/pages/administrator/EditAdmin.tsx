@@ -84,8 +84,7 @@ const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   username: Yup.string().required('UserName is required'),
   email: Yup.string().email('Enter a valid email').required('Email is required'),
-  // password: Yup.string().required('Password is required'),
-  // password_confirmation: Yup.string().required('Password Confirmation is required'),
+
   gender: Yup.string().required('Gender is required'),
   phone: Yup.string().required('Phone is required'),
   type: Yup.string().required('Type is required'),
