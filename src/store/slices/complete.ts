@@ -2,7 +2,7 @@
 
 // THIRD-PARTY
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import getListCandidate from 'api/complete';
+import { getListCandidate, getOneCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/complete';
 import { Payload } from 'types/complete';
 
 const initialState = {
@@ -19,6 +19,15 @@ export const fetchCandidates: any = createAsyncThunk('complete/fetchList', async
   const { params, token, callback } = payload;
   const query = new URLSearchParams(params).toString();
   const response = await getListCandidate(query, token);
+  if (callback) {
+    callback(response);
+  }
+  return response.data.success.data;
+});
+
+export const getOne: any = createAsyncThunk('complete/getOne', async (payload: Payload) => {
+  const { id, token, callback } = payload;
+  const response = await getOneCandidate(id, token);
   if (callback) {
     callback(response);
   }
@@ -59,6 +68,16 @@ const completeSlice = createSlice({
       state.data.list = action.payload;
     },
     [fetchCandidates.rejected]: (state, action) => {
+      console.log('error', action.error);
+    },
+    [getOne.pending]: (state, action) => {
+      console.log('pending');
+    },
+    [getOne.fulfilled]: (state, action) => {
+      console.log('success', action.payload);
+      state.info = action.payload;
+    },
+    [getOne.rejected]: (state, action) => {
       console.log('error', action.error);
     }
   }

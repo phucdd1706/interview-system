@@ -2,7 +2,7 @@
 
 // THIRD-PARTY
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import getListCandidate from 'api/complete';
+import { getListCandidate } from 'api/complete';
 import { Payload } from 'types/complete';
 
 const initialState = {

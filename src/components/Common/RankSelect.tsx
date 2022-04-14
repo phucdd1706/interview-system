@@ -1,33 +1,26 @@
 // THIRD PARTY
 import React, { useState, useEffect } from 'react';
-import { Box, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { fetchCandidates } from 'store/slices/complete';
+import { Select, InputLabel, MenuItem } from '@mui/material';
 
 // IMPORT PROJECT
-import { Rank } from 'types/complete';
+import { Rank } from 'types/rank';
+import { getRanksList } from 'store/slices/rank';
+import { useDispatch, useSelector } from 'store';
 
 const RankSelect = (props: any) => {
   const dispatch = useDispatch();
   const { blur, change, values, required } = props;
-  const [rank, setRank] = useState([
-    { id: 1, rankName: 'Inter' },
-    { id: 2, rankName: 'Fresher' }
-  ]);
+  const [data, setData] = useState<Rank[]>([]);
+
+  const { ranks } = useSelector((state) => state.rank);
 
   useEffect(() => {
-    // getList();
+    dispatch(getRanksList());
   }, []);
 
-  const getList = () => {
-    const params = {
-      filter: JSON.stringify({}),
-      range: JSON.stringify([0, 100]),
-      sort: JSON.stringify(['rankName', 'ASC']),
-      attributes: 'id,rankName'
-    };
-    dispatch(fetchCandidates(params));
-  };
+  useEffect(() => {
+    setData(ranks);
+  }, [ranks]);
 
   return (
     <>
@@ -46,9 +39,9 @@ const RankSelect = (props: any) => {
         value={values?.rank}
         fullWidth
       >
-        {rank?.map((row: Rank) => (
+        {data?.map((row: Rank) => (
           <MenuItem value={row?.id} key={row?.id}>
-            {row?.rankName}
+            {row?.name}
           </MenuItem>
         ))}
       </Select>

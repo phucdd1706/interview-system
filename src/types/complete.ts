@@ -14,12 +14,8 @@ export interface SearchValues {
   status?: number | string;
 }
 
-export interface Rank {
-  id: number | string;
-  rankName: string;
-}
-
 export interface Payload {
+  id: string | number;
   params: any;
   token: string;
   callback: (response: any) => void;
