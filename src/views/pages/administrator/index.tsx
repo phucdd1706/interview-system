@@ -3,67 +3,81 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/AddTwoTone';
-import { Button, Fab, Grid, InputAdornment, Menu, MenuItem, Stack, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import {
+  Button,
+  Fab,
+  Grid,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
 import AdministratorList from 'views/pages/administrator/AdministratorList';
 import MainCard from 'ui-component/cards/MainCard';
-import SortStatus from 'views/pages/administrator/SortStatus';
-import { dispatch } from 'store';
-import { delAdministrator, getAdministratorList } from 'store/slices/user';
-import { UserFilter } from 'types/user';
+
+import { useDispatch, useSelector } from 'store';
+import { getAdministratorList } from 'store/slices/user';
+import { SelectProps, UserFilter } from 'types/user';
 import { gridSpacing } from '../../../store/constant';
-import EditAdmin from './EditAdmin';
-import InfoAdmin from './InfoAdmin';
+
 import AddAdministrator from './AddAdministrator';
+import { UserProfile } from 'types/user-profile';
+
+const SortStatus: SelectProps[] = [
+  {
+    value: '',
+    label: 'All'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  },
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 2,
+    label: 'Blocked'
+  }
+];
 
 const Administrator = () => {
   const theme = useTheme();
-  const [id, setId] = useState('');
+
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const [open, setOpen] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
-  const handleClickOpenDialog = () => {
-    setOpen(true);
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState<UserProfile[]>([]);
+  const userState = useSelector((state) => state.user);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setFilter({ ...filter, currentPage: page! });
   };
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
-  const handleCloseInfo = () => {
-    setOpenInfo(false);
-  };
-  const handleClickOpenInfo = () => {
-    setOpenInfo(true);
-  };
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-  const handleCallbackInfo = (adminId: string) => {
-    setId(adminId);
-    setOpenInfo(true);
-  };
-  const handleCallbackEdit = (adminId: string) => {
-    setId(adminId);
-    setOpenEdit(true);
-  };
-  const handleCallbackDel = (adminId: string) => {
-    setId(adminId);
-    dispatch(delAdministrator(adminId));
-    window.location.reload();
-  };
+
   const initialState: UserFilter = {
     search: '',
-    status: ''
+    status: '',
+    currentPage: 1,
+    limit: 20
   };
   const [filter, setFilter] = useState(initialState);
-
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
@@ -75,28 +89,70 @@ const Administrator = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+    setFilter({ ...filter, status: index });
+    setAnchorEl(null);
+  };
+  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
   const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getAdministratorList(filter));
-    }, 400);
+    await dispatch(getAdministratorList(filter));
   };
+
+  useEffect(() => {
+    setData(userState.users);
+  }, [userState]);
 
   useEffect(() => {
     filterData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: string | '') => {
-    setFilter({ ...filter, status: index });
-    setAnchorEl(null);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const handleDrawerOpen = () => {
+    setOpenDrawer((prevState) => !prevState);
   };
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const handleClickPagination = (event: React.MouseEvent) => {};
+  const addAdministrator = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
+
+  // const [open, setOpen] = useState(false);
+  // const [openInfo, setOpenInfo] = useState(false);
+  // const [openEdit, setOpenEdit] = React.useState(false);
+  // const handleClickOpenDialog = () => {
+  //   setOpen(true);
+  // };
+  // const handleCloseDialog = () => {
+  //   setOpen(false);
+  // };
+  // const handleCloseInfo = () => {
+  //   setOpenInfo(false);
+  // };
+  // const handleClickOpenInfo = () => {
+  //   setOpenInfo(true);
+  // };
+  // const handleCloseEdit = () => {
+  //   setOpenEdit(false);
+  // };
+  // const handleCallbackInfo = (adminId: string) => {
+  //   setId(adminId);
+  //   setOpenInfo(true);
+  // };
+  // const handleCallbackEdit = (adminId: string) => {
+  //   setId(adminId);
+  //   setOpenEdit(true);
+  // };
+  // const handleCallbackDel = (adminId: string) => {
+  //   setId(adminId);
+  //   dispatch(delAdministrator(adminId));
+  //   window.location.reload();
+  // };
+
+  // const handleClickPagination = (event: React.MouseEvent) => {};
 
   return (
     <MainCard
@@ -142,7 +198,7 @@ const Administrator = () => {
                       aria-labelledby="demo-positioned-button"
                       anchorEl={anchorEl}
                       open={openSort}
-                      onClose={handleClose}
+                      onClose={handleSortStatusClose}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right'
@@ -173,7 +229,7 @@ const Administrator = () => {
               <Fab
                 color="primary"
                 size="small"
-                onClick={handleClickOpenDialog}
+                onClick={addAdministrator}
                 sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
               >
                 <AddIcon fontSize="small" />
@@ -184,50 +240,34 @@ const Administrator = () => {
       }
       content={false}
     >
-      <AddAdministrator open={open} handleCloseDialog={handleCloseDialog} />
-      <InfoAdmin open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <EditAdmin open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <AdministratorList
-        handleInfor={handleClickOpenInfo}
-        handleCallbackInfo={handleCallbackInfo}
-        handleCallbackEdit={handleCallbackEdit}
-        handleCallbackDel={handleCallbackDel}
-        id={id}
-      />
-
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Username</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Date of Birth</TableCell>
+              <TableCell>Gender</TableCell>
+              <TableCell>Updated</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            {data && data.map((user, index) => <AdministratorList key={user.id} user={user} index={index} />)}
+          </TableBody>
+        </Table>
+        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
-          <Grid item>{/* <Pagination count={10} color="primary" /> */}</Grid>
           <Grid item>
-            <Button
-              size="large"
-              sx={{ color: theme.palette.grey[900] }}
-              color="secondary"
-              endIcon={<ExpandMoreRoundedIcon />}
-              onClick={handleClickPagination}
-            >
-              10 Rows
-            </Button>
-            <Menu
-              id="menu-user-list-style1"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              variant="selectedMenu"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
-            </Menu>
+            <Pagination count={userState.pageCount} page={userState.currentPage} onChange={handleChange} color="primary" />
           </Grid>
         </Grid>
       </Grid>
