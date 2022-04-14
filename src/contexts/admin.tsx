@@ -39,12 +39,10 @@ const QLAdmin_api = {
 const QLAdminService = {
   getDsAdmin: async (params: AdminParams) => {
     const resp: AxiosResponse<QLAdminResponse> = await axiosServices.get(QLAdmin_api.dsAdmin, { params });
-    console.log(1111, resp);
     return resp;
   },
   getDetailAdmin: async (id: string) => {
     const resp: AxiosResponse<QLAdminResponse> = await axiosServices.get(QLAdmin_api.detailAdmin(id));
-    console.log(1111, resp);
     return resp;
   },
   postAdmin: async (data: QLAdmin) => {
