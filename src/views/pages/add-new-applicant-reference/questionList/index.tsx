@@ -50,15 +50,15 @@ const QuestionList = ({ questionList }: Props) => {
         <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }}>
           <Autocomplete
             options={jobPosition}
-            getOptionLabel={(option) => option.title}
-            onChange={(event, value) => getQuestions('position', (value && value.title) || '')}
+            getOptionLabel={(option) => option}
+            onChange={(event, value) => getQuestions('position', value || '')}
             renderInput={(params) => <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />}
             sx={{ flexGrow: 1 }}
           />
           <Autocomplete
             options={jobLevel}
-            onChange={(event, value) => getQuestions('level', (value && value.title) || '')}
-            getOptionLabel={(option) => option.title}
+            onChange={(event, value) => getQuestions('level', value || '')}
+            getOptionLabel={(option) => option}
             renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
             sx={{ flexGrow: 1 }}
           />

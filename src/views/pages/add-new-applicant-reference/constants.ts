@@ -1,34 +1,5 @@
-export const jobPosition = [
-  { title: 'ReactJS' },
-  { title: 'NodeJS' },
-  { title: 'AngularJS' },
-  { title: 'VueJS' },
-  { title: 'React Native' },
-  { title: 'Ionic' },
-  { title: 'Flutter' },
-  { title: 'ExpressJS' },
-  { title: 'Laravel' },
-  { title: 'Django' },
-  { title: 'PHP' },
-  { title: 'Python' },
-  { title: 'Java' },
-  { title: 'C#' },
-  { title: 'C++' },
-  { title: 'C' },
-  { title: 'Swift' },
-  { title: 'Objective-C' },
-  { title: 'Kotlin' },
-  { title: 'Ruby' },
-  { title: 'Ruby on Rails' }
-];
+export const jobPosition = ['React', 'Angular', 'Vue', 'Node', 'Express', 'MongoDB', 'MySQL', 'PostgreSQL'];
 
-export const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];
+export const jobLevel = ['Intern', 'Junior', 'Mid-level', 'Senior'];
 
-export const workingExperiences = [
-  { title: '6 months' },
-  { title: '1 year' },
-  { title: '2 years' },
-  { title: '3 years' },
-  { title: '4 years' },
-  { title: '5 years' }
-];
+export const workingExperiences = ['6 months', '1 year', '2 years', '3 years', '4 years', '5 years'];
