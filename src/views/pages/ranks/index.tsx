@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/ranks/SortStatus';
 import {
@@ -14,6 +14,12 @@ import {
   MenuItem,
   Pagination,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography,
@@ -22,71 +28,33 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
-import RanksList from 'views/pages/ranks/RanksList';
-import { dispatch, useSelector } from 'store';
-import { DeleteRank, getRanksList } from 'store/slices/rank';
-import { Rank, RankFilter } from 'types/rank';
+import Rank from 'views/pages/ranks/Rank';
+import { useDispatch, useSelector } from 'store';
+import { getRanksList } from 'store/slices/rank';
+import { RankType, RankFilter } from 'types/rank';
 import AddRank from './AddRank';
 import { gridSpacing } from 'store/constant';
-import EditRank from './EditRank';
-import InfoRank from './InfoRank';
-import { openSnackbar } from 'store/slices/snackbar';
-import AlertCustomerDelete from '../customer/AlertCustomerDelete';
 
-interface Props {
-  rank: Rank;
-}
-const Ranks = ({ rank }: Props) => {
+const Ranks = () => {
   const theme = useTheme();
-  const [id, setId] = useState('');
-
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+  const spacingMD = matchDownMD ? 1 : 1.5;
 
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState<RankType[]>([]);
   const rankState = useSelector((state) => state.rank);
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setFilter({ ...filter, currentPage: page! });
   };
 
-  const spacingMD = matchDownMD ? 1 : 1.5;
-
-  const [open, setOpen] = React.useState(false);
-  const [openDel, setOpenDel] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
-
-  const handleClickOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen((prevState) => !prevState);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  const handleEdit = (rankId: string) => {
-    setId(rankId);
-    setOpenEdit(true);
-  };
-
-  const handleCloseInfo = () => {
-    setOpenInfo(false);
-  };
-
-  const handleInfo = (rankId: string) => {
-    setId(rankId);
-    setOpenInfo(true);
-  };
-
   const initialState: RankFilter = {
     search: '',
-    status: ''
+    status: '',
+    currentPage: 1
   };
   const [filter, setFilter] = useState(initialState);
-
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
@@ -98,44 +66,35 @@ const Ranks = ({ rank }: Props) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
-
-  const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getRanksList(filter));
-    }, 400);
-  };
-
-  useEffect(() => {
-    filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
     setFilter({ ...filter, status: index });
     setAnchorEl(null);
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const handleDeleteRank = (status: boolean) => {
-    setOpenDel(false);
-    if (status) {
-      dispatch(DeleteRank(rank));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-    }
+  const filterData = async () => {
+    await dispatch(getRanksList(filter));
+  };
+
+  React.useEffect(() => {
+    setData(rankState.ranks);
+  }, [rankState]);
+
+  React.useEffect(() => {
+    filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const handleDrawerOpen = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
+
+  const addRank = () => {
+    setOpenDrawer((prevState) => !prevState);
   };
 
   return (
@@ -182,7 +141,7 @@ const Ranks = ({ rank }: Props) => {
                       aria-labelledby="demo-positioned-button"
                       anchorEl={anchorEl}
                       open={openSort}
-                      onClose={handleClose}
+                      onClose={handleSortStatusClose}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right'
@@ -210,12 +169,7 @@ const Ranks = ({ rank }: Props) => {
           </Grid>
           <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
             <Tooltip title="Add">
-              <Fab
-                color="primary"
-                size="small"
-                onClick={handleClickOpenDialog}
-                sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
-              >
+              <Fab color="primary" size="small" onClick={addRank} sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}>
                 <AddIcon fontSize="small" />
               </Fab>
             </Tooltip>
@@ -224,11 +178,24 @@ const Ranks = ({ rank }: Props) => {
       }
       content={false}
     >
-      <AddRank open={open} handleCloseDialog={handleCloseDialog} />
-      <EditRank open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <InfoRank open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <RanksList handleDelete={setOpenDel} handleEdit={handleEdit} handleInfo={handleInfo} id={id} />
-      {openDel && <AlertCustomerDelete name={rank.name} open={openDel} handleClose={handleDeleteRank} />}
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            {data && data.map((rank, index) => <Rank key={rank.id} rank={rank} index={index} />)}
+          </TableBody>
+        </Table>
+        <AddRank open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>

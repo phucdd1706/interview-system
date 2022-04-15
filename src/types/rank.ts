@@ -1,7 +1,7 @@
 // PROJECT IMPORTS
 
 export interface RankStateProps {
-  ranks: Rank[];
+  ranks: RankType[];
   pageCount: number;
   currentPage: number;
   error: object | string | null;
@@ -18,9 +18,14 @@ export type SortStatusProps = {
   label: string;
 };
 
-export type Rank = {
+export type RankType = {
   id?: string;
   name?: string;
   description?: string;
   status?: number;
+};
+
+export type SelectProps = {
+  value?: any;
+  label: string;
 };
