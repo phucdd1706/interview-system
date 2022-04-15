@@ -34,6 +34,7 @@ import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
 import DepartmentList from 'views/pages/department/DepartmentList';
 import AddDepartment from 'views/pages/department/AddDepartment';
+import { margin } from '@mui/system';
 
 const SortStatus: SelectProps[] = [
   {
@@ -208,11 +209,13 @@ const Departments = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Code</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="center" sx={{ pr: 3 }}>
+              <TableCell sx={{ pl: 3 }} style={{ width: '70px' }}>
+                #
+              </TableCell>
+              <TableCell style={{ width: '120px' }}>Name</TableCell>
+              <TableCell style={{ width: '100px' }}>Code</TableCell>
+              <TableCell style={{ width: '120px' }}>Status</TableCell>
+              <TableCell sx={{ pr: 3 }} style={{ width: '80px' }}>
                 Actions
               </TableCell>
             </TableRow>
