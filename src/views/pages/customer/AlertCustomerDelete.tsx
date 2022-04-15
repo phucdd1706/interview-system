@@ -20,7 +20,7 @@ export default function AlertCustomerDelete({ name, open, handleClose }: Props) 
     >
       {open && (
         <>
-          <DialogTitle id="item-delete-title">{name} - Are you sure you want to delete?</DialogTitle>]{' '}
+          <DialogTitle id="item-delete-title">{name} - Are you sure you want to delete?</DialogTitle>{' '}
           <DialogActions sx={{ mr: 2 }}>
             <Button onClick={() => handleClose(false)} color="error">
               Cancel

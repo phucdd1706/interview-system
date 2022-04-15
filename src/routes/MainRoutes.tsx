@@ -7,6 +7,8 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
+const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
+const Inprogress = Loadable(lazy(() => import('views/pages/inProgress/index')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
 const Department = Loadable(lazy(() => import('views/pages/department')));
@@ -26,6 +28,18 @@ const MainRoutes = {
     {
       path: '/dashboard/analytics',
       element: <Dashboard />
+    },
+    {
+      path: '/dashboard',
+      element: <Dashboard />
+    },
+    {
+      path: '/complete',
+      element: <Complete />
+    },
+    {
+      path: '/inprogress',
+      element: <Inprogress />
     },
     {
       path: '/user/administrator',

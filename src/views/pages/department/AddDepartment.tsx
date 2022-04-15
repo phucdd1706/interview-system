@@ -50,6 +50,7 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
         })
       );
       handleDrawerOpen();
+      formik.resetForm();
     }
   });
   return (

@@ -83,6 +83,7 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
         })
       );
       handleDrawerOpen();
+      formik.resetForm();
     }
   });
 
