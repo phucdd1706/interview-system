@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { dispatch, useSelector } from 'store';
+import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { DeleteRank } from 'store/slices/rank';
 import { RankType } from 'types/rank';
