@@ -32,6 +32,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
 export default function SettingPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [openSettings, setOpenSettings] = React.useState(false);
   const [state, setState] = React.useState({
     email: true,
     desktop: false,
@@ -52,8 +53,18 @@ export default function SettingPage() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
+  };
+
+  const handleSettingsChange = () => {
+    setOpenSettings(true);
+  };
+
+  const handleSettingsClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSettings(false);
   };
 
   const handleFacebookURLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,6 +162,18 @@ export default function SettingPage() {
                   </FormGroup>
                 </Grid>
               </Grid>
+              <Grid container direction="row" alignItems="flex-end" justifyContent="flex-end" spacing={gridSpacing} sx={{ mt: 2 }}>
+                <Grid item>
+                  <Button size="large" type="submit" variant="contained" color="primary" onClick={handleSettingsChange}>
+                    Apply Change
+                  </Button>
+                </Grid>
+                <Snackbar open={openSettings} autoHideDuration={2500} onClose={handleSettingsClose}>
+                  <Alert onClose={handleSettingsClose} severity="success" sx={{ width: '100%' }}>
+                    Apply Settings Change Successfully!
+                  </Alert>
+                </Snackbar>
+              </Grid>
             </CardContent>
           </MainCard>
         </Grid>
@@ -230,7 +253,7 @@ export default function SettingPage() {
                   </Stack>
                   <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                      Change Password Successfully!
+                      Connected Successfully!
                     </Alert>
                   </Snackbar>
                 </Grid>
