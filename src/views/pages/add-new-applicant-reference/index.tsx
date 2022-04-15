@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { Box, Button, Alert, Snackbar } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
