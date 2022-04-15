@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { DeleteRank } from 'store/slices/rank';
 import { RankType } from 'types/rank';
@@ -77,6 +77,22 @@ const Rank = ({ rank, index }: Props) => {
             }}
           >
             {rank.name}
+          </Link>
+        </TableCell>
+        <TableCell sx={{ width: 410, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+          <Link
+            underline="hover"
+            color="default"
+            sx={{
+              overflow: 'hidden',
+              display: 'block',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              ':hover': { color: 'primary.main' },
+              cursor: 'pointer'
+            }}
+          >
+            {rank.description}
           </Link>
         </TableCell>
         <TableCell>

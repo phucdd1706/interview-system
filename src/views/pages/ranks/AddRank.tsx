@@ -25,6 +25,7 @@ const validationSchema = Yup.object({
 
 const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: '',
       description: '',
@@ -46,6 +47,7 @@ const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
         })
       );
       handleDrawerOpen();
+      formik.resetForm();
     }
   });
 

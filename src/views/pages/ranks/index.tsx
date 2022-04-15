@@ -184,6 +184,7 @@ const Ranks = () => {
             <TableRow>
               <TableCell sx={{ pl: 3 }}>#</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="center" sx={{ pr: 3 }}>
                 Actions
