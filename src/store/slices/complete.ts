@@ -1,100 +1,127 @@
 // PROJECT IMPORTS
 
 // THIRD-PARTY
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getListCandidate, getOneCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/complete';
+import { createSlice } from '@reduxjs/toolkit';
+import { getListCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/complete';
 import { Payload } from 'types/complete';
+import { DefaultRootStateProps } from 'types';
+import { dispatch } from 'store';
 
-const initialState = {
-  data: {
-    list: [],
-    pagination: []
-  },
-  info: {},
-  query: {},
-  filter: {}
+const initialState: DefaultRootStateProps['complete'] = {
+  complete: [],
+  pageCount: 0,
+  currentPage: 1,
+  error: null
 };
-
-export const fetchCandidates: any = createAsyncThunk('complete/fetchList', async (payload: Payload) => {
-  const { params, token, callback } = payload;
-  const query = new URLSearchParams(params).toString();
-  const response = await getListCandidate(query, token);
-  if (callback) {
-    callback(response);
-  }
-  return response.data.success.data;
-});
-
-export const getOne: any = createAsyncThunk('complete/getOne', async (payload: Payload) => {
-  const { id, token, callback } = payload;
-  const response = await getOneCandidate(id, token);
-  if (callback) {
-    callback(response);
-  }
-  return response.data.success.data;
-});
-
-export const removeCandidate: any = createAsyncThunk('complete/delete', async (payload: Payload) => {
-  const { id, token, callback } = payload;
-  const response = await deleteCandidate(id, token);
-  if (callback) {
-    callback(response);
-  }
-  return id;
-});
 
 const completeSlice = createSlice({
   name: 'complete',
   initialState,
   reducers: {
-    save: (state, action) => ({
-      ...state,
-      data: {
-        list: action.payload.list,
-        pagination: action.payload.pagination
-      },
-      info: {}
-    }),
-    info: (state, action) => ({
-      ...state,
-      info: action.payload
-    }),
-    filter: (state, action) => ({
-      ...state,
-      filter: action.payload
-    }),
-    query: (state, action) => ({
-      ...state,
-      query: action.payload
-    })
-  },
-  extraReducers: {
-    [fetchCandidates.fulfilled]: (state, action) => {
-      console.log('success', action.payload);
-      state.data.list = action.payload;
-    },
-    [fetchCandidates.rejected]: (state, action) => {
-      console.log('error', action.error);
+    hasError(state, action) {
+      state.error = action.payload;
     },
 
-    [getOne.fulfilled]: (state, action) => {
-      console.log('success', action.payload);
-      state.info = action.payload;
-    },
-    [getOne.rejected]: (state, action) => {
-      console.log('error', action.error);
+    getCompleteListSuccess(state, action) {
+      state.complete = action.payload.data;
+      state.pageCount = action.payload.last_page;
+      state.currentPage = action.payload.current_page;
     },
 
-    [removeCandidate.fulfilled]: (state, action) => {
-      console.log('success', action.payload);
-      state.data.list = state.data.list.filter((item: any) => item.id !== action.payload);
+    addCompleteSuccess(state, action) {
+      state.complete.unshift(action.payload);
     },
-    [removeCandidate.rejected]: (state, action) => {
-      console.log('error', action.error);
+
+    editCompleteSuccess(state, action) {
+      state.complete = state.complete.map((complete) => {
+        if (complete.id === action.payload.id) {
+          return action.payload;
+        }
+        return complete;
+      });
+    },
+
+    deleteCompleteSuccess(state, action) {
+      state.complete = state.complete.filter((complete) => complete.id !== action.payload.id);
     }
   }
 });
 
-export const { save, info, filter, query } = completeSlice.actions;
-
 export default completeSlice.reducer;
+
+export function fetchCandidates(payload: Payload) {
+  return async () => {
+    const { params, token, callback } = payload;
+    const query = new URLSearchParams(params).toString();
+    const response = await getListCandidate(query, token)
+      .then((result) => {
+        dispatch(completeSlice.actions.getCompleteListSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(completeSlice.actions.hasError(err));
+        return err;
+      });
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
+export function addCandidate(payload: Payload) {
+  return async () => {
+    const { params, token, callback } = payload;
+    const response = await createCandidate(params, token)
+      .then((result) => {
+        dispatch(completeSlice.actions.addCompleteSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(completeSlice.actions.hasError(err));
+        return err;
+      });
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
+export function editCandidate(payload: Payload) {
+  return async () => {
+    const { id, params, token, callback } = payload;
+    const response = await updateCandidate(id, params, token)
+      .then((result) => {
+        dispatch(completeSlice.actions.editCompleteSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(completeSlice.actions.hasError(err));
+        return err;
+      });
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
+export function removeCandidate(payload: Payload) {
+  return async () => {
+    const { id, token, callback } = payload;
+    const response = await deleteCandidate(id, token)
+      .then((result) => {
+        dispatch(completeSlice.actions.deleteCompleteSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(completeSlice.actions.hasError(err));
+        return err;
+      });
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}

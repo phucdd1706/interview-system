@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'store';
 
 const RankSelect = (props: any) => {
   const dispatch = useDispatch();
-  const { blur, change, values, required, size, formik } = props;
+  const { change, values, required, size, formik, sx, fullWidth } = props;
   const [data, setData] = useState<Rank[]>([]);
 
   const { ranks } = useSelector((state) => state.rank);
@@ -33,12 +33,11 @@ const RankSelect = (props: any) => {
         name="rank"
         size={size || 'small'}
         label={<span>Rank</span>}
-        onBlur={blur}
         onChange={change}
-        inputProps={{}}
         value={values}
-        fullWidth
+        fullWidth={fullWidth}
         error={formik && formik.touched.rank && Boolean(formik.errors.rank)}
+        sx={sx}
       >
         {data?.map((row: Rank) => (
           <MenuItem value={row?.id} key={row?.id}>

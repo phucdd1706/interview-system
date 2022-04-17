@@ -10,6 +10,8 @@ import { RankStateProps } from 'types/rank';
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
 import { DepartmentStateProps } from './department';
+import { CompleteStateProps } from './complete';
+import { InProgressStateProps } from './inProgress';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
@@ -17,6 +19,8 @@ export interface DefaultRootStateProps {
   customer: CustomerStateProps;
   rank: RankStateProps;
   department: DepartmentStateProps;
+  complete: CompleteStateProps;
+  inProgress: InProgressStateProps;
 }
 
 export interface ColorProps {
