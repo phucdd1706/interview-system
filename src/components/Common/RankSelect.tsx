@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputLabel, MenuItem } from '@mui/material';
 
 // IMPORT PROJECT
-import { Rank } from 'types/rank';
+import { RankType } from 'types/rank';
 import { getRanksList } from 'store/slices/rank';
 import { useDispatch, useSelector } from 'store';
 
 const RankSelect = (props: any) => {
   const dispatch = useDispatch();
   const { change, values, required, size, formik, sx, fullWidth } = props;
-  const [data, setData] = useState<Rank[]>([]);
+  const [data, setData] = useState<RankType[]>([]);
 
   const { ranks } = useSelector((state) => state.rank);
 
@@ -39,7 +39,7 @@ const RankSelect = (props: any) => {
         error={formik && formik.touched.rank && Boolean(formik.errors.rank)}
         sx={sx}
       >
-        {data?.map((row: Rank) => (
+        {data?.map((row: RankType) => (
           <MenuItem value={row?.id} key={row?.id}>
             {row?.name}
           </MenuItem>

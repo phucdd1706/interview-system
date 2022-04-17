@@ -83,6 +83,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
         })
       );
       handleDrawerOpen();
+      formik.resetForm();
     }
   });
 

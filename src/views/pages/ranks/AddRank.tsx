@@ -1,20 +1,21 @@
 // THIRD-PARTY
-import { forwardRef, SyntheticEvent } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, SlideProps, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
-import { useDispatch } from 'react-redux';
+import { dispatch } from 'store';
 import { PostRank } from 'store/slices/rank';
-
-const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
+import { openSnackbar } from 'store/slices/snackbar';
 
 interface AddRankProps {
   open: boolean;
-  handleCloseDialog: (e: SyntheticEvent) => void;
+  handleDrawerOpen: () => void;
 }
 
 const validationSchema = Yup.object({
@@ -22,8 +23,9 @@ const validationSchema = Yup.object({
   description: Yup.string().required('Description is required')
 });
 
-const AddRank = ({ open, handleCloseDialog }: AddRankProps) => {
+const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: '',
       description: '',
@@ -32,16 +34,30 @@ const AddRank = ({ open, handleCloseDialog }: AddRankProps) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(PostRank(values));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Submit Success',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: true
+        })
+      );
+      handleDrawerOpen();
+      formik.resetForm();
     }
   });
 
-  const dispatch = useDispatch();
   return (
     <Dialog
       open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleCloseDialog}
+      onClose={() => {
+        handleDrawerOpen();
+        formik.resetForm();
+      }}
       sx={{
         '&>div:nth-of-type(3)': {
           '&>div': {
@@ -56,46 +72,74 @@ const AddRank = ({ open, handleCloseDialog }: AddRankProps) => {
     >
       {open && (
         <>
-          <DialogTitle>Add Rank</DialogTitle>
-          <form onSubmit={formik.handleSubmit}>
-            <DialogContent>
-              <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="name"
-                    name="name"
-                    label="Name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="description"
-                    name="description"
-                    label="Description"
-                    value={formik.values.description}
-                    onChange={formik.handleChange}
-                    error={formik.touched.description && Boolean(formik.errors.description)}
-                    helperText={formik.touched.description && formik.errors.description}
-                  />
-                </Grid>
+          <Box sx={{ p: 3 }}>
+            <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
+              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+                <Stack direction="row" spacing={0.5} alignItems="center">
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      display: 'inline-block',
+                      width: 'calc(100% - 34px)',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      verticalAlign: 'middle'
+                    }}
+                  >
+                    Add Rank
+                  </Typography>
+                </Stack>
               </Grid>
-            </DialogContent>
-            <DialogActions>
-              <AnimateButton>
-                <Button variant="contained" type="submit">
-                  Create
-                </Button>
-              </AnimateButton>
-              <Button variant="text" color="error" onClick={handleCloseDialog}>
-                Close
-              </Button>
-            </DialogActions>
+            </Grid>
+          </Box>
+          <Divider />
+          <form onSubmit={formik.handleSubmit}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DialogContent>
+                <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="name"
+                      name="name"
+                      label="Name"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="description"
+                      name="description"
+                      label="Description"
+                      value={formik.values.description}
+                      onChange={formik.handleChange}
+                      error={formik.touched.description && Boolean(formik.errors.description)}
+                      helperText={formik.touched.description && formik.errors.description}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <AnimateButton>
+                      <Button fullWidth variant="contained" type="submit">
+                        Save
+                      </Button>
+                    </AnimateButton>
+                  </Grid>
+                </Grid>
+              </DialogContent>
+            </LocalizationProvider>
           </form>
         </>
       )}

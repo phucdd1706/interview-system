@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/ranks/SortStatus';
 import {
@@ -14,68 +14,47 @@ import {
   MenuItem,
   Pagination,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Tooltip,
   Typography,
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
 // PROJECT IMPORTS
-import RanksList from 'views/pages/ranks/RanksList';
-import { dispatch } from 'store';
-import { DeleteRank, getRanksList } from 'store/slices/rank';
-import { RankFilter } from 'types/rank';
+import Rank from 'views/pages/ranks/Rank';
+import { useDispatch, useSelector } from 'store';
+import { getRanksList } from 'store/slices/rank';
+import { RankType, RankFilter } from 'types/rank';
 import AddRank from './AddRank';
 import { gridSpacing } from 'store/constant';
-import EditRank from './EditRank';
-import InfoRank from './InfoRank';
 
 const Ranks = () => {
   const theme = useTheme();
-  const [id, setId] = useState('');
-
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const [open, setOpen] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
+  const dispatch = useDispatch();
+  const [data, setData] = React.useState<RankType[]>([]);
+  const rankState = useSelector((state) => state.rank);
 
-  const handleClickOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  const handleEdit = (rankId: string) => {
-    setId(rankId);
-    setOpenEdit(true);
-  };
-
-  const handleCloseInfo = () => {
-    setOpenInfo(false);
-  };
-
-  const handleInfo = (rankId: string) => {
-    setId(rankId);
-    setOpenInfo(true);
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setFilter({ ...filter, currentPage: page! });
   };
 
   const initialState: RankFilter = {
     search: '',
-    status: ''
+    status: '',
+    currentPage: 1
   };
   const [filter, setFilter] = useState(initialState);
-
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
@@ -87,31 +66,35 @@ const Ranks = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
-
-  const filterData = async () => {
-    setTimeout(async () => {
-      await dispatch(getRanksList(filter));
-    }, 400);
-  };
-
-  useEffect(() => {
-    filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
     setFilter({ ...filter, status: index });
     setAnchorEl(null);
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const handleClickPagination = (event: React.MouseEvent) => {};
+  const filterData = async () => {
+    await dispatch(getRanksList(filter));
+  };
 
-  const handleDeleteRank = (rankId: string) => {
-    dispatch(DeleteRank(rankId));
+  React.useEffect(() => {
+    setData(rankState.ranks);
+  }, [rankState]);
+
+  React.useEffect(() => {
+    filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const handleDrawerOpen = () => {
+    setOpenDrawer((prevState) => !prevState);
+  };
+
+  const addRank = () => {
+    setOpenDrawer((prevState) => !prevState);
   };
 
   return (
@@ -158,7 +141,7 @@ const Ranks = () => {
                       aria-labelledby="demo-positioned-button"
                       anchorEl={anchorEl}
                       open={openSort}
-                      onClose={handleClose}
+                      onClose={handleSortStatusClose}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'right'
@@ -186,12 +169,7 @@ const Ranks = () => {
           </Grid>
           <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
             <Tooltip title="Add">
-              <Fab
-                color="primary"
-                size="small"
-                onClick={handleClickOpenDialog}
-                sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
-              >
+              <Fab color="primary" size="small" onClick={addRank} sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}>
                 <AddIcon fontSize="small" />
               </Fab>
             </Tooltip>
@@ -200,45 +178,29 @@ const Ranks = () => {
       }
       content={false}
     >
-      <AddRank open={open} handleCloseDialog={handleCloseDialog} />
-      <EditRank open={openEdit} handleCloseDialog={handleCloseEdit} id={id} />
-      <InfoRank open={openInfo} handleCloseDialog={handleCloseInfo} id={id} />
-      <RanksList handleDelete={handleDeleteRank} handleEdit={handleEdit} handleInfo={handleInfo} id={id} />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            {data && data.map((rank, index) => <Rank key={rank.id} rank={rank} index={index} />)}
+          </TableBody>
+        </Table>
+        <AddRank open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination count={10} color="primary" />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              sx={{ color: theme.palette.grey[900] }}
-              color="secondary"
-              endIcon={<ExpandMoreRoundedIcon />}
-              onClick={handleClickPagination}
-            >
-              10 Rows
-            </Button>
-            <Menu
-              id="menu-user-list-style1"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              variant="selectedMenu"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <MenuItem onClick={handleClose}> 10 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 20 Rows</MenuItem>
-              <MenuItem onClick={handleClose}> 30 Rows </MenuItem>
-            </Menu>
+            <Pagination count={rankState.pageCount} page={rankState.currentPage} onChange={handleChange} color="primary" />
           </Grid>
         </Grid>
       </Grid>
