@@ -27,7 +27,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MainCard from 'ui-component/cards/MainCard';
 import { RootState } from 'store/index';
 import { Candidates, SearchValues } from 'types/complete';
-import { Rank } from 'types/rank';
+import { RankType, RankFilter } from 'types/rank';
 import { fetchCandidates } from 'store/slices/complete';
 import SortStatus from 'views/pages/complete/SortStatus';
 import Complete from './Complete';
@@ -44,7 +44,7 @@ const Index = () => {
   const token = localStorage.getItem('serviceToken');
   const completeState = useSelector((state: RootState) => state.complete);
 
-  const [dataRank, setDataRank] = useState<Rank[]>([]);
+  const [dataRank, setDataRank] = useState<RankType[]>([]);
   const rankState = useSelector((state: RootState) => state.rank);
   const [candidate, setCandidate] = useState<Candidates[]>([]);
   const [anchorElSort, setAnchorElSort] = useState(null);
@@ -55,6 +55,11 @@ const Index = () => {
     status: '',
     currentPage: 1,
     limit: 20
+  };
+  const initialRankState: RankFilter = {
+    search: '',
+    status: '1',
+    currentPage: 1
   };
   const [filters, setFilters] = useState(initialState);
 
@@ -71,7 +76,7 @@ const Index = () => {
 
   useEffect(() => {
     getList();
-    dispatch(getRanksList());
+    dispatch(getRanksList(initialRankState));
   }, []);
 
   const getList = () => {
@@ -139,7 +144,7 @@ const Index = () => {
                 </Typography>
 
                 <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <Typography variant="h5">Sort by: </Typography>
+                  <Typography variant="h5">Sort by rank: </Typography>
                   <Button
                     id="demo-positioned-button"
                     aria-controls="demo-positioned-menu"

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputLabel, MenuItem } from '@mui/material';
 
 // IMPORT PROJECT
-import { RankType } from 'types/rank';
+import { RankType, RankFilter } from 'types/rank';
 import { getRanksList } from 'store/slices/rank';
 import { useDispatch, useSelector } from 'store';
 
@@ -13,9 +13,13 @@ const RankSelect = (props: any) => {
   const [data, setData] = useState<RankType[]>([]);
 
   const { ranks } = useSelector((state) => state.rank);
-
+  const initialRankState: RankFilter = {
+    search: '',
+    status: '1',
+    currentPage: 1
+  };
   useEffect(() => {
-    dispatch(getRanksList());
+    dispatch(getRanksList(initialRankState));
   }, []);
 
   useEffect(() => {
