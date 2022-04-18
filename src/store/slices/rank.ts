@@ -57,6 +57,8 @@ export function getRanksList(filter?: RankFilter) {
   const queryParams = `${
     (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
   }&page=${filter?.currentPage}`;
+
+  console.log('filter', filter);
   return async () => {
     try {
       const response = await axios.get(`${RANKS_URL}?${queryParams}`);
