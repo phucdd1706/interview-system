@@ -24,6 +24,8 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
+import { useSelector } from 'store';
+import { editNotifications } from 'store/slices/notification';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -33,11 +35,11 @@ export default function SettingPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openSettings, setOpenSettings] = React.useState(false);
-  const [state, setState] = React.useState({
-    email: true,
-    desktop: false,
-    attempted: false
-  });
+
+  const notifiState = useSelector((state) => state.notification.notifications);
+
+  const [state, setState] = React.useState(notifiState);
+
   const [FacebookURL, setFacebookURL] = React.useState('');
   const [LinkedInURL, setLinkedInURL] = React.useState('');
   const [TwitterURL, setTwitterURL] = React.useState('');
@@ -57,6 +59,7 @@ export default function SettingPage() {
   };
 
   const handleSettingsChange = () => {
+    editNotifications(state);
     setOpenSettings(true);
   };
 
