@@ -1,6 +1,5 @@
 // THIRD-PARTY
-import { useState } from 'react';
-import { Formik, FormikErrors } from 'formik';
+import { Formik } from 'formik';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -52,10 +51,10 @@ const initialApplicantInfo: ApplicantInfo = {
     }
   ],
   notes: '',
-  interviewTime: `${new Date().toISOString().split('T')[0]}T00:00`
+  interviewTime: `${new Date().toISOString().split('T')[0]}T09:00`
 };
 
-const EmployeeForm = () => {
+const ApplicantForm = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
@@ -86,7 +85,6 @@ const EmployeeForm = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            {console.log(errors)}
             {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string }[] }) => {
               const { render } = row;
               return (
@@ -273,4 +271,4 @@ const EmployeeForm = () => {
   );
 };
 
-export default EmployeeForm;
+export default ApplicantForm;

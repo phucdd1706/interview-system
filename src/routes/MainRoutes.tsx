@@ -47,7 +47,7 @@ const MainRoutes = {
       element: <AddNewApplicant />
     },
     {
-      path: '/interview/:id',
+      path: '/interview/:applicantId',
       element: <Interview />
     }
   ]

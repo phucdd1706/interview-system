@@ -8,10 +8,10 @@ import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
 import { addInterviewQuestions, deleteInterviewQuestions, getQuestionsThunk } from 'store/slices/applicantReferences';
 import { jobPosition, jobLevel } from '../constants';
+import { useDispatch, useSelector } from 'store';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
-import { useDispatch, useSelector } from 'store';
 
 interface Props {
   questionList: QuestionStackInterface[];

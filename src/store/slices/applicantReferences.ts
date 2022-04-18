@@ -21,14 +21,15 @@ const initialState: ApplicantDataInterface = {
     experiences: [],
     applyPosition: []
   },
-  interviewQuestions: []
+  interviewQuestions: [],
+  questions: []
 };
 
 const applicantReferences = createSlice({
   name: 'applicantReferences',
   initialState,
   reducers: {
-    applicantInit: () => initialState,
+    applicantFormInit: () => initialState,
     setApplicantInfo(state, action: { payload: ApplicantDataInterface }) {
       action.payload.interviewQuestions.map((item: QuestionStackInterface) => {
         item.questions.map((question: QuestionInterface) => {
@@ -51,6 +52,9 @@ const applicantReferences = createSlice({
       );
       Object.assign(state, { questions });
     },
+    questionsInit(state) {
+      state.questions = [];
+    },
     deleteInterviewQuestions(state, action: { payload: { type: string; questionId: string } }) {
       const { type, questionId } = action.payload;
       state.interviewQuestions.filter((item) => {
@@ -71,6 +75,7 @@ const applicantReferences = createSlice({
         }
         return item;
       });
+      state.questions = state.questions.filter((element) => element.questionId !== question.questionId);
     },
     handleAnswerScore(state, action: { payload: { questionId: string; answerScore: string } }) {
       const { questionId, answerScore } = action.payload;
@@ -102,14 +107,15 @@ const applicantReferences = createSlice({
 export default applicantReferences.reducer;
 
 export const {
-  applicantInit,
+  applicantFormInit,
   addInterviewQuestions,
   deleteInterviewQuestions,
   handleAnswerScore,
   handleInterviewQuestionNotes,
   setApplicantInfo,
   setReferenceEvaluate,
-  setQuestions
+  setQuestions,
+  questionsInit
 } = applicantReferences.actions;
 
 // ASYNC ACTIONS
@@ -119,7 +125,6 @@ const postData = async <T>(url: string, data: any): Promise<T> => {
     .post(url, data)
     .then((res) => res.data)
     .catch((err) => {
-      console.log(err.response);
       dispatch(
         openSnackbar({
           open: true,
@@ -160,7 +165,8 @@ const getData = async <T>(url: string): Promise<T> => {
 };
 
 const applicantAPI = {
-  applicantReferenceInit: () => getData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/init`),
+  applicantReferenceInit: (applicantId: string) =>
+    getData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/${applicantId}`),
   getQuestionsThunk: (type: string, value: string) =>
     postData<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
   getInterviewQuestionThunk: (applicantInfo: ApplicantInfo) =>
@@ -169,8 +175,8 @@ const applicantAPI = {
     postData<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
 };
 
-export const applicantReferenceInit = createAsyncThunk('applicantReferences/applicantReferenceInit', async () => {
-  const data = await applicantAPI.applicantReferenceInit();
+export const applicantReferenceInit = createAsyncThunk('applicantReferences/applicantReferenceInit', async (applicantId: string) => {
+  const data = await applicantAPI.applicantReferenceInit(applicantId);
   return data && dispatch(setApplicantInfo(data));
 });
 

@@ -1,13 +1,13 @@
 // THIRD-PARTY
 import React from 'react';
-import { Paper, Stack, Typography, Button, FormControl, MenuItem, Select } from '@mui/material';
-import { IconX, IconPlus, IconDotsVertical } from '@tabler/icons';
+import { Paper, Stack, Typography, Button, FormControl, MenuItem, Select, Fab } from '@mui/material';
+import { IconX, IconDotsVertical } from '@tabler/icons';
 
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
-import { handleAnswerScore, handleInterviewQuestionNotes } from 'store/slices/applicantReferences';
-import ButtonRounded from 'views/pages/add-new-applicant-reference/buttonRounded';
+import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicantReferences';
+import AddIcon from '@mui/icons-material/Add';
 
 interface Props {
   value: {
@@ -44,13 +44,16 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
           </Button>
         )}
         {onAddTag && (
-          <ButtonRounded
+          <Fab
+            sx={{ width: '28px', height: '28px', minHeight: 'auto', minWidth: 'auto', padding: 0 }}
+            color="primary"
+            aria-label="add"
             onClick={() => {
               onAddTag(type, value);
             }}
           >
-            <IconPlus height={22} />
-          </ButtonRounded>
+            <AddIcon height={22} />
+          </Fab>
         )}
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>

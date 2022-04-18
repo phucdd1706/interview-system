@@ -13,14 +13,16 @@ import ReferenceResult from './referenceResult';
 import { useSelector, useDispatch } from 'store';
 import { getReferenceEvaluateThunk, applicantReferenceInit } from 'store/slices/applicantReferences';
 import { ApplicantDataInterface } from 'types/applicantData';
+import { useParams } from 'react-router-dom';
 
 const InterviewPage = () => {
   const applicantReferences: ApplicantDataInterface = useSelector((state) => state.applicant);
   const dispatch = useDispatch();
   const intl = useIntl();
+  const { applicantId } = useParams();
 
   useEffect(() => {
-    dispatch(applicantReferenceInit());
+    applicantId && dispatch(applicantReferenceInit(applicantId));
   }, [dispatch]);
 
   const getReferenceEvaluate = async () => {

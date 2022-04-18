@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { Box, Button, Alert, Snackbar } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import EmployeeForm from './applicantInfo/applicantReferenceForm';
+import ApplicantForm from './applicantInfo/applicantReferenceForm';
 import QuestionList from './questionList/index';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
-import { applicantInit } from 'store/slices/applicantReferences';
+import { applicantFormInit } from 'store/slices/applicantReferences';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const AddApplicantReference = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   useEffect(() => {
     dispatch(activeItem(['applicant']));
-    dispatch(applicantInit());
+    dispatch(applicantFormInit());
   }, [dispatch]);
 
   const submitInfo = () => {
@@ -32,14 +32,14 @@ const AddApplicantReference = () => {
       .post(`${process.env.REACT_APP_FAKE_API_URL}/applicant`, applicantInfo)
       .then(async (res) => {
         setSubmitting(false);
-        navigate('/interview/1', { replace: true });
+        navigate(`/interview/${res.data.applicantId}`, { replace: true });
       })
       .catch((err) => err);
   };
   return (
     <Box>
       <MainCard title={intl.formatMessage({ id: 'applicant reference form' })}>
-        <EmployeeForm />
+        <ApplicantForm />
       </MainCard>
       {applicantInfo.interviewQuestions.length > 0 && (
         <>
