@@ -118,6 +118,7 @@ const AddInProgress = (props: any) => {
     if (type === 'close') {
       setVisibleModal(false);
       setData({});
+      setErrors({});
     } else {
       setVisibleModal(true);
     }
