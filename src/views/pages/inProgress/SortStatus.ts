@@ -1,21 +1,21 @@
 // PROJECT IMPORTS
-import { SortStatusProps } from 'types/user';
+import { Status } from 'types/inProgress';
 
-const SortStatus: SortStatusProps[] = [
+const SortStatus: Status[] = [
   {
     value: '',
     label: 'All'
   },
   {
-    value: '1',
+    value: 1,
     label: 'Inactive'
   },
   {
-    value: '2',
+    value: 2,
     label: 'Active'
   },
   {
-    value: '3',
+    value: 3,
     label: 'Blocked'
   }
 ];

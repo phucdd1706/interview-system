@@ -20,10 +20,10 @@ export interface SearchValues {
 }
 
 export interface Payload {
-  id?: string | number;
-  params?: any;
-  token?: any;
-  callback?: (response: any) => void;
+  id: string | number;
+  params: any;
+  token: string;
+  callback: (response: any) => void;
 }
 
 export type Status = {
@@ -31,8 +31,8 @@ export type Status = {
   label: string;
 };
 
-export interface CompleteStateProps {
-  complete: Candidates[];
+export interface InProgressStateProps {
+  inProgress: Candidates[];
   pageCount: number;
   currentPage: number;
   error: object | string | null;

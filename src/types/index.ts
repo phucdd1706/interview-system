@@ -11,6 +11,8 @@ import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
 import { ProfileStateProps } from 'types/profile';
 import { DepartmentStateProps } from './department';
+import { CompleteStateProps } from './complete';
+import { InProgressStateProps } from './inProgress';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
@@ -19,6 +21,8 @@ export interface DefaultRootStateProps {
   rank: RankStateProps;
   profile: ProfileStateProps;
   department: DepartmentStateProps;
+  complete: CompleteStateProps;
+  inProgress: InProgressStateProps;
 }
 
 export interface ColorProps {
