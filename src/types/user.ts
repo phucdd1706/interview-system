@@ -15,3 +15,8 @@ export type SortStatusProps = {
   value?: string;
   label: string;
 };
+
+export type SelectProps = {
+  value?: any;
+  label: string;
+};
