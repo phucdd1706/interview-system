@@ -1,6 +1,7 @@
 // THIRD-PARTY
 
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -28,9 +29,11 @@ import { openSnackbar } from 'store/slices/snackbar';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { Department, SelectProps } from 'types/department';
 import { putDepartment } from 'store/slices/department';
+import axios from 'axios';
+import { useState } from 'react';
 
 // const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
@@ -38,6 +41,13 @@ interface EditDepartmentProps {
   department: Department;
   open: boolean;
   handleDrawerOpen: () => void;
+}
+interface DataError {
+  error: {
+    errors: string[];
+    message: string;
+  };
+  message: string;
 }
 
 const Status: SelectProps[] = [
@@ -59,7 +69,9 @@ const validationSchema = Yup.object({
   code: Yup.string().required('Code is required'),
   status: Yup.string().required('Status is required')
 });
+
 const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentProps) => {
+  const departmentState = useSelector((state) => state.department);
   const formik = useFormik({
     initialValues: {
       id: department.id,
@@ -68,20 +80,33 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
       status: department.status
     },
     validationSchema,
-    onSubmit: (values) => {
-      dispatch(putDepartment(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
-        })
-      );
+    onSubmit: async (values) => {
+      try {
+        await dispatch(putDepartment(values));
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: 'Updated successfully!',
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            variant: 'alert',
+            alert: {
+              color: 'success'
+            },
+            close: false
+          })
+        );
+      } catch (error) {
+        if (error && axios.isAxiosError(error)) {
+          if (error.response) {
+            const datas: DataError = error.response.data;
+            dispatch((Alert as any).error({ message: datas.error.message }));
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+        }
+      }
       handleDrawerOpen();
     }
   });
