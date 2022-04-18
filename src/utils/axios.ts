@@ -1,8 +1,6 @@
 // THIRD-PARTY
 import axios from 'axios';
-import { dispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
-import { getSeverityType, getErrMessage } from './helpers/axios/errHandle';
+import { alertRequestError } from './helpers/axios/errorAlert';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TOKEN =
@@ -16,19 +14,7 @@ axiosServices.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log(error.response);
-    dispatch(
-      openSnackbar({
-        open: true,
-        severity: (error.response && getSeverityType(error.response.status)) || 'error',
-        message: (error.response && getErrMessage(error.response)) || "Can't connect to server",
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        variant: 'alert',
-        alert: {
-          color: (error.response && getSeverityType(error.response.status)) || 'error'
-        },
-        close: false
-      })
-    );
+    alertRequestError(error.response);
     return Promise.reject((error.response && error.response.data) || 'Wrong Services');
   }
 );

@@ -1,13 +1,10 @@
 // PROJECT IMPORTS
 import { ApplicantDataInterface, ApplicantInfo, ReferenceEvaluate } from 'types/applicantData';
 import { QuestionInterface, QuestionStackInterface } from 'types/interviewQuestion';
-import { dispatch } from 'store';
-import { openSnackbar } from '../snackbar';
-import axiosServices from 'utils/axios';
-import { getData, postData } from 'utils/helpers/axios';
+import { axiosGet, axiosPost } from 'utils/helpers/axios';
 
 // THIRD-PARTY
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
@@ -124,11 +121,11 @@ export const {
 
 export const applicantAPI = {
   applicantReferenceInit: (applicantId: string) =>
-    getData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/${applicantId}`),
+    axiosGet<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/${applicantId}`),
   getQuestionsThunk: (type: string, value: string) =>
-    postData<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
+    axiosPost<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
   getInterviewQuestionThunk: (applicantInfo: ApplicantInfo) =>
-    postData<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/interview-question`, applicantInfo, 'Success'),
+    axiosPost<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/interview-question`, applicantInfo, 'Success hehe'),
   getReferenceEvaluateThunk: (applicantInfo: ApplicantDataInterface) =>
-    postData<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
+    axiosPost<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
 };

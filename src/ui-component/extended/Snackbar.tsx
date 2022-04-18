@@ -8,6 +8,7 @@ import { SyntheticEvent } from 'react';
 import { closeSnackbar } from 'store/slices/snackbar';
 import { KeyedObject } from 'types';
 import { useDispatch, useSelector } from 'store';
+import { makeStyles } from '@mui/styles';
 
 // animation function
 function TransitionSlideLeft(props: SlideProps) {
@@ -86,6 +87,7 @@ const Snackbar = () => {
           <Alert
             severity={severity || 'success'}
             variant={alert.variant}
+            color={alert.color}
             action={
               <>
                 {actionButton !== false && (

@@ -1,25 +1,13 @@
 import axiosServices from 'utils/axios';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
+import { alertRequestSuccess } from './errorAlert';
 
-export const postData = async <T>(url: string, data: any, alert?: string): Promise<T> => {
+export const axiosPost = async <T>(url: string, data: any, alert?: string): Promise<T> => {
   const response = await axiosServices
     .post(url, data)
     .then((res: any) => {
-      alert &&
-        dispatch(
-          openSnackbar({
-            open: true,
-            severity: 'success',
-            message: alert,
-            anchorOrigin: { vertical: 'top', horizontal: 'right' },
-            variant: 'alert',
-            alert: {
-              color: 'success'
-            },
-            close: false
-          })
-        );
+      alert && alertRequestSuccess(alert);
       return res.data;
     })
     .catch((err: string) => {
@@ -28,24 +16,37 @@ export const postData = async <T>(url: string, data: any, alert?: string): Promi
   return response;
 };
 
-export const getData = async <T>(url: string, alert?: string): Promise<T> => {
+export const axiosGet = async <T>(url: string, alert?: string): Promise<T> => {
   const response = await axiosServices
     .get(url)
     .then((res: any) => {
-      alert &&
-        dispatch(
-          openSnackbar({
-            open: true,
-            severity: 'success',
-            message: alert,
-            anchorOrigin: { vertical: 'top', horizontal: 'right' },
-            variant: 'alert',
-            alert: {
-              color: 'success'
-            },
-            close: false
-          })
-        );
+      alert && alertRequestSuccess(alert);
+      return res.data;
+    })
+    .catch((err: string) => {
+      console.log(err);
+    });
+  return response;
+};
+
+export const axiosPut = async <T>(url: string, data: any, alert?: string): Promise<T> => {
+  const response = await axiosServices
+    .put(url, data)
+    .then((res: any) => {
+      alert && alertRequestSuccess(alert);
+      return res.data;
+    })
+    .catch((err: string) => {
+      console.log(err);
+    });
+  return response;
+};
+
+export const axiosDelete = async <T>(url: string, alert?: string): Promise<T> => {
+  const response = await axiosServices
+    .delete(url)
+    .then((res: any) => {
+      alert && alertRequestSuccess(alert);
       return res.data;
     })
     .catch((err: string) => {
