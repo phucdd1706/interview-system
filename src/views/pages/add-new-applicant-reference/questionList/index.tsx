@@ -73,49 +73,6 @@ const QuestionList = ({ questionList }: Props) => {
 
 export default QuestionList;
 
-const ListQuestions = [
-  {
-    questionId: '1234',
-    question: 'What is your 23423?'
-  },
-  {
-    questionId: '21234',
-    question: 'What is werweyour age?'
-  },
-  {
-    questionId: '3sdf',
-    question: 'erwer salary?'
-  },
-  {
-    questionId: '412',
-    question: 'What is RwerwfeactJS?'
-  },
-  {
-    questionId: '524',
-    question: 'What is sdfRedux?'
-  },
-  {
-    questionId: '623',
-    question: 'What is werJ1?'
-  },
-  {
-    questionId: '754',
-    question: 'How to increafwese performance?'
-  },
-  {
-    questionId: '83',
-    question: 'How to increweqase security?'
-  },
-  {
-    questionId: '9654',
-    question: 'explain about React lifecycle?'
-  },
-  {
-    questionId: '1340',
-    question: 'What is RefwwactJS?'
-  }
-];
-
 const jobPosition = [
   { title: 'ReactJS' },
   { title: 'NodeJS' },

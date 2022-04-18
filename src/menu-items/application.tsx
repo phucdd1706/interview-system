@@ -1,9 +1,9 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
+import { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus } from '@tabler/icons';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-import { IconStairsUp, IconUserCheck, IconFilePlus } from '@tabler/icons';
 
-const icons = { IconUserCheck, CorporateFareIcon, IconStairsUp, IconFilePlus };
+const icons = { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, CorporateFareIcon };
 
 const application = {
   id: 'application',
@@ -31,6 +31,26 @@ const application = {
       ]
     },
     {
+      id: 'history',
+      title: <FormattedMessage id="history" />,
+      type: 'collapse',
+      icon: icons.IconHistory,
+      children: [
+        {
+          id: 'complete',
+          title: <FormattedMessage id="complete" />,
+          type: 'item',
+          url: '/complete'
+        },
+        {
+          id: 'inprogress',
+          title: <FormattedMessage id="inProgress" />,
+          type: 'item',
+          url: '/inprogress'
+        }
+      ]
+    },
+    {
       id: 'manage-department',
       title: <FormattedMessage id="department" />,
       type: 'item',
@@ -44,7 +64,7 @@ const application = {
       type: 'item',
       url: '/ranks',
       icon: icons.IconStairsUp,
-      breadcrumbs: false
+      breadcrumbs: true
     },
     {
       id: 'applicant',

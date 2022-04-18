@@ -1,6 +1,5 @@
 // THIRD-PARTY
 import { Stack } from '@mui/material';
-import { useSelector } from 'store';
 import { QuestionStackInterface } from 'types/interviewQuestion';
 
 // PROJECT IMPORTS

@@ -46,12 +46,9 @@ export function editProfile(profile: Profile) {
 export function changeNewPassword(changePassword: ChangePassword) {
   return async () => {
     try {
-      // Input is Password and information
       const response = await axios.put(`${PROFILE_URL}`, changePassword);
-      console.log(response);
       dispatch(slice.actions.changePasswordSuccess(response.data.success.data));
     } catch (error) {
-      console.error(error);
       dispatch(slice.actions.hasError(error));
     }
   };
