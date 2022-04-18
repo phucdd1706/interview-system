@@ -22,7 +22,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import LegendWrapper from '../legend';
 import { useDispatch } from 'store';
 import { ApplicantInfo } from 'types/applicantData';
-import { getInterviewQuestionThunk } from 'store/slices/applicantReferences';
+import { getInterviewQuestionThunk } from 'store/slices/applicant/applicantAsyncAction';
 import personalDetail from './layoutMapping';
 import { jobPosition, jobLevel, workingExperiences } from '../constants';
 

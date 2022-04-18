@@ -13,7 +13,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
-import { applicantFormInit } from 'store/slices/applicantReferences';
+import { applicantFormInit } from 'store/slices/applicant/applicantReferences';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const AddApplicantReference = () => {
       </MainCard>
       {applicantInfo.interviewQuestions.length > 0 && (
         <>
-          <MainCard title={intl.formatMessage({ id: 'list questions' })} sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'interview questions' })} sx={{ margin: '1em 0' }}>
             <QuestionList questionList={applicantInfo.interviewQuestions} />
           </MainCard>
           <MainCard sx={{ margin: '1em 0' }}>

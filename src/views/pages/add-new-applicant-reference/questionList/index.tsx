@@ -6,7 +6,8 @@ import { useState } from 'react';
 import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
-import { addInterviewQuestions, deleteInterviewQuestions, getQuestionsThunk } from 'store/slices/applicantReferences';
+import { getQuestionsThunk } from 'store/slices/applicant/applicantAsyncAction';
+import { addInterviewQuestions, deleteInterviewQuestions } from 'store/slices/applicant/applicantReferences';
 import { jobPosition, jobLevel } from '../constants';
 import { useDispatch, useSelector } from 'store';
 

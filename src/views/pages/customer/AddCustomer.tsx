@@ -33,17 +33,6 @@ interface Props {
   handleDrawerOpen: () => void;
 }
 
-const Type: SelectProps[] = [
-  {
-    value: 1,
-    label: 'Administrator'
-  },
-  {
-    value: 2,
-    label: 'Customer'
-  }
-];
-
 const Gender: SelectProps[] = [
   {
     value: 'male',
@@ -90,10 +79,11 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
           alert: {
             color: 'success'
           },
-          close: false
+          close: true
         })
       );
       handleDrawerOpen();
+      formik.resetForm();
     }
   });
 
@@ -250,24 +240,6 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                         {Gender.map((gender: SelectProps, index: number) => (
                           <MenuItem key={index} value={gender.value}>
                             {gender.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <Select
-                        id="type"
-                        name="type"
-                        displayEmpty
-                        value={formik.values.type}
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                      >
-                        {Type.map((type: SelectProps, index: number) => (
-                          <MenuItem key={index} value={type.value}>
-                            {type.label}
                           </MenuItem>
                         ))}
                       </Select>

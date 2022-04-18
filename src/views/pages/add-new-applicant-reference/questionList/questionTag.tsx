@@ -6,7 +6,7 @@ import { IconX, IconDotsVertical } from '@tabler/icons';
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
-import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicantReferences';
+import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicant/applicantReferences';
 import AddIcon from '@mui/icons-material/Add';
 
 interface Props {

@@ -6,7 +6,7 @@ import React from 'react';
 // PROJECT IMPORTS
 import QuestionTag from './questionTag';
 import { useDispatch } from 'store';
-import { questionsInit } from 'store/slices/applicantReferences';
+import { questionsInit } from 'store/slices/applicant/applicantReferences';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';

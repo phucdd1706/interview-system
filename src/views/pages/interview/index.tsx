@@ -11,7 +11,7 @@ import InterviewerResult from './interviewerResult';
 import InterviewQuestions from './interviewQuestions';
 import ReferenceResult from './referenceResult';
 import { useSelector, useDispatch } from 'store';
-import { getReferenceEvaluateThunk, applicantReferenceInit } from 'store/slices/applicantReferences';
+import { getReferenceEvaluateThunk, applicantReferenceInit } from 'store/slices/applicant/applicantAsyncAction';
 import { ApplicantDataInterface } from 'types/applicantData';
 import { useParams } from 'react-router-dom';
 

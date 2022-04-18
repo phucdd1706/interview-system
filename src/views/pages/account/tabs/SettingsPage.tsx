@@ -60,7 +60,6 @@ export default function SettingPage() {
     setFacebookURL(event.target.value);
   };
   const handleFacebookConnect = () => {
-    console.log(FacebookURL);
     setOpen(true);
   };
 
@@ -68,7 +67,6 @@ export default function SettingPage() {
     setLinkedInURL(event.target.value);
   };
   const handleLinkedInConnect = () => {
-    console.log(LinkedInURL);
     setOpen(true);
   };
 
@@ -76,7 +74,6 @@ export default function SettingPage() {
     setTwitterURL(event.target.value);
   };
   const handleTwitterConnect = () => {
-    console.log(TwitterURL);
     setOpen(true);
   };
 
