@@ -72,7 +72,7 @@ const Complete = (props: any) => {
 
   const renderStatus = (status: number) => (
     <>
-      {status === 1 && (
+      {status === 0 && (
         <Chip
           label="Inactive"
           size="small"
@@ -82,7 +82,7 @@ const Complete = (props: any) => {
           }}
         />
       )}
-      {status === 2 && (
+      {status === 1 && (
         <Chip
           label="Active"
           size="small"
@@ -92,7 +92,7 @@ const Complete = (props: any) => {
           }}
         />
       )}
-      {status === 3 && (
+      {status === 2 && (
         <Chip
           label="Blocked"
           size="small"
