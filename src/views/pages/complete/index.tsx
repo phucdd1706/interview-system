@@ -168,8 +168,9 @@ const Index = () => {
                     }}
                     transformOrigin={{
                       vertical: 'top',
-                      horizontal: 'right'
+                      horizontal: 'center'
                     }}
+                    sx={{ height: 300 }}
                   >
                     {dataRank?.map((item, index) => (
                       <MenuItem
@@ -237,7 +238,7 @@ const Index = () => {
   };
 
   const handleTableChange = (e: any, pageTable: number) => {
-    console.log('pageTable', pageTable);
+    setFilters({ ...filters, currentPage: pageTable! });
   };
 
   return (
@@ -256,7 +257,7 @@ const Index = () => {
                 <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
               {candidate?.map((row) => (
                 <Complete key={row?.id} complete={row} />
               ))}
@@ -266,7 +267,7 @@ const Index = () => {
         <Grid item xs={12} sx={{ p: 3 }}>
           <Grid container justifyContent="space-between" spacing={gridSpacing}>
             <Grid item>
-              <Pagination count={10} color="primary" onChange={handleTableChange} />
+              <Pagination count={completeState.pageCount} page={completeState.currentPage} color="primary" onChange={handleTableChange} />
             </Grid>
           </Grid>
         </Grid>

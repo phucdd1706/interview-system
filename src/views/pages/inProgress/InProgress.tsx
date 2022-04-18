@@ -156,7 +156,7 @@ const InProgress = (props: any) => {
 
   return (
     <>
-      <TableRow hover>
+      <TableRow hover key={inProgress?.id}>
         <TableCell>{inProgress?.id}</TableCell>
         <TableCell>{inProgress?.name}</TableCell>
         <TableCell>{inProgress?.phone}</TableCell>

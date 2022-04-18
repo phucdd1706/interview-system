@@ -156,7 +156,7 @@ const Complete = (props: any) => {
 
   return (
     <>
-      <TableRow hover>
+      <TableRow hover key={complete?.id}>
         <TableCell>{complete?.id}</TableCell>
         <TableCell>{complete?.name}</TableCell>
         <TableCell>{complete?.phone}</TableCell>
@@ -166,7 +166,7 @@ const Complete = (props: any) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertCompleteDelete name={complete?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddComplete visible={visibleAdd} dataEdit={complete} />{' '}
+      <AddComplete visible={visibleAdd} dataEdit={complete} />
     </>
   );
 };
