@@ -9,6 +9,7 @@ const application = {
   id: 'application',
   title: <FormattedMessage id="application" />,
   type: 'group',
+  role: 1,
   children: [
     {
       id: 'manage-member',

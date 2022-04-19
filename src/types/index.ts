@@ -45,6 +45,7 @@ export type NavItemType = {
   url?: string | undefined;
   type?: string;
   title?: React.ReactNode | string;
+  role?: number;
   color?: 'primary' | 'secondary' | 'default' | undefined;
   caption?: React.ReactNode | string;
   breadcrumbs?: boolean;
