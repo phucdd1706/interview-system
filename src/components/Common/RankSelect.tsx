@@ -3,19 +3,23 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputLabel, MenuItem } from '@mui/material';
 
 // IMPORT PROJECT
-import { Rank } from 'types/rank';
+import { RankType, RankFilter } from 'types/rank';
 import { getRanksList } from 'store/slices/rank';
 import { useDispatch, useSelector } from 'store';
 
 const RankSelect = (props: any) => {
   const dispatch = useDispatch();
-  const { blur, change, values, required, size, formik } = props;
-  const [data, setData] = useState<Rank[]>([]);
+  const { change, values, required, size, formik, sx, fullWidth } = props;
+  const [data, setData] = useState<RankType[]>([]);
 
   const { ranks } = useSelector((state) => state.rank);
-
+  const initialRankState: RankFilter = {
+    search: '',
+    status: '1',
+    currentPage: 1
+  };
   useEffect(() => {
-    dispatch(getRanksList());
+    dispatch(getRanksList(initialRankState));
   }, []);
 
   useEffect(() => {
@@ -33,14 +37,13 @@ const RankSelect = (props: any) => {
         name="rank"
         size={size || 'small'}
         label={<span>Rank</span>}
-        onBlur={blur}
         onChange={change}
-        inputProps={{}}
         value={values}
-        fullWidth
+        fullWidth={fullWidth}
         error={formik && formik.touched.rank && Boolean(formik.errors.rank)}
+        sx={sx}
       >
-        {data?.map((row: Rank) => (
+        {data?.map((row: RankType) => (
           <MenuItem value={row?.id} key={row?.id}>
             {row?.name}
           </MenuItem>
