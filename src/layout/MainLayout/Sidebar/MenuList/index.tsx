@@ -7,10 +7,15 @@ import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
 
 const MenuList = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  console.log(user);
   const navItems = menuItem.items.map((item) => {
     switch (item.type) {
       case 'group':
-        return <NavGroup key={item.id} item={item} />;
+        if (item.role === user.type) {
+          return <NavGroup key={item.id} item={item} />;
+        }
+        return <></>;
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">

@@ -6,12 +6,15 @@ import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
 import { UserFilter } from 'types/user';
+import { UserProfile } from '../../types/user-profile';
 
 export const ADMINISTRATOR_URL = `${process.env.REACT_APP_API_URL}/v1/operator/users`;
 
 const initialState: DefaultRootStateProps['user'] = {
-  error: null,
-  users: []
+  users: [],
+  pageCount: 0,
+  currentPage: 1,
+  error: null
 };
 
 const slice = createSlice({
@@ -23,7 +26,28 @@ const slice = createSlice({
     },
 
     getAdministratorListSuccess(state, action) {
-      state.users = action.payload;
+      state.users = action.payload.data;
+    },
+
+    addAdministratorSuccess(state, action) {
+      state.users.unshift(action.payload);
+    },
+
+    editAdministratorSuccess(state, action) {
+      if (action.payload.type === 2) {
+        state.users = state.users.filter((user) => user.id !== action.payload.id);
+      } else {
+        state.users = state.users.map((user) => {
+          if (user.id === action.payload.id) {
+            return action.payload;
+          }
+          return user;
+        });
+      }
+    },
+
+    deleteAdministratorSuccess(state, action) {
+      state.users = state.users.filter((user) => user.id !== action.payload.id);
     }
   }
 });
@@ -31,10 +55,47 @@ const slice = createSlice({
 export default slice.reducer;
 
 export function getAdministratorList(filter?: UserFilter) {
+  const queryParams = `${
+    (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+  }&page=${filter?.currentPage}`;
+
   return async () => {
     try {
-      const response = await axios.get(`${ADMINISTRATOR_URL}?search=${filter?.search}&status=${filter?.status}`);
-      dispatch(slice.actions.getAdministratorListSuccess(response.data.success.data));
+      const response = await axios.get(`${ADMINISTRATOR_URL}?${queryParams}`);
+      dispatch(slice.actions.getAdministratorListSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function addAdministrator(administrator: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, administrator);
+      dispatch(slice.actions.addAdministratorSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function editAdministrator(user: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${user.id}`, user);
+      dispatch(slice.actions.editAdministratorSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function deleteAdministrator(user: UserProfile) {
+  return async () => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${user.id}`);
+      dispatch(slice.actions.deleteAdministratorSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

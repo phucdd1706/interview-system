@@ -11,6 +11,7 @@ interface DashboardMenuProps {
   id: string;
   title: React.ReactNode | string;
   type: string;
+  role: number;
   children: {
     id: string;
     title: React.ReactNode | string;
@@ -25,6 +26,7 @@ const dashboard: DashboardMenuProps = {
   id: 'dashboard',
   title: <FormattedMessage id="dashboard" />,
   type: 'group',
+  role: 1,
   children: [
     {
       id: 'analytics',
