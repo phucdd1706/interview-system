@@ -22,12 +22,14 @@ const application = {
           id: 'administrator',
           title: <FormattedMessage id="administrator" />,
           type: 'item',
+          role: 1,
           url: '/user/administrator'
         },
         {
           id: 'customer',
           title: <FormattedMessage id="customer" />,
           type: 'item',
+          role: 1,
           url: '/user/customer'
         }
       ]
