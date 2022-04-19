@@ -37,6 +37,15 @@ const setSession = (serviceToken?: string | null) => {
   }
 };
 
+const setUser = (user?: any | null) => {
+  if (user) {
+    localStorage.setItem('user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('user');
+    delete axios.defaults.headers.common.Authorization;
+  }
+};
+
 const JWTContext = createContext<JWTContextType | null>(null);
 
 export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
@@ -82,6 +91,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     const response = await axios.post(LOGIN_URL, { email, password });
     const { token, user } = response.data.success;
     setSession(token);
+    setUser(user);
     dispatch({
       type: LOGIN,
       payload: {
@@ -93,6 +103,7 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
 
   const logout = () => {
     setSession(null);
+    setUser(null);
     dispatch({ type: LOGOUT });
   };
 

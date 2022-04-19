@@ -1,6 +1,7 @@
 // THIRD PARTY
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Divider, TextField, Grid, FormHelperText, Dialog } from '@mui/material';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { Box, Button, Typography, Stack, DialogContent, Divider, TextField, Grid, FormHelperText, Dialog } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
@@ -9,6 +10,7 @@ import RankSelect from 'components/Common/RankSelect';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { addCandidate, editCandidate } from 'store/slices/complete';
 import { dispatch } from 'store';
+import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
 
 const AddComplete = (props: any) => {
@@ -39,7 +41,6 @@ const AddComplete = (props: any) => {
           params: values,
           token,
           callback: (res) => {
-            console.log('res', res);
             if (res?.data?.success) {
               dispatch(
                 openSnackbar({
@@ -53,7 +54,7 @@ const AddComplete = (props: any) => {
                   close: true
                 })
               );
-              setVisibleModal(false);
+              changeModal('close');
             } else {
               dispatch(
                 openSnackbar({
@@ -78,7 +79,6 @@ const AddComplete = (props: any) => {
           params: values,
           token,
           callback: (res) => {
-            console.log('res', res);
             if (res?.data?.success) {
               dispatch(
                 openSnackbar({
@@ -92,7 +92,7 @@ const AddComplete = (props: any) => {
                   close: true
                 })
               );
-              setVisibleModal(false);
+              changeModal('close');
             } else {
               dispatch(
                 openSnackbar({
@@ -119,6 +119,7 @@ const AddComplete = (props: any) => {
       setVisibleModal(false);
       setData({});
       setErrors({});
+      formik.resetForm();
     } else {
       setVisibleModal(true);
     }
@@ -154,7 +155,6 @@ const AddComplete = (props: any) => {
       open={visibleModal}
       onClose={() => {
         changeModal('close');
-        formik.resetForm();
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -168,136 +168,148 @@ const AddComplete = (props: any) => {
         }
       }}
     >
-      <Box sx={{ p: 3 }} role="presentation">
-        <Typography id="modal-modal-title" variant="h4" component="h2">
-          {data?.id ? 'Edit record' : 'Add new record'}
-        </Typography>
-        <Divider sx={{ mb: 3, mt: 1 }} />
-        <form onSubmit={formik.handleSubmit}>
-          <Grid container spacing={2}>
+      <Box sx={{ p: 3 }}>
+        <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
+          <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+            <Stack direction="row" spacing={0.5} alignItems="center">
+              <Button
+                variant="text"
+                color="error"
+                sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                onClick={() => changeModal('close')}
+              >
+                <HighlightOffIcon />
+              </Button>
+              <Typography
+                variant="h4"
+                sx={{
+                  display: 'inline-block',
+                  width: 'calc(100% - 34px)',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  verticalAlign: 'middle'
+                }}
+              >
+                {data?.id ? 'Edit record' : 'Add new record'}
+              </Typography>
+            </Stack>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Divider />
+
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent>
+          <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
             <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="name"
-                  value={formik.values?.name}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Name
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-              </Box>
+              <TextField
+                id="name"
+                name="name"
+                value={formik.values?.name}
+                label={
+                  <span>
+                    <span style={{ color: 'red' }}>*</span> Name
+                  </span>
+                }
+                fullWidth
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
             </Grid>
             <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="username"
-                  value={formik.values?.username}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Username
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
-                  helperText={(formik.touched.username && formik.errors.username) || errors?.username}
-                />
-              </Box>
+              <TextField
+                id="username"
+                name="username"
+                value={formik.values?.username}
+                label={
+                  <span>
+                    <span style={{ color: 'red' }}>*</span> Username
+                  </span>
+                }
+                fullWidth
+                onChange={formik.handleChange}
+                error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
+                helperText={(formik.touched.username && formik.errors.username) || errors?.username}
+              />
             </Grid>
             <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="phone"
-                  value={formik.values?.phone}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Phone
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
-                  helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
-                />
-              </Box>
+              <TextField
+                id="phone"
+                name="phone"
+                value={formik.values?.phone}
+                label={
+                  <span>
+                    <span style={{ color: 'red' }}>*</span> Phone
+                  </span>
+                }
+                fullWidth
+                onChange={formik.handleChange}
+                error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
+                helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
+              />
             </Grid>
             <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="email"
-                  value={formik.values?.email}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Email
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
-                  helperText={(formik.touched.email && formik.errors.email) || errors?.email}
-                />
-              </Box>
+              <TextField
+                id="email"
+                name="email"
+                value={formik.values?.email}
+                label={
+                  <span>
+                    <span style={{ color: 'red' }}>*</span> Email
+                  </span>
+                }
+                fullWidth
+                onChange={formik.handleChange}
+                error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
+                helperText={(formik.touched.email && formik.errors.email) || errors?.email}
+              />
             </Grid>
+            {!data?.id && (
+              <>
+                <Grid item xl={12}>
+                  <TextField
+                    id="password"
+                    name="password"
+                    value={formik.values?.password}
+                    label={
+                      <span>
+                        <span style={{ color: 'red' }}>*</span> Password
+                      </span>
+                    }
+                    fullWidth
+                    onChange={formik.handleChange}
+                    error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                    helperText={(formik.touched.password && formik.errors.password) || errors?.password}
+                  />
+                </Grid>
+                <Grid item xl={12}>
+                  <TextField
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    value={formik.values?.password_confirmation}
+                    label={
+                      <span>
+                        <span style={{ color: 'red' }}>*</span> Confirm password
+                      </span>
+                    }
+                    fullWidth
+                    onChange={formik.handleChange}
+                    error={(formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) || errors?.password}
+                    helperText={(formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="password"
-                  value={formik.values?.password}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Password
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
-                  helperText={(formik.touched.password && formik.errors.password) || errors?.password}
-                />
-              </Box>
-            </Grid>
-            <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <TextField
-                  id="outlined-basic"
-                  name="password_confirmation"
-                  value={formik.values?.password_confirmation}
-                  label={
-                    <span>
-                      <span style={{ color: 'red' }}>*</span> Confirm password
-                    </span>
-                  }
-                  fullWidth
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  error={(formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) || errors?.password}
-                  helperText={(formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password}
-                />
-              </Box>
-            </Grid>
-            <Grid item xl={12}>
-              <Box sx={{ mb: 1 }}>
-                <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank} required formik={formik} />
-                {formik.touched.rank && formik.errors.rank && (
-                  <FormHelperText error id="standard-weight-helper-text-rank-login">
-                    {formik.errors.rank}
-                  </FormHelperText>
-                )}
-              </Box>
+              <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank} formik={formik} />
+              {formik.touched.rank && formik.errors.rank && (
+                <FormHelperText error id="standard-weight-helper-text-rank-login">
+                  {formik.errors.rank}
+                </FormHelperText>
+              )}
             </Grid>
 
             <Grid item xs={12}>
@@ -308,8 +320,8 @@ const AddComplete = (props: any) => {
               </AnimateButton>
             </Grid>
           </Grid>
-        </form>
-      </Box>
+        </DialogContent>
+      </form>
     </Dialog>
   );
 };
