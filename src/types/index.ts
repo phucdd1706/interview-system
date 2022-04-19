@@ -12,6 +12,7 @@ import { UserStateProps } from 'types/user';
 import { DepartmentStateProps } from './department';
 import { CompleteStateProps } from './complete';
 import { InProgressStateProps } from './inProgress';
+import { LanguageStateProps } from './language';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
@@ -21,6 +22,7 @@ export interface DefaultRootStateProps {
   department: DepartmentStateProps;
   complete: CompleteStateProps;
   inProgress: InProgressStateProps;
+  language: LanguageStateProps;
 }
 
 export interface ColorProps {

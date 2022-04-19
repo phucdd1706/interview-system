@@ -1,6 +1,6 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
-import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem } from '@mui/material';
+import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stack, Link, Typography } from '@mui/material';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
@@ -8,7 +8,7 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 // PROJECT IMPORTS
 import { removeCandidate } from 'store/slices/inProgress';
 import AddInProgress from 'views/pages/inProgress/AddInProgress';
-import AlertInProgressDelete from 'views/pages/inProgress/AlertInProgressDelete';
+import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
 import { dispatch } from 'store';
 
@@ -157,14 +157,33 @@ const InProgress = (props: any) => {
   return (
     <>
       <TableRow hover key={inProgress?.id}>
-        <TableCell>{inProgress?.id}</TableCell>
-        <TableCell>{inProgress?.name}</TableCell>
+        <TableCell>
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Typography variant="body2">{inProgress.id}</Typography>
+          </Stack>
+        </TableCell>
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+          <Link
+            underline="hover"
+            color="default"
+            sx={{
+              overflow: 'hidden',
+              display: 'block',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              ':hover': { color: 'primary.main' },
+              cursor: 'pointer'
+            }}
+          >
+            {inProgress.name}
+          </Link>
+        </TableCell>
         <TableCell>{inProgress?.phone}</TableCell>
         <TableCell>{inProgress?.email}</TableCell>
         <TableCell>{moment(inProgress.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(inProgress?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
-        {openModal && <AlertInProgressDelete name={inProgress?.name} open={openModal} handleClose={handleRemove} />}
+        {openModal && <AlertDelete name={inProgress?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
       <AddInProgress visible={visibleAdd} dataEdit={inProgress} />
     </>

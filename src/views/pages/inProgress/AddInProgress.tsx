@@ -209,7 +209,7 @@ const AddInProgress = (props: any) => {
                 value={formik.values?.name}
                 label={
                   <span>
-                    <span style={{ color: 'red' }}>*</span> Username
+                    <span style={{ color: 'red' }}>*</span> Name
                   </span>
                 }
                 fullWidth
