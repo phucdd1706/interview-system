@@ -1,5 +1,6 @@
 // THIRD-PARTY
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { ErrorResponse } from 'types/error-response.type';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TOKEN =
@@ -13,6 +14,16 @@ axiosServices.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
 );
+
+axios.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError<ErrorResponse>) => {
+    console.error(error);
+    error.message = error.response?.data.error?.message || 'Lỗi không xác định';
+    return Promise.reject(error);
+  }
+);
+
 export default axiosServices;
 export const userRequest = axios.create({
   baseURL: BASE_URL,
