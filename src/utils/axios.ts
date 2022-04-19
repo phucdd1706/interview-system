@@ -13,7 +13,6 @@ const axiosServices = axios.create({
 axiosServices.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error.response);
     alertRequestError(error.response);
     return Promise.reject((error.response && error.response.data) || 'Wrong Services');
   }

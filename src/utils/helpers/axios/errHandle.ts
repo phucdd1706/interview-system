@@ -17,6 +17,7 @@ const errorCode = {
   415: 'Unsupported Media Type',
   416: 'Range Not Satisfiable',
   417: 'Expectation Failed',
+  422: 'Unprocessable Entity',
   429: 'Too Many Requests',
   444: 'Connection Closed Without Response',
   500: 'Internal Server Error',
@@ -27,7 +28,7 @@ type ErrorCode = keyof typeof errorCode;
 
 export const getSeverityType = (errStatus: number): 'error' | 'warning' => {
   if (errStatus === 401) {
-    return 'warning';
+    return 'error';
   }
   return 'error';
 };
@@ -36,7 +37,10 @@ export const getErrMessage = (errResponse: any): string => {
   if (errResponse.status === 404) {
     return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText}: Could not find the resource`;
   }
+  if (errResponse.status === 401) {
+    return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errorCode[401]}: Username or password is incorrect`;
+  }
   return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText} ${
-    errResponse.data ? `: ${errResponse.data}` : ''
+    errResponse.data && errResponse.data.message ? `: ${errResponse.data.message}` : ''
   }`;
 };
