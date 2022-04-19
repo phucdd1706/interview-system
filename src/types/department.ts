@@ -21,11 +21,6 @@ export type DepartmentFilter = {
   limit?: number;
 };
 
-export type SortStatusProps = {
-  value?: any;
-  label: string;
-};
-
 export type Department = {
   id?: string;
   name?: string;

@@ -140,6 +140,7 @@ const Departments = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
+  console.log(657575, departmentState.pageCount);
 
   return (
     <MainCard
@@ -200,7 +201,7 @@ const Departments = () => {
                           sx={{ p: 1.5 }}
                           key={index}
                           selected={status.value === filter.status}
-                          onClick={(event) => handleMenuItemClick(event, status.value || '')}
+                          onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
                         </MenuItem>
