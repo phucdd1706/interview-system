@@ -2,7 +2,6 @@
 import { Box, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Stack, useMediaQuery, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 const InterviewerResult = () => {
@@ -20,9 +19,7 @@ const InterviewerResult = () => {
           level: '',
           notes: ''
         }}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          console.log('values', values);
-        }}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {}}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>

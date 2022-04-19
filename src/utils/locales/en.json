@@ -1,6 +1,8 @@
 {
   "dashboard": "Dashboard",
   "history": "History",
+  "complete": "Complete",
+  "inProgress": "InProgress",
   "add new applicant reference": "Add New Applicant Reference",
   "analytics": "Analytics",
   "application": "Application",
@@ -14,6 +16,6 @@
   "interview questions": "Interview Questions",
   "reference results": "Reference Results",
   "interviewer results": "Interviewer Results",
-  "interview": "Interview",
-  "applicant information": "Applicant Information"
+  "applicant information": "Applicant Information",
+  "department": "Department"
 }
