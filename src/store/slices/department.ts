@@ -16,10 +16,10 @@ export const DEPARTMENT_URL = {
 };
 
 const initialState: DefaultRootStateProps['department'] = {
-  error: null,
   pageCount: 0,
   currentPage: 1,
-  department: []
+  department: [],
+  error: []
 };
 
 const slice = createSlice({

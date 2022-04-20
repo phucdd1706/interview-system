@@ -1,5 +1,6 @@
 // THIRD-PARTY
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { ErrorResponse } from 'types/error-response.type';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TOKEN =
@@ -13,6 +14,7 @@ axiosServices.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
 );
+
 export default axiosServices;
 export const userRequest = axios.create({
   baseURL: BASE_URL,

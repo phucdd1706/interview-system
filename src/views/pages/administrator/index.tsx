@@ -115,6 +115,7 @@ const Administrators = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
+  console.log(1123, administratorState.pageCount);
 
   return (
     <MainCard
@@ -230,12 +231,7 @@ const Administrators = () => {
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination
-              count={administratorState.pageCount}
-              page={administratorState.currentPage}
-              onChange={handleChange}
-              color="primary"
-            />
+            <Pagination count={1} page={administratorState.currentPage} onChange={handleChange} color="primary" />
           </Grid>
         </Grid>
       </Grid>
