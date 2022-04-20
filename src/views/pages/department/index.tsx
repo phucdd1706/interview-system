@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import {
-  Alert,
   Button,
   Fab,
   Grid,
@@ -35,15 +34,6 @@ import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
 import DepartmentList from 'views/pages/department/DepartmentList';
 import AddDepartment from 'views/pages/department/AddDepartment';
-import axios from 'axios';
-
-interface DataError {
-  error: {
-    errors: string[];
-    message: string;
-  };
-  message: string;
-}
 
 const SortStatus: SelectProps[] = [
   {
@@ -111,20 +101,7 @@ const Departments = () => {
   };
 
   useEffect(() => {
-    try {
-      setData(departmentState.department);
-    } catch (error) {
-      if (error && axios.isAxiosError(error)) {
-        if (error.response) {
-          const datas: DataError = error.response.data;
-          (Notification as any).error({ message: datas.error.message });
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-      }
-    }
+    setData(departmentState.department);
   }, [departmentState]);
 
   useEffect(() => {
@@ -140,7 +117,6 @@ const Departments = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-  console.log(657575, departmentState.pageCount);
 
   return (
     <MainCard

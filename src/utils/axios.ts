@@ -15,15 +15,6 @@ axiosServices.interceptors.response.use(
   (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
 );
 
-axios.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError<ErrorResponse>) => {
-    console.error(error);
-    error.message = error.response?.data.error?.message || 'Lỗi không xác định';
-    return Promise.reject(error);
-  }
-);
-
 export default axiosServices;
 export const userRequest = axios.create({
   baseURL: BASE_URL,
