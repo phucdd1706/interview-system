@@ -59,6 +59,7 @@ const validationSchema = Yup.object({
   code: Yup.string().required('Code is required'),
   status: Yup.string().required('Status is required')
 });
+
 const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentProps) => {
   const formik = useFormik({
     initialValues: {
@@ -68,8 +69,8 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
       status: department.status
     },
     validationSchema,
-    onSubmit: (values) => {
-      dispatch(putDepartment(values));
+    onSubmit: async (values) => {
+      await dispatch(putDepartment(values));
       dispatch(
         openSnackbar({
           open: true,

@@ -24,8 +24,6 @@ export interface NavGroupProps {
 const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  console.log(user);
-  // menu list collapse & items
   const items = item.children?.map((menu) => {
     console.log(menu);
     switch (menu.type) {

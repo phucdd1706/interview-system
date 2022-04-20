@@ -1,6 +1,7 @@
 // THIRD-PARTY
-import axios from 'axios';
 import { alertRequestError } from './helpers/axios/errorAlert';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { ErrorResponse } from 'types/error-response.type';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TOKEN =
@@ -12,17 +13,12 @@ const axiosServices = axios.create({
 // interceptor for http
 axiosServices.interceptors.response.use(
   (response) => response,
-  (error) => {
-    console.log(error);
-    if (error.response) {
-      console.log(error.response);
-    } else {
-      console.log('no response: ', error.message);
-    }
+  (error: AxiosError) => {
     alertRequestError(error);
     return Promise.reject((error.response && error.response.data) || 'Wrong Services');
   }
 );
+
 export default axiosServices;
 export const userRequest = axios.create({
   baseURL: BASE_URL,

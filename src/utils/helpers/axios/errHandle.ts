@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 const errorCode = {
   400: 'Bad Request',
   401: 'Unauthorized',
@@ -33,7 +35,7 @@ export const getSeverityType = (errStatus: number | undefined): 'error' | 'warni
   return 'error';
 };
 
-export const getErrMessage = (errResponse: any): string => {
+export const getErrMessage = (errResponse: AxiosResponse<{ message: string; errors: any }>): string => {
   if (errResponse.status === 404) {
     return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText}: Could not find the resource`;
   }
