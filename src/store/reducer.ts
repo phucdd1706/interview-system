@@ -12,6 +12,7 @@ import inProgressReducer from 'store/slices/inProgress';
 import customerReducer from './slices/customer';
 import applicantReferences from 'store/slices/applicant/applicantReferences';
 import rankReducer from 'store/slices/rank';
+import languageReducer from 'store/slices/language';
 import departmentReducer from 'store/slices/department';
 
 const reducer = combineReducers({
@@ -31,7 +32,8 @@ const reducer = combineReducers({
   department: departmentReducer,
   applicant: applicantReferences,
   customer: customerReducer,
-  rank: rankReducer
+  rank: rankReducer,
+  language: languageReducer
 });
 
 export default reducer;

@@ -26,7 +26,7 @@ const errorCode = {
 
 type ErrorCode = keyof typeof errorCode;
 
-export const getSeverityType = (errStatus: number): 'error' | 'warning' => {
+export const getSeverityType = (errStatus: number | undefined): 'error' | 'warning' => {
   if (errStatus === 401) {
     return 'error';
   }
@@ -40,7 +40,10 @@ export const getErrMessage = (errResponse: any): string => {
   if (errResponse.status === 401) {
     return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errorCode[401]}: Username or password is incorrect`;
   }
-  return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText} ${
-    errResponse.data && errResponse.data.message ? `: ${errResponse.data.message}` : ''
-  }`;
+  if (errResponse) {
+    return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText} ${
+      errResponse.data && errResponse.data.message ? `: ${errResponse.data.message}` : ''
+    }`;
+  }
+  return '2';
 };

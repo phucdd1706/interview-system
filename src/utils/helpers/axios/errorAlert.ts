@@ -3,8 +3,10 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { getSeverityType, getErrMessage } from './errHandle';
 
 export const alertRequestError = (errResponse: any): void => {
-  const severityType = getSeverityType(errResponse.status);
-  const message = getErrMessage(errResponse);
+  console.log('err: ', errResponse.toJSON());
+  const severityType = (errResponse.response && getSeverityType(errResponse.response.status)) || 'error';
+  const message = (errResponse.response && getErrMessage(errResponse.response)) || errResponse.message;
+  console.log('message: ', getErrMessage(errResponse));
   dispatch(
     openSnackbar({
       open: true,

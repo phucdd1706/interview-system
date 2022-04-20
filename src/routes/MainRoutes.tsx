@@ -9,6 +9,7 @@ import AuthGuard from 'utils/route-guard/AuthGuard';
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
 const Inprogress = Loadable(lazy(() => import('views/pages/inProgress/index')));
+const Language = Loadable(lazy(() => import('views/pages/language/index')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
 const Department = Loadable(lazy(() => import('views/pages/department')));
@@ -40,6 +41,10 @@ const MainRoutes = {
     {
       path: '/inprogress',
       element: <Inprogress />
+    },
+    {
+      path: '/language',
+      element: <Language />
     },
     {
       path: '/user/administrator',
