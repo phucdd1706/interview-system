@@ -87,7 +87,7 @@ const validationSchema = yup.object({
 });
 
 const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
-  //use formik
+  // //use formik
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
