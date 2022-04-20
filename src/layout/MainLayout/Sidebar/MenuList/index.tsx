@@ -8,7 +8,6 @@ import menuItem from 'menu-items';
 
 const MenuList = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  console.log(user);
   const navItems = menuItem.items.map((item) => {
     switch (item.type) {
       case 'group':
