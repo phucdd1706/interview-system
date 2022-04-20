@@ -5,6 +5,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
+import { filterAuthorization } from 'menu-items/application';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
@@ -76,5 +77,9 @@ const MainRoutes = {
     }
   ]
 };
+
+filterAuthorization.forEach((item: string) => {
+  MainRoutes.children = MainRoutes.children.filter((child) => child.path !== item);
+});
 
 export default MainRoutes;
