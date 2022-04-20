@@ -112,6 +112,10 @@ const Index = () => {
     setVisibleAdd(!visibleAdd);
   };
 
+  const handleVisibleAdd = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
   const renderSearchForm = () => (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
@@ -208,7 +212,7 @@ const Index = () => {
           </Grid>
         </Grid>
       </MainCard>
-      <AddInProgress visible={visibleAdd} dataEdit={{}} />
+      <AddInProgress visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleAdd} />
     </>
   );
 };

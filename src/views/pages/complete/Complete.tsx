@@ -105,6 +105,10 @@ const Complete = (props: any) => {
     </>
   );
 
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
   const renderMenuButton = () => (
     <>
       <ButtonBase
@@ -185,7 +189,7 @@ const Complete = (props: any) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={complete?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddComplete visible={visibleAdd} dataEdit={complete} />
+      <AddComplete visible={visibleAdd} dataEdit={complete} handleVisibleModal={handleVisibleModal} />
     </>
   );
 };

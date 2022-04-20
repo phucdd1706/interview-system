@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Button,
   TextField,
   Grid,
   InputAdornment,
@@ -13,14 +12,11 @@ import {
   TableRow,
   TableContainer,
   TableHead,
-  Menu,
-  MenuItem,
   Pagination,
   Stack,
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
 
 // PROJECT IMPORTS
