@@ -31,12 +31,12 @@ const NavGroup = ({ item }: NavGroupProps) => {
         if (menu.role === user.type) {
           return <NavCollapse key={menu.id} menu={menu} level={1} />;
         }
-        return <></>;
+        return null;
       case 'item':
         if (menu.role === user.type) {
           return <NavItem key={menu.id} item={menu} level={1} />;
         }
-        return <></>;
+        return null;
 
       default:
         return (
