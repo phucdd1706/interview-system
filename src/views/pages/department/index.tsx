@@ -103,6 +103,7 @@ const Departments = () => {
   useEffect(() => {
     setData(departmentState.department);
   }, [departmentState]);
+  console.log(22222, data);
 
   useEffect(() => {
     filterData();
@@ -211,10 +212,11 @@ const Departments = () => {
               <TableCell sx={{ pl: 3 }} style={{ width: '70px' }}>
                 #
               </TableCell>
-              <TableCell style={{ width: '120px' }}>Name</TableCell>
-              <TableCell style={{ width: '100px' }}>Code</TableCell>
-              <TableCell style={{ width: '120px' }}>Status</TableCell>
-              <TableCell sx={{ pr: 3 }} style={{ width: '80px' }}>
+              <TableCell style={{ width: '180px' }}>Name</TableCell>
+              <TableCell style={{ width: '180px' }}>Code</TableCell>
+              <TableCell style={{ width: '180px' }}>Create At</TableCell>
+              <TableCell style={{ width: '170px' }}>Status</TableCell>
+              <TableCell sx={{ pr: 3 }} style={{ width: '10px' }}>
                 Actions
               </TableCell>
             </TableRow>
