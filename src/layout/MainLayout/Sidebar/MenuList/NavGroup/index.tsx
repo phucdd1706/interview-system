@@ -12,6 +12,7 @@ export interface NavGroupProps {
   item: {
     id?: string;
     type?: string;
+    role?: number;
     icon?: GenericCardProps['iconPrimary'];
     children?: NavGroupProps['item'][];
     title?: ReactNode | string;
@@ -22,14 +23,20 @@ export interface NavGroupProps {
 
 const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
-
-  // menu list collapse & items
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const items = item.children?.map((menu) => {
     switch (menu.type) {
       case 'collapse':
-        return <NavCollapse key={menu.id} menu={menu} level={1} />;
+        if (menu.role === user.type) {
+          return <NavCollapse key={menu.id} menu={menu} level={1} />;
+        }
+        return <></>;
       case 'item':
-        return <NavItem key={menu.id} item={menu} level={1} />;
+        if (menu.role === user.type) {
+          return <NavItem key={menu.id} item={menu} level={1} />;
+        }
+        return <></>;
+
       default:
         return (
           <Typography key={menu.id} variant="h6" color="error" align="center">

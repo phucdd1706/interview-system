@@ -14,6 +14,7 @@ import applicantReferences from 'store/slices/applicantReferences';
 import rankReducer from 'store/slices/rank';
 import profileReducer from 'store/slices/profile';
 import notificationReducer from 'store/slices/notification';
+import languageReducer from 'store/slices/language';
 import departmentReducer from 'store/slices/department';
 
 const reducer = combineReducers({
@@ -35,7 +36,8 @@ const reducer = combineReducers({
   customer: customerReducer,
   rank: rankReducer,
   profile: profileReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
+  language: languageReducer
 });
 
 export default reducer;

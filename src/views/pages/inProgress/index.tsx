@@ -1,7 +1,6 @@
 // THIRD-PARTY
 import React, { useState, useEffect } from 'react';
 import {
-  Button,
   TextField,
   Grid,
   InputAdornment,
@@ -14,28 +13,24 @@ import {
   TableHead,
   Fab,
   Tooltip,
-  Menu,
-  MenuItem,
   Pagination,
   Stack,
   useMediaQuery
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import { useTheme } from '@mui/material/styles';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import { RootState, useDispatch, useSelector } from 'store/index';
 import { Candidates, SearchValues } from 'types/inProgress';
-import { RankType, RankFilter } from 'types/rank';
 import { fetchCandidates } from 'store/slices/inProgress';
-import SortStatus from 'views/pages/inProgress/SortStatus';
 import InProgress from 'views/pages/inProgress/InProgress';
 import { gridSpacing } from '../../../store/constant';
 import AddInProgress from 'views/pages/inProgress/AddInProgress';
-import { getRanksList } from 'store/slices/rank';
+import RankFilters from 'components/Common/RankFilters';
+import StatusFilters from 'components/Common/StatusFilters';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -52,9 +47,6 @@ const Index = () => {
   const [anchorElSort, setAnchorElSort] = useState(null);
   const [anchorElRank, setAnchorElRank] = useState(null);
 
-  const [dataRank, setDataRank] = useState<RankType[]>([]);
-  const rankState = useSelector((state: RootState) => state.rank);
-
   const initialState: SearchValues = {
     search: '',
     rank: '',
@@ -62,27 +54,15 @@ const Index = () => {
     currentPage: 1,
     limit: 20
   };
-  const initialRankState: RankFilter = {
-    search: '',
-    status: '1',
-    currentPage: 1
-  };
 
   const [filters, setFilters] = useState(initialState);
-  const openSort = Boolean(anchorElSort);
-  const openRank = Boolean(anchorElRank);
 
   useEffect(() => {
     setCandidate(inProgressState.inProgress);
   }, [inProgressState]);
 
   useEffect(() => {
-    setDataRank(rankState.ranks);
-  }, [rankState]);
-
-  useEffect(() => {
     getList();
-    dispatch(getRanksList(initialRankState));
   }, []);
 
   useEffect(() => {
@@ -97,7 +77,7 @@ const Index = () => {
     dispatch(fetchCandidates({ params: filters, token }));
   };
 
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+  const handleSortClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setFilters({ ...filters, status: index });
     setAnchorElSort(null);
   };
@@ -132,161 +112,87 @@ const Index = () => {
     setVisibleAdd(!visibleAdd);
   };
 
-  const renderSearchForm = () => {
-    const sortLabel = SortStatus.filter((items) => items.value === filters.status);
-    const rankLabel = dataRank.filter((items) => items.id === filters.rank);
-
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
-            <Grid item>
-              <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
-                <TextField
-                  sx={{ width: { xs: 140, md: 'auto' } }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    )
-                  }}
-                  value={filters.search}
-                  placeholder="Search...."
-                  size="small"
-                  onChange={handleSearch}
-                />
-
-                <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
-                  |
-                </Typography>
-
-                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <Typography variant="h5">Sort by rank: </Typography>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={openRank ? 'true' : undefined}
-                    onClick={handleRank}
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  >
-                    {rankLabel.length > 0 && rankLabel[0].name}
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorElRank}
-                    open={openRank}
-                    onClose={handleCloseRank}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right'
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right'
-                    }}
-                  >
-                    {dataRank?.map((item, index) => (
-                      <MenuItem
-                        sx={{ p: 1.5 }}
-                        key={index}
-                        selected={item.id === filters.rank}
-                        onClick={(event) => handleRankClick(event, item.id)}
-                      >
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Stack>
-
-                <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
-                  |
-                </Typography>
-
-                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <Typography variant="h5">Sort by: </Typography>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={openSort ? 'true' : undefined}
-                    onClick={handleSort}
-                    sx={{ color: 'grey.500', fontWeight: 400 }}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  >
-                    {sortLabel.length > 0 && sortLabel[0].label}
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorElSort}
-                    open={openSort}
-                    onClose={handleCloseSort}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right'
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right'
-                    }}
-                  >
-                    {SortStatus.map((status, index) => (
-                      <MenuItem
-                        sx={{ p: 1.5 }}
-                        key={index}
-                        selected={status.value === filters.status}
-                        onClick={(event) => handleMenuItemClick(event, status.value)}
-                      >
-                        {status.label}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Stack>
-              </Stack>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
-          <Tooltip title="Add">
-            <Fab
-              color="primary"
-              size="small"
-              onClick={addInProgress}
-              sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}
-            >
-              <AddIcon fontSize="small" />
-            </Fab>
-          </Tooltip>
-        </Grid>
-      </Grid>
-    );
+  const handleVisibleAdd = () => {
+    setVisibleAdd((prevState) => !prevState);
   };
 
+  const renderSearchForm = () => (
+    <Grid container spacing={2}>
+      <Grid item xs={12} sm={6}>
+        <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
+          <Grid item>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+              <TextField
+                sx={{ width: { xs: 140, md: 'auto' } }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  )
+                }}
+                value={filters.search}
+                placeholder="Search...."
+                size="small"
+                onChange={handleSearch}
+              />
+
+              <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
+
+              <RankFilters
+                filters={filters}
+                anchorElRank={anchorElRank}
+                handleRank={handleRank}
+                handleCloseRank={handleCloseRank}
+                handleRankClick={handleRankClick}
+              />
+
+              <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
+
+              <StatusFilters
+                filters={filters}
+                anchorElSort={anchorElSort}
+                handleSort={handleSort}
+                handleCloseSort={handleCloseSort}
+                handleSortClick={handleSortClick}
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+        <Tooltip title="Add">
+          <Fab color="primary" size="small" onClick={addInProgress} sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}>
+            <AddIcon fontSize="small" />
+          </Fab>
+        </Tooltip>
+      </Grid>
+    </Grid>
+  );
+
   const handleTableChange = (e: any, pageTable: number) => {
-    console.log('pageTable', pageTable);
+    setFilters({ ...filters, currentPage: pageTable! });
   };
 
   return (
     <>
       <MainCard title={renderSearchForm()}>
         <TableContainer>
-          <Table aria-label="simple table">
+          <Table>
             <TableHead>
               <TableRow>
-                <TableCell>#</TableCell>
+                <TableCell sx={{ pr: 3 }}>#</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Mobile</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="center" sx={{ pr: 3 }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
               {candidate?.map((row) => (
                 <InProgress key={row?.id} inProgress={row} />
               ))}
@@ -296,12 +202,17 @@ const Index = () => {
         <Grid item xs={12} sx={{ p: 3 }}>
           <Grid container justifyContent="space-between" spacing={gridSpacing}>
             <Grid item>
-              <Pagination count={10} color="primary" onChange={handleTableChange} />
+              <Pagination
+                count={inProgressState.pageCount}
+                page={inProgressState.currentPage}
+                color="primary"
+                onChange={handleTableChange}
+              />
             </Grid>
           </Grid>
         </Grid>
       </MainCard>
-      <AddInProgress visible={visibleAdd} dataEdit={{}} />
+      <AddInProgress visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleAdd} />
     </>
   );
 };

@@ -14,6 +14,7 @@ import { NotificationStateProps } from 'types/notification';
 import { DepartmentStateProps } from './department';
 import { CompleteStateProps } from './complete';
 import { InProgressStateProps } from './inProgress';
+import { LanguageStateProps } from './language';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
@@ -25,6 +26,7 @@ export interface DefaultRootStateProps {
   department: DepartmentStateProps;
   complete: CompleteStateProps;
   inProgress: InProgressStateProps;
+  language: LanguageStateProps;
 }
 
 export interface ColorProps {
@@ -46,6 +48,7 @@ export type NavItemType = {
   external?: string;
   url?: string | undefined;
   type?: string;
+  role?: number;
   title?: React.ReactNode | string;
   color?: 'primary' | 'secondary' | 'default' | undefined;
   caption?: React.ReactNode | string;

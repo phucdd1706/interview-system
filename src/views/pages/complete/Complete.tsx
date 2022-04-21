@@ -1,6 +1,6 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
-import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem } from '@mui/material';
+import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stack, Link, Typography } from '@mui/material';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
@@ -8,7 +8,7 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 // PROJECT IMPORTS
 import { removeCandidate } from 'store/slices/complete';
 import AddComplete from 'views/pages/complete/AddComplete';
-import AlertCompleteDelete from 'views/pages/complete/AlertCompleteDelete';
+import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
 import { dispatch } from 'store';
 
@@ -105,6 +105,10 @@ const Complete = (props: any) => {
     </>
   );
 
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
   const renderMenuButton = () => (
     <>
       <ButtonBase
@@ -156,17 +160,36 @@ const Complete = (props: any) => {
 
   return (
     <>
-      <TableRow hover>
-        <TableCell>{complete?.id}</TableCell>
-        <TableCell>{complete?.name}</TableCell>
+      <TableRow hover key={complete?.id}>
+        <TableCell sx={{ width: 110, minWidth: 110 }}>
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Typography variant="body2">{complete.id}</Typography>
+          </Stack>
+        </TableCell>
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+          <Link
+            underline="hover"
+            color="default"
+            sx={{
+              overflow: 'hidden',
+              display: 'block',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              ':hover': { color: 'primary.main' },
+              cursor: 'pointer'
+            }}
+          >
+            {complete.name}
+          </Link>
+        </TableCell>
         <TableCell>{complete?.phone}</TableCell>
         <TableCell>{complete?.email}</TableCell>
         <TableCell>{moment(complete.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(complete?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
-        {openModal && <AlertCompleteDelete name={complete?.name} open={openModal} handleClose={handleRemove} />}
+        {openModal && <AlertDelete name={complete?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddComplete visible={visibleAdd} dataEdit={complete} />{' '}
+      <AddComplete visible={visibleAdd} dataEdit={complete} handleVisibleModal={handleVisibleModal} />
     </>
   );
 };
