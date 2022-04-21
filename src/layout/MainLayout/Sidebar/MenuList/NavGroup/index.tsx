@@ -25,7 +25,6 @@ const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const items = item.children?.map((menu) => {
-    console.log(menu);
     switch (menu.type) {
       case 'collapse':
         if (menu.role === user.type) {

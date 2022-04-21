@@ -45,12 +45,14 @@ const application = {
           id: 'complete',
           title: <FormattedMessage id="complete" />,
           type: 'item',
+          role: 1,
           url: '/complete'
         },
         {
           id: 'inprogress',
           title: <FormattedMessage id="inProgress" />,
           type: 'item',
+          role: 1,
           url: '/inprogress'
         }
       ]

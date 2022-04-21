@@ -257,7 +257,7 @@ const ApplicantForm = () => {
                   size="large"
                   type="submit"
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                   sx={{ marginTop: 4 }}
                 >
                   Get Interview Question

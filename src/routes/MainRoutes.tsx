@@ -6,6 +6,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
 import { filterAuthorization } from 'menu-items/application';
+import PageNotFound from 'views/pages/404';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Complete = Loadable(lazy(() => import('views/pages/complete/index')));

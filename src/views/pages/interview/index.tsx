@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'store';
 import { getReferenceEvaluateThunk, applicantReferenceInit } from 'store/slices/applicant/applicantAsyncAction';
 import { ApplicantDataInterface } from 'types/applicantData';
 import { useParams } from 'react-router-dom';
+import Loading from './loading';
 
 const InterviewPage = () => {
   const applicantReferences: ApplicantDataInterface = useSelector((state) => state.applicant);
@@ -23,7 +24,7 @@ const InterviewPage = () => {
 
   useEffect(() => {
     applicantId && dispatch(applicantReferenceInit(applicantId));
-  }, [dispatch]);
+  }, [dispatch, applicantId]);
 
   const getReferenceEvaluate = async () => {
     dispatch(getReferenceEvaluateThunk(applicantReferences));
@@ -31,10 +32,10 @@ const InterviewPage = () => {
   return (
     <Stack direction="column" spacing={2}>
       <MainCard title={intl.formatMessage({ id: 'applicant information' })}>
-        <ApplicantInformation applicantInfo={applicantReferences.applicantInfo} />
+        {applicantReferences.applicantInfo.id ? <ApplicantInformation applicantInfo={applicantReferences.applicantInfo} /> : <Loading />}
       </MainCard>
       <MainCard title={intl.formatMessage({ id: 'interview questions' })}>
-        {applicantReferences.interviewQuestions.length > 0 && (
+        {applicantReferences.interviewQuestions.length > 0 ? (
           <>
             <InterviewQuestions interviewQuestions={applicantReferences.interviewQuestions} />
             <Box margin="2em 0">
@@ -49,13 +50,15 @@ const InterviewPage = () => {
                   size="large"
                   type="submit"
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                 >
                   Send Interview Result
                 </Button>
               </AnimateButton>
             </Box>
           </>
+        ) : (
+          <Loading />
         )}
       </MainCard>
       {applicantReferences.referenceEvaluate && (

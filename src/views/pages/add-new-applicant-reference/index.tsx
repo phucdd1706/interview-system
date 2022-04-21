@@ -56,7 +56,7 @@ const AddApplicantReference = () => {
                 size="large"
                 type="submit"
                 variant="contained"
-                color="secondary"
+                color="primary"
               >
                 Submit
               </Button>
