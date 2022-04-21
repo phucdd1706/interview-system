@@ -15,6 +15,7 @@ const Customer = Loadable(lazy(() => import('views/pages/customer')));
 const Department = Loadable(lazy(() => import('views/pages/department')));
 const Profile = Loadable(lazy(() => import('views/pages/account')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
+const Question = Loadable(lazy(() => import('views/pages/questions')));
 const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
 const Interview = Loadable(lazy(() => import('views/pages/interview')));
 
@@ -59,8 +60,12 @@ const MainRoutes = {
       element: <Department />
     },
     {
-      path: 'ranks',
+      path: '/ranks',
       element: <Ranks />
+    },
+    {
+      path: '/questions',
+      element: <Question />
     },
     {
       path: '/user/profile',
