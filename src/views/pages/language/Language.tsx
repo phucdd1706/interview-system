@@ -17,7 +17,7 @@ const Language = (props: any) => {
   const theme = useTheme();
   const token = localStorage.getItem('serviceToken');
 
-  const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleAdd, setVisibleAdd] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
@@ -68,6 +68,10 @@ const Language = (props: any) => {
         })
       );
     }
+  };
+
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
   };
 
   const renderMenuButton = () => (
@@ -162,7 +166,7 @@ const Language = (props: any) => {
             <Typography variant="body2">{language.id}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -184,7 +188,7 @@ const Language = (props: any) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddLanguage visible={visibleAdd} dataEdit={language} />
+      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} />
     </>
   );
 };

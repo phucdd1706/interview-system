@@ -119,6 +119,10 @@ const InProgress = (props: any) => {
     </>
   );
 
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
   const renderStatus = (status: number) => (
     <>
       {status === 0 && (
@@ -157,7 +161,7 @@ const InProgress = (props: any) => {
   return (
     <>
       <TableRow hover key={inProgress?.id}>
-        <TableCell>
+        <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{inProgress.id}</Typography>
           </Stack>
@@ -185,7 +189,7 @@ const InProgress = (props: any) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={inProgress?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddInProgress visible={visibleAdd} dataEdit={inProgress} />
+      <AddInProgress visible={visibleAdd} dataEdit={inProgress} handleVisibleModal={handleVisibleModal} />
     </>
   );
 };

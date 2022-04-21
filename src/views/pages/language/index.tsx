@@ -79,6 +79,10 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
+  const handleTableChange = (e: any, pageTable: number) => {
+    setFilters({ ...filters, currentPage: pageTable! });
+  };
+
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilters({ ...filters, search: newString! });
@@ -94,6 +98,10 @@ const Index = () => {
 
   const addInProgress = () => {
     setVisibleAdd(!visibleAdd);
+  };
+
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
   };
 
   const renderSearchForm = () => (
@@ -140,10 +148,6 @@ const Index = () => {
     </Grid>
   );
 
-  const handleTableChange = (e: any, pageTable: number) => {
-    setFilters({ ...filters, currentPage: pageTable! });
-  };
-
   return (
     <>
       <MainCard title={renderSearchForm()} content={false}>
@@ -176,7 +180,7 @@ const Index = () => {
           </Grid>
         </Grid>
       </MainCard>
-      <AddLanguage visible={visibleAdd} dataEdit={{}} />
+      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} />
     </>
   );
 };
