@@ -27,15 +27,15 @@ const NavGroup = ({ item }: NavGroupProps) => {
   const items = item.children?.map((menu) => {
     switch (menu.type) {
       case 'collapse':
-        if (menu.role === user.type) {
+        if (menu.role === user.type || !menu.role) {
           return <NavCollapse key={menu.id} menu={menu} level={1} />;
         }
-        return <></>;
+        return null;
       case 'item':
-        if (menu.role === user.type) {
+        if (menu.role === user.type || !menu.role) {
           return <NavItem key={menu.id} item={menu} level={1} />;
         }
-        return <></>;
+        return null;
 
       default:
         return (

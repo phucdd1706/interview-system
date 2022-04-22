@@ -68,7 +68,7 @@ const InterviewerResult = () => {
             </Stack>
             <Box sx={{ marginTop: 3 }}>
               <AnimateButton>
-                <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
                   Submit
                 </Button>
               </AnimateButton>
