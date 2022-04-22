@@ -1,5 +1,9 @@
 // PROJECT IMPORTS
 
+import { Department } from './department';
+import { Languages } from './language';
+import { RankType } from './rank';
+
 export interface QuestionStateProps {
   questions: QuestionType[];
   pageCount: number;
@@ -9,7 +13,11 @@ export interface QuestionStateProps {
 
 export type QuestionFilter = {
   search?: string;
-  status?: string;
+  rank_id?: number | string;
+  department_id?: number | string;
+  language_id?: number | string;
+  type?: number | string;
+  status?: number | string;
   currentPage?: number;
 };
 
@@ -20,12 +28,15 @@ export type SortStatusProps = {
 
 export type QuestionType = {
   id?: number;
-  rankId?: number | string;
-  departmentId?: number | string;
-  languageId?: number | string;
-  questionContent?: string;
-  type?: number;
-  status?: number;
+  rank_id?: number | string;
+  department_id?: number | string;
+  language_id?: number | string;
+  question_content?: string;
+  type?: number | string;
+  status?: number | string;
+  language?: Languages;
+  rank?: RankType;
+  department?: Department;
 };
 
 export type SelectProps = {

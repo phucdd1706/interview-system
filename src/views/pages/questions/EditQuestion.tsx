@@ -1,4 +1,7 @@
 // THIRD-PARTY
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {
   Box,
   Button,
@@ -16,30 +19,28 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
-import { PostQuestion } from 'store/slices/question';
-import { SelectProps } from 'types/question';
+import { dispatch, useSelector } from 'store';
+import { QuestionType, SelectProps } from 'types/question';
+
 import { openSnackbar } from 'store/slices/snackbar';
-import { useDispatch, useSelector } from 'store';
-import { getRanksList } from 'store/slices/rank';
+import { PutQuestion } from 'store/slices/question';
+import React, { useEffect, useState } from 'react';
 import { Department, DepartmentFilter } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
 import { RankFilter, RankType } from 'types/rank';
+import { getRanksList } from 'store/slices/rank';
 import { Languages, SearchValues } from 'types/language';
 import { fetchLanguages } from 'store/slices/language';
 
-interface AddQuestionProps {
+interface EditQuestionProps {
+  question: QuestionType;
   open: boolean;
   handleDrawerOpen: () => void;
 }
-
 const Type: SelectProps[] = [
   {
     value: 0,
@@ -50,17 +51,27 @@ const Type: SelectProps[] = [
     label: 'Advanced'
   }
 ];
+const Status: SelectProps[] = [
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  }
+];
 
 const validationSchema = Yup.object({
   rank_id: Yup.string().required('Rank is required'),
   department_id: Yup.string().required('Department is required'),
   language_id: Yup.string().required('Language is required'),
   question_content: Yup.string().required('Question content is required'),
-  type: Yup.string().required('Question type is required')
+  type: Yup.string().required('Question type is required'),
+  status: Yup.string().required('Question status is required')
 });
 
-const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
-  const dispatch = useDispatch();
+const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) => {
   // department
   const [department, setDepartment] = React.useState<Department[]>([]);
   const initialState: DepartmentFilter = {
@@ -123,24 +134,24 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
     filterDataLanguage();
   }, [filterLanguage]);
   // Language
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      rank_id: '',
-      department_id: '',
-      language_id: '',
-      question_content: '',
-      type: '',
-      status: 1
+      id: question.id,
+      rank_id: question.rank_id,
+      department_id: question.department_id,
+      language_id: question.language_id,
+      question_content: question.question_content,
+      type: question.type,
+      status: question.status
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PostQuestion(values));
+      dispatch(PutQuestion(values));
       dispatch(
         openSnackbar({
           open: true,
-          message: 'Submit Success',
+          message: 'Updated successfully!',
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
           variant: 'alert',
           alert: {
@@ -150,7 +161,6 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
         })
       );
       handleDrawerOpen();
-      formik.resetForm();
     }
   });
 
@@ -198,7 +208,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    Add Question
+                    {`Edit "${question.id}"`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -302,6 +312,26 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel>Status</InputLabel>
+                      <Select
+                        id="status"
+                        name="status"
+                        label="Status"
+                        displayEmpty
+                        value={formik.values.status}
+                        onChange={formik.handleChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                      >
+                        {Status.map((status: SelectProps, index: number) => (
+                          <MenuItem key={index} value={status.value}>
+                            {status.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
                     <AnimateButton>
                       <Button fullWidth variant="contained" type="submit">
                         Save
@@ -318,4 +348,4 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   );
 };
 
-export default AddQuestion;
+export default EditQuestion;

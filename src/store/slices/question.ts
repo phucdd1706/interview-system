@@ -37,16 +37,12 @@ const slice = createSlice({
       state.questions = state.questions.filter((question) => question.id !== action.payload.id);
     },
     putQuestionSuccess(state, action) {
-      if (action.payload.type === 1) {
-        state.questions = state.questions.filter((question) => question.id !== action.payload.id);
-      } else {
-        state.questions = state.questions.map((question) => {
-          if (question.id === action.payload.id) {
-            return action.payload;
-          }
-          return question;
-        });
-      }
+      state.questions = state.questions.map((question) => {
+        if (question.id === action.payload.id) {
+          return action.payload;
+        }
+        return question;
+      });
     }
   }
 });
@@ -56,6 +52,10 @@ export default slice.reducer;
 export function getQuestionsList(filter?: QuestionFilter) {
   const queryParams = `${
     (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+    // (filter?.type !== '' ? `&type=${filter?.type}` : '')
+    // (filter?.language_id?.name !== '' ? `&language_id=${filter?.language_id?.name}` : '') +
+    // (filter?.rank_id?.name !== '' ? `&rank_id=${filter?.rank_id?.name}` : '') +
+    // (filter?.department_id?.name !== '' ? `&department_id=${filter?.department_id?.name}` : '')
   }&page=${filter?.currentPage}`;
   return async () => {
     try {
@@ -78,24 +78,24 @@ export function PostQuestion(question: QuestionType) {
   };
 }
 
-// export function DeleteRank(rank: RankType) {
-//   return async () => {
-//     try {
-//       const response = await axios.delete(`${RANKS_URL}/${rank.id}`);
-//       dispatch(slice.actions.deleteRankSuccess(response.data.success));
-//     } catch (error) {
-//       dispatch(slice.actions.hasError(error));
-//     }
-//   };
-// }
+export function DeleteQuestion(question: QuestionType) {
+  return async () => {
+    try {
+      const response = await axios.delete(`${QUESTIONS_URL}/${question.id}`);
+      dispatch(slice.actions.deleteQuestionSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
 
-// export function PutRank(rank: RankType) {
-//   return async () => {
-//     try {
-//       const response = await axios.put(`${RANKS_URL}/${rank.id}`, rank);
-//       dispatch(slice.actions.putRankSuccess(response.data.success));
-//     } catch (error) {
-//       dispatch(slice.actions.hasError(error));
-//     }
-//   };
-// }
+export function PutQuestion(question: QuestionType) {
+  return async () => {
+    try {
+      const response = await axios.put(`${QUESTIONS_URL}/${question.id}`, question);
+      dispatch(slice.actions.putQuestionSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

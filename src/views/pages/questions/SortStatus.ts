@@ -1,5 +1,5 @@
 // PROJECT IMPORTS
-import { SortStatusProps } from 'types/rank';
+import { SortStatusProps } from 'types/question';
 
 const SortStatus: SortStatusProps[] = [
   {

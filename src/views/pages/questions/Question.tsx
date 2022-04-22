@@ -7,6 +7,9 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { QuestionType } from 'types/question';
+import { DeleteQuestion } from 'store/slices/question';
+import AlertQuestionDelete from './AlertQuestionDelete';
+import EditQuestion from './EditQuestion';
 
 interface Props {
   question: QuestionType;
@@ -33,24 +36,24 @@ const Question = ({ question, index }: Props) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-  // const handleModalClose = (status: boolean) => {
-  //   setOpenModal(false);
-  //   if (status) {
-  //     dispatch(DeleteQuestion(question));
-  //     dispatch(
-  //       openSnackbar({
-  //         open: true,
-  //         message: 'Deleted successfully!',
-  //         anchorOrigin: { vertical: 'top', horizontal: 'right' },
-  //         variant: 'alert',
-  //         alert: {
-  //           color: 'success'
-  //         },
-  //         close: true
-  //       })
-  //     );
-  //   }
-  // };
+  const handleModalClose = (status: boolean) => {
+    setOpenModal(false);
+    if (status) {
+      dispatch(DeleteQuestion(question));
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: 'Deleted successfully!',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          variant: 'alert',
+          alert: {
+            color: 'success'
+          },
+          close: true
+        })
+      );
+    }
+  };
 
   return (
     <>
@@ -74,7 +77,7 @@ const Question = ({ question, index }: Props) => {
               cursor: 'pointer'
             }}
           >
-            {question.rankId}
+            {question.rank?.name}
           </Link>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -90,7 +93,7 @@ const Question = ({ question, index }: Props) => {
               cursor: 'pointer'
             }}
           >
-            {question.departmentId}
+            {question.department?.name}
           </Link>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -106,24 +109,12 @@ const Question = ({ question, index }: Props) => {
               cursor: 'pointer'
             }}
           >
-            {question.languageId}
+            {question.language?.name}
           </Link>
         </TableCell>
         <TableCell sx={{ width: 410, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {question.questionContent}
-          </Link>
+          {question.type === 0 && 'Basic'}
+          {question.type === 1 && 'Advanced'}
         </TableCell>
         <TableCell>
           {question.status === 0 && (
@@ -178,7 +169,7 @@ const Question = ({ question, index }: Props) => {
             <MenuItem
               onClick={() => {
                 handleClose();
-                // editRank();
+                editQuestion();
               }}
             >
               Edit
@@ -186,16 +177,16 @@ const Question = ({ question, index }: Props) => {
             <MenuItem
               onClick={() => {
                 handleClose();
-                // setOpenModal(true);
+                setOpenModal(true);
               }}
             >
               Delete
             </MenuItem>
           </Menu>
-          {/* {openModal && <AlertRankDelete name={rank.name} open={openModal} handleClose={handleModalClose} />} */}
+          {openModal && <AlertQuestionDelete id={question.id} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      {/* <EditRank rank={rank} open={openRankDrawer} handleDrawerOpen={handleRankDrawerOpen} /> */}
+      <EditQuestion question={question} open={openQuestionDrawer} handleDrawerOpen={handleQuestionDrawerOpen} />
     </>
   );
 };

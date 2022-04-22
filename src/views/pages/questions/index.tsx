@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
 import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import SortStatus from 'views/pages/ranks/SortStatus';
+import SortStatus from 'views/pages/questions/SortStatus';
 import {
   Button,
   Fab,
