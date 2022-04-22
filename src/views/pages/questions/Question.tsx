@@ -63,7 +63,22 @@ const Question = ({ question, index }: Props) => {
             <Typography variant="body2">{question.id}</Typography>
           </Stack>
         </TableCell>
-
+        <TableCell sx={{ width: 610, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+          <Link
+            underline="hover"
+            color="default"
+            sx={{
+              overflow: 'hidden',
+              display: 'block',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              ':hover': { color: 'primary.main' },
+              cursor: 'pointer'
+            }}
+          >
+            {question.question_content}
+          </Link>
+        </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           <Link
             underline="hover"
@@ -112,7 +127,7 @@ const Question = ({ question, index }: Props) => {
             {question.language?.name}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: 410, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           {question.type === 0 && 'Basic'}
           {question.type === 1 && 'Advanced'}
         </TableCell>
