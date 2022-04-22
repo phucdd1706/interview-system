@@ -1,16 +1,11 @@
 // THIRD-PARTY
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Avatar,
   Button,
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Divider,
   Grid,
   List,
@@ -23,7 +18,6 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  TextField,
   Typography
 } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
@@ -34,27 +28,39 @@ import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
-import useAuth from '../../../../hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 // import { getProfile } from '../../../../store/slices/profile';
 import User from 'assets/images/users/user-round.svg';
 import MainCard from 'ui-component/cards/MainCard';
+import ProfileEdit from './ProfileEdit';
 
 export default function Profile() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
   const { user } = useAuth();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const handleDialogOpen = () => {
+    setOpenDialog((prevState: any) => !prevState);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const userStr: string = user?.dob!;
+  const d = new Date(userStr);
+  const dobLocale = d.toLocaleDateString();
 
-  // const onGetProfile = () => {
-  //   getProfile();
-  // };
+  const [displayGender, setDisplayGender] = React.useState<string>('');
+  useEffect(() => {
+    switch (user?.gender) {
+      case 'male':
+        setDisplayGender('Male');
+        break;
+      case 'female':
+        setDisplayGender('Female');
+        break;
+      default:
+        setDisplayGender('N/A');
+        break;
+    }
+  }, [user?.gender]);
 
   return (
     <Box>
@@ -74,7 +80,7 @@ export default function Profile() {
                 />
               }
               title={user?.name}
-              subheader={user?.type === 1 ? 'Admin' : 'User'}
+              subheader={user?.type === 1 ? 'Administrator' : 'User'}
               sx={{
                 borderBottom: '1px solid',
                 borderColor: theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.primary[200] + 75,
@@ -105,7 +111,7 @@ export default function Profile() {
                     <Typography variant="h5">Email</Typography>
                   </ListItemText>
                   <ListItemSecondaryAction>
-                    <Typography>{user?.email}</Typography>
+                    <Typography>{user?.email === null ? 'N/A' : user?.email}</Typography>
                   </ListItemSecondaryAction>
                 </ListItemButton>
                 <Divider />
@@ -117,7 +123,7 @@ export default function Profile() {
                     <Typography variant="h5">Phone Number</Typography>
                   </ListItemText>
                   <ListItemSecondaryAction>
-                    <Typography>{user?.phone}</Typography>
+                    <Typography>{user?.phone === null ? 'N/A' : user?.phone}</Typography>
                   </ListItemSecondaryAction>
                 </ListItemButton>
               </List>
@@ -127,9 +133,9 @@ export default function Profile() {
         <Grid item xs={12} lg={8}>
           <MainCard>
             <CardHeader
-              title="Persional Details"
+              title="Personal Details"
               action={
-                <Button onClick={handleClickOpen}>
+                <Button onClick={handleDialogOpen}>
                   <EditIcon />
                 </Button>
               }
@@ -151,38 +157,25 @@ export default function Profile() {
                     </TableRow>
                     <TableRow>
                       <TableCell variant="head">Phone</TableCell>
-                      <TableCell variant="body">{user?.phone}</TableCell>
+                      <TableCell variant="body">{user?.phone === null ? 'N/A' : user?.phone}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell variant="head">Date Of Birth</TableCell>
-                      <TableCell variant="body">{user?.dob}</TableCell>
+                      <TableCell variant="body">{dobLocale}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell variant="head">Gender</TableCell>
-                      <TableCell variant="body">{user?.gender}</TableCell>
+                      <TableCell variant="body">{displayGender}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell variant="head">Position</TableCell>
-                      <TableCell variant="body">{user?.type === 1 ? 'Admin' : 'User'}</TableCell>
+                      <TableCell variant="body">{user?.type === 1 ? 'Administrator' : 'User'}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
+                <ProfileEdit open={openDialog} handleDialogOpen={handleDialogOpen} />
               </TableContainer>
             </CardContent>
-            <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
-              <DialogTitle>Personal Information</DialogTitle>
-              <DialogContent>
-                <DialogContentText>Change your personal Information here</DialogContentText>
-                <TextField margin="dense" id="name" label="Name" value={user?.name} fullWidth variant="standard" />
-                <TextField margin="dense" id="phone" label="Phone Number" value={user?.phone} fullWidth variant="standard" />
-                <TextField margin="dense" id="dob" label="Date of Birth" value={user?.dob} fullWidth variant="standard" />
-                <TextField margin="dense" id="gender" label="Gender" value={user?.gender} fullWidth variant="standard" />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Edit</Button>
-                <Button onClick={handleClose}>Cancel</Button>
-              </DialogActions>
-            </Dialog>
           </MainCard>
         </Grid>
       </Grid>
