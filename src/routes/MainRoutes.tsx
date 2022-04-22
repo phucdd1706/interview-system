@@ -38,49 +38,68 @@ const MainRoutes = {
     },
     {
       path: '/complete',
+      role: 2,
       element: <Complete />
     },
     {
       path: '/inprogress',
+      role: 2,
       element: <Inprogress />
     },
     {
       path: '/language',
+      role: 1,
       element: <Language />
     },
     {
       path: '/user/administrator',
+      role: 1,
       element: <Administrator />
     },
     {
       path: '/user/customer',
+      role: 1,
       element: <Customer />
     },
     {
       path: '/department',
+      role: 1,
       element: <Department />
     },
     {
       path: 'ranks',
+      role: 1,
       element: <Ranks />
     },
     {
       path: '/user/profile',
+      role: 1,
       element: <Profile />
     },
     {
       path: '/applicant',
+      role: 2,
       element: <AddNewApplicant />
     },
     {
       path: '/interview/:applicantId',
+      role: 2,
       element: <Interview />
     }
   ]
 };
 
-filterAuthorization.forEach((item: string) => {
-  MainRoutes.children = MainRoutes.children.filter((child) => child.path !== item);
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+// filterAuthorization.forEach((item: string) => {
+//   MainRoutes.children = MainRoutes.children.filter((child) => child.path !== item);
+// });
+
+MainRoutes.children = MainRoutes.children.filter((child) => {
+  if (child.role) {
+    return user.type === child.role;
+  }
+  return true;
 });
 
 export default MainRoutes;

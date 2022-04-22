@@ -14,6 +14,7 @@ const axiosServices = axios.create({
 axiosServices.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
+    console.log(error.response);
     alertRequestError(error);
     return Promise.reject((error.response && error.response.data) || 'Wrong Services');
   }
