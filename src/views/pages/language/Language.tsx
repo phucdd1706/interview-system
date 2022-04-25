@@ -7,15 +7,18 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 import { removeLanguage } from 'store/slices/language';
+import { Languages } from 'types/language';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
 import { dispatch } from 'store';
 
-const Language = (props: any) => {
-  const { language } = props;
+interface Props {
+  language: Languages;
+}
+
+const Language = ({ language }: Props) => {
   const theme = useTheme();
-  const token = localStorage.getItem('serviceToken');
 
   const [visibleAdd, setVisibleAdd] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +38,6 @@ const Language = (props: any) => {
       dispatch(
         removeLanguage({
           id: language.id,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(
@@ -179,7 +181,7 @@ const Language = (props: any) => {
               cursor: 'pointer'
             }}
           >
-            {language.name}
+            {language?.name}
           </Link>
         </TableCell>
         <TableCell>{language?.description}</TableCell>
