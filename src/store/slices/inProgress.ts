@@ -51,9 +51,9 @@ export default inProgressSlice.reducer;
 
 export function fetchCandidates(payload: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
+    const { params, callback } = payload;
     const query = new URLSearchParams(params).toString();
-    const response = await getListCandidate(query, token)
+    const response = await getListCandidate(query)
       .then((result) => {
         dispatch(inProgressSlice.actions.getInProgressListSuccess(result.data.success));
         return result;
@@ -71,8 +71,8 @@ export function fetchCandidates(payload: Payload) {
 
 export function addCandidate(payload: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
-    const response = await createCandidate(params, token)
+    const { params, callback } = payload;
+    const response = await createCandidate(params)
       .then((result) => {
         dispatch(inProgressSlice.actions.addInProgressSuccess(result.data.success));
         return result;
@@ -90,8 +90,8 @@ export function addCandidate(payload: Payload) {
 
 export function editCandidate(payload: Payload) {
   return async () => {
-    const { id, params, token, callback } = payload;
-    const response = await updateCandidate(id, params, token)
+    const { id, params, callback } = payload;
+    const response = await updateCandidate(id, params)
       .then((result) => {
         dispatch(inProgressSlice.actions.editInProgressSuccess(result.data.success));
         return result;
@@ -109,8 +109,8 @@ export function editCandidate(payload: Payload) {
 
 export function removeCandidate(payload: Payload) {
   return async () => {
-    const { id, token, callback } = payload;
-    const response = await deleteCandidate(id, token)
+    const { id, callback } = payload;
+    const response = await deleteCandidate(id)
       .then((result) => {
         dispatch(inProgressSlice.actions.deleteInProgressSuccess(result.data.success));
         return result;

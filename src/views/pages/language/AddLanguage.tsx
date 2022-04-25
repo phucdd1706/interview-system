@@ -21,28 +21,27 @@ import * as yup from 'yup';
 // PROJECT IMPORT
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { addLanguage, editLanguage } from 'store/slices/language';
+import { Languages } from 'types/language';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { SelectProps } from 'types/customer';
 
 interface Props {
-  dataEdit: any;
+  dataEdit: Languages;
   visible: boolean;
   handleVisibleModal: () => void;
 }
 
 const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
-  const token = localStorage.getItem('serviceToken');
   const [errors, setErrors] = useState<any>({});
 
-  const handleAdd = (values: any) => {
+  const handleAdd = (values: Languages) => {
     if (dataEdit.id) {
       dispatch(
         editLanguage({
           id: dataEdit.id,
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(
@@ -80,7 +79,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       dispatch(
         addLanguage({
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(

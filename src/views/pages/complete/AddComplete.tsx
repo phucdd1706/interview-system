@@ -8,28 +8,27 @@ import * as yup from 'yup';
 // PROJECT IMPORT
 import RankSelect from 'components/Common/RankSelect';
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import { Candidates } from 'types/complete';
 import { addCandidate, editCandidate } from 'store/slices/complete';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
 
 interface Props {
-  dataEdit: any;
+  dataEdit: Candidates;
   visible: boolean;
   handleVisibleModal: () => void;
 }
 
 const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
-  const token = localStorage.getItem('serviceToken');
   const [errors, setErrors] = useState<any>({});
 
-  const handleAdd = (values: any) => {
+  const handleAdd = (values: Candidates) => {
     if (dataEdit.id) {
       dispatch(
         editCandidate({
           id: dataEdit.id,
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(
@@ -67,7 +66,6 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       dispatch(
         addCandidate({
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(

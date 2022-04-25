@@ -7,7 +7,7 @@ import SortStatus from './SortStatus';
 
 const StatusFilters = (props: any) => {
   const { filters, handleSortClick, anchorElSort, handleSort, handleCloseSort } = props;
-  const sortLabel = SortStatus.filter((items) => items.value === filters.status);
+  const sortLabel = SortStatus?.filter((items) => items.value === filters.status);
 
   const openSort = Boolean(anchorElSort);
 
@@ -23,7 +23,7 @@ const StatusFilters = (props: any) => {
         sx={{ color: 'grey.500', fontWeight: 400 }}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        {sortLabel.length > 0 && sortLabel[0].label}
+        {sortLabel?.length > 0 && sortLabel[0]?.label}
       </Button>
       <Menu
         id="demo-positioned-menu"
@@ -40,7 +40,7 @@ const StatusFilters = (props: any) => {
           horizontal: 'right'
         }}
       >
-        {SortStatus.map((status, index) => (
+        {SortStatus?.map((status, index) => (
           <MenuItem
             sx={{ p: 1.5 }}
             key={index}

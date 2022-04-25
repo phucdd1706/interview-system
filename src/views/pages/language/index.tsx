@@ -38,7 +38,6 @@ const Index = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const token = localStorage.getItem('serviceToken');
   const languageState = useSelector((state: RootState) => state.language);
 
   const [language, setLanguage] = useState<Languages[]>([]);
@@ -67,11 +66,11 @@ const Index = () => {
   }, [filters]);
 
   const getList = () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const filterData = async () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const handleSortClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
