@@ -6,14 +6,14 @@ import {
   DialogContent,
   Divider,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Typography,
-  FormHelperText
+  Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -161,7 +161,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                       formik={formik}
                     />
                     {formik.touched.department_id && formik.errors.department_id && (
-                      <FormHelperText error id="standard-weight-helper-text-department-login">
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
                         {formik.errors.department_id}
                       </FormHelperText>
                     )}
@@ -175,7 +175,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                       formik={formik}
                     />
                     {formik.touched.language_id && formik.errors.language_id && (
-                      <FormHelperText error id="standard-weight-helper-text-language-login">
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
                         {formik.errors.language_id}
                       </FormHelperText>
                     )}

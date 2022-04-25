@@ -63,7 +63,7 @@ const Question = ({ question, index }: Props) => {
             <Typography variant="body2">{question.id}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 610, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
