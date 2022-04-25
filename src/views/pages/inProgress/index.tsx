@@ -39,7 +39,6 @@ const Index = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const token = localStorage.getItem('serviceToken');
   const inProgressState = useSelector((state: RootState) => state.inProgress);
 
   const [candidate, setCandidate] = useState<Candidates[]>([]);
@@ -70,11 +69,11 @@ const Index = () => {
   }, [filters]);
 
   const getList = () => {
-    dispatch(fetchCandidates({ params: filters, token }));
+    dispatch(fetchCandidates({ params: filters }));
   };
 
   const filterData = async () => {
-    dispatch(fetchCandidates({ params: filters, token }));
+    dispatch(fetchCandidates({ params: filters }));
   };
 
   const handleSortClick = (event: React.MouseEvent<HTMLElement>, index: number) => {

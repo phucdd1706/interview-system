@@ -7,15 +7,18 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 import { removeCandidate } from 'store/slices/complete';
+import { Candidates } from 'types/complete';
 import AddComplete from 'views/pages/complete/AddComplete';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
 import { dispatch } from 'store';
 
-const Complete = (props: any) => {
-  const { complete } = props;
+interface Props {
+  complete: Candidates;
+}
+
+const Complete = ({ complete }: Props) => {
   const theme = useTheme();
-  const token = localStorage.getItem('serviceToken');
 
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +38,6 @@ const Complete = (props: any) => {
       dispatch(
         removeCandidate({
           id: complete.id,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(
