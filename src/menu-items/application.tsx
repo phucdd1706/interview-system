@@ -38,21 +38,21 @@ const application = {
       id: 'history',
       title: <FormattedMessage id="history" />,
       type: 'collapse',
-      role: 1,
+      role: 2,
       icon: icons.IconHistory,
       children: [
         {
           id: 'complete',
           title: <FormattedMessage id="complete" />,
           type: 'item',
-          role: 1,
+          role: 2,
           url: '/complete'
         },
         {
           id: 'inprogress',
           title: <FormattedMessage id="inProgress" />,
           type: 'item',
-          role: 1,
+          role: 2,
           url: '/inprogress'
         }
       ]
@@ -88,7 +88,7 @@ const application = {
       id: 'applicant',
       title: <FormattedMessage id="add new applicant reference" />,
       type: 'item',
-      role: 1,
+      role: 2,
       url: '/applicant',
       icon: icons.IconFilePlus,
       breadcrumbs: true

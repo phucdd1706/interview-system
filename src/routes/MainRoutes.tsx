@@ -38,12 +38,12 @@ const MainRoutes = {
     },
     {
       path: '/complete',
-      role: 1,
+      role: 2,
       element: <Complete />
     },
     {
       path: '/inprogress',
-      role: 1,
+      role: 2,
       element: <Inprogress />
     },
     {
@@ -78,12 +78,12 @@ const MainRoutes = {
     },
     {
       path: '/applicant',
-      role: 1,
+      role: 2,
       element: <AddNewApplicant />
     },
     {
       path: '/interview/:applicantId',
-      role: 1,
+      role: 2,
       element: <Interview />
     }
   ]

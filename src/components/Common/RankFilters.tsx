@@ -64,7 +64,7 @@ const RankFilters = (props: any) => {
         sx={{ height: 300 }}
       >
         {dataRank?.map((item, index) => (
-          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank} onClick={(event) => handleRankClick(event, item.id)}>
+          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank} onClick={() => handleRankClick(item.id)}>
             {item.name}
           </MenuItem>
         ))}

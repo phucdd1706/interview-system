@@ -81,8 +81,8 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleRankClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
-    setFilters({ ...filters, rank: index });
+  const handleRankClick = (rank: number | string) => {
+    setFilters({ ...filters, rank });
     setAnchorElRank(null);
   };
 

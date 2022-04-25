@@ -59,7 +59,15 @@ const Index = () => {
     getList();
   }, []);
 
+  useEffect(() => {
+    filterData();
+  }, [filters]);
+
   const getList = () => {
+    dispatch(fetchCandidates({ params: filters }));
+  };
+
+  const filterData = async () => {
     dispatch(fetchCandidates({ params: filters }));
   };
 
@@ -68,8 +76,8 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleRankClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
-    setFilters({ ...filters, rank: index });
+  const handleRankClick = (rank: string | number) => {
+    setFilters({ ...filters, rank });
     setAnchorElRank(null);
   };
 
