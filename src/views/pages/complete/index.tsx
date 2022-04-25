@@ -18,7 +18,6 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import { FormattedMessage } from 'react-intl';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -162,12 +161,8 @@ const Index = () => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ pr: 3 }}>#</TableCell>
-                <TableCell>
-                  <FormattedMessage id="name" />
-                </TableCell>
-                <TableCell>
-                  <FormattedMessage id="phone" />
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Phone</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Status</TableCell>

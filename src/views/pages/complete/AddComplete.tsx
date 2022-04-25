@@ -13,7 +13,6 @@ import { addCandidate, editCandidate } from 'store/slices/complete';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { FormattedMessage } from 'react-intl';
 
 interface Props {
   dataEdit: Candidates;
@@ -274,7 +273,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button fullWidth variant="contained" type="submit">
-                      <FormattedMessage id="data" />
+                      Save
                     </Button>
                   </AnimateButton>
                 </Grid>
