@@ -32,6 +32,8 @@ const slice = createSlice({
 
     getAdministratorListSuccess(state, action) {
       state.users = action.payload.data;
+      state.pageCount = action.payload.last_page;
+      state.currentPage = action.payload.current_page;
     },
 
     addAdministratorSuccess(state, action) {
