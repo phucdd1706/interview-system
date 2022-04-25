@@ -10,6 +10,7 @@ import { Department, DepartmentFilter } from 'types/department';
 
 export const DEPARTMENT_URL = {
   getDepartmen: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
+  getAll: `${process.env.REACT_APP_API_URL}/v1/department/all`,
   postDepartment: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
   putDepartment: (id: string) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
   delDepartment: (id: string) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
@@ -73,7 +74,7 @@ export function getDepartmentsAll(payload: Payload) {
   return async () => {
     const { callback } = payload;
     const response = await await axios
-      .get(`${DEPARTMENT_URL.postDepartment}/all`)
+      .get(`${DEPARTMENT_URL.getAll}`)
       .then((result) => result)
       .catch((err) => err);
 

@@ -25,7 +25,9 @@ const RankFilters = (props: any) => {
     dispatch(
       getRanksAll({
         callback: (res) => {
-          setDataRank([{ id: '', name: 'All' }, ...res?.data?.success]);
+          if (res?.data?.success) {
+            setDataRank([{ id: '', name: 'All' }, ...res?.data?.success]);
+          }
         }
       })
     );
