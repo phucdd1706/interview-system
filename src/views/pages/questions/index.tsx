@@ -40,6 +40,7 @@ import { RankFilter, RankType } from 'types/rank';
 import { getRanksList } from 'store/slices/rank';
 import { Languages, SearchValues } from 'types/language';
 import { fetchLanguages } from 'store/slices/language';
+import axios from 'utils/axios';
 
 const Questions = () => {
   // department
@@ -65,6 +66,7 @@ const Questions = () => {
   // department
 
   // rank
+
   const [anchorElRank, setAnchorElRank] = useState<null | HTMLElement>(null);
   const openSortRank = Boolean(anchorElRank);
   const handleClickListItemRank = (event: React.MouseEvent<HTMLElement>) => {
@@ -80,17 +82,18 @@ const Questions = () => {
   };
 
   const [rank, setRank] = React.useState<RankType[]>([]);
-  const [filterRank, setFilterRank] = useState();
-  const filterDataRank = async () => {
-    await dispatch(getRanksList(filterRank));
+  const getAllRank = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/operator/ranks/all`);
+      setRank(response.data.success);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const rankState = useSelector((state) => state.rank);
   useEffect(() => {
-    setRank(rankState.ranks);
-  }, [rankState]);
-  useEffect(() => {
-    filterDataRank();
-  }, [filterRank]);
+    getAllRank();
+  }, []);
+
   // rank
 
   // Language
@@ -174,7 +177,7 @@ const Questions = () => {
   const addQuestion = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-
+  console.log(11111, rank.length > 0 && rank[0].name);
   return (
     <MainCard
       title={
@@ -258,7 +261,7 @@ const Questions = () => {
                       id="demo-positioned-menu-rank"
                       aria-labelledby="demo-positioned-button-rank"
                       anchorEl={anchorElRank}
-                      open={openSort}
+                      open={openSortRank}
                       onClose={handleSortStatusCloseRank}
                       anchorOrigin={{
                         vertical: 'bottom',
