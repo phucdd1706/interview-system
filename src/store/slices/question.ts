@@ -51,7 +51,9 @@ export default slice.reducer;
 
 export function getQuestionsList(filter?: QuestionFilter) {
   const queryParams = `${
-    (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
+    (filter?.search !== '' ? `&search=${filter?.search}` : '') +
+    (filter?.rank_id !== '' ? `&rank_id=${filter?.rank_id}` : '') +
+    (filter?.status !== '' ? `&status=${filter?.status}` : '')
     // (filter?.type !== '' ? `&type=${filter?.type}` : '')
     // (filter?.language_id?.name !== '' ? `&language_id=${filter?.language_id?.name}` : '') +
     // (filter?.rank_id?.name !== '' ? `&rank_id=${filter?.rank_id?.name}` : '') +
@@ -93,8 +95,10 @@ export function PutQuestion(question: QuestionType) {
   return async () => {
     try {
       const response = await axios.put(`${QUESTIONS_URL}/${question.id}`, question);
+      console.log('response.data.success', response.data.success);
       dispatch(slice.actions.putQuestionSuccess(response.data.success));
     } catch (error) {
+      console.log('error', error);
       dispatch(slice.actions.hasError(error));
     }
   };

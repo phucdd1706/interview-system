@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -27,13 +26,10 @@ import { gridSpacing } from 'store/constant';
 import { PostQuestion } from 'store/slices/question';
 import { SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
-import { useDispatch, useSelector } from 'store';
-import { getRanksList } from 'store/slices/rank';
-import { Department, DepartmentFilter } from 'types/department';
-import { getDepartmentList } from 'store/slices/department';
-import { RankFilter, RankType } from 'types/rank';
-import { Languages, SearchValues } from 'types/language';
-import { fetchLanguages } from 'store/slices/language';
+import { useDispatch } from 'store';
+import RankSelect from 'components/Common/RankSelect';
+import LanguageSelect from 'components/Common/LanguageSelect';
+import DepartmentSelect from 'components/Common/DepartmentSelect';
 
 interface AddQuestionProps {
   open: boolean;
@@ -61,68 +57,6 @@ const validationSchema = Yup.object({
 
 const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   const dispatch = useDispatch();
-  // department
-  const [department, setDepartment] = React.useState<Department[]>([]);
-  const initialState: DepartmentFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter, setFilter] = useState(initialState);
-  const filterData = async () => {
-    await dispatch(getDepartmentList(filter));
-  };
-  const departmentState = useSelector((state) => state.department);
-  useEffect(() => {
-    setDepartment(departmentState.department);
-  }, [departmentState]);
-  useEffect(() => {
-    filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-  // department
-
-  // rank
-  const [rank, setRank] = React.useState<RankType[]>([]);
-  const initialStateRank: RankFilter = {
-    search: '',
-    status: '',
-    currentPage: 1
-  };
-  const [filterRank, setFilterRank] = useState(initialStateRank);
-  const filterDataRank = async () => {
-    await dispatch(getRanksList(filterRank));
-  };
-  const rankState = useSelector((state) => state.rank);
-  useEffect(() => {
-    setRank(rankState.ranks);
-  }, [rankState]);
-  useEffect(() => {
-    filterDataRank();
-  }, [filterRank]);
-  // rank
-
-  // Language
-  const [language, setLanguage] = React.useState<Languages[]>([]);
-  const initialStateLanguage: SearchValues = {
-    search: '',
-    status: '',
-    currentPage: 1
-  };
-  const token = localStorage.getItem('serviceToken');
-  const [filterLanguage, setFilterLanguage] = useState(initialStateLanguage);
-  const filterDataLanguage = async () => {
-    await dispatch(fetchLanguages({ params: { filterLanguage } }));
-  };
-  const languageState = useSelector((state) => state.language);
-  useEffect(() => {
-    setLanguage(languageState.language);
-  }, [languageState]);
-  useEffect(() => {
-    filterDataLanguage();
-  }, []);
-  // Language
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -210,64 +144,25 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
                   <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel>Rank</InputLabel>
-                      <Select
-                        id="rank_id"
-                        name="rank_id"
-                        label="Rank"
-                        displayEmpty
-                        value={formik.values.rank_id}
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                      >
-                        {rank.map((rankk: RankType, index: number) => (
-                          <MenuItem key={index} value={rankk.id}>
-                            {rankk.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
                   </Grid>
                   <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel>Department</InputLabel>
-                      <Select
-                        id="department_id"
-                        name="department_id"
-                        label="department"
-                        displayEmpty
-                        value={formik.values.department_id}
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                      >
-                        {department.map((depart: Department, index: number) => (
-                          <MenuItem key={index} value={depart.id}>
-                            {depart.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <DepartmentSelect
+                      fullWidth
+                      size="medium"
+                      change={formik.handleChange}
+                      values={formik.values?.department_id}
+                      formik={formik}
+                    />
                   </Grid>
                   <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel>Language</InputLabel>
-                      <Select
-                        id="language_id"
-                        name="language_id"
-                        label="Language"
-                        displayEmpty
-                        value={formik.values.language_id}
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                      >
-                        {language.map((lang: Languages, index: number) => (
-                          <MenuItem key={index} value={lang.id}>
-                            {lang.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <LanguageSelect
+                      fullWidth
+                      size="medium"
+                      change={formik.handleChange}
+                      values={formik.values?.language_id}
+                      formik={formik}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField

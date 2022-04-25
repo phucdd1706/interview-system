@@ -48,7 +48,7 @@ const Index = () => {
 
   const initialState: SearchValues = {
     search: '',
-    rank: '',
+    rank_id: '',
     status: '',
     currentPage: 1,
     limit: 20
@@ -81,8 +81,8 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleRankClick = (rank: number | string) => {
-    setFilters({ ...filters, rank });
+  const handleRankClick = (rank_id: number | string) => {
+    setFilters({ ...filters, rank_id });
     setAnchorElRank(null);
   };
 
@@ -90,8 +90,6 @@ const Index = () => {
     const newString = event?.target.value;
     setFilters({ ...filters, search: newString! });
   };
-
-  console.log('filters', filters);
 
   const handleSort = (event: any) => {
     setAnchorElSort(event.currentTarget);

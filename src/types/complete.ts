@@ -6,7 +6,7 @@ export interface Candidates {
   username?: string;
   phone?: string;
   email?: string;
-  rank?: number | string;
+  rank_id?: number | string;
   password?: string;
   password_confirmation?: string;
   created_at?: string;
@@ -16,7 +16,7 @@ export interface Candidates {
 
 export interface SearchValues {
   search?: string;
-  rank?: number | string;
+  rank_id?: number | string;
   status?: number | string;
   currentPage?: number;
   limit?: number;

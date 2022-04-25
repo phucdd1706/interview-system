@@ -52,7 +52,7 @@ const RankSelect = (props: any) => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          name="rank"
+          name="rank_id"
           size={size || 'small'}
           label={
             <span>
@@ -62,7 +62,7 @@ const RankSelect = (props: any) => {
           onChange={change}
           value={values}
           fullWidth={fullWidth}
-          error={formik && formik.touched.rank && Boolean(formik.errors.rank)}
+          error={formik && formik.touched.rank_id && Boolean(formik.errors.rank_id)}
           MenuProps={MenuProps}
         >
           {data?.map((row: RankType) => (

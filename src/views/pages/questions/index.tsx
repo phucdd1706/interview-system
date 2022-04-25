@@ -29,46 +29,58 @@ import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
 import Question from 'views/pages/questions/Question';
+import { useDispatch, useSelector, RootState } from 'store';
 import { getQuestionsList } from 'store/slices/question';
 import { QuestionType, QuestionFilter } from 'types/question';
 import AddQuestion from './AddQuestion';
 import { gridSpacing } from 'store/constant';
 import { Department, DepartmentFilter } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
-import { RankFilter, RankType } from 'types/rank';
-import { getRanksList } from 'store/slices/rank';
 import { Languages, SearchValues } from 'types/language';
 import { fetchLanguages } from 'store/slices/language';
-import axios from 'utils/axios';
-import { dispatch, useSelector } from 'store';
 import RankFilters from 'components/Common/RankFilters';
 
+const initialState: QuestionFilter = {
+  search: '',
+  status: '',
+  rank_id: '',
+  currentPage: 1
+};
+
 const Questions = () => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
+
+  const questionState = useSelector((state: RootState) => state.question);
   const [data, setData] = React.useState<QuestionType[]>([]);
-  const questionState = useSelector((state) => state.question);
+  const [anchorElRank, setAnchorElRank] = useState(null);
+  const [filter, setFilter] = useState(initialState);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+
+  const openSort = Boolean(anchorEl);
+
+  useEffect(() => {
+    setData(questionState.questions);
+  }, [questionState]);
+
+  useEffect(() => {
+    filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setFilter({ ...filter, currentPage: page! });
   };
 
-  const initialState: QuestionFilter = {
-    search: '',
-    status: '',
-    rank_id: '',
-    currentPage: 1
-  };
-  const [filter, setFilter] = useState(initialState);
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
     setFilter({ ...filter, search: newString! });
   };
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openSort = Boolean(anchorEl);
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,25 +88,18 @@ const Questions = () => {
   const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
+
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
     setFilter({ ...filter, status: index });
     setAnchorEl(null);
   };
+
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
   const filterData = async () => {
     await dispatch(getQuestionsList(filter));
   };
 
-  React.useEffect(() => {
-    setData(questionState.questions);
-  }, [questionState]);
-
-  React.useEffect(() => {
-    filterData();
-  }, [filter]);
-
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const handleDrawerOpen = () => {
     setOpenDrawer((prevState) => !prevState);
   };
@@ -102,17 +107,16 @@ const Questions = () => {
   const addQuestion = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-  // rank
-  const [anchorElRank, setAnchorElRank] = useState(null);
-  const handleRankClick = (rank_id: string | number) => {
-    setFilter({ ...filter, rank_id });
-    setAnchorElRank(null);
-  };
   const handleRank = (event: any) => {
     setAnchorElRank(event.currentTarget);
   };
 
   const handleCloseRank = () => {
+    setAnchorElRank(null);
+  };
+
+  const handleRankClick = (index: number | string) => {
+    setFilter({ ...filter, rank_id: index });
     setAnchorElRank(null);
   };
 
@@ -182,16 +186,14 @@ const Questions = () => {
                       ))}
                     </Menu>
                   </Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                    <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }} />
-                    <RankFilters
-                      filters={filter}
-                      anchorElRank={anchorElRank}
-                      handleRank={handleRank}
-                      handleCloseRank={handleCloseRank}
-                      handleRankClick={handleRankClick}
-                    />
-                  </Stack>
+
+                  <RankFilters
+                    filters={filter}
+                    anchorElRank={anchorElRank}
+                    handleRank={handleRank}
+                    handleCloseRank={handleCloseRank}
+                    handleRankClick={handleRankClick}
+                  />
                 </Stack>
               </Grid>
             </Grid>

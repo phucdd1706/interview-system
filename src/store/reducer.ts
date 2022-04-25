@@ -31,7 +31,6 @@ const reducer = combineReducers({
   menu: menuReducer,
   complete: completeReducer,
   inProgress: inProgressReducer,
-
   department: departmentReducer,
   applicant: applicantReferences,
   customer: customerReducer,
