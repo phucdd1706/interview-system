@@ -11,11 +11,13 @@
   "customer": "Người dùng",
   "manage-rank": "Quản lý Rank",
   "interview": "Phỏng vấn",
-  "applicant reference form": "Biểu mẫu thông tin ứng viên",
-  "interview questions": "Câu hỏi phỏng vấn",
-  "reference results": "Kết quả tham khảo",
-  "interviewer results": "Kết quả phỏng vấn",
-  "applicant information": "Thông tin ứng viên",
+  "applicant-reference-form": "Biểu mẫu thông tin ứng viên",
+  "interview-questions": "Câu hỏi phỏng vấn",
+  "reference-results": "Kết quả tham khảo",
+  "interviewer-results": "Kết quả phỏng vấn",
+  "applicant-information": "Thông tin ứng viên",
   "department": "Phòng ban",
-  "language": "Ngôn ngữ"
+  "language": "Ngôn ngữ",
+  "experiences": "Kinh nghiệm",
+  "apply-positions": "Vị trí ứng tuyển"
 }

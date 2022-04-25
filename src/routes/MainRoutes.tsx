@@ -73,7 +73,6 @@ const MainRoutes = {
     },
     {
       path: '/user/profile',
-      role: 1,
       element: <Profile />
     },
     {

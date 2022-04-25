@@ -5,17 +5,20 @@ const personalDetail = [
       {
         key: 'firstName',
         label: 'First Name',
-        type: 'text'
+        type: 'text',
+        required: true
       },
       {
         key: 'lastName',
         label: 'Last Name',
-        type: 'text'
+        type: 'text',
+        required: true
       },
       {
         key: 'age',
         label: 'Age',
-        type: 'number'
+        type: 'number',
+        required: true
       }
     ]
   },
@@ -25,12 +28,14 @@ const personalDetail = [
       {
         key: 'email',
         label: 'Email',
-        type: 'email'
+        type: 'email',
+        required: true
       },
       {
         key: 'phone',
         label: 'Phone Number',
-        type: 'tel'
+        type: 'tel',
+        required: true
       }
     ]
   },
@@ -40,7 +45,8 @@ const personalDetail = [
       {
         key: 'address',
         label: 'Address',
-        type: 'text'
+        type: 'text',
+        required: true
       }
     ]
   },
@@ -50,7 +56,8 @@ const personalDetail = [
       {
         key: 'interviewTime',
         label: 'Interview Time',
-        type: 'datetime-local'
+        type: 'datetime-local',
+        required: true
       }
     ]
   },

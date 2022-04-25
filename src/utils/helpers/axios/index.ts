@@ -1,6 +1,4 @@
 import axiosServices from 'utils/axios';
-import { dispatch } from 'store';
-import { openSnackbar } from 'store/slices/snackbar';
 import { alertRequestSuccess } from './errorAlert';
 
 export const axiosPost = async <T>(url: string, data: any, alert?: string): Promise<T> => {

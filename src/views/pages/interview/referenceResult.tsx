@@ -46,7 +46,7 @@ const ReferenceResult = ({ result }: Props) => (
           {element.label}:&nbsp;
         </Typography>
         <Typography variant="h4" component="h4" sx={{ lineHeight: 1.25, fontWeight: '400' }}>
-          {result[element.key as keyType]}
+          {element.key === 'salary' ? Number(result[element.key as keyType]).toLocaleString() : result[element.key as keyType]}
         </Typography>
       </Stack>
     ))}

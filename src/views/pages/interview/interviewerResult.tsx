@@ -23,16 +23,21 @@ const InterviewerResult = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
+            {console.log(values)}
             <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2}>
               <FormControl fullWidth>
                 <InputLabel htmlFor="outlined-adornment-salary">Expected Salary</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-salary"
-                  type="number"
-                  value={values.expectedSalary}
+                  type="text"
+                  value={Number(values.expectedSalary).toLocaleString()}
                   name="expectedSalary"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const event = e;
+                    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+                    handleChange(event);
+                  }}
                   label="expected salary"
                 />
               </FormControl>
@@ -58,10 +63,14 @@ const InterviewerResult = () => {
                 <OutlinedInput
                   id="outlined-adornment-salary"
                   type="number"
-                  value={values.salary}
+                  value={Number(values.salary).toLocaleString()}
                   name="salary"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const event = e;
+                    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+                    handleChange(event);
+                  }}
                   label="salary"
                 />
               </FormControl>

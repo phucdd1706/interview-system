@@ -38,12 +38,12 @@ const AddApplicantReference = () => {
   };
   return (
     <Box>
-      <MainCard title={intl.formatMessage({ id: 'applicant reference form' })}>
+      <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
         <ApplicantForm />
       </MainCard>
       {applicantInfo.interviewQuestions.length > 0 && (
         <>
-          <MainCard title={intl.formatMessage({ id: 'interview questions' })} sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'interview-questions' })} sx={{ margin: '1em 0' }}>
             <QuestionList questionList={applicantInfo.interviewQuestions} />
           </MainCard>
           <MainCard sx={{ margin: '1em 0' }}>

@@ -16,6 +16,7 @@ import {
 import { IconX } from '@tabler/icons';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+import { useIntl } from 'react-intl';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -55,6 +56,7 @@ const initialApplicantInfo: ApplicantInfo = {
 };
 
 const ApplicantForm = () => {
+  const intl = useIntl();
   const theme = useTheme();
   const dispatch = useDispatch();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
@@ -85,16 +87,18 @@ const ApplicantForm = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string }[] }) => {
+            {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string; required?: boolean }[] }) => {
               const { render } = row;
               return (
                 <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
-                  {render.map((item: { key: string; label: string; type: string }) => {
+                  {render.map((item: { key: string; label: string; type: string; required?: boolean }) => {
                     const key: personalDetailType = item.key as personalDetailType;
-                    const { label, type } = item;
+                    const { label, type, required } = item;
                     return (
                       <FormControl fullWidth error={Boolean(touched[key] && errors[key])} key={`${row.label}-${label}`}>
-                        <InputLabel htmlFor={`outlined-adornment-${row.label}-${label}`}>{label}</InputLabel>
+                        <InputLabel htmlFor={`outlined-adornment-${row.label}-${label}`} required={required}>
+                          {label}
+                        </InputLabel>
                         <OutlinedInput
                           id={`outlined-adornment-${row.label}-${label}`}
                           type={type}
@@ -117,7 +121,7 @@ const ApplicantForm = () => {
               );
             })}
 
-            <LegendWrapper legend="Experiences">
+            <LegendWrapper legend={intl.formatMessage({ id: 'experiences' })}>
               <Box>
                 {values.experiences.map((item: { id: string; position: string; durations: string }, index: number) => (
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
@@ -174,7 +178,7 @@ const ApplicantForm = () => {
               </Box>
             </LegendWrapper>
 
-            <LegendWrapper legend="Apply Positions">
+            <LegendWrapper legend={intl.formatMessage({ id: 'apply-positions' })}>
               <Box>
                 {values.applyPosition.map((item: { id: string; position: string; level: string }, index: number) => (
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>

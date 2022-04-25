@@ -31,10 +31,10 @@ const InterviewPage = () => {
   };
   return (
     <Stack direction="column" spacing={2}>
-      <MainCard title={intl.formatMessage({ id: 'applicant information' })}>
+      <MainCard title={intl.formatMessage({ id: 'applicant-information' })}>
         {applicantReferences.applicantInfo.id ? <ApplicantInformation applicantInfo={applicantReferences.applicantInfo} /> : <Loading />}
       </MainCard>
-      <MainCard title={intl.formatMessage({ id: 'interview questions' })}>
+      <MainCard title={intl.formatMessage({ id: 'interview-questions' })}>
         {applicantReferences.interviewQuestions.length > 0 ? (
           <>
             <InterviewQuestions interviewQuestions={applicantReferences.interviewQuestions} />
@@ -63,10 +63,10 @@ const InterviewPage = () => {
       </MainCard>
       {applicantReferences.referenceEvaluate && (
         <>
-          <MainCard title={intl.formatMessage({ id: 'reference results' })} sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'reference-results' })} sx={{ margin: '1em 0' }}>
             <ReferenceResult result={applicantReferences.referenceEvaluate} />
           </MainCard>
-          <MainCard title={intl.formatMessage({ id: 'interviewer results' })} sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'interviewer-results' })} sx={{ margin: '1em 0' }}>
             <InterviewerResult />
           </MainCard>
         </>
