@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/questions/SortStatus';
 import {
@@ -29,7 +29,6 @@ import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
 import Question from 'views/pages/questions/Question';
-import { useDispatch, useSelector } from 'store';
 import { getQuestionsList } from 'store/slices/question';
 import { QuestionType, QuestionFilter } from 'types/question';
 import AddQuestion from './AddQuestion';
@@ -41,87 +40,14 @@ import { getRanksList } from 'store/slices/rank';
 import { Languages, SearchValues } from 'types/language';
 import { fetchLanguages } from 'store/slices/language';
 import axios from 'utils/axios';
+import { dispatch, useSelector } from 'store';
+import RankFilters from 'components/Common/RankFilters';
 
 const Questions = () => {
-  // department
-  const [department, setDepartment] = React.useState<Department[]>([]);
-  const initialStateDepartment: DepartmentFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filterDepartment, setFilterDepartment] = useState(initialStateDepartment);
-  const filterDataDepartment = async () => {
-    await dispatch(getDepartmentList(filter));
-  };
-  const departmentState = useSelector((state) => state.department);
-  useEffect(() => {
-    setDepartment(departmentState.department);
-  }, [departmentState]);
-  useEffect(() => {
-    filterDataDepartment();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterDepartment]);
-  // department
-
-  // rank
-
-  const [anchorElRank, setAnchorElRank] = useState<null | HTMLElement>(null);
-  const openSortRank = Boolean(anchorElRank);
-  const handleClickListItemRank = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElRank(event.currentTarget);
-  };
-
-  const handleSortStatusCloseRank = () => {
-    setAnchorElRank(null);
-  };
-  const handleMenuItemClickRank = (event: React.MouseEvent<HTMLElement>, index: any) => {
-    setFilter({ ...filter, status: index });
-    setAnchorElRank(null);
-  };
-
-  const [rank, setRank] = React.useState<RankType[]>([]);
-  const getAllRank = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/operator/ranks/all`);
-      setRank(response.data.success);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getAllRank();
-  }, []);
-
-  // rank
-
-  // Language
-  const [language, setLanguage] = React.useState<Languages[]>([]);
-  const initialStateLanguage: SearchValues = {
-    search: '',
-    status: '',
-    currentPage: 1
-  };
-  const token = localStorage.getItem('serviceToken');
-  const [filterLanguage, setFilterLanguage] = useState(initialStateLanguage);
-  const filterDataLanguage = async () => {
-    await dispatch(fetchLanguages({ params: filterLanguage, token }));
-  };
-  const languageState = useSelector((state) => state.language);
-  useEffect(() => {
-    setLanguage(languageState.language);
-  }, [languageState]);
-  useEffect(() => {
-    filterDataLanguage();
-  }, [filterLanguage]);
-  // Language
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
-
-  const dispatch = useDispatch();
   const [data, setData] = React.useState<QuestionType[]>([]);
   const questionState = useSelector((state) => state.question);
 
@@ -166,7 +92,6 @@ const Questions = () => {
 
   React.useEffect(() => {
     filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -177,7 +102,20 @@ const Questions = () => {
   const addQuestion = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-  console.log(11111, rank.length > 0 && rank[0].name);
+  // rank
+  const [anchorElRank, setAnchorElRank] = useState(null);
+  const handleRankClick = (rank_id: string | number) => {
+    setFilter({ ...filter, rank_id });
+    setAnchorElRank(null);
+  };
+  const handleRank = (event: any) => {
+    setAnchorElRank(event.currentTarget);
+  };
+
+  const handleCloseRank = () => {
+    setAnchorElRank(null);
+  };
+
   return (
     <MainCard
       title={
@@ -245,44 +183,14 @@ const Questions = () => {
                     </Menu>
                   </Stack>
                   <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                    <Typography variant="h5">Sort by Rank: </Typography>
-                    <Button
-                      id="demo-positioned-button-rank"
-                      aria-controls="demo-positioned-menu-rank"
-                      aria-haspopup="true"
-                      aria-expanded={openSortRank ? 'true' : undefined}
-                      onClick={handleClickListItemRank}
-                      sx={{ color: 'grey.500', fontWeight: 400 }}
-                      endIcon={<KeyboardArrowDownIcon />}
-                    >
-                      {rank.length > 0 && rank[0].name}
-                    </Button>
-                    <Menu
-                      id="demo-positioned-menu-rank"
-                      aria-labelledby="demo-positioned-button-rank"
-                      anchorEl={anchorElRank}
-                      open={openSortRank}
-                      onClose={handleSortStatusCloseRank}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right'
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                      }}
-                    >
-                      {rank.map((rankk: RankType, index: number) => (
-                        <MenuItem
-                          sx={{ p: 1.5 }}
-                          key={index}
-                          selected={rankk.id === filter.rank_id}
-                          onClick={(event) => handleMenuItemClickRank(event, rankk.id)}
-                        >
-                          {rankk.name}
-                        </MenuItem>
-                      ))}
-                    </Menu>
+                    <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }} />
+                    <RankFilters
+                      filters={filter}
+                      anchorElRank={anchorElRank}
+                      handleRank={handleRank}
+                      handleCloseRank={handleCloseRank}
+                      handleRankClick={handleRankClick}
+                    />
                   </Stack>
                 </Stack>
               </Grid>

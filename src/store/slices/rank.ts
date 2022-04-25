@@ -1,5 +1,6 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
+import { Payload } from 'types/complete';
 
 // PROJECT IMPORTS
 import axios from 'utils/axios';
@@ -58,13 +59,26 @@ export function getRanksList(filter?: RankFilter) {
     (filter?.search !== '' ? `&search=${filter?.search}` : '') + (filter?.status !== '' ? `&status=${filter?.status}` : '')
   }&page=${filter?.currentPage}`;
 
-  console.log('filter', filter);
   return async () => {
     try {
       const response = await axios.get(`${RANKS_URL}?${queryParams}`);
       dispatch(slice.actions.getRanksListSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getRanksAll(payload: Payload) {
+  return async () => {
+    const { callback } = payload;
+    const response = await await axios
+      .get(`${RANKS_URL}/all`)
+      .then((result) => result)
+      .catch((err) => err);
+
+    if (callback) {
+      callback(response);
     }
   };
 }

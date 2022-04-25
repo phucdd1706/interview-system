@@ -103,7 +103,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
   };
   const [filterRank, setFilterRank] = useState(initialStateRank);
   const filterDataRank = async () => {
-    await dispatch(getRanksList(filterRank));
+    // await dispatch(getRanksList(filterRank));
   };
   const rankState = useSelector((state) => state.rank);
   useEffect(() => {
@@ -124,7 +124,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
   const token = localStorage.getItem('serviceToken');
   const [filterLanguage, setFilterLanguage] = useState(initialStateLanguage);
   const filterDataLanguage = async () => {
-    await dispatch(fetchLanguages({ params: filterLanguage, token }));
+    // await dispatch(fetchLanguages({ params: { filterLanguage } }));
   };
   const languageState = useSelector((state) => state.language);
   useEffect(() => {

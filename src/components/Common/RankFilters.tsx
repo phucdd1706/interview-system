@@ -4,30 +4,31 @@ import { Button, Typography, Menu, MenuItem, Stack } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // PROJECT IMPORTS
-import { RootState, useDispatch, useSelector } from 'store/index';
-import { RankType, RankFilter } from 'types/rank';
-import { getRanksList } from 'store/slices/rank';
+import { useDispatch } from 'store/index';
+import { RankType } from 'types/rank';
+import { getRanksAll } from 'store/slices/rank';
 
 const RankFilters = (props: any) => {
   const { filters, handleRankClick, anchorElRank, handleRank, handleCloseRank } = props;
   const dispatch = useDispatch();
   const [dataRank, setDataRank] = useState<RankType[]>([]);
-  const rankState = useSelector((state: RootState) => state.rank);
 
   const openRank = Boolean(anchorElRank);
 
-  const initialRankState: RankFilter = {
-    search: '',
-    status: '1',
-    currentPage: 1
-  };
+  // const initialRankState: RankFilter = {
+  //   search: '',
+  //   status: '1',
+  //   currentPage: 1
+  // };
 
   useEffect(() => {
-    setDataRank(rankState.ranks);
-  }, [rankState]);
-
-  useEffect(() => {
-    dispatch(getRanksList(initialRankState));
+    dispatch(
+      getRanksAll({
+        callback: (res) => {
+          setDataRank(res?.data?.success);
+        }
+      })
+    );
   }, []);
 
   const rankLabel = dataRank.filter((items) => items.id === filters.rank);
@@ -63,7 +64,7 @@ const RankFilters = (props: any) => {
         sx={{ height: 300 }}
       >
         {dataRank?.map((item, index) => (
-          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank} onClick={(event) => handleRankClick(event, item.id)}>
+          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank} onClick={() => handleRankClick(item.id)}>
             {item.name}
           </MenuItem>
         ))}

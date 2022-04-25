@@ -12,24 +12,23 @@ import { addCandidate, editCandidate } from 'store/slices/inProgress';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
+import { Candidates } from 'types/inProgress';
 
 interface Props {
-  dataEdit: any;
+  dataEdit: Candidates;
   visible: boolean;
   handleVisibleModal: () => void;
 }
 
 const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
-  const token = localStorage.getItem('serviceToken');
   const [errors, setErrors] = useState<any>({});
 
-  const handleAdd = (values: any) => {
+  const handleAdd = (values: Candidates) => {
     if (dataEdit.id) {
       dispatch(
         editCandidate({
           id: dataEdit.id,
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(
@@ -67,7 +66,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       dispatch(
         addCandidate({
           params: values,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(

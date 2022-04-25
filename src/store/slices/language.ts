@@ -51,9 +51,9 @@ export default completeSlice.reducer;
 
 export function fetchLanguages(payload: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
+    const { params, callback } = payload;
     const query = new URLSearchParams(params).toString();
-    const response = await getListLanguage(query, token)
+    const response = await getListLanguage(query)
       .then((result) => {
         dispatch(completeSlice.actions.getCompleteListSuccess(result.data.success));
         return result;
@@ -71,8 +71,8 @@ export function fetchLanguages(payload: Payload) {
 
 export function addLanguage(payload: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
-    const response = await createLanguage(params, token)
+    const { params, callback } = payload;
+    const response = await createLanguage(params)
       .then((result) => {
         dispatch(completeSlice.actions.addCompleteSuccess(result.data.success));
         return result;
@@ -90,8 +90,8 @@ export function addLanguage(payload: Payload) {
 
 export function editLanguage(payload: Payload) {
   return async () => {
-    const { id, params, token, callback } = payload;
-    const response = await updateLanguage(id, params, token)
+    const { id, params, callback } = payload;
+    const response = await updateLanguage(id, params)
       .then((result) => {
         dispatch(completeSlice.actions.editCompleteSuccess(result.data.success));
         return result;
@@ -109,8 +109,8 @@ export function editLanguage(payload: Payload) {
 
 export function removeLanguage(payload: Payload) {
   return async () => {
-    const { id, token, callback } = payload;
-    const response = await deleteLanguage(id, token)
+    const { id, callback } = payload;
+    const response = await deleteLanguage(id)
       .then((result) => {
         dispatch(completeSlice.actions.deleteCompleteSuccess(result.data.success));
         return result;

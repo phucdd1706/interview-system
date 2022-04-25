@@ -113,7 +113,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   const token = localStorage.getItem('serviceToken');
   const [filterLanguage, setFilterLanguage] = useState(initialStateLanguage);
   const filterDataLanguage = async () => {
-    await dispatch(fetchLanguages({ params: filterLanguage, token }));
+    await dispatch(fetchLanguages({ params: { filterLanguage } }));
   };
   const languageState = useSelector((state) => state.language);
   useEffect(() => {
@@ -121,7 +121,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   }, [languageState]);
   useEffect(() => {
     filterDataLanguage();
-  }, [filterLanguage]);
+  }, []);
   // Language
 
   const formik = useFormik({
