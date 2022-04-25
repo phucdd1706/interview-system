@@ -34,10 +34,6 @@ import { getQuestionsList } from 'store/slices/question';
 import { QuestionType, QuestionFilter } from 'types/question';
 import AddQuestion from './AddQuestion';
 import { gridSpacing } from 'store/constant';
-import { Department, DepartmentFilter } from 'types/department';
-import { getDepartmentList } from 'store/slices/department';
-import { Languages, SearchValues } from 'types/language';
-import { fetchLanguages } from 'store/slices/language';
 import RankFilters from 'components/Common/RankFilters';
 
 const initialState: QuestionFilter = {

@@ -2,7 +2,7 @@ import axiosServices from 'utils/axios';
 
 const getListLanguage = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages?${params}`);
 
-const getAllLanguage = () => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages/all`);
+const getAllLanguage = () => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/languages/all`);
 
 const getOneLanguage = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`);
 
