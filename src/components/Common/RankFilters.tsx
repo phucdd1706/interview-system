@@ -31,7 +31,7 @@ const RankFilters = (props: any) => {
     );
   }, []);
 
-  const rankLabel = dataRank.filter((items) => items.id === filters.rank);
+  const rankLabel = dataRank?.filter((items) => items.id === filters.rank);
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
@@ -45,7 +45,7 @@ const RankFilters = (props: any) => {
         sx={{ color: 'grey.500', fontWeight: 400 }}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        {rankLabel.length > 0 && rankLabel[0].name}
+        {rankLabel?.length > 0 && rankLabel[0]?.name}
       </Button>
       <Menu
         id="demo-positioned-menu"

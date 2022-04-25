@@ -91,8 +91,6 @@ const Index = () => {
     setFilters({ ...filters, search: newString! });
   };
 
-  console.log('filters', filters);
-
   const handleSort = (event: any) => {
     setAnchorElSort(event.currentTarget);
   };
