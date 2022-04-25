@@ -10,8 +10,8 @@ import { Department, DepartmentFilter, Payload } from 'types/department';
 export const DEPARTMENT_URL = {
   getDepartmen: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
   postDepartment: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
-  putDepartment: (id: string) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
-  delDepartment: (id: string) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
+  putDepartment: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
+  delDepartment: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
   getDetailDepartment: (id: string) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`
 };
 
@@ -85,13 +85,21 @@ export function postDepartment(payload: Payload) {
     }
   };
 }
-export function putDepartment(depart: Department) {
+export function putDepartment(payload: Payload) {
   return async () => {
-    try {
-      const resp = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/department/${depart.id}`, depart);
-      dispatch(slice.actions.putDepartmentSuccess(resp.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, params, callback } = payload;
+    const resp = await axios
+      .put(DEPARTMENT_URL.putDepartment(id), params)
+      .then((result) => {
+        dispatch(slice.actions.putDepartmentSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }
