@@ -40,36 +40,29 @@ const Language = ({ language }: Props) => {
           id: language.id,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Delete record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Delete record successfully!');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const handleVisibleModal = () => {

@@ -31,32 +31,10 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Edit record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Edit record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
@@ -68,38 +46,31 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Add new record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Add new record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const changeModal = (type: string) => {
@@ -114,7 +85,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
     name: yup.string().required('Name is required'),
     email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
     phone: yup.string().max(10).required('Phone is required'),
-    rank: yup.string().required('Rank is required')
+    rank_id: yup.string().required('Rank is required')
   });
 
   const formik = useFormik({
@@ -125,7 +96,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       email: dataEdit?.email,
       password: dataEdit?.password,
       password_confirmation: dataEdit?.password_confirmation,
-      rank: dataEdit?.rank,
+      rank_id: dataEdit?.rank_id,
       phone: dataEdit?.phone,
       type: 1
     },
@@ -291,10 +262,10 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                   </>
                 )}
                 <Grid item xl={12}>
-                  <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank} formik={formik} />
-                  {formik.touched.rank && formik.errors.rank && (
+                  <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
+                  {formik.touched.rank_id && formik.errors.rank_id && (
                     <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank}
+                      {formik.errors.rank_id}
                     </FormHelperText>
                   )}
                 </Grid>

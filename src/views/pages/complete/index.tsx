@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import { FormattedMessage } from 'react-intl';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -43,7 +44,7 @@ const Index = () => {
   const [anchorElRank, setAnchorElRank] = useState(null);
   const initialState: SearchValues = {
     search: '',
-    rank: '',
+    rank_id: '',
     status: '',
     currentPage: 1,
     limit: 20
@@ -76,8 +77,8 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleRankClick = (rank: string | number) => {
-    setFilters({ ...filters, rank });
+  const handleRankClick = (rank_id: string | number) => {
+    setFilters({ ...filters, rank_id });
     setAnchorElRank(null);
   };
 
@@ -161,8 +162,12 @@ const Index = () => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ pr: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Mobile</TableCell>
+                <TableCell>
+                  <FormattedMessage id="name" />
+                </TableCell>
+                <TableCell>
+                  <FormattedMessage id="phone" />
+                </TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Status</TableCell>

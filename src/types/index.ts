@@ -15,12 +15,14 @@ import { DepartmentStateProps } from './department';
 import { CompleteStateProps } from './complete';
 import { InProgressStateProps } from './inProgress';
 import { LanguageStateProps } from './language';
+import { QuestionStateProps } from './question';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
   customer: CustomerStateProps;
   rank: RankStateProps;
+  question: QuestionStateProps;
   profile: ProfileStateProps;
   notification: NotificationStateProps;
   department: DepartmentStateProps;

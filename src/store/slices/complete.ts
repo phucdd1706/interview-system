@@ -49,9 +49,8 @@ const completeSlice = createSlice({
 
 export default completeSlice.reducer;
 
-export function fetchCandidates(payload: Payload) {
+export function fetchCandidates({ params, callback }: Payload) {
   return async () => {
-    const { params, callback } = payload;
     const query = new URLSearchParams(params).toString();
     const response = await getListCandidate(query)
       .then((result) => {
@@ -69,9 +68,8 @@ export function fetchCandidates(payload: Payload) {
   };
 }
 
-export function addCandidate(payload: Payload) {
+export function addCandidate({ params, callback }: Payload) {
   return async () => {
-    const { params, callback } = payload;
     const response = await createCandidate(params)
       .then((result) => {
         dispatch(completeSlice.actions.addCompleteSuccess(result.data.success));
@@ -88,9 +86,8 @@ export function addCandidate(payload: Payload) {
   };
 }
 
-export function editCandidate(payload: Payload) {
+export function editCandidate({ id, params, callback }: Payload) {
   return async () => {
-    const { id, params, callback } = payload;
     const response = await updateCandidate(id, params)
       .then((result) => {
         dispatch(completeSlice.actions.editCompleteSuccess(result.data.success));
@@ -107,9 +104,8 @@ export function editCandidate(payload: Payload) {
   };
 }
 
-export function removeCandidate(payload: Payload) {
+export function removeCandidate({ id, callback }: Payload) {
   return async () => {
-    const { id, callback } = payload;
     const response = await deleteCandidate(id)
       .then((result) => {
         dispatch(completeSlice.actions.deleteCompleteSuccess(result.data.success));
