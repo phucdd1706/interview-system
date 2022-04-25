@@ -6,6 +6,11 @@ export interface DepartmentStateProps {
   currentPage: number;
   error: DataError[];
 }
+export interface Payload {
+  id?: string | number;
+  params?: Department;
+  callback?: (response: any) => void;
+}
 interface DataError {
   error: {
     errors: string[];
