@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputLabel, MenuItem, FormControl } from '@mui/material';
 
 // IMPORT PROJECT
-import { RankType } from 'types/rank';
-import { getRanksAll } from 'store/slices/rank';
+import { Department } from 'types/department';
+import { getDepartmentsAll } from 'store/slices/department';
 import { useDispatch } from 'store';
 
-const RankSelect = (props: any) => {
+const DepartmentSelect = (props: any) => {
   const dispatch = useDispatch();
   const { change, values, size, formik, fullWidth } = props;
-  const [data, setData] = useState<RankType[]>([]);
+  const [data, setData] = useState<Department[]>([]);
 
   // const initialRankState: RankFilter = {
   //   search: '',
@@ -20,7 +20,7 @@ const RankSelect = (props: any) => {
 
   useEffect(() => {
     dispatch(
-      getRanksAll({
+      getDepartmentsAll({
         callback: (res) => {
           setData(res?.data?.success);
         }
@@ -46,26 +46,26 @@ const RankSelect = (props: any) => {
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
           <span>
-            <span style={{ color: 'red' }}>*</span> Rank
+            <span style={{ color: 'red' }}>*</span> Department
           </span>
         </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          name="rank_id"
+          name="department_id"
           size={size || 'small'}
           label={
             <span>
-              <span style={{ color: 'red' }}>*</span> Rank
+              <span style={{ color: 'red' }}>*</span> Department
             </span>
           }
           onChange={change}
           value={values}
           fullWidth={fullWidth}
-          error={formik && formik.touched.rank_id && Boolean(formik.errors.rank_id)}
+          error={formik && formik.touched.department_id && Boolean(formik.errors.department_id)}
           MenuProps={MenuProps}
         >
-          {data?.map((row: RankType) => (
+          {data?.map((row: Department) => (
             <MenuItem value={row?.id} key={row?.id}>
               {row?.name}
             </MenuItem>
@@ -76,4 +76,4 @@ const RankSelect = (props: any) => {
   );
 };
 
-export default RankSelect;
+export default DepartmentSelect;

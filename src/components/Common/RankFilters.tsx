@@ -25,13 +25,15 @@ const RankFilters = (props: any) => {
     dispatch(
       getRanksAll({
         callback: (res) => {
-          setDataRank(res?.data?.success);
+          setDataRank([{ id: '', name: 'All' }, ...res?.data?.success]);
         }
       })
     );
   }, []);
 
-  const rankLabel = dataRank?.filter((items) => items.id === filters.rank);
+  console.log('dataRank', dataRank);
+
+  const rankLabel = dataRank?.filter((items) => items.id === filters.rank_id);
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
@@ -64,7 +66,7 @@ const RankFilters = (props: any) => {
         sx={{ height: 300 }}
       >
         {dataRank?.map((item, index) => (
-          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank} onClick={() => handleRankClick(item.id)}>
+          <MenuItem sx={{ p: 1.5 }} key={index} selected={item.id === filters.rank_id} onClick={() => handleRankClick(item.id)}>
             {item.name}
           </MenuItem>
         ))}

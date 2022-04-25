@@ -1,5 +1,6 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
+import { Payload } from 'types/complete';
 
 // PROJECT IMPORTS
 import axios from 'utils/axios';
@@ -67,6 +68,21 @@ export function getDepartmentList(filter?: DepartmentFilter) {
     }
   };
 }
+
+export function getDepartmentsAll(payload: Payload) {
+  return async () => {
+    const { callback } = payload;
+    const response = await await axios
+      .get(`${DEPARTMENT_URL.postDepartment}/all`)
+      .then((result) => result)
+      .catch((err) => err);
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
 export function postDepartment(data?: Department) {
   return async () => {
     try {

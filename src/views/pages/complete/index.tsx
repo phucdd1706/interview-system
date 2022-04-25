@@ -43,7 +43,7 @@ const Index = () => {
   const [anchorElRank, setAnchorElRank] = useState(null);
   const initialState: SearchValues = {
     search: '',
-    rank: '',
+    rank_id: '',
     status: '',
     currentPage: 1,
     limit: 20
@@ -76,8 +76,8 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleRankClick = (rank: string | number) => {
-    setFilters({ ...filters, rank });
+  const handleRankClick = (rank_id: string | number) => {
+    setFilters({ ...filters, rank_id });
     setAnchorElRank(null);
   };
 
