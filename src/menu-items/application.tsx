@@ -84,6 +84,7 @@ const application = {
       icon: icons.IconStairsUp,
       breadcrumbs: true
     },
+
     {
       id: 'applicant',
       title: <FormattedMessage id="add new applicant reference" />,

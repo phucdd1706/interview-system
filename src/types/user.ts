@@ -19,7 +19,11 @@ export type SortStatusProps = {
   value?: string;
   label: string;
 };
-
+export interface Payload {
+  id?: string | number;
+  params?: Administrator;
+  callback?: (response: any) => void;
+}
 export type Administrator = {
   id?: string;
   name?: string;
