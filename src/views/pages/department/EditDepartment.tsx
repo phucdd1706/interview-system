@@ -31,6 +31,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { dispatch } from 'store';
 import { Department, SelectProps } from 'types/department';
 import { putDepartment } from 'store/slices/department';
+import { useState } from 'react';
 
 // const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
 
@@ -61,6 +62,54 @@ const validationSchema = Yup.object({
 });
 
 const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentProps) => {
+  const [errors, setErrors] = useState<any>({});
+
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const EditDepart = (values: Department) => {
+    dispatch(
+      putDepartment({
+        id: department.id,
+        params: values,
+        callback: (resp) => {
+          if (resp?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Edit record successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: resp?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(resp?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     initialValues: {
       id: department.id,
@@ -69,21 +118,8 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
       status: department.status
     },
     validationSchema,
-    onSubmit: async (values) => {
-      await dispatch(putDepartment(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
-        })
-      );
-      handleDrawerOpen();
+    onSubmit: (values) => {
+      EditDepart(values);
     }
   });
 
@@ -91,8 +127,7 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -148,8 +183,8 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
                       name="name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
                       fullWidth
                       label="Name"
                     />
@@ -162,8 +197,8 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
                       label="Code"
                       onChange={formik.handleChange}
                       value={formik.values.code}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.code && Boolean(formik.errors.code)) || errors.code}
+                      helperText={(formik.touched.code && formik.errors.code) || errors.code}
                     />
                   </Grid>
                   <Grid item xs={12}>
