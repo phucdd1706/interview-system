@@ -31,8 +31,6 @@ const RankFilters = (props: any) => {
     );
   }, []);
 
-  console.log('dataRank', dataRank);
-
   const rankLabel = dataRank?.filter((items) => items.id === filters.rank_id);
 
   return (
