@@ -13,6 +13,7 @@ import { addCandidate, editCandidate } from 'store/slices/complete';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
   dataEdit: Candidates;
@@ -31,32 +32,10 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Edit record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Edit record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
@@ -68,38 +47,31 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Add new record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Add new record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const changeModal = (type: string) => {
@@ -302,7 +274,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button fullWidth variant="contained" type="submit">
-                      Save
+                      <FormattedMessage id="data" />
                     </Button>
                   </AnimateButton>
                 </Grid>
