@@ -1,4 +1,5 @@
 // THIRD-PARTY
+import { alertRequestError } from './helpers/axios/errorAlert';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ErrorResponse } from 'types/error-response.type';
 
@@ -12,7 +13,11 @@ const axiosServices = axios.create({
 // interceptor for http
 axiosServices.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
+  (error: AxiosError) => {
+    console.log(error.response);
+    alertRequestError(error);
+    return Promise.reject((error.response && error.response.data) || 'Wrong Services');
+  }
 );
 
 export default axiosServices;
