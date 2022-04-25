@@ -5,6 +5,8 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
+import { filterAuthorization } from 'menu-items/application';
+import PageNotFound from 'views/pages/404';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
@@ -36,45 +38,68 @@ const MainRoutes = {
     },
     {
       path: '/complete',
+      role: 2,
       element: <Complete />
     },
     {
       path: '/inprogress',
+      role: 2,
       element: <Inprogress />
     },
     {
       path: '/language',
+      role: 1,
       element: <Language />
     },
     {
       path: '/user/administrator',
+      role: 1,
       element: <Administrator />
     },
     {
       path: '/user/customer',
+      role: 1,
       element: <Customer />
     },
     {
       path: '/department',
+      role: 1,
       element: <Department />
     },
     {
       path: 'ranks',
+      role: 1,
       element: <Ranks />
     },
     {
       path: '/user/profile',
+      role: 1,
       element: <Profile />
     },
     {
       path: '/applicant',
+      role: 2,
       element: <AddNewApplicant />
     },
     {
-      path: '/interview/:id',
+      path: '/interview/:applicantId',
+      role: 2,
       element: <Interview />
     }
   ]
 };
+
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+// filterAuthorization.forEach((item: string) => {
+//   MainRoutes.children = MainRoutes.children.filter((child) => child.path !== item);
+// });
+
+MainRoutes.children = MainRoutes.children.filter((child) => {
+  if (child.role) {
+    return user.type === child.role;
+  }
+  return true;
+});
 
 export default MainRoutes;

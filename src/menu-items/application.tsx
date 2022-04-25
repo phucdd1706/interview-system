@@ -38,19 +38,21 @@ const application = {
       id: 'history',
       title: <FormattedMessage id="history" />,
       type: 'collapse',
-      role: 1,
+      role: 2,
       icon: icons.IconHistory,
       children: [
         {
           id: 'complete',
           title: <FormattedMessage id="complete" />,
           type: 'item',
+          role: 2,
           url: '/complete'
         },
         {
           id: 'inprogress',
           title: <FormattedMessage id="inProgress" />,
           type: 'item',
+          role: 2,
           url: '/inprogress'
         }
       ]
@@ -93,5 +95,21 @@ const application = {
     }
   ]
 };
+
+const userRole = JSON.parse(localStorage.getItem('user') || '{}');
+const hiddenRoute: Array<string> = [];
+const getHiddenRoute = (route: any) => {
+  if (route.children) {
+    route.children.forEach((element: any) => getHiddenRoute(element));
+  } else {
+    if (route.role !== userRole.type) {
+      hiddenRoute.push(route.url);
+    }
+    return hiddenRoute;
+  }
+  return hiddenRoute;
+};
+
+export const filterAuthorization = getHiddenRoute(application);
 
 export default application;

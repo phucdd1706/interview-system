@@ -1,11 +1,12 @@
 // PROJECT IMPORTS
 
 export interface Languages {
-  id: number;
-  name: string;
-  description: string;
-  created_at: string;
-  status: number;
+  id?: number;
+  name?: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  status?: any;
 }
 
 export interface SearchValues {
@@ -18,12 +19,11 @@ export interface SearchValues {
 export interface Payload {
   id?: string | number;
   params?: any;
-  token?: any;
   callback?: (response: any) => void;
 }
 
 export type Status = {
-  value?: any;
+  value?: number | string;
   label: string;
 };
 

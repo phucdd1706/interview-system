@@ -3,31 +3,34 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputLabel, MenuItem, FormControl } from '@mui/material';
 
 // IMPORT PROJECT
-import { RankType, RankFilter } from 'types/rank';
-import { getRanksList } from 'store/slices/rank';
-import { useDispatch, useSelector } from 'store';
+import { RankType } from 'types/rank';
+import { getRanksAll } from 'store/slices/rank';
+import { useDispatch } from 'store';
 
 const RankSelect = (props: any) => {
   const dispatch = useDispatch();
   const { change, values, size, formik, fullWidth } = props;
   const [data, setData] = useState<RankType[]>([]);
 
-  const { ranks } = useSelector((state) => state.rank);
-  const initialRankState: RankFilter = {
-    search: '',
-    status: '1',
-    currentPage: 1
-  };
-  useEffect(() => {
-    dispatch(getRanksList(initialRankState));
-  }, []);
+  // const initialRankState: RankFilter = {
+  //   search: '',
+  //   status: '1',
+  //   currentPage: 1
+  // };
 
   useEffect(() => {
-    setData(ranks);
-  }, [ranks]);
+    dispatch(
+      getRanksAll({
+        callback: (res) => {
+          setData(res?.data?.success);
+        }
+      })
+    );
+  }, []);
 
   const ITEM_HEIGHT = 40;
   const ITEM_PADDING_TOP = 8;
+
   const MenuProps = {
     PaperProps: {
       style: {
