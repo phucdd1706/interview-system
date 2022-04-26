@@ -115,7 +115,6 @@ const Administrators = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-  console.log(1123, administratorState.pageCount);
 
   return (
     <MainCard
