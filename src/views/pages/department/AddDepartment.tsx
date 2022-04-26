@@ -13,14 +13,14 @@ import { gridSpacing } from 'store/constant';
 
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { postDepartment } from 'store/slices/department';
+import { postDepartment, getDepartmentList } from 'store/slices/department';
 import { Department } from 'types/department';
 
 interface AddDepartmentProps {
   open: boolean;
+  filter: any;
   handleDrawerOpen: () => void;
 }
 
@@ -29,7 +29,7 @@ const validationSchema = Yup.object({
   code: Yup.string().required('Code is required')
 });
 
-const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
+const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) => {
   const [errors, setErrors] = useState<any>({});
 
   const changeModal = (type: string) => {
@@ -45,6 +45,7 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {
+            dispatch(getDepartmentList(filter));
             dispatch(
               openSnackbar({
                 open: true,

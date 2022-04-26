@@ -74,7 +74,7 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
   const EditDepart = (values: Department) => {
     dispatch(
       putDepartment({
-        id: department.id,
+        id: values.id,
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {

@@ -44,32 +44,10 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Edit language successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Edit language successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
@@ -81,38 +59,31 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Add new language successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Add language successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const changeModal = (type: string) => {

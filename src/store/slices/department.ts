@@ -1,5 +1,6 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
+
 // PROJECT IMPORTS
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
@@ -118,13 +119,21 @@ export function putDepartment(payload: Payload) {
     }
   };
 }
-export function delDepartment(depart: Department) {
+export function delDepartment(payload: Payload) {
   return async () => {
-    try {
-      const resp = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/department/${depart.id}`);
-      dispatch(slice.actions.delDepartmentSuccess(resp.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const resp = await axios
+      .delete(DEPARTMENT_URL.delDepartment(id))
+      .then((result) => {
+        dispatch(slice.actions.delDepartmentSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }
