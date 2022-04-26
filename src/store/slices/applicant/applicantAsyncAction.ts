@@ -18,9 +18,19 @@ export const getQuestionsThunk = createAsyncThunk(
 
 export const getInterviewQuestionThunk = createAsyncThunk(
   'applicant/getInterviewQuestionThunk',
-  async (params: ApplicantInfo, thunkAPI) => {
+  async (
+    params: {
+      data: Array<{
+        language_id: string | number;
+        rank_id: string | number;
+        rank_advanced_id: string | number;
+      }>;
+    },
+    thunkAPI
+  ) => {
     const data = await applicantAPI.getInterviewQuestionThunk(params);
-    return data && dispatch(setApplicantInfo(data));
+    // return data && dispatch(setApplicantInfo(data));
+    return data;
   }
 );
 

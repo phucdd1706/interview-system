@@ -51,6 +51,8 @@ const slice = createSlice({
   }
 });
 
+export const { getRanksListSuccess } = slice.actions;
+
 export default slice.reducer;
 
 export function getRanksList(filter?: RankFilter) {

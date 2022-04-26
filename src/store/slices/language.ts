@@ -47,6 +47,8 @@ const completeSlice = createSlice({
   }
 });
 
+export const { getCompleteListSuccess } = completeSlice.actions;
+
 export default completeSlice.reducer;
 
 export function fetchLanguages(payload: Payload) {

@@ -73,9 +73,9 @@ const ApplicantInformation = ({ applicantInfo }: Props) => {
         <Typography variant="h4" component="h4">
           Apply Position:
         </Typography>
-        {applicantInfo.applyPosition.map((data: { id: string; position: string; level: string }, index) => (
+        {applicantInfo.applyPosition.map((data: { rank_advanced_id: string; language_id: string; rank_id: string }, index) => (
           <Typography variant="h4" component="h4" sx={{ fontWeight: '400' }} key={index}>
-            &nbsp;{data.position} - {data.level}&nbsp;
+            &nbsp;{data.language_id} - {data.rank_id}&nbsp;
             {index < applicantInfo.applyPosition.length - 1 && !matchDownSM && '/'}
           </Typography>
         ))}

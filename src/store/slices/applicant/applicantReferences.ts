@@ -124,8 +124,13 @@ export const applicantAPI = {
     axiosGet<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/${applicantId}`),
   getQuestionsThunk: (type: string, value: string) =>
     axiosPost<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
-  getInterviewQuestionThunk: (applicantInfo: ApplicantInfo) =>
-    axiosPost<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/interview-question`, applicantInfo, 'Success hehe'),
+  getInterviewQuestionThunk: (params: {
+    data: Array<{
+      language_id: string | number;
+      rank_id: string | number;
+      rank_advanced_id: string | number;
+    }>;
+  }) => axiosPost<ApplicantDataInterface>(`${process.env.REACT_APP_API_URL}/v1/client/questions/candidate`, params, 'Success'),
   getReferenceEvaluateThunk: (applicantInfo: ApplicantDataInterface) =>
     axiosPost<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
 };

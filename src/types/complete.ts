@@ -1,7 +1,7 @@
 // PROJECT IMPORTS
 
 export interface Candidates {
-  id: number;
+  id: number | string;
   name: string;
   username: string;
   phone: string;

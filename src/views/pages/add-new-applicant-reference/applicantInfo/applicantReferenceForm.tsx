@@ -1,6 +1,8 @@
 // THIRD-PARTY
+import * as React from 'react';
 import { Formik } from 'formik';
 import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -20,12 +22,19 @@ import { useIntl } from 'react-intl';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import axiosServices from 'utils/axios';
 import LegendWrapper from '../legend';
-import { useDispatch } from 'store';
+import { useDispatch, useSelector } from 'store';
+import { getRanksListSuccess } from 'store/slices/rank';
+import { getCompleteListSuccess } from 'store/slices/language';
 import { ApplicantInfo } from 'types/applicantData';
 import { getInterviewQuestionThunk } from 'store/slices/applicant/applicantAsyncAction';
 import personalDetail from './layoutMapping';
 import { jobPosition, jobLevel, workingExperiences } from '../constants';
+
+// TYPE IMPORTS
+import { RankType } from 'types/rank';
+import { Languages } from 'types/language';
 
 type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
 
@@ -39,16 +48,9 @@ const initialApplicantInfo: ApplicantInfo = {
   address: '',
   applyPosition: [
     {
-      id: uuidv4(),
-      position: '',
-      level: ''
-    }
-  ],
-  experiences: [
-    {
-      id: uuidv4(),
-      position: '',
-      durations: ''
+      rank_advanced_id: '',
+      language_id: '',
+      rank_id: ''
     }
   ],
   notes: '',
@@ -60,7 +62,14 @@ const ApplicantForm = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
-
+  const { language } = useSelector((state) => state.language);
+  const { ranks } = useSelector((state) => state.rank);
+  React.useEffect(() => {
+    axios.all([axiosServices.get('/v1/languages/all'), axiosServices.get('/v1/ranks/all')]).then((res) => {
+      dispatch(getCompleteListSuccess({ data: res[0].data.success }));
+      dispatch(getRanksListSuccess({ data: res[1].data.success }));
+    });
+  }, [dispatch]);
   return (
     <Box>
       <Formik
@@ -74,19 +83,20 @@ const ApplicantForm = () => {
           address: Yup.string().required('Address is required'),
           applyPosition: Yup.array().of(
             Yup.object().shape({
-              position: Yup.string().required('Position is required'),
-              level: Yup.string().required('Level is required')
+              language_id: Yup.string().required('Position is required'),
+              rank_id: Yup.string().required('Level is required')
             })
           )
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          await dispatch(getInterviewQuestionThunk(values));
+          await dispatch(getInterviewQuestionThunk({ data: values.applyPosition }));
           setSubmitting(false);
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
+            {console.log(values)}
             {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string; required?: boolean }[] }) => {
               const { render } = row;
               return (
@@ -121,75 +131,19 @@ const ApplicantForm = () => {
               );
             })}
 
-            <LegendWrapper legend={intl.formatMessage({ id: 'experiences' })}>
-              <Box>
-                {values.experiences.map((item: { id: string; position: string; durations: string }, index: number) => (
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
-                    <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
-                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
-                        <Autocomplete
-                          options={jobPosition}
-                          onChange={(event, value) => {
-                            setFieldValue(`experiences[${index}].position`, value);
-                          }}
-                          getOptionLabel={(option) => option}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Position" placeholder="Position" />}
-                          sx={{ flexGrow: 1 }}
-                        />
-                      </FormControl>
-                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
-                        <Autocomplete
-                          options={workingExperiences}
-                          onChange={(event, value) => {
-                            setFieldValue(`experiences[${index}].durations`, value);
-                          }}
-                          getOptionLabel={(option) => option}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Durations" placeholder="Durations" />}
-                          sx={{ flexGrow: 1 }}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => {
-                        setFieldValue(
-                          'experiences',
-                          values.experiences.filter((experience) => experience.id !== item.id)
-                        );
-                      }}
-                      sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
-                    >
-                      <IconX />
-                    </Button>
-                  </Stack>
-                ))}
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setFieldValue('experiences', [...values.experiences, { id: uuidv4(), position: '', durations: '' }]);
-                    }}
-                    sx={{ marginTop: 2 }}
-                  >
-                    + Add more experiences
-                  </Button>
-                </Stack>
-              </Box>
-            </LegendWrapper>
-
             <LegendWrapper legend={intl.formatMessage({ id: 'apply-positions' })}>
               <Box>
-                {values.applyPosition.map((item: { id: string; position: string; level: string }, index: number) => (
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
+                {values.applyPosition.map((item: { rank_advanced_id: string; language_id: string; rank_id: string }, index: number) => (
+                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={uuidv4()}>
                     <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={jobPosition}
+                          options={language}
                           onChange={(event, value) => {
-                            setFieldValue(`applyPosition[${index}].position`, value);
+                            setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
-                          getOptionLabel={(option) => option}
+                          value={language.find((element) => element.id === item.language_id)}
+                          getOptionLabel={(option: Languages) => option.name || ''}
                           renderInput={(params) => (
                             <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
                           )}
@@ -199,18 +153,19 @@ const ApplicantForm = () => {
                           <FormHelperText error id="standard-weight-helper-text-last-name">
                             {
                               // @ts-ignore:next-line
-                              errors.applyPosition[index] && errors.applyPosition[index].position
+                              errors.applyPosition[index] && errors.applyPosition[index].language_id
                             }
                           </FormHelperText>
                         )}
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={jobLevel}
+                          options={ranks}
                           onChange={(event, value) => {
-                            setFieldValue(`applyPosition[${index}].level`, value);
+                            setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
-                          getOptionLabel={(option) => option}
+                          value={ranks.find((element) => element.id === item.rank_id)}
+                          getOptionLabel={(option: RankType) => option.name || ''}
                           renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
                           sx={{ flexGrow: 1 }}
                         />
@@ -218,7 +173,27 @@ const ApplicantForm = () => {
                           <FormHelperText error id="standard-weight-helper-text-last-name">
                             {
                               // @ts-ignore:next-line
-                              errors.applyPosition[index] && errors.applyPosition[index].level
+                              errors.applyPosition[index] && errors.applyPosition[index].rank_id
+                            }
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                      <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
+                        <Autocomplete
+                          options={ranks}
+                          onChange={(event, value) => {
+                            setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
+                          }}
+                          value={ranks.find((element) => element.id === item.rank_advanced_id)}
+                          getOptionLabel={(option: RankType) => option.name || ''}
+                          renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
+                          sx={{ flexGrow: 1 }}
+                        />
+                        {touched.applyPosition && errors.applyPosition && (
+                          <FormHelperText error id="standard-weight-helper-text-last-name">
+                            {
+                              // @ts-ignore:next-line
+                              errors.applyPosition[index] && errors.applyPosition[index].rank_advanced_id
                             }
                           </FormHelperText>
                         )}
@@ -230,7 +205,7 @@ const ApplicantForm = () => {
                       onClick={() => {
                         setFieldValue(
                           'applyPosition',
-                          values.applyPosition.filter((position) => position.id !== item.id)
+                          values.applyPosition.filter((position) => position.language_id !== item.language_id)
                         );
                       }}
                       sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
@@ -243,7 +218,7 @@ const ApplicantForm = () => {
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      setFieldValue('applyPosition', values.applyPosition.concat({ id: uuidv4(), position: '', level: '' }));
+                      setFieldValue('applyPosition', values.applyPosition.concat({ rank_advanced_id: '', language_id: '', rank_id: '' }));
                     }}
                     sx={{ marginTop: 2 }}
                   >

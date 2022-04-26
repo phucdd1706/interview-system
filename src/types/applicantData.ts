@@ -38,11 +38,11 @@ export interface ApplicantInfo {
   phone: string;
   address: string;
   interviewTime: string;
-  experiences: Job[];
+  experiences?: Job[];
   applyPosition: Array<{
-    id: string;
-    position: string;
-    level: string;
+    rank_advanced_id: string;
+    language_id: string;
+    rank_id: string;
   }>;
   notes: string;
 }
