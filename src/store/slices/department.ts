@@ -1,6 +1,5 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-
 // PROJECT IMPORTS
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
@@ -9,6 +8,7 @@ import { Department, DepartmentFilter, Payload } from 'types/department';
 
 export const DEPARTMENT_URL = {
   getDepartmen: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
+  getAll: `${process.env.REACT_APP_API_URL}/v1/department/all`,
   postDepartment: `${process.env.REACT_APP_API_URL}/v1/operator/department`,
   putDepartment: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
   delDepartment: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/department/${id}`,
@@ -67,6 +67,21 @@ export function getDepartmentList(filter?: DepartmentFilter) {
     }
   };
 }
+
+export function getDepartmentsAll(payload: Payload) {
+  return async () => {
+    const { callback } = payload;
+    const response = await await axios
+      .get(`${DEPARTMENT_URL.getAll}`)
+      .then((result) => result)
+      .catch((err) => err);
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
 export function postDepartment(payload: Payload) {
   return async () => {
     const { params, callback } = payload;

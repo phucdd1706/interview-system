@@ -9,6 +9,7 @@ import { dispatch } from 'store';
 import { RankType, RankFilter } from 'types/rank';
 
 export const RANKS_URL = `${process.env.REACT_APP_API_URL}/v1/operator/ranks`;
+export const RANKS_URL_ALL = `${process.env.REACT_APP_API_URL}/v1/ranks/all`;
 
 const initialState: DefaultRootStateProps['rank'] = {
   ranks: [],
@@ -73,7 +74,7 @@ export function getRanksAll(payload: Payload) {
   return async () => {
     const { callback } = payload;
     const response = await await axios
-      .get(`${RANKS_URL}/all`)
+      .get(`${RANKS_URL_ALL}`)
       .then((result) => result)
       .catch((err) => err);
 

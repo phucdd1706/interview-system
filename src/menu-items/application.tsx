@@ -86,6 +86,15 @@ const application = {
     },
 
     {
+      id: 'manage-question',
+      title: <FormattedMessage id="manage-question" />,
+      type: 'item',
+      role: 1,
+      url: '/questions',
+      icon: icons.IconStairsUp,
+      breadcrumbs: true
+    },
+    {
       id: 'applicant',
       title: <FormattedMessage id="add new applicant reference" />,
       type: 'item',
