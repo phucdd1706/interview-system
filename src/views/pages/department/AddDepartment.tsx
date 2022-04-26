@@ -16,11 +16,11 @@ import { openSnackbar } from 'store/slices/snackbar';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { postDepartment, getDepartmentList } from 'store/slices/department';
-import { Department } from 'types/department';
+import { Department, DepartmentFilter } from 'types/department';
 
 interface AddDepartmentProps {
   open: boolean;
-  filter: any;
+  filter: DepartmentFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -46,35 +46,27 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
         callback: (resp) => {
           if (resp?.data?.success) {
             dispatch(getDepartmentList(filter));
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Add new record successfully!',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            Notification('success', 'Add new record successfully!');
             changeModal('close');
           } else {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: resp?.message,
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'error'
-                },
-                close: true
-              })
-            );
+            Notification('error', resp?.message);
             setErrors(resp?.errors);
           }
         }
+      })
+    );
+  };
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
       })
     );
   };
