@@ -73,14 +73,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
     );
   };
 
-  const changeModal = (type: string) => {
-    if (type === 'close') {
-      handleVisibleModal();
-      setErrors({});
-      formik.resetForm();
-    }
-  };
-
   const validationSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -105,6 +97,14 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       handleAdd(values);
     }
   });
+
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleVisibleModal();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
 
   return (
     <Dialog
@@ -263,11 +263,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 )}
                 <Grid item xl={12}>
                   <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                  {formik.touched.rank_id && formik.errors.rank_id && (
-                    <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank_id}
-                    </FormHelperText>
-                  )}
                 </Grid>
 
                 <Grid item xs={12}>

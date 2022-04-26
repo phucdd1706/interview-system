@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/questions/SortStatus';
 import {
@@ -35,11 +35,15 @@ import { QuestionType, QuestionFilter } from 'types/question';
 import AddQuestion from './AddQuestion';
 import { gridSpacing } from 'store/constant';
 import RankFilters from 'components/Common/RankFilters';
+import DepartmentFilters from 'components/Common/DepartmentFilters';
+import LanguageFilters from 'components/Common/LanguageFilters';
 
 const initialState: QuestionFilter = {
   search: '',
   status: '',
   rank_id: '',
+  department_id: '',
+  language_id: '',
   currentPage: 1
 };
 
@@ -52,7 +56,7 @@ const Questions = () => {
 
   const questionState = useSelector((state: RootState) => state.question);
   const [data, setData] = React.useState<QuestionType[]>([]);
-  const [anchorElRank, setAnchorElRank] = useState(null);
+
   const [filter, setFilter] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -103,7 +107,8 @@ const Questions = () => {
   const addQuestion = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-
+  // rank
+  const [anchorElRank, setAnchorElRank] = useState(null);
   const handleRank = (event: any) => {
     setAnchorElRank(event.currentTarget);
   };
@@ -116,7 +121,41 @@ const Questions = () => {
     setFilter({ ...filter, rank_id: index });
     setAnchorElRank(null);
   };
+  // rank-end
 
+  // department
+  const [anchorElDepartment, setAnchorElDepartment] = useState(null);
+  const handleDepartment = (event: any) => {
+    setAnchorElDepartment(event.currentTarget);
+  };
+
+  const handleCloseDepartment = () => {
+    setAnchorElDepartment(null);
+  };
+
+  const handleDepartmentClick = (index: number | string) => {
+    setFilter({ ...filter, department_id: index });
+    setAnchorElDepartment(null);
+    console.log(index);
+  };
+  // department
+
+  // Language
+  const [anchorElLanguage, setAnchorElLanguage] = useState(null);
+  const handleLanguage = (event: any) => {
+    setAnchorElLanguage(event.currentTarget);
+  };
+
+  const handleCloseLanguage = () => {
+    setAnchorElLanguage(null);
+  };
+
+  const handleLanguageClick = (index: number | string) => {
+    setFilter({ ...filter, language_id: index });
+    setAnchorElLanguage(null);
+    console.log(121, index);
+  };
+  // language
   return (
     <MainCard
       title={
@@ -126,7 +165,7 @@ const Questions = () => {
               <Grid item>
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
                   <TextField
-                    sx={{ width: { xs: 140, md: 'auto' } }}
+                    sx={{ width: { xs: 140, md: '250px' } }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -144,7 +183,9 @@ const Questions = () => {
                     |
                   </Typography>
                   <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                    <Typography variant="h5">Sort by: </Typography>
+                    <Typography variant="h5" style={{ width: '50px' }}>
+                      Sort by:{' '}
+                    </Typography>
                     <Button
                       id="demo-positioned-button"
                       aria-controls="demo-positioned-menu"
@@ -190,6 +231,20 @@ const Questions = () => {
                     handleRank={handleRank}
                     handleCloseRank={handleCloseRank}
                     handleRankClick={handleRankClick}
+                  />
+                  <DepartmentFilters
+                    filters={filter}
+                    anchorElDepartment={anchorElDepartment}
+                    handleDepartment={handleDepartment}
+                    handleCloseDepartment={handleCloseDepartment}
+                    handleDepartmentClick={handleDepartmentClick}
+                  />
+                  <LanguageFilters
+                    filters={filter}
+                    anchorElLanguage={anchorElLanguage}
+                    handleLanguage={handleLanguage}
+                    handleCloseLanguage={handleCloseLanguage}
+                    handleLanguageClick={handleLanguageClick}
                   />
                 </Stack>
               </Grid>

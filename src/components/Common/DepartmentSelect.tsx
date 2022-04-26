@@ -1,6 +1,6 @@
 // THIRD PARTY
 import React, { useState, useEffect } from 'react';
-import { Select, InputLabel, MenuItem, FormControl } from '@mui/material';
+import { Select, InputLabel, MenuItem, FormHelperText, FormControl } from '@mui/material';
 
 // IMPORT PROJECT
 import { Department } from 'types/department';
@@ -9,14 +9,8 @@ import { useDispatch } from 'store';
 
 const DepartmentSelect = (props: any) => {
   const dispatch = useDispatch();
-  const { change, values, size, formik, fullWidth } = props;
+  const { change, values, size, formik } = props;
   const [data, setData] = useState<Department[]>([]);
-
-  // const initialRankState: RankFilter = {
-  //   search: '',
-  //   status: '1',
-  //   currentPage: 1
-  // };
 
   useEffect(() => {
     dispatch(
@@ -43,15 +37,14 @@ const DepartmentSelect = (props: any) => {
 
   return (
     <>
-      <FormControl fullWidth>
+      <FormControl fullWidth error>
         <InputLabel id="demo-simple-select-label">
           <span>
             <span style={{ color: 'red' }}>*</span> Department
           </span>
         </InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="department_id"
           name="department_id"
           size={size || 'small'}
           label={
@@ -61,8 +54,7 @@ const DepartmentSelect = (props: any) => {
           }
           onChange={change}
           value={values}
-          fullWidth={fullWidth}
-          error={formik && formik.touched.department_id && Boolean(formik.errors.department_id)}
+          error={formik.touched.department_id && Boolean(formik.errors.department_id)}
           MenuProps={MenuProps}
         >
           {data?.map((row: Department) => (
@@ -71,6 +63,11 @@ const DepartmentSelect = (props: any) => {
             </MenuItem>
           ))}
         </Select>
+        {formik.touched.department_id && formik.errors.department_id && (
+          <FormHelperText error id="standard-weight-helper-text-rank-login">
+            {formik.errors.department_id}
+          </FormHelperText>
+        )}
       </FormControl>
     </>
   );

@@ -9,6 +9,7 @@ import {
   DialogContent,
   Divider,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -141,7 +142,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit "${question.id}"`}
+                    {`Edit question ${question.id}`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -154,6 +155,11 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
                   <Grid item xs={12}>
                     <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
+                    {formik.touched.rank_id && formik.errors.rank_id && (
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
+                        {formik.errors.rank_id}
+                      </FormHelperText>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <DepartmentSelect
@@ -163,6 +169,11 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       values={formik.values?.department_id}
                       formik={formik}
                     />
+                    {formik.touched.department_id && formik.errors.department_id && (
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
+                        {formik.errors.department_id}
+                      </FormHelperText>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <LanguageSelect
@@ -172,6 +183,11 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       values={formik.values?.language_id}
                       formik={formik}
                     />
+                    {formik.touched.language_id && formik.errors.language_id && (
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
+                        {formik.errors.language_id}
+                      </FormHelperText>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -181,9 +197,12 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       label="question_content"
                       value={formik.values.question_content}
                       onChange={formik.handleChange}
-                      error={formik.touched.question_content && Boolean(formik.errors.question_content)}
-                      helperText={formik.touched.question_content && formik.errors.question_content}
                     />
+                    {formik.touched.question_content && formik.errors.question_content && (
+                      <FormHelperText error id="standard-weight-helper-text-rank-login">
+                        {formik.errors.question_content}
+                      </FormHelperText>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>

@@ -37,6 +37,7 @@ const slice = createSlice({
       state.questions = state.questions.filter((question) => question.id !== action.payload.id);
     },
     putQuestionSuccess(state, action) {
+      console.log(111111);
       state.questions = state.questions.map((question) => {
         if (question.id === action.payload.id) {
           return action.payload;
@@ -53,11 +54,9 @@ export function getQuestionsList(filter?: QuestionFilter) {
   const queryParams = `${
     (filter?.search !== '' ? `&search=${filter?.search}` : '') +
     (filter?.rank_id !== '' ? `&rank_id=${filter?.rank_id}` : '') +
+    (filter?.department_id !== '' ? `&department_id=${filter?.department_id}` : '') +
+    (filter?.language_id !== '' ? `&language_id=${filter?.language_id}` : '') +
     (filter?.status !== '' ? `&status=${filter?.status}` : '')
-    // (filter?.type !== '' ? `&type=${filter?.type}` : '')
-    // (filter?.language_id?.name !== '' ? `&language_id=${filter?.language_id?.name}` : '') +
-    // (filter?.rank_id?.name !== '' ? `&rank_id=${filter?.rank_id?.name}` : '') +
-    // (filter?.department_id?.name !== '' ? `&department_id=${filter?.department_id?.name}` : '')
   }&page=${filter?.currentPage}`;
   return async () => {
     try {

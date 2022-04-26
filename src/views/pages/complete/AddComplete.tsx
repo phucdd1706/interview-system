@@ -263,11 +263,6 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 )}
                 <Grid item xl={12}>
                   <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                  {formik.touched.rank_id && formik.errors.rank_id && (
-                    <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank_id}
-                    </FormHelperText>
-                  )}
                 </Grid>
 
                 <Grid item xs={12}>

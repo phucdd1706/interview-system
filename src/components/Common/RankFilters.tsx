@@ -37,7 +37,9 @@ const RankFilters = (props: any) => {
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-      <Typography variant="h5">Sort by rank: </Typography>
+      <Typography variant="h5" style={{ width: '80px' }}>
+        Sort by rank:{' '}
+      </Typography>
       <Button
         id="demo-positioned-button"
         aria-controls="demo-positioned-menu"
