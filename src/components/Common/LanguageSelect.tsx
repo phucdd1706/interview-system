@@ -43,10 +43,10 @@ const LanguageSelect = (props: any) => {
 
   return (
     <>
-      <FormControl fullWidth error>
+      <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span>
-            <span style={{ color: 'red' }}>*</span> Language
+          <span style={{ color: formik && formik.touched.language_id && Boolean(formik.errors.language_id) ? '#f44336' : '' }}>
+            <span style={{ color: '#f44336' }}>*</span> Language
           </span>
         </InputLabel>
         <Select

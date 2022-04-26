@@ -11,6 +11,12 @@ export interface QuestionStateProps {
   error: object | string | null;
 }
 
+export interface Payload {
+  id?: string | number;
+  params?: Department;
+  callback?: (response: any) => void;
+}
+
 export type QuestionFilter = {
   search?: string;
   rank_id?: number | string;

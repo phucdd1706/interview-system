@@ -58,7 +58,6 @@ const validationSchema = Yup.object({
 
 const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   const dispatch = useDispatch();
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -191,8 +190,8 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                   <Grid item xs={12}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
-                        <span>
-                          <span style={{ color: 'red' }}>*</span> Type
+                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
+                          <span style={{ color: '#f44336' }}>*</span> Type
                         </span>
                       </InputLabel>
                       <Select
