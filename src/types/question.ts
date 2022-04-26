@@ -13,7 +13,7 @@ export interface QuestionStateProps {
 
 export interface Payload {
   id?: string | number;
-  params?: Department;
+  params?: QuestionType;
   callback?: (response: any) => void;
 }
 

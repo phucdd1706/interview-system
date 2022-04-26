@@ -1,9 +1,10 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
 import { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, IconWorld } from '@tabler/icons';
+import QuizIcon from '@mui/icons-material/Quiz';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
-const icons = { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, CorporateFareIcon, IconWorld };
+const icons = { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, CorporateFareIcon, IconWorld, QuizIcon };
 
 const application = {
   id: 'application',
@@ -91,7 +92,7 @@ const application = {
       type: 'item',
       role: 1,
       url: '/questions',
-      icon: icons.IconStairsUp,
+      icon: icons.QuizIcon,
       breadcrumbs: true
     },
     {
