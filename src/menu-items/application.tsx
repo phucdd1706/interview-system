@@ -84,6 +84,7 @@ const application = {
       icon: icons.IconStairsUp,
       breadcrumbs: true
     },
+
     {
       id: 'manage-question',
       title: <FormattedMessage id="manage-question" />,

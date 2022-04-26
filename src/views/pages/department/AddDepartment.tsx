@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Button, Dialog, DialogContent, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
@@ -17,6 +17,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { postDepartment } from 'store/slices/department';
+import { Department } from 'types/department';
 
 interface AddDepartmentProps {
   open: boolean;
@@ -27,7 +28,56 @@ const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   code: Yup.string().required('Code is required')
 });
+
 const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
+  const [errors, setErrors] = useState<any>({});
+
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const AddDepart = (values: Department) => {
+    dispatch(
+      postDepartment({
+        params: values,
+        callback: (resp) => {
+          if (resp?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Add new record successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: resp?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(resp?.errors);
+          }
+        }
+      })
+    );
+  };
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -36,29 +86,14 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(postDepartment(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
-        })
-      );
-      handleDrawerOpen();
-      formik.resetForm();
+      AddDepart(values);
     }
   });
   return (
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -114,8 +149,8 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
                       name="name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                       fullWidth
                       label="Name"
                     />
@@ -128,8 +163,8 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
                       label="Code"
                       onChange={formik.handleChange}
                       value={formik.values.code}
-                      error={formik.touched.code && Boolean(formik.errors.code)}
-                      helperText={formik.touched.code && formik.errors.code}
+                      error={(formik.touched.code && Boolean(formik.errors.code)) || errors?.code}
+                      helperText={(formik.touched.code && formik.errors.code) || errors?.code}
                     />
                   </Grid>
                   <Grid item xs={12}>
