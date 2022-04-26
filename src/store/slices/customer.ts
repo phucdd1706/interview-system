@@ -8,7 +8,7 @@ import { dispatch } from 'store';
 import { CustomerFilter } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 
-export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/client/users`;
+export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/operator/client/users`;
 
 const initialState: DefaultRootStateProps['customer'] = {
   customers: [],
