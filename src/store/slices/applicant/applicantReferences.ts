@@ -8,13 +8,12 @@ import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
-    firstName: '',
-    lastName: '',
+    name: '',
     age: '',
     email: '',
     phone: '',
     address: '',
-    interviewTime: '',
+    time: '',
     applyPosition: [],
     questions: [],
     note: ''
@@ -30,12 +29,19 @@ const applicantReferences = createSlice({
     applicantFormInit: () => initialState,
     setApplicantInfo(state, action: { payload: { applicant: ApplicantInfo; questions: InterviewQuestions[] } }) {
       console.log(action.payload);
-      // state.interviewQuestions = action.payload.map(
-      //   (element: InterviewQuestions, index): QuestionStackInterface => ({
-      //     type: `Rand ${index}`,
-      //     questions: element
-      //   })
-      // );
+      state.interviewQuestions = action.payload.questions.map(
+        (element: InterviewQuestions, index): QuestionStackInterface => ({
+          type: `Rand ${index}`,
+          questions: element
+        })
+      );
+      state.applicantInfo = action.payload.applicant;
+      const questions = action.payload.questions.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
+      state.applicantInfo.questions = [];
+      questions.forEach((question) => {
+        state.applicantInfo.questions && question.id && state.applicantInfo.questions.push({ question_id: question.id });
+      });
+      // state.applicantInfo.questions = applicantInterviewQuestion;
     },
     // setReferenceEvaluate(state, action: { payload: ReferenceEvaluate }) {
     //   Object.assign(state, { referenceEvaluate: action.payload });

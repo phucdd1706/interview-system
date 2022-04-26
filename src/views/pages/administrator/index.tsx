@@ -115,7 +115,6 @@ const Administrators = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
-  console.log(1123, administratorState.pageCount);
 
   return (
     <MainCard
@@ -207,7 +206,7 @@ const Administrators = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>STT</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Username</TableCell>
               <TableCell>Email</TableCell>
@@ -226,7 +225,7 @@ const Administrators = () => {
               data.map((administrator, index) => <Administrator key={administrator.id} administrator={administrator} index={index} />)}
           </TableBody>
         </Table>
-        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>

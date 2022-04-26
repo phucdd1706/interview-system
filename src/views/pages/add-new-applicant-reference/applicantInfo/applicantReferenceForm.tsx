@@ -30,24 +30,21 @@ import { getCompleteListSuccess } from 'store/slices/language';
 import { ApplicantInfo } from 'types/applicantData';
 import { getInterviewQuestionThunk } from 'store/slices/applicant/applicantAsyncAction';
 import personalDetail from './layoutMapping';
-import { jobPosition, jobLevel, workingExperiences } from '../constants';
 
 // TYPE IMPORTS
 import { RankType } from 'types/rank';
 import { Languages } from 'types/language';
 import FormInput from './formInput';
 
-type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address';
+type personalDetailType = 'name' | 'email' | 'phone' | 'address' | 'note';
 
 const initialApplicantInfo: ApplicantInfo = {
-  id: '',
-  firstName: '',
-  lastName: '',
+  name: '',
   age: '',
   email: 'denvl585@gmail.com',
   phone: '',
   address: '',
-  interviewTime: `${new Date().toISOString().split('T')[0]}T09:00`,
+  time: `${new Date().toISOString().split('T')[0]}T09:00`,
   note: '',
   applyPosition: [
     {
@@ -76,8 +73,7 @@ const ApplicantForm = () => {
       <Formik
         initialValues={initialApplicantInfo}
         validationSchema={Yup.object().shape({
-          firstName: Yup.string().required('First name is required'),
-          lastName: Yup.string().required('Last name is required'),
+          name: Yup.string().required('First name is required'),
           age: Yup.number().required('Age is required'),
           email: Yup.string().email('Email is invalid').required('Email is required'),
           phone: Yup.string().required('Phone is required'),
@@ -91,7 +87,6 @@ const ApplicantForm = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          console.log('>>>>Value: ', values);
           await dispatch(getInterviewQuestionThunk(values));
           setSubmitting(false);
         }}
@@ -159,7 +154,7 @@ const ApplicantForm = () => {
                           }}
                           value={ranks.find((element) => element.id == item.rank_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
+                          renderInput={(params) => <TextField {...params} variant="standard" label="Rank" placeholder="Rank" />}
                           sx={{ flexGrow: 1 }}
                         />
                         {touched.applyPosition && errors.applyPosition && (
@@ -179,7 +174,9 @@ const ApplicantForm = () => {
                           }}
                           value={ranks.find((element) => element.id == item.rank_advanced_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
+                          renderInput={(params) => (
+                            <TextField {...params} variant="standard" label="Rank Advanced" placeholder="Rank Advanced" />
+                          )}
                           sx={{ flexGrow: 1 }}
                         />
                         {touched.applyPosition && errors.applyPosition && (

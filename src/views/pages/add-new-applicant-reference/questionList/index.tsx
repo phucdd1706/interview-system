@@ -60,13 +60,7 @@ const QuestionList = ({ questionList, type }: Props) => {
           {type.toUpperCase()}
         </Typography>
         {Object.keys(questionList.questions).map((key) => (
-          <QuestionStack
-            stackType={key}
-            questionStack={questionList.questions[key]}
-            onClickAddButton={handleModalOpen}
-            onClickDeleteButton={deleteQuestion}
-            key={key}
-          />
+          <QuestionStack stackType={key} questionStack={questionList.questions[key]} key={key} />
         ))}
       </Stack>
       <ModalStyled open={open} onModalClose={handleModalClose} modalTitle="Add Questions">
@@ -88,10 +82,7 @@ const QuestionList = ({ questionList, type }: Props) => {
         </Stack>
         <Divider />
         <Stack direction="column" spacing={1} sx={{ padding: '1em 0', overflowY: 'auto', marginBottom: 2, height: 'calc(90vh - 200px)' }}>
-          {questions &&
-            questions.map((data: QuestionType, index: number) => (
-              <QuestionTag key={index} type={selectedType} value={data} onAddTag={addQuestion} />
-            ))}
+          {questions && questions.map((data: QuestionType, index: number) => <QuestionTag key={index} type={selectedType} value={data} />)}
         </Stack>
       </ModalStyled>
     </>

@@ -13,14 +13,14 @@ import { gridSpacing } from 'store/constant';
 
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { postDepartment } from 'store/slices/department';
-import { Department } from 'types/department';
+import { postDepartment, getDepartmentList } from 'store/slices/department';
+import { Department, DepartmentFilter } from 'types/department';
 
 interface AddDepartmentProps {
   open: boolean;
+  filter: DepartmentFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -29,7 +29,7 @@ const validationSchema = Yup.object({
   code: Yup.string().required('Code is required')
 });
 
-const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
+const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) => {
   const [errors, setErrors] = useState<any>({});
 
   const changeModal = (type: string) => {
@@ -45,35 +45,28 @@ const AddDepartment = ({ open, handleDrawerOpen }: AddDepartmentProps) => {
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Add new record successfully!',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            dispatch(getDepartmentList(filter));
+            Notification('success', 'Add new record successfully!');
             changeModal('close');
           } else {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: resp?.message,
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'error'
-                },
-                close: true
-              })
-            );
+            Notification('error', resp?.message);
             setErrors(resp?.errors);
           }
         }
+      })
+    );
+  };
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
       })
     );
   };

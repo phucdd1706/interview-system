@@ -1,11 +1,12 @@
 import axiosServices from 'utils/axios';
 import { alertRequestSuccess } from './errorAlert';
 
-export const axiosPost = async <T>(url: string, data: any, alert?: string): Promise<T> => {
+export const axiosPost = async <T>(url: string, data: any, alert?: string, callback?: () => any): Promise<T> => {
   const response = await axiosServices
     .post(url, data)
     .then((res: any) => {
       alert && alertRequestSuccess(alert);
+      callback && callback();
       return res.data;
     })
     .catch((err: string) => {

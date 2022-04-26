@@ -32,20 +32,38 @@ export interface InterviewerEvaluate {
 
 export interface ApplicantInfo {
   id?: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   age: string;
   email: string;
   phone: string;
   address: string;
-  interviewTime: string;
-  questions?: Array<Array<{ questionId: number }>>;
+  time: string;
+  questions?: Array<{ question_id: number }>;
   experiences?: Job[];
   applyPosition: Array<{
     rank_advanced_id: string;
     language_id: string;
     rank_id: string;
   }>;
+  note?: string;
+}
+
+export interface ApplicantDataAPI {
+  id?: string;
+  name: string;
+  age: string;
+  email: string;
+  phone: string;
+  address: string;
+  time: string;
+  questions?: Array<{ question_id: number }>;
+  experiences?: Job[];
+  applyPosition?: Array<{
+    rank_advanced_id: string;
+    language_id: string;
+    rank_id: string;
+  }>;
+  status?: number;
   note?: string;
 }
 

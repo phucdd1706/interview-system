@@ -1,6 +1,5 @@
 // THIRD-PARTY
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   TextField,
   Grid,
@@ -21,16 +20,15 @@ import SearchIcon from '@mui/icons-material/Search';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import { RootState } from 'store/index';
 import { Candidates, SearchValues } from 'types/complete';
 import { fetchCandidates } from 'store/slices/complete';
 import Complete from './Complete';
 import { gridSpacing } from '../../../store/constant';
-import RankFilters from 'components/Common/RankFilters';
-import StatusFilters from 'components/Common/StatusFilters';
+import RankFilters from 'ui-component/CommonFilters/RankFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
+import { dispatch, RootState, useSelector } from 'store';
 
 const Index = () => {
-  const dispatch = useDispatch();
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -162,7 +160,7 @@ const Index = () => {
               <TableRow>
                 <TableCell sx={{ pr: 3 }}>#</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Mobile</TableCell>
+                <TableCell>Phone</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Status</TableCell>
@@ -172,8 +170,8 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {candidate?.map((row) => (
-                <Complete key={row?.id} complete={row} />
+              {candidate?.map((row, index: number) => (
+                <Complete key={row?.id} complete={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>

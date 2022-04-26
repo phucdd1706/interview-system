@@ -3,14 +3,8 @@ const personalDetail = [
     label: 'Information',
     render: [
       {
-        key: 'firstName',
-        label: 'First Name',
-        type: 'text',
-        required: true
-      },
-      {
-        key: 'lastName',
-        label: 'Last Name',
+        key: 'name',
+        label: 'Full Name',
         type: 'text',
         required: true
       },
@@ -18,6 +12,12 @@ const personalDetail = [
         key: 'age',
         label: 'Age',
         type: 'number',
+        required: true
+      },
+      {
+        key: 'phone',
+        label: 'Phone Number',
+        type: 'tel',
         required: true
       }
     ]
@@ -29,12 +29,6 @@ const personalDetail = [
         key: 'email',
         label: 'Email',
         type: 'email',
-        required: true
-      },
-      {
-        key: 'phone',
-        label: 'Phone Number',
-        type: 'tel',
         required: true
       }
     ]
@@ -54,7 +48,7 @@ const personalDetail = [
     label: 'Interview Time',
     render: [
       {
-        key: 'interviewTime',
+        key: 'time',
         label: 'Interview Time',
         type: 'datetime-local',
         required: true

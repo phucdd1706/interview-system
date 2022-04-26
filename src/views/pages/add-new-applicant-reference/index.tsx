@@ -14,10 +14,13 @@ import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
 import { applicantFormInit } from 'store/slices/applicant/applicantReferences';
+import { ApplicantDataAPI } from 'types/applicantData';
+import { axiosPost } from 'utils/helpers/axios';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
-  const applicantInfo = useSelector((state) => state.applicant);
+  const applicant = useSelector((state) => state.applicant);
+
   const intl = useIntl();
   const navigate = useNavigate();
   const [isSubmitting, setSubmitting] = useState(false);
@@ -25,27 +28,23 @@ const AddApplicantReference = () => {
     dispatch(activeItem(['applicant']));
     dispatch(applicantFormInit());
   }, [dispatch]);
-
   const submitInfo = () => {
+    const data: ApplicantDataAPI = { ...applicant.applicantInfo };
+    delete data.applyPosition;
+    data.status = 0;
     setSubmitting(true);
-    axiosServices
-      .post(`${process.env.REACT_APP_FAKE_API_URL}/applicant`, applicantInfo)
-      .then(async (res) => {
-        setSubmitting(false);
-        navigate(`/interview/${res.data.applicantId}`, { replace: true });
-      })
-      .catch((err) => err);
+    axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, data, 'Add applicant success', () => setSubmitting(false));
   };
   return (
     <Box>
       <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
         <ApplicantForm />
       </MainCard>
-      {applicantInfo.interviewQuestions.length > 0 && (
+      {applicant.interviewQuestions.length > 0 && (
         <>
           <MainCard title={intl.formatMessage({ id: 'interview-questions' })} sx={{ margin: '1em 0' }}>
             <Stack direction="column" spacing={2}>
-              {applicantInfo.interviewQuestions.map((question, index) => (
+              {applicant.interviewQuestions.map((question, index) => (
                 <QuestionList questionList={question} type={question.type} key={index} />
               ))}
             </Stack>

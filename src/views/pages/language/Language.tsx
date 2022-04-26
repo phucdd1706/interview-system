@@ -11,18 +11,21 @@ import { Languages } from 'types/language';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
-import { dispatch } from 'store';
+import { RootState, dispatch, useSelector } from 'store/index';
 
 interface Props {
   language: Languages;
+  index: number;
+  getList: () => void;
 }
 
-const Language = ({ language }: Props) => {
+const Language = ({ language, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const languageState = useSelector((state: RootState) => state.language);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -40,36 +43,30 @@ const Language = ({ language }: Props) => {
           id: language.id,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Delete record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              getList();
+              openNotification('success', 'Delete record successfully!');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const handleVisibleModal = () => {
@@ -165,10 +162,10 @@ const Language = ({ language }: Props) => {
       <TableRow hover key={language?.id}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{language.id}</Typography>
+            <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: '15%', minWidth: 250, maxWidth: 'calc(100vw - 850px)', overflow: 'hidden' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -184,13 +181,13 @@ const Language = ({ language }: Props) => {
             {language?.name}
           </Link>
         </TableCell>
-        <TableCell>{language?.description}</TableCell>
+        <TableCell sx={{ width: '30%', minWidth: 250, maxWidth: 450, overflow: 'hidden' }}>{language?.description}</TableCell>
         <TableCell>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(language?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} />
+      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

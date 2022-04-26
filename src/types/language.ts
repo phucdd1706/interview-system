@@ -12,7 +12,7 @@ export interface Languages {
 export interface SearchValues {
   search?: string;
   status?: number | string;
-  currentPage?: number;
+  currentPage?: number | string;
   limit?: number;
 }
 

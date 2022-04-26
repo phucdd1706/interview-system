@@ -7,10 +7,11 @@ import { UserProfile } from 'types/user-profile';
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import EditAdministrator from 'views/pages/administrator/EditAdministrator';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { deleteAdministrator } from 'store/slices/user';
+import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
 import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
+import { UserFilter } from 'types/user';
 
 interface Props {
   administrator: UserProfile;
@@ -19,6 +20,7 @@ interface Props {
 
 const Administrator = ({ administrator, index }: Props) => {
   const theme = useTheme();
+  const administratorState = useSelector((state) => state.user);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
   const handleAdministratorDrawerOpen = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
@@ -35,33 +37,48 @@ const Administrator = ({ administrator, index }: Props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [filter, setFilter] = useState<UserFilter>();
 
   const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(deleteAdministrator(administrator));
       dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
+        deleteAdministrator({
+          id: administrator.id,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getAdministratorList(filter));
+              Notification('success', 'Deleted successfully!');
+            } else {
+              Notification('error', resp?.message);
+            }
+          }
         })
       );
     }
+  };
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   return (
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{administrator.id}</Typography>
+          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+            <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
