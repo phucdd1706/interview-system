@@ -207,7 +207,7 @@ const Administrators = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>STT</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Username</TableCell>
               <TableCell>Email</TableCell>

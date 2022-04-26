@@ -7,7 +7,7 @@ import { UserProfile } from 'types/user-profile';
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import EditAdministrator from 'views/pages/administrator/EditAdministrator';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { deleteAdministrator } from 'store/slices/user';
 import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
@@ -19,6 +19,7 @@ interface Props {
 
 const Administrator = ({ administrator, index }: Props) => {
   const theme = useTheme();
+  const administratorState = useSelector((state) => state.user);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
   const handleAdministratorDrawerOpen = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
@@ -60,8 +61,10 @@ const Administrator = ({ administrator, index }: Props) => {
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{administrator.id}</Typography>
+          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+            <Typography variant="body2">
+              {(administratorState.currentPage - 1) * (administratorState.pageCount ? administratorState.pageCount : 0) + index + 1}
+            </Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
