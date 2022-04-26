@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { dispatch } from 'store';
+import { dispatch, RootState, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { QuestionType } from 'types/question';
-import { DeleteQuestion } from 'store/slices/question';
+import { QuestionFilter, QuestionType } from 'types/question';
+import { DeleteQuestion, getQuestionsList } from 'store/slices/question';
 import AlertQuestionDelete from './AlertQuestionDelete';
 import EditQuestion from './EditQuestion';
 
@@ -17,6 +17,27 @@ interface Props {
 }
 
 const Question = ({ question, index }: Props) => {
+  const initialState: QuestionFilter = {
+    search: '',
+    status: '',
+    currentPage: 1
+  };
+  const [filter] = useState(initialState);
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
+  const questionState = useSelector((state: RootState) => state.question);
   const theme = useTheme();
   const [openQuestionDrawer, setOpenQuestionDrawer] = useState<boolean>(false);
   const handleQuestionDrawerOpen = () => {
@@ -39,17 +60,17 @@ const Question = ({ question, index }: Props) => {
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(DeleteQuestion(question));
       dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
+        DeleteQuestion({
+          id: question.id,
+          callback: (response) => {
+            if (response?.data?.success) {
+              dispatch(getQuestionsList(filter));
+              Notification('success', 'Delete successfully');
+            } else {
+              Notification('error', response?.message);
+            }
+          }
         })
       );
     }
@@ -60,7 +81,7 @@ const Question = ({ question, index }: Props) => {
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{question.id}</Typography>
+            <Typography variant="body2">{20 * (questionState.currentPage - 1) + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ maxWidth: 400 }} component="th" scope="row">
@@ -199,7 +220,7 @@ const Question = ({ question, index }: Props) => {
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertQuestionDelete id={question.id} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertQuestionDelete id={question.id} open={openModal} handleClose={handleModalClose} filter={filter} />}
         </TableCell>
       </TableRow>
       <EditQuestion question={question} open={openQuestionDrawer} handleDrawerOpen={handleQuestionDrawerOpen} />

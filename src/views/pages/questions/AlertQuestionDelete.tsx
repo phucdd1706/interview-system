@@ -1,14 +1,16 @@
 // THIRD-PARTY
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { QuestionFilter } from 'types/question';
 
 // PROJECT IMPORTS
 interface Props {
   id: number | undefined;
   open: boolean;
+  filter: QuestionFilter;
   handleClose: (status: boolean) => void;
 }
 
-export default function AlertQuestionDelete({ id, open, handleClose }: Props) {
+export default function AlertQuestionDelete({ id, open, handleClose, filter }: Props) {
   return (
     <Dialog
       open={open}

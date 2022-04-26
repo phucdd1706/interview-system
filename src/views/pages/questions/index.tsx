@@ -270,7 +270,7 @@ const Questions = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>STT</TableCell>
               <TableCell>Question Content</TableCell>
               <TableCell>Rank</TableCell>
               <TableCell>Department</TableCell>
@@ -286,7 +286,7 @@ const Questions = () => {
             {data && data.map((question, index) => <Question key={question.id} question={question} index={index} />)}
           </TableBody>
         </Table>
-        <AddQuestion open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+        <AddQuestion open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>

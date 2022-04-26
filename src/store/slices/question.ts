@@ -92,13 +92,21 @@ export function PostQuestion(payload: Payload) {
   };
 }
 
-export function DeleteQuestion(question: QuestionType) {
+export function DeleteQuestion(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.delete(`${QUESTIONS_URL}/${question.id}`);
-      dispatch(slice.actions.deleteQuestionSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const response = await axios
+      .delete(`${QUESTIONS_URL}/${id}`)
+      .then((result) => {
+        dispatch(slice.actions.deleteQuestionSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }
