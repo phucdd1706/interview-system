@@ -67,6 +67,7 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
       formik.resetForm();
     }
   };
+
   const EditDepart = (values: Department) => {
     dispatch(
       putDepartment({

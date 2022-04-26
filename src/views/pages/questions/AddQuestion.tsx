@@ -25,12 +25,13 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
 import { PostQuestion } from 'store/slices/question';
-import { SelectProps } from 'types/question';
+import { QuestionType, SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch } from 'store';
-import RankSelect from 'components/Common/RankSelect';
-import LanguageSelect from 'components/Common/LanguageSelect';
-import DepartmentSelect from 'components/Common/DepartmentSelect';
+import RankSelect from 'ui-component/CommonSelect/RankSelect';
+import LanguageSelect from 'ui-component/CommonSelect/LanguageSelect';
+import DepartmentSelect from 'ui-component/CommonSelect/DepartmentSelect';
+import { useState } from 'react';
 
 interface AddQuestionProps {
   open: boolean;
@@ -58,7 +59,53 @@ const validationSchema = Yup.object({
 
 const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState<any>({});
 
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const AddQuest = (values: QuestionType) => {
+    dispatch(
+      PostQuestion({
+        params: values,
+        callback: (response) => {
+          if (response?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Add new question successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: response?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(response?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -71,30 +118,14 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PostQuestion(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
-      formik.resetForm();
+      AddQuest(values);
     }
   });
-
   return (
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -177,22 +208,25 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                             <span style={{ color: 'red' }}>*</span> Question content
                           </span>
                         }
-                        error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
+                        error={
+                          (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
+                        }
                         value={formik.values.question_content}
                         onChange={formik.handleChange}
                       />
-                      {formik.touched.question_content && formik.errors.question_content && (
+                      {(formik.touched.question_content && formik.errors.question_content && (
                         <FormHelperText error id="standard-weight-helper-text-rank-login">
                           {formik.errors.question_content}
                         </FormHelperText>
-                      )}
+                      )) ||
+                        errors.question_content}
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
-                          <span style={{ color: 'red' }}>*</span> Type
+                          <span style={{ color: '#f44336' }}>*</span> Type
                         </span>
                       </InputLabel>
                       <Select
