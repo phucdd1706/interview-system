@@ -49,10 +49,6 @@ const Status: SelectProps[] = [
   {
     value: 1,
     label: 'Active'
-  },
-  {
-    value: 2,
-    label: 'Blocked'
   }
 ];
 const validationSchema = Yup.object({

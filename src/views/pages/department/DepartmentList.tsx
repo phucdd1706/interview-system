@@ -127,16 +127,6 @@ const DepartmentList = ({ department, index }: Props) => {
               }}
             />
           )}
-          {department.status === 2 && (
-            <Chip
-              label="Blocked"
-              size="small"
-              sx={{
-                background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-                color: theme.palette.orange.dark
-              }}
-            />
-          )}
         </TableCell>
 
         <TableCell sx={{ width: 60, minWidth: 60 }}>
