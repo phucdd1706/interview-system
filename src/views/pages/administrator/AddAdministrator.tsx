@@ -25,12 +25,13 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { Administrator, SelectProps } from 'types/user';
-import { addAdministrator } from 'store/slices/user';
+import { Administrator, SelectProps, UserFilter } from 'types/user';
+import { addAdministrator, getAdministratorList } from 'store/slices/user';
 import { useState } from 'react';
 
 interface Props {
   open: boolean;
+  filter: UserFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -54,7 +55,7 @@ const validationSchema = yup.object({
   type: yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
+const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -69,6 +70,7 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {
+            dispatch(getAdministratorList(filter));
             dispatch(
               openSnackbar({
                 open: true,

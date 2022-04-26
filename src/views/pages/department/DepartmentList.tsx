@@ -72,7 +72,7 @@ const DepartmentList = ({ department, index }: Props) => {
               dispatch(getDepartmentList(filter));
               Notification('success', 'Delete successfully');
             } else {
-              Notification('success', resp?.message);
+              Notification('error', resp?.message);
             }
           }
         })

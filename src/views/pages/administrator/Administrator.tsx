@@ -62,9 +62,7 @@ const Administrator = ({ administrator, index }: Props) => {
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
-            <Typography variant="body2">
-              {(administratorState.currentPage - 1) * (administratorState.pageCount ? administratorState.pageCount : 0) + index + 1}
-            </Typography>
+            <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
