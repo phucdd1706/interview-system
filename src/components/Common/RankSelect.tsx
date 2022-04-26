@@ -18,8 +18,6 @@ const RankSelect = (props: any) => {
   //   currentPage: 1
   // };
 
-  console.log('formik', formik);
-
   useEffect(() => {
     dispatch(
       getRanksAll({
@@ -45,10 +43,10 @@ const RankSelect = (props: any) => {
 
   return (
     <>
-      <FormControl fullWidth error>
+      <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span>
-            <span style={{ color: 'red' }}>*</span> Rank
+          <span style={{ color: formik && formik.touched.rank_id && Boolean(formik.errors.rank_id) ? '#f44336' : '' }}>
+            <span style={{ color: '#f44336' }}>*</span> Rank
           </span>
         </InputLabel>
         <Select
@@ -58,7 +56,7 @@ const RankSelect = (props: any) => {
           size={size || 'small'}
           label={
             <span>
-              <span style={{ color: 'red' }}>*</span> Rank
+              <span style={{ color: '#f44336' }}>*</span> Rank
             </span>
           }
           onChange={change}

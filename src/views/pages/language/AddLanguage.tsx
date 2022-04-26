@@ -31,9 +31,10 @@ interface Props {
   dataEdit: Languages;
   visible: boolean;
   handleVisibleModal: () => void;
+  getList: () => void;
 }
 
-const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
+const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props) => {
   const [errors, setErrors] = useState<any>({});
 
   const handleAdd = (values: Languages) => {
@@ -59,6 +60,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
+              getList();
               openNotification('success', 'Add language successfully!');
               changeModal('close');
             } else {
@@ -170,7 +172,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? `Edit ${dataEdit.name}` : 'Add new record'}
+                    {dataEdit?.id ? `Edit ${dataEdit.name}` : 'Add new language'}
                   </Typography>
                 </Stack>
               </Grid>
@@ -189,7 +191,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -206,7 +208,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.description}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Description
+                        <span style={{ color: '#f44336' }}>*</span> Description
                       </span>
                     }
                     fullWidth

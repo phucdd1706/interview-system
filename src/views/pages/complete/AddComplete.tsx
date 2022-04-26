@@ -168,7 +168,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -184,7 +184,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.username}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Username
+                        <span style={{ color: '#f44336' }}>*</span> Username
                       </span>
                     }
                     fullWidth
@@ -200,7 +200,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.phone}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Phone
+                        <span style={{ color: '#f44336' }}>*</span> Phone
                       </span>
                     }
                     fullWidth
@@ -216,7 +216,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.email}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Email
+                        <span style={{ color: '#f44336' }}>*</span> Email
                       </span>
                     }
                     fullWidth
@@ -234,7 +234,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Password
+                            <span style={{ color: '#f44336' }}>*</span> Password
                           </span>
                         }
                         fullWidth
@@ -250,7 +250,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password_confirmation}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Confirm password
+                            <span style={{ color: '#f44336' }}>*</span> Confirm password
                           </span>
                         }
                         fullWidth
