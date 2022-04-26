@@ -206,7 +206,11 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel>Type</InputLabel>
+                      <InputLabel id="demo-simple-select-label">
+                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
+                          <span style={{ color: 'red' }}>*</span> Type
+                        </span>
+                      </InputLabel>
                       <Select
                         id="type"
                         name="type"

@@ -18,7 +18,7 @@ export interface SearchValues {
   search?: string;
   rank_id?: number | string;
   status?: number | string;
-  currentPage?: number;
+  currentPage?: number | string;
   limit?: number;
 }
 

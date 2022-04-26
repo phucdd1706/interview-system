@@ -18,9 +18,10 @@ interface Props {
   dataEdit: Candidates;
   visible: boolean;
   handleVisibleModal: () => void;
+  getList: () => void;
 }
 
-const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
+const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props) => {
   const [errors, setErrors] = useState<any>({});
 
   const handleAdd = (values: Candidates) => {
@@ -46,6 +47,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
+              getList();
               openNotification('success', 'Add new record successfully!');
               changeModal('close');
             } else {
@@ -73,14 +75,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
     );
   };
 
-  const changeModal = (type: string) => {
-    if (type === 'close') {
-      handleVisibleModal();
-      setErrors({});
-      formik.resetForm();
-    }
-  };
-
   const validationSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -105,6 +99,14 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
       handleAdd(values);
     }
   });
+
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleVisibleModal();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
 
   return (
     <Dialog
@@ -168,7 +170,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -184,7 +186,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.username}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Username
+                        <span style={{ color: '#f44336' }}>*</span> Username
                       </span>
                     }
                     fullWidth
@@ -200,7 +202,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.phone}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Phone
+                        <span style={{ color: '#f44336' }}>*</span> Phone
                       </span>
                     }
                     fullWidth
@@ -216,7 +218,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.email}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Email
+                        <span style={{ color: '#f44336' }}>*</span> Email
                       </span>
                     }
                     fullWidth
@@ -234,7 +236,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Password
+                            <span style={{ color: '#f44336' }}>*</span> Password
                           </span>
                         }
                         fullWidth
@@ -250,7 +252,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password_confirmation}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Confirm password
+                            <span style={{ color: '#f44336' }}>*</span> Confirm password
                           </span>
                         }
                         fullWidth
@@ -263,11 +265,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 )}
                 <Grid item xl={12}>
                   <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                  {formik.touched.rank_id && formik.errors.rank_id && (
-                    <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank_id}
-                    </FormHelperText>
-                  )}
                 </Grid>
 
                 <Grid item xs={12}>

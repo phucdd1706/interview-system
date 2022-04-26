@@ -10,19 +10,22 @@ import { removeCandidate } from 'store/slices/inProgress';
 import AddInProgress from 'views/pages/inProgress/AddInProgress';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
-import { dispatch } from 'store';
+import { RootState, dispatch, useSelector } from 'store';
 import { Candidates } from 'types/inProgress';
 
 interface Props {
   inProgress: Candidates;
+  index: number;
+  getList: () => void;
 }
 
-const InProgress = ({ inProgress }: Props) => {
+const InProgress = ({ inProgress, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const inProgressState = useSelector((state: RootState) => state.inProgress);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -40,6 +43,7 @@ const InProgress = ({ inProgress }: Props) => {
           id: inProgress.id,
           callback: (res) => {
             if (res?.data?.success) {
+              getList();
               openNotification('success', 'Delete record successfully!');
             } else {
               openNotification('error', res?.message);
@@ -158,7 +162,7 @@ const InProgress = ({ inProgress }: Props) => {
       <TableRow hover key={inProgress?.id}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{inProgress.id}</Typography>
+            <Typography variant="body2">{index + 20 * (inProgressState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -184,7 +188,7 @@ const InProgress = ({ inProgress }: Props) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={inProgress?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddInProgress visible={visibleAdd} dataEdit={inProgress} handleVisibleModal={handleVisibleModal} />
+      <AddInProgress visible={visibleAdd} dataEdit={inProgress} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

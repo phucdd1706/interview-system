@@ -1,6 +1,5 @@
 // THIRD-PARTY
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   TextField,
   Grid,
@@ -18,20 +17,18 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
-import { FormattedMessage } from 'react-intl';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import { RootState } from 'store/index';
 import { Candidates, SearchValues } from 'types/complete';
 import { fetchCandidates } from 'store/slices/complete';
 import Complete from './Complete';
 import { gridSpacing } from '../../../store/constant';
 import RankFilters from 'components/Common/RankFilters';
 import StatusFilters from 'components/Common/StatusFilters';
+import { dispatch, RootState, useSelector } from 'store';
 
 const Index = () => {
-  const dispatch = useDispatch();
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
@@ -162,12 +159,8 @@ const Index = () => {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ pr: 3 }}>#</TableCell>
-                <TableCell>
-                  <FormattedMessage id="name" />
-                </TableCell>
-                <TableCell>
-                  <FormattedMessage id="phone" />
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Phone</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Status</TableCell>
@@ -177,8 +170,8 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {candidate?.map((row) => (
-                <Complete key={row?.id} complete={row} />
+              {candidate?.map((row, index: number) => (
+                <Complete key={row?.id} complete={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>
