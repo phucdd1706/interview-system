@@ -31,7 +31,9 @@ const LanguageFilters = (props: any) => {
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-      <Typography variant="h5">Sort by Language: </Typography>
+      <Typography variant="h5" style={{ width: '120px' }}>
+        Sort by Language:{' '}
+      </Typography>
       <Button
         id="demo-positioned-button"
         aria-controls="demo-positioned-menu"
