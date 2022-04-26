@@ -191,7 +191,7 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                   <Grid item xs={12}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
-                        <span>
+                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
                           <span style={{ color: 'red' }}>*</span> Type
                         </span>
                       </InputLabel>

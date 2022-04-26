@@ -13,7 +13,6 @@ import { addCandidate, editCandidate } from 'store/slices/complete';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { FormattedMessage } from 'react-intl';
 
 interface Props {
   dataEdit: Candidates;
@@ -169,7 +168,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -185,7 +184,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.username}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Username
+                        <span style={{ color: '#f44336' }}>*</span> Username
                       </span>
                     }
                     fullWidth
@@ -201,7 +200,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.phone}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Phone
+                        <span style={{ color: '#f44336' }}>*</span> Phone
                       </span>
                     }
                     fullWidth
@@ -217,7 +216,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.email}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Email
+                        <span style={{ color: '#f44336' }}>*</span> Email
                       </span>
                     }
                     fullWidth
@@ -235,7 +234,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Password
+                            <span style={{ color: '#f44336' }}>*</span> Password
                           </span>
                         }
                         fullWidth
@@ -251,7 +250,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password_confirmation}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Confirm password
+                            <span style={{ color: '#f44336' }}>*</span> Confirm password
                           </span>
                         }
                         fullWidth
@@ -264,17 +263,12 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 )}
                 <Grid item xl={12}>
                   <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                  {formik.touched.rank_id && formik.errors.rank_id && (
-                    <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank_id}
-                    </FormHelperText>
-                  )}
                 </Grid>
 
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button fullWidth variant="contained" type="submit">
-                      <FormattedMessage id="data" />
+                      Save
                     </Button>
                   </AnimateButton>
                 </Grid>

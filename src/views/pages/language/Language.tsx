@@ -11,18 +11,21 @@ import { Languages } from 'types/language';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
-import { dispatch } from 'store';
+import { RootState, dispatch, useSelector } from 'store/index';
 
 interface Props {
   language: Languages;
+  index: number;
+  getList: () => void;
 }
 
-const Language = ({ language }: Props) => {
+const Language = ({ language, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const languageState = useSelector((state: RootState) => state.language);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -40,6 +43,7 @@ const Language = ({ language }: Props) => {
           id: language.id,
           callback: (res) => {
             if (res?.data?.success) {
+              getList();
               openNotification('success', 'Delete record successfully!');
             } else {
               openNotification('error', res?.message);
@@ -158,7 +162,7 @@ const Language = ({ language }: Props) => {
       <TableRow hover key={language?.id}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{language.id}</Typography>
+            <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -183,7 +187,7 @@ const Language = ({ language }: Props) => {
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} />
+      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

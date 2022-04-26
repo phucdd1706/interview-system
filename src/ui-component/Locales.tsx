@@ -2,19 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { IntlProvider, MessageFormatElement } from 'react-intl';
 
-// import label from ;
-
 // PROJECT IMPORTS
 import useConfig from 'hooks/useConfig';
-
-// console.log('label', label);
 
 const loadLocaleData = (locale: string) => {
   switch (locale) {
     case 'vi':
-      return import('utils/locales/vi');
+      return import('utils/locales/vi.json');
     default:
-      return import('utils/locales/en');
+      return import('utils/locales/en.json');
   }
 };
 
