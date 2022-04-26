@@ -1,19 +1,22 @@
 // PROJECT IMPORTS
 
 export interface Candidates {
-  id: number | string;
-  name: string;
-  username: string;
-  phone: string;
-  email: string;
-  rank: number | string;
-  created_at: string;
-  status: number;
+  id?: number;
+  name?: string;
+  username?: string;
+  phone?: string;
+  email?: string;
+  rank_id?: number | string;
+  password?: string;
+  password_confirmation?: string;
+  created_at?: string;
+  updated_at?: string;
+  status?: any;
 }
 
 export interface SearchValues {
   search?: string;
-  rank?: number | string;
+  rank_id?: number | string;
   status?: number | string;
   currentPage?: number;
   limit?: number;
@@ -22,12 +25,11 @@ export interface SearchValues {
 export interface Payload {
   id?: string | number;
   params?: any;
-  token?: any;
   callback?: (response: any) => void;
 }
 
 export type Status = {
-  value?: any;
+  value?: number | string;
   label: string;
 };
 

@@ -1,14 +1,13 @@
 // PROJECT IMPORTS
 import { ApplicantDataInterface, ApplicantInfo, ReferenceEvaluate } from 'types/applicantData';
-import { QuestionInterface, QuestionStackInterface } from 'types/interviewQuestion';
+import { QuestionInterface, QuestionStackInterface, ResponseInterviewQuestion, InterviewQuestions } from 'types/interviewQuestion';
 import { axiosGet, axiosPost } from 'utils/helpers/axios';
-
+import { QuestionType } from 'types/question';
 // THIRD-PARTY
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
-    id: '',
     firstName: '',
     lastName: '',
     age: '',
@@ -16,9 +15,9 @@ const initialState: ApplicantDataInterface = {
     phone: '',
     address: '',
     interviewTime: '',
-    notes: '',
-    experiences: [],
-    applyPosition: []
+    applyPosition: [],
+    questions: [],
+    note: ''
   },
   interviewQuestions: [],
   questions: []
@@ -29,77 +28,65 @@ const applicantReferences = createSlice({
   initialState,
   reducers: {
     applicantFormInit: () => initialState,
-    setApplicantInfo(state, action: { payload: ApplicantDataInterface }) {
-      action.payload.interviewQuestions.map((item: QuestionStackInterface) => {
-        item.questions.map((question: QuestionInterface) => {
-          question.answerScore = '';
-          question.notes = '';
-          return question;
-        });
-        return item;
-      });
-      Object.assign(state, action.payload);
+    setApplicantInfo(state, action: { payload: { applicant: ApplicantInfo; questions: InterviewQuestions[] } }) {
+      console.log(action.payload);
+      // state.interviewQuestions = action.payload.map(
+      //   (element: InterviewQuestions, index): QuestionStackInterface => ({
+      //     type: `Rand ${index}`,
+      //     questions: element
+      //   })
+      // );
     },
-    setReferenceEvaluate(state, action: { payload: ReferenceEvaluate }) {
-      Object.assign(state, { referenceEvaluate: action.payload });
-    },
-    setQuestions(state, action: { payload: QuestionInterface[] }) {
-      const questions = action.payload.filter((element) =>
-        state.interviewQuestions.every((questionStack) =>
-          questionStack.questions.every((question) => question.questionId !== element.questionId)
-        )
-      );
-      Object.assign(state, { questions });
+    // setReferenceEvaluate(state, action: { payload: ReferenceEvaluate }) {
+    //   Object.assign(state, { referenceEvaluate: action.payload });
+    // },
+    setQuestions(state, action: { payload: InterviewQuestions[] }) {
+      const questions = action.payload.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
+      state.questions = questions;
     },
     questionsInit(state) {
       state.questions = [];
     },
-    deleteInterviewQuestions(state, action: { payload: { type: string; questionId: string } }) {
-      const { type, questionId } = action.payload;
-      state.interviewQuestions.filter((item) => {
-        if (item.type.toLowerCase() === type.toLowerCase()) {
-          item.questions = item.questions.filter((question) => question.questionId !== questionId);
-        }
-        return item;
+    deleteInterviewQuestions(state, action: { payload: { questionType: string; id: number } }) {
+      const { questionType, id } = action.payload;
+      const newInterviewQuestions = state.interviewQuestions.map((element) => {
+        element.questions[questionType] = element.questions[questionType].filter((question) => question.id !== id);
+        return element;
       });
+      state.interviewQuestions = newInterviewQuestions;
     },
-    addInterviewQuestions(state, action: { payload: { type: string; question: QuestionInterface } }) {
-      const { type, question } = action.payload;
-      state.interviewQuestions.filter((item) => {
-        if (
-          item.type.toLowerCase() === type.toLowerCase() &&
-          item.questions.every((element) => element.questionId !== question.questionId)
-        ) {
-          item.questions.push(question);
-        }
-        return item;
-      });
-      state.questions = state.questions.filter((element) => element.questionId !== question.questionId);
-    },
-    handleAnswerScore(state, action: { payload: { questionId: string; answerScore: string } }) {
-      const { questionId, answerScore } = action.payload;
-      state.interviewQuestions.map((item) => {
-        item.questions.map((question) => {
-          if (question.questionId === questionId) {
-            question.answerScore = answerScore;
-          }
-          return question;
-        });
-        return item;
-      });
-    },
-    handleInterviewQuestionNotes(state, action: { payload: { questionId: string; notes: string } }) {
-      const { questionId, notes } = action.payload;
-      state.interviewQuestions.map((item) => {
-        item.questions.map((question) => {
-          if (question.questionId === questionId) {
-            question.notes = notes;
-          }
-          return question;
-        });
-        return item;
-      });
+    addInterviewQuestions(state, action: { payload: { questionType: string; language: string; question: QuestionType } }) {
+      const { questionType, question } = action.payload;
+      const isExisted = state.interviewQuestions.some((element) => element.questions[questionType].some((item) => item.id === question.id));
+      if (!isExisted) {
+        state.interviewQuestions[0].questions[questionType].push(question);
+        state.questions = state.questions.filter((element) => element.id !== question.id);
+      }
     }
+    // handleAnswerScore(state, action: { payload: { id: string; answerScore: string } }) {
+    //   const { id, answerScore } = action.payload;
+    //   state.interviewQuestions.map((item) => {
+    //     item.questions.map((question) => {
+    //       if (question.id === id) {
+    //         question.answerScore = answerScore;
+    //       }
+    //       return question;
+    //     });
+    //     return item;
+    //   });
+    // },
+    //   handleInterviewQuestionNotes(state, action: { payload: { id: string; notes: string } }) {
+    //     const { id, notes } = action.payload;
+    //     state.interviewQuestions.map((item) => {
+    //       item.questions.map((question) => {
+    //         if (question.id === id) {
+    //           question.notes = notes;
+    //         }
+    //         return question;
+    //       });
+    //       return item;
+    //     });
+    //   }
   }
 });
 
@@ -109,10 +96,10 @@ export const {
   applicantFormInit,
   addInterviewQuestions,
   deleteInterviewQuestions,
-  handleAnswerScore,
-  handleInterviewQuestionNotes,
+  // handleAnswerScore,
+  // handleInterviewQuestionNotes,
   setApplicantInfo,
-  setReferenceEvaluate,
+  // setReferenceEvaluate,
   setQuestions,
   questionsInit
 } = applicantReferences.actions;
@@ -122,15 +109,17 @@ export const {
 export const applicantAPI = {
   applicantReferenceInit: (applicantId: string) =>
     axiosGet<ApplicantDataInterface>(`${process.env.REACT_APP_FAKE_API_URL}/applicant/reference/${applicantId}`),
-  getQuestionsThunk: (type: string, value: string) =>
-    axiosPost<QuestionInterface[]>(`${process.env.REACT_APP_FAKE_API_URL}/questions`, { type, value }),
+  getQuestionsThunk: (language_id: number, rank_id: number) =>
+    axiosPost<ResponseInterviewQuestion>(`${process.env.REACT_APP_API_URL}/v1/client/questions/candidate`, {
+      data: [{ rank_advanced_id: rank_id, language_id, rank_id }]
+    }),
   getInterviewQuestionThunk: (params: {
     data: Array<{
       language_id: string | number;
       rank_id: string | number;
       rank_advanced_id: string | number;
     }>;
-  }) => axiosPost<ApplicantDataInterface>(`${process.env.REACT_APP_API_URL}/v1/client/questions/candidate`, params, 'Success'),
+  }) => axiosPost<ResponseInterviewQuestion>(`${process.env.REACT_APP_API_URL}/v1/client/questions/candidate`, params, 'Success'),
   getReferenceEvaluateThunk: (applicantInfo: ApplicantDataInterface) =>
     axiosPost<ReferenceEvaluate>(`${process.env.REACT_APP_FAKE_API_URL}/referenceEvaluate`, applicantInfo)
 };

@@ -3,7 +3,7 @@
   "history": "Lịch sử",
   "complete": "Hoàn thành",
   "inProgress": "Trong tiến trình",
-  "add new applicant reference": "Thêm thông tin ứng viên",
+  "add-new-applicant": "Thêm thông tin ứng viên",
   "analytics": "Thống kê",
   "application": "Ứng dụng",
   "manage-member": "Quản lý thành viên",
@@ -19,5 +19,6 @@
   "department": "Phòng ban",
   "language": "Ngôn ngữ",
   "experiences": "Kinh nghiệm",
-  "apply-positions": "Vị trí ứng tuyển"
+  "apply-positions": "Vị trí ứng tuyển",
+  "manage-question": "Quản lý câu hỏi"
 }

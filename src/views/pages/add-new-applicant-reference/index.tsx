@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { Box, Button } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -44,7 +44,11 @@ const AddApplicantReference = () => {
       {applicantInfo.interviewQuestions.length > 0 && (
         <>
           <MainCard title={intl.formatMessage({ id: 'interview-questions' })} sx={{ margin: '1em 0' }}>
-            <QuestionList questionList={applicantInfo.interviewQuestions} />
+            <Stack direction="column" spacing={2}>
+              {applicantInfo.interviewQuestions.map((question, index) => (
+                <QuestionList questionList={question} type={question.type} key={index} />
+              ))}
+            </Stack>
           </MainCard>
           <MainCard sx={{ margin: '1em 0' }}>
             <AnimateButton>

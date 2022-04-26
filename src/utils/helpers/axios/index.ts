@@ -6,7 +6,6 @@ export const axiosPost = async <T>(url: string, data: any, alert?: string): Prom
     .post(url, data)
     .then((res: any) => {
       alert && alertRequestSuccess(alert);
-      console.log(res.data);
       return res.data;
     })
     .catch((err: string) => {

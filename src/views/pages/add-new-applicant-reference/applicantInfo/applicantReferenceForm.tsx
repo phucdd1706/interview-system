@@ -35,8 +35,9 @@ import { jobPosition, jobLevel, workingExperiences } from '../constants';
 // TYPE IMPORTS
 import { RankType } from 'types/rank';
 import { Languages } from 'types/language';
+import FormInput from './formInput';
 
-type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
+type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address';
 
 const initialApplicantInfo: ApplicantInfo = {
   id: '',
@@ -46,15 +47,15 @@ const initialApplicantInfo: ApplicantInfo = {
   email: 'denvl585@gmail.com',
   phone: '',
   address: '',
+  interviewTime: `${new Date().toISOString().split('T')[0]}T09:00`,
+  note: '',
   applyPosition: [
     {
       rank_advanced_id: '',
       language_id: '',
       rank_id: ''
     }
-  ],
-  notes: '',
-  interviewTime: `${new Date().toISOString().split('T')[0]}T09:00`
+  ]
 };
 
 const ApplicantForm = () => {
@@ -90,13 +91,13 @@ const ApplicantForm = () => {
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          await dispatch(getInterviewQuestionThunk({ data: values.applyPosition }));
+          console.log('>>>>Value: ', values);
+          await dispatch(getInterviewQuestionThunk(values));
           setSubmitting(false);
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            {console.log(values)}
             {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string; required?: boolean }[] }) => {
               const { render } = row;
               return (
@@ -105,26 +106,18 @@ const ApplicantForm = () => {
                     const key: personalDetailType = item.key as personalDetailType;
                     const { label, type, required } = item;
                     return (
-                      <FormControl fullWidth error={Boolean(touched[key] && errors[key])} key={`${row.label}-${label}`}>
-                        <InputLabel htmlFor={`outlined-adornment-${row.label}-${label}`} required={required}>
-                          {label}
-                        </InputLabel>
-                        <OutlinedInput
-                          id={`outlined-adornment-${row.label}-${label}`}
-                          type={type}
-                          value={values[key]}
-                          name={key}
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          label={label}
-                          inputProps={{}}
-                        />
-                        {touched[key] && errors[key] && (
-                          <FormHelperText error id="standard-weight-helper-text-last-name">
-                            {errors[key]}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
+                      <FormInput
+                        key={`${row.label}-${label}`}
+                        touched={touched[key]}
+                        errors={errors[key]}
+                        label={label}
+                        type={type}
+                        values={values[key]}
+                        name={key}
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        required={required}
+                      />
                     );
                   })}
                 </Stack>
@@ -142,7 +135,7 @@ const ApplicantForm = () => {
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
-                          value={language.find((element) => element.id === item.language_id)}
+                          value={language.find((element) => element.id == item.language_id)}
                           getOptionLabel={(option: Languages) => option.name || ''}
                           renderInput={(params) => (
                             <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
@@ -164,7 +157,7 @@ const ApplicantForm = () => {
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
-                          value={ranks.find((element) => element.id === item.rank_id)}
+                          value={ranks.find((element) => element.id == item.rank_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
                           renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
                           sx={{ flexGrow: 1 }}
@@ -184,7 +177,7 @@ const ApplicantForm = () => {
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
                           }}
-                          value={ranks.find((element) => element.id === item.rank_advanced_id)}
+                          value={ranks.find((element) => element.id == item.rank_advanced_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
                           renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
                           sx={{ flexGrow: 1 }}

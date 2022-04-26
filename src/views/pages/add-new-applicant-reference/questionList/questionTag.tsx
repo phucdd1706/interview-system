@@ -6,20 +6,16 @@ import { IconX, IconDotsVertical } from '@tabler/icons';
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
-import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicant/applicantReferences';
+// import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicant/applicantReferences';
 import AddIcon from '@mui/icons-material/Add';
+import { QuestionType } from 'types/question';
 
 interface Props {
-  value: {
-    questionId: string;
-    question: string;
-    notes?: string;
-    answerScore?: string;
-  };
+  value: QuestionType;
   type: string;
   interviewing?: boolean;
-  onDeleteTag?: (type: string, questionId: string) => void;
-  onAddTag?: (type: string, question: { questionId: string; question: string }) => void;
+  onDeleteTag?: (questionType: string, id: number) => void;
+  onAddTag?: (questionType: string, language: string, question: QuestionType) => void;
 }
 
 const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag }: Props) => {
@@ -30,14 +26,14 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
     <Paper className={classes.itemHovered} variant="outlined" sx={{ padding: '1em' }}>
       <Stack direction="row" alignItems="center" spacing={2}>
         <Typography variant="body1" component="span" sx={{ flexGrow: 1 }}>
-          {value.question}
+          {value.question_content}
         </Typography>
         {onDeleteTag && (
           <Button
             color="error"
             sx={{ width: '24px', height: '24px', padding: 0, minWidth: 'auto', borderRadius: 99 }}
             onClick={() => {
-              onDeleteTag(type, value.questionId);
+              onDeleteTag(type, value.id || -1);
             }}
           >
             <IconX height={22} />
@@ -45,11 +41,11 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
         )}
         {onAddTag && (
           <Fab
-            sx={{ width: '28px', height: '28px', minHeight: 'auto', minWidth: 'auto', padding: 0 }}
+            sx={{ width: '28px', height: '28px', minHeight: 'auto', minWidth: '28px', padding: 0 }}
             color="primary"
             aria-label="add"
             onClick={() => {
-              onAddTag(type, value);
+              onAddTag(type, 'reactjs', value);
             }}
           >
             <AddIcon height={22} />
@@ -64,7 +60,7 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
                 label="Evaluate"
                 value={value.answerScore || ''}
                 onChange={(e) => {
-                  dispatch(handleAnswerScore({ questionId: value.questionId, answerScore: e.target.value }));
+                  // dispatch(handleAnswerScore({ id: value.id, answerScore: e.target.value }));
                 }}
               >
                 <MenuItem value="">
@@ -87,17 +83,17 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
           </Stack>
         )}
       </Stack>
-      {showNote && (
+      {/* {showNote && (
         <textarea
           value={value.notes}
           onChange={(e) => {
-            dispatch(handleInterviewQuestionNotes({ questionId: value.questionId, notes: e.target.value }));
+            // dispatch(handleInterviewQuestionNotes({ id: value.id, notes: e.target.value }));
           }}
           rows={3}
           style={{ width: '100%', resize: 'none', marginTop: '1em', padding: '0.5em' }}
           placeholder="Notes"
         />
-      )}
+      )} */}
     </Paper>
   );
 };

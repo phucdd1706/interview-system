@@ -62,11 +62,11 @@ const personalDetail = [
     ]
   },
   {
-    label: 'Notes',
+    label: 'Note',
     render: [
       {
-        key: 'notes',
-        label: 'Notes',
+        key: 'note',
+        label: 'Note',
         type: 'text'
       }
     ]

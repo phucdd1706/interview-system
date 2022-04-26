@@ -3,7 +3,7 @@
   "history": "History",
   "complete": "Complete",
   "inProgress": "InProgress",
-  "add new applicant reference": "Add New Applicant Reference",
+  "add-new-applicant": "Add New Applicant",
   "analytics": "Analytics",
   "application": "Application",
   "manage-member": "Manage Member",
@@ -11,7 +11,7 @@
   "customer": "Customer",
   "manage-rank": "Manage Rank",
   "interview": "Interview",
-  "applicant-reference-form": "applicant-reference-form",
+  "applicant-reference-form": "Applicant Reference Form",
   "interview-questions": "Interview Questions",
   "reference-results": "Reference Results",
   "interviewer-results": "Interviewer Results",
@@ -19,5 +19,6 @@
   "department": "Department",
   "language": "Language",
   "experiences": "Experiences",
-  "apply-positions": "Apply Positions"
+  "apply-positions": "Apply Positions",
+  "manage-question": "Manage question"
 }

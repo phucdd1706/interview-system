@@ -1,4 +1,5 @@
 import { QuestionStackInterface, QuestionInterface } from './interviewQuestion';
+import { QuestionType } from './question';
 
 export interface Job {
   id: string;
@@ -38,13 +39,14 @@ export interface ApplicantInfo {
   phone: string;
   address: string;
   interviewTime: string;
+  questions?: Array<Array<{ questionId: number }>>;
   experiences?: Job[];
   applyPosition: Array<{
     rank_advanced_id: string;
     language_id: string;
     rank_id: string;
   }>;
-  notes: string;
+  note?: string;
 }
 
 export interface ApplicantDataInterface {
@@ -52,5 +54,5 @@ export interface ApplicantDataInterface {
   interviewQuestions: QuestionStackInterface[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
-  questions: QuestionInterface[];
+  questions: QuestionType[];
 }

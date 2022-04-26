@@ -9,22 +9,24 @@ import { useDispatch } from 'store';
 import { questionsInit } from 'store/slices/applicant/applicantReferences';
 
 // TYPE IMPORTS
-import { QuestionStackInterface } from 'types/interviewQuestion';
+import { InterviewQuestions, QuestionStackInterface } from 'types/interviewQuestion';
+import { QuestionType } from 'types/question';
 
 interface Props {
-  questionStack: QuestionStackInterface;
+  questionStack: QuestionType[];
   onClickAddButton?: (type: string) => void;
-  onClickDeleteButton?: (type: string, questionId: string) => void;
+  onClickDeleteButton?: (type: string, id: number) => void;
   interviewing?: boolean;
+  stackType: string;
 }
 
-const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickDeleteButton }: Props) => {
+const QuestionStack = ({ questionStack, interviewing, stackType, onClickAddButton, onClickDeleteButton }: Props) => {
   const dispatch = useDispatch();
   return (
     <Box>
       <Stack direction="row" marginBottom={2}>
-        <Typography variant="h3" component="h3" sx={{ flexGrow: 1 }}>
-          {questionStack.type}
+        <Typography variant="h4" component="h4" sx={{ flexGrow: 1 }}>
+          {stackType?.toUpperCase()}
         </Typography>
         {onClickAddButton && (
           <Fab
@@ -32,7 +34,7 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
             color="primary"
             aria-label="add"
             onClick={() => {
-              onClickAddButton(questionStack.type);
+              onClickAddButton(stackType);
               dispatch(questionsInit());
             }}
           >
@@ -41,18 +43,9 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
         )}
       </Stack>
       <Stack direction="column" spacing={2}>
-        {questionStack.questions.map((data) => {
-          const { questionId } = data;
-          return (
-            <QuestionTag
-              value={data}
-              type={questionStack.type}
-              onDeleteTag={onClickDeleteButton}
-              interviewing={interviewing}
-              key={questionId}
-            />
-          );
-        })}
+        {questionStack.map((question, index) => (
+          <QuestionTag value={question} type={stackType} onDeleteTag={onClickDeleteButton} interviewing={interviewing} key={index} />
+        ))}
       </Stack>
     </Box>
   );
