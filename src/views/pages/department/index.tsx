@@ -103,11 +103,9 @@ const Departments = () => {
   useEffect(() => {
     setData(departmentState.department);
   }, [departmentState]);
-  console.log(22222, data);
 
   useEffect(() => {
     filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -212,20 +210,18 @@ const Departments = () => {
               <TableCell sx={{ pl: 3 }} style={{ width: '70px' }}>
                 STT
               </TableCell>
-              <TableCell style={{ width: '180px' }}>Name</TableCell>
-              <TableCell style={{ width: '180px' }}>Code</TableCell>
-              <TableCell style={{ width: '180px' }}>Create At</TableCell>
-              <TableCell style={{ width: '170px' }}>Status</TableCell>
-              <TableCell sx={{ pr: 3 }} style={{ width: '10px' }}>
-                Actions
-              </TableCell>
+              <TableCell sx={{ width: 180, minWidth: 180 }}>Name</TableCell>
+              <TableCell sx={{ width: 180, minWidth: 180 }}>Code</TableCell>
+              <TableCell sx={{ width: 180, minWidth: 180 }}>Create At</TableCell>
+              <TableCell sx={{ width: 170, minWidth: 170 }}>Status</TableCell>
+              <TableCell sx={{ pr: 3, width: 10, minWidth: 10 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
             {data && data.map((department, index) => <DepartmentList key={department.id} department={department} index={index} />)}
           </TableBody>
         </Table>
-        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
