@@ -88,6 +88,7 @@ const validationSchema = yup.object({
 
 const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
   // //use formik
+  // const err = useSelector((state) => state.customer.error);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -104,6 +105,33 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(editCustomer(values));
+      // if (err) {
+      //   dispatch(
+      //     openSnackbar({
+      //       open: true,
+      //       message: 'The given data was invalid',
+      //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      //       variant: 'alert',
+      //       alert: {
+      //         color: 'error'
+      //       },
+      //       close: true
+      //     })
+      //   );
+      // } else {
+      //   dispatch(
+      //     openSnackbar({
+      //       open: true,
+      //       message: 'Updated successfully!',
+      //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      //       variant: 'alert',
+      //       alert: {
+      //         color: 'success'
+      //       },
+      //       close: true
+      //     })
+      //   );
+      // }
       dispatch(
         openSnackbar({
           open: true,

@@ -22,7 +22,7 @@ import { useFormik } from 'formik';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { addCustomer } from 'store/slices/customer';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
@@ -54,6 +54,7 @@ const validationSchema = yup.object({
 });
 
 const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
+  const err = useSelector((state) => state.customer.error);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -70,18 +71,33 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       dispatch(addCustomer(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
+      if (err) {
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: 'The given data was invalid',
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            variant: 'alert',
+            alert: {
+              color: 'error'
+            },
+            close: true
+          })
+        );
+      } else {
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: 'Submit Success',
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            variant: 'alert',
+            alert: {
+              color: 'success'
+            },
+            close: true
+          })
+        );
+      }
       handleDrawerOpen();
       formik.resetForm();
     }
