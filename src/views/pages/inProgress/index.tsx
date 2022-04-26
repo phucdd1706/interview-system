@@ -29,8 +29,8 @@ import { fetchCandidates } from 'store/slices/inProgress';
 import InProgress from 'views/pages/inProgress/InProgress';
 import { gridSpacing } from '../../../store/constant';
 import AddInProgress from 'views/pages/inProgress/AddInProgress';
-import RankFilters from 'components/Common/RankFilters';
-import StatusFilters from 'components/Common/StatusFilters';
+import RankFilters from 'ui-component/CommonFilters/RankFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
 
 const Index = () => {
   const dispatch = useDispatch();

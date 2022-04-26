@@ -24,8 +24,8 @@ import { Candidates, SearchValues } from 'types/complete';
 import { fetchCandidates } from 'store/slices/complete';
 import Complete from './Complete';
 import { gridSpacing } from '../../../store/constant';
-import RankFilters from 'components/Common/RankFilters';
-import StatusFilters from 'components/Common/StatusFilters';
+import RankFilters from 'ui-component/CommonFilters/RankFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
 import { dispatch, RootState, useSelector } from 'store';
 
 const Index = () => {

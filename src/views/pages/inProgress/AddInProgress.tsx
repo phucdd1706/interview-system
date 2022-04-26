@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 // PROJECT IMPORT
-import RankSelect from 'components/Common/RankSelect';
+import RankSelect from 'ui-component/CommonSelect/RankSelect';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { addCandidate, editCandidate } from 'store/slices/inProgress';
 import { dispatch } from 'store';

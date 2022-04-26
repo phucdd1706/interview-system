@@ -29,7 +29,7 @@ import { fetchLanguages } from 'store/slices/language';
 import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
-import StatusFilters from 'components/Common/StatusFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
 
 const Index = () => {
   const dispatch = useDispatch();

@@ -13,6 +13,7 @@ import {
   Select,
   TextField,
   Grid,
+  InputLabel,
   Dialog
 } from '@mui/material';
 import { useFormik } from 'formik';
@@ -200,7 +201,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                   />
                 </Grid>
-
                 <Grid item xl={12}>
                   <TextField
                     id="description"
@@ -217,13 +217,14 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     helperText={(formik.touched.description && formik.errors.description) || errors?.description}
                   />
                 </Grid>
-
                 {dataEdit.id && (
                   <Grid item xs={12}>
                     <FormControl fullWidth>
+                      <InputLabel>Status</InputLabel>
                       <Select
                         id="status"
                         name="status"
+                        label="Status"
                         displayEmpty
                         value={formik.values.status}
                         onChange={formik.handleChange}
@@ -238,7 +239,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     </FormControl>
                   </Grid>
                 )}
-
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button fullWidth variant="contained" type="submit">
