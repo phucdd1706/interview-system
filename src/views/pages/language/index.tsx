@@ -29,7 +29,7 @@ import { fetchLanguages } from 'store/slices/language';
 import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
-import StatusFilters from 'components/Common/StatusFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -44,14 +44,12 @@ const Index = () => {
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorElSort, setAnchorElSort] = useState(null);
 
-  const initialState: SearchValues = {
+  const [filters, setFilters] = useState<SearchValues>({
     search: '',
     status: '',
     currentPage: 1,
     limit: 20
-  };
-
-  const [filters, setFilters] = useState(initialState);
+  });
 
   useEffect(() => {
     setLanguage(languageState.language);
@@ -165,8 +163,8 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {language?.map((row) => (
-                <Language key={row?.id} language={row} />
+              {language?.map((row, index: number) => (
+                <Language key={row?.id} language={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>
@@ -179,7 +177,7 @@ const Index = () => {
           </Grid>
         </Grid>
       </MainCard>
-      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} />
+      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

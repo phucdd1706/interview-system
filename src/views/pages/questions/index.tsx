@@ -34,9 +34,9 @@ import { getQuestionsList } from 'store/slices/question';
 import { QuestionType, QuestionFilter } from 'types/question';
 import AddQuestion from './AddQuestion';
 import { gridSpacing } from 'store/constant';
-import RankFilters from 'components/Common/RankFilters';
-import DepartmentFilters from 'components/Common/DepartmentFilters';
-import LanguageFilters from 'components/Common/LanguageFilters';
+import RankFilters from 'ui-component/CommonFilters/RankFilters';
+import DepartmentFilters from 'ui-component/CommonFilters/DepartmentFilters';
+import LanguageFilters from 'ui-component/CommonFilters/LanguageFilters';
 
 const initialState: QuestionFilter = {
   search: '',

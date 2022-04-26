@@ -13,6 +13,7 @@ import {
   Select,
   TextField,
   Grid,
+  InputLabel,
   Dialog
 } from '@mui/material';
 import { useFormik } from 'formik';
@@ -31,9 +32,10 @@ interface Props {
   dataEdit: Languages;
   visible: boolean;
   handleVisibleModal: () => void;
+  getList: () => void;
 }
 
-const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
+const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props) => {
   const [errors, setErrors] = useState<any>({});
 
   const handleAdd = (values: Languages) => {
@@ -44,32 +46,10 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Edit language successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Edit language successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
@@ -81,38 +61,32 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Add new language successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              getList();
+              openNotification('success', 'Add language successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const changeModal = (type: string) => {
@@ -199,7 +173,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? `Edit ${dataEdit.name}` : 'Add new record'}
+                    {dataEdit?.id ? `Edit ${dataEdit.name}` : 'Add new language'}
                   </Typography>
                 </Stack>
               </Grid>
@@ -218,7 +192,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -227,7 +201,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                   />
                 </Grid>
-
                 <Grid item xl={12}>
                   <TextField
                     id="description"
@@ -235,7 +208,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.description}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Description
+                        <span style={{ color: '#f44336' }}>*</span> Description
                       </span>
                     }
                     fullWidth
@@ -244,13 +217,14 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     helperText={(formik.touched.description && formik.errors.description) || errors?.description}
                   />
                 </Grid>
-
                 {dataEdit.id && (
                   <Grid item xs={12}>
                     <FormControl fullWidth>
+                      <InputLabel>Status</InputLabel>
                       <Select
                         id="status"
                         name="status"
+                        label="Status"
                         displayEmpty
                         value={formik.values.status}
                         onChange={formik.handleChange}
@@ -265,7 +239,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     </FormControl>
                   </Grid>
                 )}
-
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button fullWidth variant="contained" type="submit">

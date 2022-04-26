@@ -114,13 +114,21 @@ export function editAdministrator(payload: Payload) {
   };
 }
 
-export function deleteAdministrator(user: UserProfile) {
+export function deleteAdministrator(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${user.id}`);
-      dispatch(slice.actions.deleteAdministratorSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const resp = await axios
+      .put(ADMINISTRATOR_URL.delAdmin(id))
+      .then((result) => {
+        dispatch(slice.actions.deleteAdministratorSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }
