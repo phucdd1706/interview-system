@@ -71,6 +71,7 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
       formik.resetForm();
     }
   };
+
   const EditDepart = (values: Department) => {
     dispatch(
       putDepartment({
@@ -111,6 +112,7 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
     );
   };
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       id: department.id,
       name: department.name,

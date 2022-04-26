@@ -28,9 +28,9 @@ import { PostQuestion } from 'store/slices/question';
 import { SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch } from 'store';
-import RankSelect from 'components/Common/RankSelect';
-import LanguageSelect from 'components/Common/LanguageSelect';
-import DepartmentSelect from 'components/Common/DepartmentSelect';
+import RankSelect from 'ui-component/CommonSelect/RankSelect';
+import LanguageSelect from 'ui-component/CommonSelect/LanguageSelect';
+import DepartmentSelect from 'ui-component/CommonSelect/DepartmentSelect';
 
 interface AddQuestionProps {
   open: boolean;

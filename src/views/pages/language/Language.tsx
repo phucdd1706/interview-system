@@ -165,7 +165,7 @@ const Language = ({ language, index, getList }: Props) => {
             <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: '15%', minWidth: 250, maxWidth: 'calc(100vw - 850px)', overflow: 'hidden' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -181,7 +181,7 @@ const Language = ({ language, index, getList }: Props) => {
             {language?.name}
           </Link>
         </TableCell>
-        <TableCell>{language?.description}</TableCell>
+        <TableCell sx={{ width: '30%', minWidth: 250, maxWidth: 450, overflow: 'hidden' }}>{language?.description}</TableCell>
         <TableCell>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(language?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
