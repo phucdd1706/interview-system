@@ -6,10 +6,13 @@ import { useState } from 'react';
 import QuestionStack from './questionStack';
 import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
-import { addInterviewQuestions, deleteInterviewQuestions, getQuestionsThunk } from 'store/slices/applicantReferences';
+import { getQuestionsThunk } from 'store/slices/applicant/applicantAsyncAction';
+import { addInterviewQuestions, deleteInterviewQuestions } from 'store/slices/applicant/applicantReferences';
+import { jobPosition, jobLevel } from '../constants';
+import { useDispatch, useSelector } from 'store';
+
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
-import { useDispatch, useSelector } from 'store';
 
 interface Props {
   questionList: QuestionStackInterface[];
@@ -48,15 +51,15 @@ const QuestionList = ({ questionList }: Props) => {
         <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }}>
           <Autocomplete
             options={jobPosition}
-            getOptionLabel={(option) => option.title}
-            onChange={(event, value) => getQuestions('position', (value && value.title) || '')}
+            getOptionLabel={(option) => option}
+            onChange={(event, value) => getQuestions('position', value || '')}
             renderInput={(params) => <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />}
             sx={{ flexGrow: 1 }}
           />
           <Autocomplete
             options={jobLevel}
-            onChange={(event, value) => getQuestions('level', (value && value.title) || '')}
-            getOptionLabel={(option) => option.title}
+            onChange={(event, value) => getQuestions('level', value || '')}
+            getOptionLabel={(option) => option}
             renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
             sx={{ flexGrow: 1 }}
           />
@@ -72,20 +75,3 @@ const QuestionList = ({ questionList }: Props) => {
 };
 
 export default QuestionList;
-
-const jobPosition = [
-  { title: 'ReactJS' },
-  { title: 'NodeJS' },
-  { title: 'AngularJS' },
-  { title: 'VueJS' },
-  { title: 'React Native' },
-  { title: 'Ionic' },
-  { title: 'Flutter' },
-  { title: 'ExpressJS' },
-  { title: 'Laravel' },
-  { title: 'Django' },
-  { title: 'Ruby on Rails' },
-  { title: 'PHP' }
-];
-
-const jobLevel = [{ title: 'Senior' }, { title: 'Middle' }, { title: 'Junior' }, { title: 'Intern' }];

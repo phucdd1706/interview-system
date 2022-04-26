@@ -11,11 +11,14 @@ import AddInProgress from 'views/pages/inProgress/AddInProgress';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
 import { dispatch } from 'store';
+import { Candidates } from 'types/inProgress';
 
-const InProgress = (props: any) => {
-  const { inProgress } = props;
+interface Props {
+  inProgress: Candidates;
+}
+
+const InProgress = ({ inProgress }: Props) => {
   const theme = useTheme();
-  const token = localStorage.getItem('serviceToken');
 
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -35,7 +38,6 @@ const InProgress = (props: any) => {
       dispatch(
         removeCandidate({
           id: inProgress.id,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
               dispatch(

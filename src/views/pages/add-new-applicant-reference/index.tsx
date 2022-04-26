@@ -7,12 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import EmployeeForm from './applicantInfo/applicantReferenceForm';
+import ApplicantForm from './applicantInfo/applicantReferenceForm';
 import QuestionList from './questionList/index';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
+import { applicantFormInit } from 'store/slices/applicant/applicantReferences';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const AddApplicantReference = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   useEffect(() => {
     dispatch(activeItem(['applicant']));
+    dispatch(applicantFormInit());
   }, [dispatch]);
 
   const submitInfo = () => {
@@ -30,18 +32,18 @@ const AddApplicantReference = () => {
       .post(`${process.env.REACT_APP_FAKE_API_URL}/applicant`, applicantInfo)
       .then(async (res) => {
         setSubmitting(false);
-        navigate('/interview/1', { replace: true });
+        navigate(`/interview/${res.data.applicantId}`, { replace: true });
       })
       .catch((err) => err);
   };
   return (
     <Box>
       <MainCard title={intl.formatMessage({ id: 'applicant reference form' })}>
-        <EmployeeForm />
+        <ApplicantForm />
       </MainCard>
       {applicantInfo.interviewQuestions.length > 0 && (
         <>
-          <MainCard title={intl.formatMessage({ id: 'list questions' })} sx={{ margin: '1em 0' }}>
+          <MainCard title={intl.formatMessage({ id: 'interview questions' })} sx={{ margin: '1em 0' }}>
             <QuestionList questionList={applicantInfo.interviewQuestions} />
           </MainCard>
           <MainCard sx={{ margin: '1em 0' }}>
@@ -54,7 +56,7 @@ const AddApplicantReference = () => {
                 size="large"
                 type="submit"
                 variant="contained"
-                color="secondary"
+                color="primary"
               >
                 Submit
               </Button>

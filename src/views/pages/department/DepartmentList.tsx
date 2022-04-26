@@ -14,6 +14,7 @@ import { Department } from 'types/department';
 import { delDepartment } from 'store/slices/department';
 import AlertDepartmentDelete from './AlertDepartmentDelete';
 import EditDepartment from './EditDepartment';
+import moment from 'moment';
 
 interface Props {
   department: Department;
@@ -82,6 +83,7 @@ const DepartmentList = ({ department, index }: Props) => {
           </Link>
         </TableCell>
         <TableCell>{department.code}</TableCell>
+        <TableCell>{moment(department.created_at).format('DD/MM/YYYY')}</TableCell>
         <TableCell>
           {department.status === 0 && (
             <Chip
@@ -114,6 +116,7 @@ const DepartmentList = ({ department, index }: Props) => {
             />
           )}
         </TableCell>
+
         <TableCell sx={{ width: 60, minWidth: 60 }}>
           <ButtonBase
             className="more-button"

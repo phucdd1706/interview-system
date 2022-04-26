@@ -28,6 +28,8 @@ import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
+import { useState } from 'react';
+import { Administrator } from 'types/user';
 
 interface Props {
   customer: UserProfile;
@@ -87,8 +89,53 @@ const validationSchema = yup.object({
 });
 
 const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
-  // //use formik
-  // const err = useSelector((state) => state.customer.error);
+  const [errors, setErrors] = useState<any>({});
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const EditCus = (values: Administrator) => {
+    dispatch(
+      editCustomer({
+        id: customer.id,
+        params: values,
+        callback: (res) => {
+          if (res?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Updated successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: res?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(res?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -104,47 +151,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(editCustomer(values));
-      // if (err) {
-      //   dispatch(
-      //     openSnackbar({
-      //       open: true,
-      //       message: 'The given data was invalid',
-      //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      //       variant: 'alert',
-      //       alert: {
-      //         color: 'error'
-      //       },
-      //       close: true
-      //     })
-      //   );
-      // } else {
-      //   dispatch(
-      //     openSnackbar({
-      //       open: true,
-      //       message: 'Updated successfully!',
-      //       anchorOrigin: { vertical: 'top', horizontal: 'right' },
-      //       variant: 'alert',
-      //       alert: {
-      //         color: 'success'
-      //       },
-      //       close: true
-      //     })
-      //   );
-      // }
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
+      EditCus(values);
     }
   });
 
@@ -211,8 +218,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -223,8 +230,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       label="User Name"
                       value={formik.values.username}
                       onChange={formik.handleChange}
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
+                      helperText={(formik.touched.username && formik.errors.username) || errors?.username}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -235,8 +242,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       label="Email"
                       value={formik.values.email}
                       onChange={formik.handleChange}
-                      error={formik.touched.email && Boolean(formik.errors.email)}
-                      helperText={formik.touched.email && formik.errors.email}
+                      error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
+                      helperText={(formik.touched.email && formik.errors.email) || errors?.email}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -247,8 +254,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       label="Phone"
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      error={formik.touched.phone && Boolean(formik.errors.phone)}
-                      helperText={formik.touched.phone && formik.errors.phone}
+                      error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
+                      helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
                     />
                   </Grid>
                   <Grid item xs={12}>

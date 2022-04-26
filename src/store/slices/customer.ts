@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { CustomerFilter } from 'types/customer';
+import { CustomerFilter, Payload } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 
 export const CUSTOMER_URL = `${process.env.REACT_APP_API_URL}/v1/operator/client/users`;
@@ -71,25 +71,47 @@ export function getCustomerList(filter?: CustomerFilter) {
   };
 }
 
-export function addCustomer(customer: UserProfile) {
+export function addCustomers(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, customer);
-      dispatch(slice.actions.addCustomerSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const res = await axios
+      .post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, params)
+      .then((result) => {
+        dispatch(slice.actions.addCustomerSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(slice.actions.hasError(err));
+        return err;
+      });
+    if (callback) {
+      callback(res);
     }
   };
 }
 
-export function editCustomer(customer: UserProfile) {
+export function editCustomer(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`, customer);
-      dispatch(slice.actions.editCustomerSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, params, callback } = payload;
+    const res = await axios
+      .put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`, params)
+      .then((result) => {
+        dispatch(slice.actions.editCustomerSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(slice.actions.hasError(err));
+        return err;
+      });
+    if (callback) {
+      callback(res);
     }
+    // try {
+    //   const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${customer.id}`, customer);
+    //   dispatch(slice.actions.editCustomerSuccess(response.data.success));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 
