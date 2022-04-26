@@ -192,8 +192,8 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {candidate?.map((row) => (
-                <InProgress key={row?.id} inProgress={row} />
+              {candidate?.map((row, index: number) => (
+                <InProgress key={row?.id} inProgress={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>
@@ -211,7 +211,7 @@ const Index = () => {
           </Grid>
         </Grid>
       </MainCard>
-      <AddInProgress visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleAdd} />
+      <AddInProgress visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleAdd} getList={() => getList()} />
     </>
   );
 };

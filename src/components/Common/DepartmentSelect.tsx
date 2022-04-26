@@ -37,10 +37,10 @@ const DepartmentSelect = (props: any) => {
 
   return (
     <>
-      <FormControl fullWidth error>
+      <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span>
-            <span style={{ color: 'red' }}>*</span> Department
+          <span style={{ color: formik && formik.touched.department_id && Boolean(formik.errors.department_id) ? '#f44336' : '' }}>
+            <span style={{ color: '#f44336' }}>*</span> Department
           </span>
         </InputLabel>
         <Select
@@ -49,7 +49,7 @@ const DepartmentSelect = (props: any) => {
           size={size || 'small'}
           label={
             <span>
-              <span style={{ color: 'red' }}>*</span> Department
+              <span style={{ color: '#f44336' }}>*</span> Department
             </span>
           }
           onChange={change}

@@ -7,11 +7,11 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 
 import { openSnackbar } from 'store/slices/snackbar';
-import { Department } from 'types/department';
-import { delDepartment } from 'store/slices/department';
+import { Department, DepartmentFilter } from 'types/department';
+import { delDepartment, getDepartmentList } from 'store/slices/department';
 import AlertDepartmentDelete from './AlertDepartmentDelete';
 import EditDepartment from './EditDepartment';
 import moment from 'moment';
@@ -21,6 +21,7 @@ interface Props {
   index: number;
 }
 const DepartmentList = ({ department, index }: Props) => {
+  const departmentState = useSelector((state) => state.department);
   const theme = useTheme();
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
   const handleDepartmentDrawerOpen = () => {
@@ -39,20 +40,41 @@ const DepartmentList = ({ department, index }: Props) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
+  const initialState: DepartmentFilter = {
+    search: '',
+    status: '',
+    currentPage: 1,
+    limit: 20
+  };
+  const [filter] = useState(initialState);
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(delDepartment(department));
       dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
+        delDepartment({
+          id: department.id,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getDepartmentList(filter));
+              Notification('success', 'Delete successfully');
+            } else {
+              Notification('success', resp?.message);
+            }
+          }
         })
       );
     }
@@ -62,8 +84,8 @@ const DepartmentList = ({ department, index }: Props) => {
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{department.id}</Typography>
+          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+            <Typography variant="body2">{index + 20 * (departmentState.currentPage - 1) + 1} </Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">

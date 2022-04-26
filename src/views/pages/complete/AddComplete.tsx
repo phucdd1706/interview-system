@@ -31,32 +31,10 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Edit record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Edit record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
@@ -68,38 +46,31 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
           params: values,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Add new record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              openNotification('success', 'Add new record successfully!');
               changeModal('close');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
               setErrors(res?.errors);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const changeModal = (type: string) => {
@@ -197,7 +168,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.name}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Name
+                        <span style={{ color: '#f44336' }}>*</span> Name
                       </span>
                     }
                     fullWidth
@@ -213,7 +184,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.username}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Username
+                        <span style={{ color: '#f44336' }}>*</span> Username
                       </span>
                     }
                     fullWidth
@@ -229,7 +200,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.phone}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Phone
+                        <span style={{ color: '#f44336' }}>*</span> Phone
                       </span>
                     }
                     fullWidth
@@ -245,7 +216,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                     value={formik.values?.email}
                     label={
                       <span>
-                        <span style={{ color: 'red' }}>*</span> Email
+                        <span style={{ color: '#f44336' }}>*</span> Email
                       </span>
                     }
                     fullWidth
@@ -263,7 +234,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Password
+                            <span style={{ color: '#f44336' }}>*</span> Password
                           </span>
                         }
                         fullWidth
@@ -279,7 +250,7 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                         value={formik.values?.password_confirmation}
                         label={
                           <span>
-                            <span style={{ color: 'red' }}>*</span> Confirm password
+                            <span style={{ color: '#f44336' }}>*</span> Confirm password
                           </span>
                         }
                         fullWidth
@@ -292,11 +263,6 @@ const AddComplete = ({ dataEdit, visible, handleVisibleModal }: Props) => {
                 )}
                 <Grid item xl={12}>
                   <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                  {formik.touched.rank_id && formik.errors.rank_id && (
-                    <FormHelperText error id="standard-weight-helper-text-rank-login">
-                      {formik.errors.rank_id}
-                    </FormHelperText>
-                  )}
                 </Grid>
 
                 <Grid item xs={12}>
