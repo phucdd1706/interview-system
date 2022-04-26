@@ -7,7 +7,7 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 
 import { openSnackbar } from 'store/slices/snackbar';
 import { Department } from 'types/department';
@@ -21,6 +21,7 @@ interface Props {
   index: number;
 }
 const DepartmentList = ({ department, index }: Props) => {
+  const departmentState = useSelector((state) => state.department);
   const theme = useTheme();
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
   const handleDepartmentDrawerOpen = () => {
@@ -57,13 +58,16 @@ const DepartmentList = ({ department, index }: Props) => {
       );
     }
   };
+  console.log(243324432, (departmentState.currentPage - 1) * (departmentState.pageCount ? departmentState.pageCount : 0) + index + 1);
 
   return (
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{department.id}</Typography>
+          <Stack direction="row" spacing={0.5}>
+            <Typography variant="body2">
+              {(departmentState.currentPage - 1) * (departmentState.pageCount ? departmentState.pageCount : 0) + index + 1}
+            </Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">

@@ -210,7 +210,7 @@ const Departments = () => {
           <TableHead>
             <TableRow>
               <TableCell sx={{ pl: 3 }} style={{ width: '70px' }}>
-                #
+                STT
               </TableCell>
               <TableCell style={{ width: '180px' }}>Name</TableCell>
               <TableCell style={{ width: '180px' }}>Code</TableCell>
