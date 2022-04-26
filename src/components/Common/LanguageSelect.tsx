@@ -1,6 +1,6 @@
 // THIRD PARTY
 import React, { useState, useEffect } from 'react';
-import { Select, InputLabel, MenuItem, FormControl } from '@mui/material';
+import { Select, InputLabel, MenuItem, FormControl, FormHelperText } from '@mui/material';
 
 // IMPORT PROJECT
 import { Languages } from 'types/language';
@@ -43,7 +43,7 @@ const LanguageSelect = (props: any) => {
 
   return (
     <>
-      <FormControl fullWidth>
+      <FormControl fullWidth error>
         <InputLabel id="demo-simple-select-label">
           <span>
             <span style={{ color: 'red' }}>*</span> Language
@@ -71,6 +71,11 @@ const LanguageSelect = (props: any) => {
             </MenuItem>
           ))}
         </Select>
+        {formik.touched.language_id && formik.errors.language_id && (
+          <FormHelperText error id="standard-weight-helper-text-rank-login">
+            {formik.errors.language_id}
+          </FormHelperText>
+        )}
       </FormControl>
     </>
   );

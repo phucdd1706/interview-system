@@ -6,14 +6,14 @@ import {
   DialogContent,
   Divider,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Typography,
-  FormHelperText
+  Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -146,11 +146,6 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
                   <Grid item xs={12}>
                     <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                    {formik.touched.rank_id && formik.errors.rank_id && (
-                      <FormHelperText error id="standard-weight-helper-text-rank-login">
-                        {formik.errors.rank_id}
-                      </FormHelperText>
-                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <DepartmentSelect
@@ -160,11 +155,6 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                       values={formik.values?.department_id}
                       formik={formik}
                     />
-                    {formik.touched.department_id && formik.errors.department_id && (
-                      <FormHelperText error id="standard-weight-helper-text-department-login">
-                        {formik.errors.department_id}
-                      </FormHelperText>
-                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <LanguageSelect
@@ -174,35 +164,50 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                       values={formik.values?.language_id}
                       formik={formik}
                     />
-                    {formik.touched.language_id && formik.errors.language_id && (
-                      <FormHelperText error id="standard-weight-helper-text-language-login">
-                        {formik.errors.language_id}
-                      </FormHelperText>
-                    )}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="question_content"
-                      name="question_content"
-                      label="question_content"
-                      value={formik.values.question_content}
-                      onChange={formik.handleChange}
-                      error={formik.touched.question_content && Boolean(formik.errors.question_content)}
-                      helperText={formik.touched.question_content && formik.errors.question_content}
-                    />
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel>Type</InputLabel>
+                      <TextField
+                        fullWidth
+                        id="question_content"
+                        size="medium"
+                        name="question_content"
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Question content
+                          </span>
+                        }
+                        error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
+                        value={formik.values.question_content}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.touched.question_content && formik.errors.question_content && (
+                        <FormHelperText error id="standard-weight-helper-text-rank-login">
+                          {formik.errors.question_content}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        <span>
+                          <span style={{ color: 'red' }}>*</span> Type
+                        </span>
+                      </InputLabel>
                       <Select
                         id="type"
+                        size="medium"
                         name="type"
-                        label="Type"
-                        displayEmpty
                         value={formik.values.type}
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Type
+                          </span>
+                        }
                         onChange={formik.handleChange}
                         inputProps={{ 'aria-label': 'Without label' }}
+                        error={formik.touched.type && Boolean(formik.errors.type)}
                       >
                         {Type.map((typee: SelectProps, index: number) => (
                           <MenuItem key={index} value={typee.value}>
@@ -210,6 +215,11 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                           </MenuItem>
                         ))}
                       </Select>
+                      {formik.touched.type && formik.errors.type && (
+                        <FormHelperText error id="standard-weight-helper-text-rank-login">
+                          {formik.errors.type}
+                        </FormHelperText>
+                      )}
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
