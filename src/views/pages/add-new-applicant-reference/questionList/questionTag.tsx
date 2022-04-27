@@ -1,27 +1,20 @@
 // THIRD-PARTY
 import React from 'react';
-import { Paper, Stack, Typography, Button, FormControl, MenuItem, Select, Fab } from '@mui/material';
-import { IconX, IconDotsVertical } from '@tabler/icons';
+import { Paper, Stack, Typography, FormControl, MenuItem, Select } from '@mui/material';
 
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
 import { handleAnswerStatus } from 'store/slices/applicant/applicantReferences';
-import AddIcon from '@mui/icons-material/Add';
 import { QuestionType } from 'types/question';
 
 interface Props {
   value: QuestionType;
-  type: string;
   interviewing?: boolean;
-  onDeleteTag?: (questionType: string, id: number) => void;
-  onAddTag?: (questionType: string, language: string, question: QuestionType) => void;
 }
 
-const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag }: Props) => {
-  console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ value', value);
+const QuestionTag = ({ value, interviewing = false }: Props) => {
   const classes = useStyles();
-  const [showNote, setShowNote] = React.useState(false);
   const dispatch = useDispatch();
   return (
     <Paper className={classes.itemHovered} variant="outlined" sx={{ padding: '1em' }}>
@@ -29,29 +22,6 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
         <Typography variant="body1" component="span" sx={{ flexGrow: 1 }}>
           {value.question_content}
         </Typography>
-        {onDeleteTag && (
-          <Button
-            color="error"
-            sx={{ width: '24px', height: '24px', padding: 0, minWidth: 'auto', borderRadius: 99 }}
-            onClick={() => {
-              onDeleteTag(type, value.id || -1);
-            }}
-          >
-            <IconX height={22} />
-          </Button>
-        )}
-        {onAddTag && (
-          <Fab
-            sx={{ width: '28px', height: '28px', minHeight: 'auto', minWidth: '28px', padding: 0 }}
-            color="primary"
-            aria-label="add"
-            onClick={() => {
-              onAddTag(type, 'reactjs', value);
-            }}
-          >
-            <AddIcon height={22} />
-          </Fab>
-        )}
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 100, height: 30 }}>
@@ -59,13 +29,15 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
                 label="Evaluate"
-                value={value.status || 1}
+                // @ts-ignore
+                value={typeof value.status === 'number' ? value.status + 1 : 3}
                 onChange={(e) => {
-                  dispatch(handleAnswerStatus({ id: value.id || 0, status: e.target.value }));
+                  dispatch(handleAnswerStatus({ id: value.candidate_id || 0, status: Number(e.target.value) - 1 }));
                 }}
               >
-                <MenuItem value={1}>Pending</MenuItem>
-                <MenuItem value={2}>Done</MenuItem>
+                <MenuItem value={3}>Skip</MenuItem>
+                <MenuItem value={1}>Fail</MenuItem>
+                <MenuItem value={2}>Pass</MenuItem>
               </Select>
             </FormControl>
             {/* <Button

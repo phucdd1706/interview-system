@@ -13,29 +13,71 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
 import axiosServices from 'utils/axios';
-import { applicantFormInit } from 'store/slices/applicant/applicantReferences';
-import { ApplicantDataAPI } from 'types/applicantData';
-import { axiosPost } from 'utils/helpers/axios';
+import { applicantInit, setApplicantInfo, setInterviewData } from 'store/slices/applicant/applicantReferences';
+import { ApplicantDataAPI, ApplicantInfo } from 'types/applicantData';
+import { axiosPost, axiosPut } from 'utils/helpers/axios';
+import { Candidates } from 'types/history';
+import { QuestionType } from 'types/question';
+import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
+
+const applicantDataInit: ApplicantInfo = {
+  name: '',
+  age: '',
+  email: '',
+  phone: '',
+  address: '',
+  time: '',
+  applyPosition: [],
+  questions: [],
+  status: 1,
+  note: ''
+};
+
+type Keys = 'id' | 'name' | 'age' | 'email' | 'note' | 'time' | 'status';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
   const applicant = useSelector((state) => state.applicant);
+  const { history } = useSelector((state) => state.history);
   const { id } = useParams();
-  console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ id', id);
   const intl = useIntl();
   const navigate = useNavigate();
   const [isSubmitting, setSubmitting] = useState(false);
-  useEffect(() => {
-    dispatch(activeItem(['applicant']));
-    dispatch(applicantFormInit());
-  }, [dispatch]);
-  const submitInfo = () => {
+
+  const submitInfo = (type: boolean) => {
+    // type: true - add new applicant, false - send interview result
     const data: ApplicantDataAPI = { ...applicant.applicantInfo };
+    const candidateQuestions =
+      (data.questions &&
+        data.questions.map((element) => ({
+          question_id: element.question_id,
+          status: element.status
+        }))) ||
+      [];
     delete data.applyPosition;
     data.status = 0;
     setSubmitting(true);
-    axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, data, 'Add applicant success', () => setSubmitting(false));
+    if (type) {
+      data.status = 1;
+      delete data.questions;
+      axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, { ...data, candidateQuestions }, 'Success');
+    } else {
+      data.status = 0;
+      axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, data, 'Add applicant success').then((res: any) => {
+        res.success.id && navigate(`/applicant/${res.success.id}`);
+      });
+    }
+    setSubmitting(false);
   };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getInterviewDataThunk(id));
+    } else {
+      dispatch(applicantInit());
+    }
+    dispatch(activeItem(['applicant']));
+  }, [id, dispatch]);
   return (
     <Box>
       <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
@@ -45,9 +87,7 @@ const AddApplicantReference = () => {
         <>
           <MainCard title={intl.formatMessage({ id: 'interview-questions' })} sx={{ margin: '1em 0' }}>
             <Stack direction="column" spacing={2}>
-              {applicant.interviewQuestions.map((question, index) => (
-                <QuestionList questionList={question} type={question.type} key={index} />
-              ))}
+              <QuestionList questionList={applicant.interviewQuestions} interviewing={!!id} />
             </Stack>
           </MainCard>
           <MainCard sx={{ margin: '1em 0' }}>
@@ -55,14 +95,16 @@ const AddApplicantReference = () => {
               <Button
                 disableElevation
                 disabled={isSubmitting}
-                onClick={submitInfo}
+                onClick={() => {
+                  submitInfo(!!id);
+                }}
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
                 color="primary"
               >
-                Submit
+                {id ? 'Send Interview Result' : 'Submit'}
               </Button>
             </AnimateButton>
           </MainCard>

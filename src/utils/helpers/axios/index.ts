@@ -19,6 +19,7 @@ export const axiosGet = async <T>(url: string, alert?: string): Promise<T> => {
   const response = await axiosServices
     .get(url)
     .then((res: any) => {
+      console.log(res);
       alert && alertRequestSuccess(alert);
       return res.data;
     })
@@ -28,11 +29,12 @@ export const axiosGet = async <T>(url: string, alert?: string): Promise<T> => {
   return response;
 };
 
-export const axiosPut = async <T>(url: string, data: any, alert?: string): Promise<T> => {
+export const axiosPut = async <T>(url: string, data: any, alert?: string, callback?: () => any): Promise<T> => {
   const response = await axiosServices
     .put(url, data)
     .then((res: any) => {
       alert && alertRequestSuccess(alert);
+      callback && callback();
       return res.data;
     })
     .catch((err: string) => {

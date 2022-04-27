@@ -31,7 +31,7 @@ export interface InterviewerEvaluate {
 }
 
 export interface ApplicantInfo {
-  id?: string;
+  id?: number;
   name: string;
   age: string;
   email: string;
@@ -45,11 +45,12 @@ export interface ApplicantInfo {
     language_id: string;
     rank_id: string;
   }>;
+  status?: number;
   note?: string;
 }
 
 export interface ApplicantDataAPI {
-  id?: string;
+  id?: number;
   name: string;
   age: string;
   email: string;
@@ -69,7 +70,7 @@ export interface ApplicantDataAPI {
 
 export interface ApplicantDataInterface {
   applicantInfo: ApplicantInfo;
-  interviewQuestions: QuestionStackInterface[];
+  interviewQuestions: QuestionType[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
   questions: QuestionType[];

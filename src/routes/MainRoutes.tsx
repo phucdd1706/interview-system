@@ -9,8 +9,7 @@ import { filterAuthorization } from 'menu-items/application';
 import PageNotFound from 'views/pages/404';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
-const Complete = Loadable(lazy(() => import('views/pages/complete/index')));
-const Inprogress = Loadable(lazy(() => import('views/pages/inProgress/index')));
+const History = Loadable(lazy(() => import('views/pages/history/index')));
 const Language = Loadable(lazy(() => import('views/pages/language/index')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
@@ -37,14 +36,9 @@ const MainRoutes = {
       element: <Dashboard />
     },
     {
-      path: '/complete',
+      path: '/history',
       role: 2,
-      element: <Complete />
-    },
-    {
-      path: '/inprogress',
-      role: 2,
-      element: <Inprogress />
+      element: <History />
     },
     {
       path: '/language',

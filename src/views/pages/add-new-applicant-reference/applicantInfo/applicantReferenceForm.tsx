@@ -26,7 +26,7 @@ import axiosServices from 'utils/axios';
 import LegendWrapper from '../legend';
 import { useDispatch, useSelector } from 'store';
 import { getRanksListSuccess } from 'store/slices/rank';
-import { getCompleteListSuccess } from 'store/slices/language';
+import { getLanguageListSuccess } from 'store/slices/language';
 import { ApplicantInfo } from 'types/applicantData';
 import { getInterviewQuestionThunk } from 'store/slices/applicant/applicantAsyncAction';
 import personalDetail from './layoutMapping';
@@ -66,16 +66,18 @@ const ApplicantForm = ({ interviewing }: Props) => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
   const { language } = useSelector((state) => state.language);
   const { ranks } = useSelector((state) => state.rank);
+  const { applicantInfo } = useSelector((state) => state.applicant);
   React.useEffect(() => {
     axios.all([axiosServices.get('/v1/languages/all'), axiosServices.get('/v1/ranks/all')]).then((res) => {
-      dispatch(getCompleteListSuccess({ data: res[0].data.success }));
+      dispatch(getLanguageListSuccess({ data: res[0].data.success }));
       dispatch(getRanksListSuccess({ data: res[1].data.success }));
     });
   }, [dispatch]);
   return (
     <Box>
       <Formik
-        initialValues={initialApplicantInfo}
+        enableReinitialize
+        initialValues={applicantInfo}
         validationSchema={Yup.object().shape({
           name: Yup.string().required('First name is required'),
           age: Yup.number().required('Age is required'),
@@ -84,8 +86,9 @@ const ApplicantForm = ({ interviewing }: Props) => {
           address: Yup.string().required('Address is required'),
           applyPosition: Yup.array().of(
             Yup.object().shape({
-              language_id: Yup.string().required('Position is required'),
-              rank_id: Yup.string().required('Level is required')
+              language_id: Yup.string().required('Language is required'),
+              rank_id: Yup.string().required('Rank is required'),
+              rank_advanced_id: Yup.string().required('Rank advanced is required')
             })
           )
         })}
@@ -116,6 +119,7 @@ const ApplicantForm = ({ interviewing }: Props) => {
                         handleBlur={handleBlur}
                         handleChange={handleChange}
                         required={required}
+                        readOnly={interviewing}
                       />
                     );
                   })}

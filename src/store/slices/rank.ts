@@ -1,6 +1,6 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-import { Payload } from 'types/complete';
+import { Payload } from 'types/history';
 
 // PROJECT IMPORTS
 import axios from 'utils/axios';

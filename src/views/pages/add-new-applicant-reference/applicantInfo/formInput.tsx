@@ -12,8 +12,8 @@ import {
   useMediaQuery
 } from '@mui/material';
 
-const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, required, type, name }: any) => (
-  <FormControl fullWidth error={Boolean(touched && errors)}>
+const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, required, type, name, readOnly }: any) => (
+  <FormControl fullWidth error={Boolean(touched && errors && !readOnly)}>
     <InputLabel htmlFor={`outlined-adornment-${label.split(' ').join('-')}`} required={required}>
       {label}
     </InputLabel>
@@ -26,8 +26,9 @@ const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, r
       onChange={handleChange}
       label={label}
       inputProps={{}}
+      readOnly={readOnly}
     />
-    {touched && errors && (
+    {touched && errors && !readOnly && (
       <FormHelperText error id="standard-weight-helper-text-last-name">
         {errors}
       </FormHelperText>
