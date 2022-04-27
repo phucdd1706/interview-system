@@ -29,6 +29,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
 import { Administrator } from 'types/user';
+import { UserProfile } from 'types/user-profile';
 
 interface Props {
   open: boolean;
@@ -64,7 +65,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       formik.resetForm();
     }
   };
-  const addCus = (values: Administrator) => {
+  const addCus = (values: UserProfile) => {
     dispatch(
       addCustomers({
         params: values,

@@ -97,7 +97,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
       formik.resetForm();
     }
   };
-  const EditCus = (values: Administrator) => {
+  const EditCus = (values: UserProfile) => {
     dispatch(
       editCustomer({
         id: customer.id,
