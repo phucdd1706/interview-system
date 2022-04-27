@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { QuestionType, QuestionFilter } from 'types/question';
+import { QuestionType, QuestionFilter, Payload } from 'types/question';
 
 export const QUESTIONS_URL = `${process.env.REACT_APP_API_URL}/v1/operator/questions`;
 
@@ -37,7 +37,6 @@ const slice = createSlice({
       state.questions = state.questions.filter((question) => question.id !== action.payload.id);
     },
     putQuestionSuccess(state, action) {
-      console.log(111111);
       state.questions = state.questions.map((question) => {
         if (question.id === action.payload.id) {
           return action.payload;
@@ -68,14 +67,28 @@ export function getQuestionsList(filter?: QuestionFilter) {
   };
 }
 
-export function PostQuestion(question: QuestionType) {
+export function PostQuestion(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.post(`${QUESTIONS_URL}`, question);
-      dispatch(slice.actions.postQuestionSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const response = await axios
+      .post(`${QUESTIONS_URL}`, params)
+      .then((result) => {
+        dispatch(slice.actions.postQuestionSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
+    // try {
+    //   const response = await axios.post(`${QUESTIONS_URL}`, question);
+    //   dispatch(slice.actions.postQuestionSuccess(response.data.success));
+    // } catch (error) {
+    //   dispatch(slice.actions.hasError(error));
+    // }
   };
 }
 
@@ -94,10 +107,8 @@ export function PutQuestion(question: QuestionType) {
   return async () => {
     try {
       const response = await axios.put(`${QUESTIONS_URL}/${question.id}`, question);
-      console.log('response.data.success', response.data.success);
       dispatch(slice.actions.putQuestionSuccess(response.data.success));
     } catch (error) {
-      console.log('error', error);
       dispatch(slice.actions.hasError(error));
     }
   };

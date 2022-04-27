@@ -194,8 +194,13 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       fullWidth
                       id="question_content"
                       name="question_content"
-                      label="question_content"
+                      label={
+                        <span>
+                          <span style={{ color: 'red' }}>*</span> Question content
+                        </span>
+                      }
                       value={formik.values.question_content}
+                      error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
                       onChange={formik.handleChange}
                     />
                     {formik.touched.question_content && formik.errors.question_content && (
@@ -208,13 +213,17 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
-                          <span style={{ color: 'red' }}>*</span> Type
+                          <span style={{ color: '#f44336' }}>*</span> Type
                         </span>
                       </InputLabel>
                       <Select
                         id="type"
                         name="type"
-                        label="Type"
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Type
+                          </span>
+                        }
                         displayEmpty
                         value={formik.values.type}
                         onChange={formik.handleChange}
@@ -230,11 +239,19 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel>Status</InputLabel>
+                      <InputLabel id="demo-simple-select-label">
+                        <span style={{ color: formik && formik.touched.status && Boolean(formik.errors.status) ? '#f44336' : '' }}>
+                          <span style={{ color: '#f44336' }}>*</span> Status
+                        </span>
+                      </InputLabel>
                       <Select
                         id="status"
                         name="status"
-                        label="Status"
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Status
+                          </span>
+                        }
                         displayEmpty
                         value={formik.values.status}
                         onChange={formik.handleChange}
