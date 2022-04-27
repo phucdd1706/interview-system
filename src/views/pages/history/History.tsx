@@ -134,7 +134,7 @@ const History = ({ history, index, getList }: Props) => {
     <>
       {status === 0 && (
         <Chip
-          label="Inactive"
+          label="InProgress"
           size="small"
           sx={{
             background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
@@ -144,7 +144,7 @@ const History = ({ history, index, getList }: Props) => {
       )}
       {status === 1 && (
         <Chip
-          label="Active"
+          label="Complete"
           size="small"
           sx={{
             background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
