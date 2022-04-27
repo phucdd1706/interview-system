@@ -136,7 +136,6 @@ const Questions = () => {
   const handleDepartmentClick = (index: number | string) => {
     setFilter({ ...filter, department_id: index });
     setAnchorElDepartment(null);
-    console.log(index);
   };
   // department
 
@@ -153,7 +152,6 @@ const Questions = () => {
   const handleLanguageClick = (index: number | string) => {
     setFilter({ ...filter, language_id: index });
     setAnchorElLanguage(null);
-    console.log(121, index);
   };
   // language
   return (

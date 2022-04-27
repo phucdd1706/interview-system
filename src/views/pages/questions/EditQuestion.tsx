@@ -24,7 +24,7 @@ import * as Yup from 'yup';
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-import { dispatch } from 'store';
+import { dispatch, RootState, useSelector } from 'store';
 import { QuestionType, SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
 import { PutQuestion } from 'store/slices/question';
@@ -35,6 +35,7 @@ import DepartmentSelect from 'ui-component/CommonSelect/DepartmentSelect';
 interface EditQuestionProps {
   question: QuestionType;
   open: boolean;
+  indexId: number;
   handleDrawerOpen: () => void;
 }
 const Type: SelectProps[] = [
@@ -67,7 +68,8 @@ const validationSchema = Yup.object({
   status: Yup.string().required('Question status is required')
 });
 
-const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) => {
+const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestionProps) => {
+  const questionState = useSelector((state: RootState) => state.question);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -142,7 +144,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit question ${question.id}`}
+                    {`Edit "question ${20 * (questionState.currentPage - 1) + indexId + 1}"`}
                   </Typography>
                 </Stack>
               </Grid>

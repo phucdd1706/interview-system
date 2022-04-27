@@ -1,16 +1,17 @@
 // THIRD-PARTY
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
-import { QuestionFilter } from 'types/question';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 // PROJECT IMPORTS
 interface Props {
-  id: number | undefined;
   open: boolean;
-  filter: QuestionFilter;
+  indexId: number;
   handleClose: (status: boolean) => void;
 }
 
-export default function AlertQuestionDelete({ id, open, handleClose, filter }: Props) {
+export default function AlertQuestionDelete({ open, handleClose, indexId }: Props) {
+  const questionState = useSelector((state: RootState) => state.question);
   return (
     <Dialog
       open={open}
@@ -22,7 +23,10 @@ export default function AlertQuestionDelete({ id, open, handleClose, filter }: P
     >
       {open && (
         <>
-          <DialogTitle id="item-delete-title">{id} - Are you sure you want to delete?</DialogTitle>]{' '}
+          <DialogTitle id="item-delete-title">
+            {`"Question ${20 * (questionState.currentPage - 1) + indexId + 1}" - Are you sure you want to delete?`}
+          </DialogTitle>
+          ]{' '}
           <DialogActions sx={{ mr: 2 }}>
             <Button onClick={() => handleClose(false)} color="error">
               Cancel

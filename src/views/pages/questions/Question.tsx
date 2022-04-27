@@ -20,6 +20,9 @@ const Question = ({ question, index }: Props) => {
   const initialState: QuestionFilter = {
     search: '',
     status: '',
+    rank_id: '',
+    department_id: '',
+    language_id: '',
     currentPage: 1
   };
   const [filter] = useState(initialState);
@@ -81,7 +84,9 @@ const Question = ({ question, index }: Props) => {
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{20 * (questionState.currentPage - 1) + index + 1}</Typography>
+            <Typography alignItems="center" variant="body2" style={{ marginLeft: '15px' }}>
+              {20 * (questionState.currentPage - 1) + index + 1}
+            </Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ maxWidth: 400 }} component="th" scope="row">
@@ -220,10 +225,10 @@ const Question = ({ question, index }: Props) => {
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertQuestionDelete id={question.id} open={openModal} handleClose={handleModalClose} filter={filter} />}
+          {openModal && <AlertQuestionDelete open={openModal} handleClose={handleModalClose} indexId={index} />}
         </TableCell>
       </TableRow>
-      <EditQuestion question={question} open={openQuestionDrawer} handleDrawerOpen={handleQuestionDrawerOpen} />
+      <EditQuestion question={question} open={openQuestionDrawer} handleDrawerOpen={handleQuestionDrawerOpen} indexId={index} />
     </>
   );
 };

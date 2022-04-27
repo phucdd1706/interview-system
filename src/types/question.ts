@@ -25,6 +25,7 @@ export type QuestionFilter = {
   type?: number | string;
   status?: number | string;
   currentPage?: number;
+  limit?: number;
 };
 
 export type SortStatusProps = {

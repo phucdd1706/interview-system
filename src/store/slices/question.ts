@@ -83,12 +83,6 @@ export function PostQuestion(payload: Payload) {
     if (callback) {
       callback(response);
     }
-    // try {
-    //   const response = await axios.post(`${QUESTIONS_URL}`, question);
-    //   dispatch(slice.actions.postQuestionSuccess(response.data.success));
-    // } catch (error) {
-    //   dispatch(slice.actions.hasError(error));
-    // }
   };
 }
 
