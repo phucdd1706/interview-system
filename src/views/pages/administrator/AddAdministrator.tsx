@@ -52,7 +52,10 @@ const validationSchema = yup.object({
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   password: yup.string().required('Password is required'),
-  password_confirmation: yup.string().required('password_confirmation is required'),
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Password_confirmation must match')
+    .required('Password_confirmation is required'),
   phone: yup
     .string()
     .matches(
@@ -270,7 +273,6 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      type="number"
                       fullWidth
                       id="phone"
                       name="phone"

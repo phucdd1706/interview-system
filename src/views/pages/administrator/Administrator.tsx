@@ -112,7 +112,7 @@ const Administrator = ({ administrator, index }: Props) => {
           {administrator.gender === 'female' && 'Female'}
           {(administrator.gender === null || administrator.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY ')}</TableCell>
         <TableCell>
           {administrator.status === 0 && (
             <Chip
