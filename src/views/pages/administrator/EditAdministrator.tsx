@@ -220,7 +220,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
@@ -232,7 +236,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       error={(formik.touched.username && Boolean(formik.errors.username)) || errors.username}
@@ -244,7 +252,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors.email}
@@ -256,7 +268,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors.phone}

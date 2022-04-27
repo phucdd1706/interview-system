@@ -184,7 +184,11 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
                       helperText={(formik.touched.name && formik.errors.name) || errors.name}
                       fullWidth
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -192,7 +196,11 @@ const EditDepartment = ({ department, open, handleDrawerOpen }: EditDepartmentPr
                       id="code"
                       name="code"
                       fullWidth
-                      label="Code"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Code
+                        </span>
+                      }
                       onChange={formik.handleChange}
                       value={formik.values.code}
                       error={(formik.touched.code && Boolean(formik.errors.code)) || errors.code}

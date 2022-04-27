@@ -28,6 +28,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { Administrator, SelectProps, UserFilter } from 'types/user';
 import { addAdministrator, getAdministratorList } from 'store/slices/user';
 import { useState } from 'react';
+import moment from 'moment';
 
 interface Props {
   open: boolean;
@@ -120,7 +121,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: null,
+      dob: moment().format('L'),
       gender: 'male',
       type: 1
     },
@@ -190,7 +191,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
@@ -202,7 +207,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
@@ -214,7 +223,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
@@ -227,7 +240,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       id="password"
                       name="password"
                       type="password"
-                      label="Password"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Password
+                        </span>
+                      }
                       value={formik.values.password}
                       onChange={formik.handleChange}
                       error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
@@ -240,7 +257,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       id="password_confirmation"
                       name="password_confirmation"
                       type="password"
-                      label="Confirm password"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Confirm password
+                        </span>
+                      }
                       value={formik.values.password_confirmation}
                       onChange={formik.handleChange}
                       error={(formik.touched.password_confirmation && Boolean(formik.errors?.password_confirmation)) || errors.password}
@@ -253,7 +274,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
