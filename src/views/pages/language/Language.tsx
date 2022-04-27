@@ -144,16 +144,6 @@ const Language = ({ language, index, getList }: Props) => {
           }}
         />
       )}
-      {status === 2 && (
-        <Chip
-          label="Blocked"
-          size="small"
-          sx={{
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-            color: theme.palette.orange.dark
-          }}
-        />
-      )}
     </>
   );
 

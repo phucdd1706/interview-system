@@ -1,5 +1,5 @@
 // PROJECT IMPORTS
-import { Status } from 'types/inProgress';
+import { Status } from 'types/history';
 
 const SortStatus: Status[] = [
   {
@@ -13,10 +13,6 @@ const SortStatus: Status[] = [
   {
     value: 1,
     label: 'Active'
-  },
-  {
-    value: 2,
-    label: 'Blocked'
   }
 ];
 
