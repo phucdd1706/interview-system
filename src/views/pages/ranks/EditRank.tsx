@@ -23,10 +23,11 @@ import * as Yup from 'yup';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 import { dispatch } from 'store';
-import { PutRank } from 'store/slices/rank';
 import { RankType, SelectProps } from 'types/rank';
 
 import { openSnackbar } from 'store/slices/snackbar';
+import { useState } from 'react';
+import { PutRank } from 'store/slices/rank';
 
 interface EditRankProps {
   rank: RankType;
@@ -52,6 +53,54 @@ const validationSchema = Yup.object({
 });
 
 const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
+  const [errors, setErrors] = useState<any>({});
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+
+  const EditRankFunc = (values: RankType) => {
+    dispatch(
+      PutRank({
+        id: values.id,
+        params: values,
+        callback: (response) => {
+          if (response?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Edit record successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: response?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(response?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -62,20 +111,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PutRank(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
+      EditRankFunc(values);
     }
   });
 
@@ -83,8 +119,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -142,8 +177,8 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>

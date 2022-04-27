@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/questions/SortStatus';
 import {

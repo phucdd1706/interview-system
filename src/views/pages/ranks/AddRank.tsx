@@ -9,12 +9,15 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
-import { dispatch } from 'store';
-import { PostRank } from 'store/slices/rank';
+import { getRanksList, PostRank } from 'store/slices/rank';
 import { openSnackbar } from 'store/slices/snackbar';
+import { RankFilter, RankType } from 'types/rank';
+import { useDispatch } from 'store';
+import { useState } from 'react';
 
 interface AddRankProps {
   open: boolean;
+  filter: RankFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -23,7 +26,47 @@ const validationSchema = Yup.object({
   description: Yup.string().required('Description is required')
 });
 
-const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
+const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState<any>({});
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const AddRankFunc = (values: RankType) => {
+    dispatch(
+      PostRank({
+        params: values,
+        callback: (response) => {
+          if (response?.data?.success) {
+            dispatch(getRanksList(filter));
+            Notification('success', 'Add new rank successfully');
+            changeModal('close');
+          } else {
+            Notification('error', response?.message);
+            setErrors(response?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -33,21 +76,7 @@ const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PostRank(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
-      formik.resetForm();
+      AddRankFunc(values);
     }
   });
 
@@ -55,8 +84,7 @@ const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -114,8 +142,8 @@ const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
                       label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -126,8 +154,8 @@ const AddRank = ({ open, handleDrawerOpen }: AddRankProps) => {
                       label="Description"
                       value={formik.values.description}
                       onChange={formik.handleChange}
-                      error={formik.touched.description && Boolean(formik.errors.description)}
-                      helperText={formik.touched.description && formik.errors.description}
+                      error={(formik.touched.description && Boolean(formik.errors.description)) || errors.description}
+                      helperText={(formik.touched.description && formik.errors.description) || errors.description}
                     />
                   </Grid>
                   <Grid item xs={12}>

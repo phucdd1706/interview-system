@@ -55,7 +55,7 @@ const application = {
     },
     {
       id: 'manage-rank',
-      title: <FormattedMessage id="manage-rank" />,
+      title: <FormattedMessage id="Manage Rank" />,
       type: 'item',
       role: 1,
       url: '/ranks',
@@ -65,7 +65,7 @@ const application = {
 
     {
       id: 'manage-question',
-      title: <FormattedMessage id="manage-question" />,
+      title: <FormattedMessage id="Manage Question" />,
       type: 'item',
       role: 1,
       url: '/questions',

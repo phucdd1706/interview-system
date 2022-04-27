@@ -205,15 +205,10 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
                         error={
                           (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
                         }
+                        helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
                         value={formik.values.question_content}
                         onChange={formik.handleChange}
                       />
-                      {(formik.touched.question_content && formik.errors.question_content && (
-                        <FormHelperText error id="standard-weight-helper-text-rank-login">
-                          {formik.errors.question_content}
-                        </FormHelperText>
-                      )) ||
-                        errors.question_content}
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
