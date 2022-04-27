@@ -18,7 +18,62 @@ const initialState: ApplicantDataInterface = {
     questions: [],
     note: ''
   },
-  interviewQuestions: [],
+  interviewQuestions: [
+    {
+      type: 'Rand 0',
+      questions: {
+        base: [
+          {
+            id: 44,
+            rank_id: 5,
+            department_id: 37,
+            language_id: 1,
+            question_content: '23csfvvsewe',
+            type: 0,
+            status: 1,
+            created_at: '2022-04-26T10:23:12.000000Z',
+            updated_at: '2022-04-26T10:23:12.000000Z'
+          },
+          {
+            id: 46,
+            rank_id: 5,
+            department_id: 37,
+            language_id: 1,
+            question_content: 'werfcxw',
+            type: 0,
+            status: 1,
+            created_at: '2022-04-26T10:23:36.000000Z',
+            updated_at: '2022-04-26T10:23:36.000000Z'
+          },
+          {
+            id: 39,
+            rank_id: 5,
+            department_id: 49,
+            language_id: 1,
+            question_content: '2132',
+            type: 0,
+            status: 1,
+            created_at: '2022-04-26T10:21:15.000000Z',
+            updated_at: '2022-04-26T10:21:15.000000Z'
+          }
+        ],
+        focus: [
+          {
+            id: 45,
+            rank_id: 5,
+            department_id: 37,
+            language_id: 1,
+            question_content: '4fdcsd',
+            type: 1,
+            status: 1,
+            created_at: '2022-04-26T10:23:25.000000Z',
+            updated_at: '2022-04-26T10:23:25.000000Z'
+          }
+        ],
+        advanced: []
+      }
+    }
+  ],
   questions: []
 };
 
@@ -68,19 +123,24 @@ const applicantReferences = createSlice({
         state.interviewQuestions[0].questions[questionType].push(question);
         state.questions = state.questions.filter((element) => element.id !== question.id);
       }
+    },
+    handleAnswerStatus(state, action: { payload: { id: number; status: number | string } }) {
+      const { id, status } = action.payload;
+      state.interviewQuestions.forEach((element) => {
+        Object.keys(element.questions).forEach((key) => {
+          element.questions[key].forEach((question) => {
+            if (question.id === id) {
+              question.status = status;
+            }
+          });
+        });
+      });
+      state.applicantInfo.questions?.forEach((question) => {
+        if (question.question_id === id) {
+          question.status = status;
+        }
+      });
     }
-    // handleAnswerScore(state, action: { payload: { id: string; answerScore: string } }) {
-    //   const { id, answerScore } = action.payload;
-    //   state.interviewQuestions.map((item) => {
-    //     item.questions.map((question) => {
-    //       if (question.id === id) {
-    //         question.answerScore = answerScore;
-    //       }
-    //       return question;
-    //     });
-    //     return item;
-    //   });
-    // },
     //   handleInterviewQuestionNotes(state, action: { payload: { id: string; notes: string } }) {
     //     const { id, notes } = action.payload;
     //     state.interviewQuestions.map((item) => {
@@ -102,7 +162,7 @@ export const {
   applicantFormInit,
   addInterviewQuestions,
   deleteInterviewQuestions,
-  // handleAnswerScore,
+  handleAnswerStatus,
   // handleInterviewQuestionNotes,
   setApplicantInfo,
   // setReferenceEvaluate,

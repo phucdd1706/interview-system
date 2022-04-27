@@ -8,13 +8,11 @@ import ModalStyled from '../modal';
 import QuestionTag from './questionTag';
 import { getQuestionsThunk } from 'store/slices/applicant/applicantAsyncAction';
 import { deleteInterviewQuestions, addInterviewQuestions } from 'store/slices/applicant/applicantReferences';
-import { jobPosition, jobLevel } from '../constants';
 import { useDispatch, useSelector } from 'store';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
 import { QuestionType } from 'types/question';
-import { Languages } from 'types/language';
 
 interface Props {
   questionList: QuestionStackInterface;
@@ -60,7 +58,7 @@ const QuestionList = ({ questionList, type }: Props) => {
           {type.toUpperCase()}
         </Typography>
         {Object.keys(questionList.questions).map((key) => (
-          <QuestionStack stackType={key} questionStack={questionList.questions[key]} key={key} />
+          <QuestionStack stackType={key} questionStack={questionList.questions[key]} interviewing key={key} />
         ))}
       </Stack>
       <ModalStyled open={open} onModalClose={handleModalClose} modalTitle="Add Questions">

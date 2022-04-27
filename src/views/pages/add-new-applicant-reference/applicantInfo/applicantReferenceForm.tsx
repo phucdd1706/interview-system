@@ -55,7 +55,11 @@ const initialApplicantInfo: ApplicantInfo = {
   ]
 };
 
-const ApplicantForm = () => {
+interface Props {
+  interviewing: boolean;
+}
+
+const ApplicantForm = ({ interviewing }: Props) => {
   const intl = useIntl();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -119,120 +123,127 @@ const ApplicantForm = () => {
               );
             })}
 
-            <LegendWrapper legend={intl.formatMessage({ id: 'apply-positions' })}>
-              <Box>
-                {values.applyPosition.map((item: { rank_advanced_id: string; language_id: string; rank_id: string }, index: number) => (
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={uuidv4()}>
-                    <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
-                      <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
-                        <Autocomplete
-                          options={language}
-                          onChange={(event, value) => {
-                            setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
+            {!interviewing && (
+              <>
+                <LegendWrapper legend={intl.formatMessage({ id: 'apply-positions' })}>
+                  <Box>
+                    {values.applyPosition.map((item: { rank_advanced_id: string; language_id: string; rank_id: string }, index: number) => (
+                      <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={uuidv4()}>
+                        <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
+                          <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
+                            <Autocomplete
+                              options={language}
+                              onChange={(event, value) => {
+                                setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
+                              }}
+                              value={language.find((element) => element.id == item.language_id)}
+                              getOptionLabel={(option: Languages) => option.name || ''}
+                              renderInput={(params) => (
+                                <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
+                              )}
+                              sx={{ flexGrow: 1 }}
+                            />
+                            {touched.applyPosition && errors.applyPosition && (
+                              <FormHelperText error id="standard-weight-helper-text-last-name">
+                                {
+                                  // @ts-ignore:next-line
+                                  errors.applyPosition[index] && errors.applyPosition[index].language_id
+                                }
+                              </FormHelperText>
+                            )}
+                          </FormControl>
+                          <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
+                            <Autocomplete
+                              options={ranks}
+                              onChange={(event, value) => {
+                                setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
+                              }}
+                              value={ranks.find((element) => element.id == item.rank_id)}
+                              getOptionLabel={(option: RankType) => option.name || ''}
+                              renderInput={(params) => <TextField {...params} variant="standard" label="Rank" placeholder="Rank" />}
+                              sx={{ flexGrow: 1 }}
+                            />
+                            {touched.applyPosition && errors.applyPosition && (
+                              <FormHelperText error id="standard-weight-helper-text-last-name">
+                                {
+                                  // @ts-ignore:next-line
+                                  errors.applyPosition[index] && errors.applyPosition[index].rank_id
+                                }
+                              </FormHelperText>
+                            )}
+                          </FormControl>
+                          <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
+                            <Autocomplete
+                              options={ranks}
+                              onChange={(event, value) => {
+                                setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
+                              }}
+                              value={ranks.find((element) => element.id == item.rank_advanced_id)}
+                              getOptionLabel={(option: RankType) => option.name || ''}
+                              renderInput={(params) => (
+                                <TextField {...params} variant="standard" label="Rank Advanced" placeholder="Rank Advanced" />
+                              )}
+                              sx={{ flexGrow: 1 }}
+                            />
+                            {touched.applyPosition && errors.applyPosition && (
+                              <FormHelperText error id="standard-weight-helper-text-last-name">
+                                {
+                                  // @ts-ignore:next-line
+                                  errors.applyPosition[index] && errors.applyPosition[index].rank_advanced_id
+                                }
+                              </FormHelperText>
+                            )}
+                          </FormControl>
+                        </Stack>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => {
+                            setFieldValue(
+                              'applyPosition',
+                              values.applyPosition.filter((position) => position.language_id !== item.language_id)
+                            );
                           }}
-                          value={language.find((element) => element.id == item.language_id)}
-                          getOptionLabel={(option: Languages) => option.name || ''}
-                          renderInput={(params) => (
-                            <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
-                          )}
-                          sx={{ flexGrow: 1 }}
-                        />
-                        {touched.applyPosition && errors.applyPosition && (
-                          <FormHelperText error id="standard-weight-helper-text-last-name">
-                            {
-                              // @ts-ignore:next-line
-                              errors.applyPosition[index] && errors.applyPosition[index].language_id
-                            }
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
-                        <Autocomplete
-                          options={ranks}
-                          onChange={(event, value) => {
-                            setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
-                          }}
-                          value={ranks.find((element) => element.id == item.rank_id)}
-                          getOptionLabel={(option: RankType) => option.name || ''}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Rank" placeholder="Rank" />}
-                          sx={{ flexGrow: 1 }}
-                        />
-                        {touched.applyPosition && errors.applyPosition && (
-                          <FormHelperText error id="standard-weight-helper-text-last-name">
-                            {
-                              // @ts-ignore:next-line
-                              errors.applyPosition[index] && errors.applyPosition[index].rank_id
-                            }
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
-                        <Autocomplete
-                          options={ranks}
-                          onChange={(event, value) => {
-                            setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
-                          }}
-                          value={ranks.find((element) => element.id == item.rank_advanced_id)}
-                          getOptionLabel={(option: RankType) => option.name || ''}
-                          renderInput={(params) => (
-                            <TextField {...params} variant="standard" label="Rank Advanced" placeholder="Rank Advanced" />
-                          )}
-                          sx={{ flexGrow: 1 }}
-                        />
-                        {touched.applyPosition && errors.applyPosition && (
-                          <FormHelperText error id="standard-weight-helper-text-last-name">
-                            {
-                              // @ts-ignore:next-line
-                              errors.applyPosition[index] && errors.applyPosition[index].rank_advanced_id
-                            }
-                          </FormHelperText>
-                        )}
-                      </FormControl>
+                          sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
+                        >
+                          <IconX />
+                        </Button>
+                      </Stack>
+                    ))}
+                    <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          setFieldValue(
+                            'applyPosition',
+                            values.applyPosition.concat({ rank_advanced_id: '', language_id: '', rank_id: '' })
+                          );
+                        }}
+                        sx={{ marginTop: 2 }}
+                      >
+                        + Add more position
+                      </Button>
                     </Stack>
+                  </Box>
+                </LegendWrapper>
+                <Box sx={{ mt: 2, width: { md: 'fit-content', sm: '100%' } }}>
+                  <AnimateButton>
                     <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => {
-                        setFieldValue(
-                          'applyPosition',
-                          values.applyPosition.filter((position) => position.language_id !== item.language_id)
-                        );
-                      }}
-                      sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
+                      disableElevation
+                      disabled={isSubmitting}
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      sx={{ marginTop: 4 }}
                     >
-                      <IconX />
+                      Get Interview Question
                     </Button>
-                  </Stack>
-                ))}
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setFieldValue('applyPosition', values.applyPosition.concat({ rank_advanced_id: '', language_id: '', rank_id: '' }));
-                    }}
-                    sx={{ marginTop: 2 }}
-                  >
-                    + Add more position
-                  </Button>
-                </Stack>
-              </Box>
-            </LegendWrapper>
-            <Box sx={{ mt: 2, width: { md: 'fit-content', sm: '100%' } }}>
-              <AnimateButton>
-                <Button
-                  disableElevation
-                  disabled={isSubmitting}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginTop: 4 }}
-                >
-                  Get Interview Question
-                </Button>
-              </AnimateButton>
-            </Box>
+                  </AnimateButton>
+                </Box>
+              </>
+            )}
           </form>
         )}
       </Formik>

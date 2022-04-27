@@ -6,7 +6,7 @@ import { IconX, IconDotsVertical } from '@tabler/icons';
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
-// import { handleAnswerScore, handleInterviewQuestionNotes, questionsInit } from 'store/slices/applicant/applicantReferences';
+import { handleAnswerStatus } from 'store/slices/applicant/applicantReferences';
 import AddIcon from '@mui/icons-material/Add';
 import { QuestionType } from 'types/question';
 
@@ -19,6 +19,7 @@ interface Props {
 }
 
 const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag }: Props) => {
+  console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ value', value);
   const classes = useStyles();
   const [showNote, setShowNote] = React.useState(false);
   const dispatch = useDispatch();
@@ -58,20 +59,16 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
                 label="Evaluate"
-                value={value.answerScore || ''}
+                value={value.status || 1}
                 onChange={(e) => {
-                  // dispatch(handleAnswerScore({ id: value.id, answerScore: e.target.value }));
+                  dispatch(handleAnswerStatus({ id: value.id || 0, status: e.target.value }));
                 }}
               >
-                <MenuItem value="">
-                  <em>Do not enter</em>
-                </MenuItem>
-                <MenuItem value="bad">Bad</MenuItem>
-                <MenuItem value="good">Good</MenuItem>
-                <MenuItem value="excellent">Excellent</MenuItem>
+                <MenuItem value={1}>Pending</MenuItem>
+                <MenuItem value={2}>Done</MenuItem>
               </Select>
             </FormControl>
-            <Button
+            {/* <Button
               color="success"
               sx={{ width: '24px', height: '24px', padding: 0, minWidth: 'auto', borderRadius: 99 }}
               onClick={() => {
@@ -79,7 +76,7 @@ const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag 
               }}
             >
               <IconDotsVertical height={22} />
-            </Button>
+            </Button> */}
           </Stack>
         )}
       </Stack>

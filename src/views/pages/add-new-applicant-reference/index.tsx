@@ -3,7 +3,7 @@ import { Box, Button, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -20,7 +20,8 @@ import { axiosPost } from 'utils/helpers/axios';
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
   const applicant = useSelector((state) => state.applicant);
-
+  const { id } = useParams();
+  console.log('%c 🆑 ', `background: #${Math.floor(Math.random() * 999999)};color: #fff;font-weight: 700`, '🚀 ~ id', id);
   const intl = useIntl();
   const navigate = useNavigate();
   const [isSubmitting, setSubmitting] = useState(false);
@@ -38,7 +39,7 @@ const AddApplicantReference = () => {
   return (
     <Box>
       <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
-        <ApplicantForm />
+        <ApplicantForm interviewing={!!id} />
       </MainCard>
       {applicant.interviewQuestions.length > 0 && (
         <>

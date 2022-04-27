@@ -82,7 +82,15 @@ const MainRoutes = {
     {
       path: '/applicant',
       role: 2,
-      element: <AddNewApplicant />
+      exact: true,
+      element: <AddNewApplicant />,
+      children: [
+        {
+          path: '/applicant/:id',
+          role: 2,
+          element: <AddNewApplicant />
+        }
+      ]
     }
   ]
 };

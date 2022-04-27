@@ -43,7 +43,6 @@ export type QuestionType = {
   language?: Languages;
   rank?: RankType;
   department?: Department;
-  answerScore?: string;
   created_at?: string;
   updated_at?: string;
 };
