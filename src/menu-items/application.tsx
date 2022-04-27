@@ -36,29 +36,6 @@ const application = {
       ]
     },
     {
-      id: 'history',
-      title: <FormattedMessage id="history" />,
-      type: 'collapse',
-      role: 2,
-      icon: icons.IconHistory,
-      children: [
-        {
-          id: 'complete',
-          title: <FormattedMessage id="complete" />,
-          type: 'item',
-          role: 2,
-          url: '/complete'
-        },
-        {
-          id: 'inprogress',
-          title: <FormattedMessage id="inProgress" />,
-          type: 'item',
-          role: 2,
-          url: '/inprogress'
-        }
-      ]
-    },
-    {
       id: 'language',
       title: <FormattedMessage id="language" />,
       type: 'item',
@@ -102,6 +79,15 @@ const application = {
       role: 2,
       url: '/applicant',
       icon: icons.IconFilePlus,
+      breadcrumbs: true
+    },
+    {
+      id: 'history',
+      title: <FormattedMessage id="history" />,
+      type: 'item',
+      role: 2,
+      url: '/history',
+      icon: icons.IconHistory,
       breadcrumbs: true
     }
   ]
