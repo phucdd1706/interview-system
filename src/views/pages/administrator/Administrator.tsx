@@ -37,7 +37,13 @@ const Administrator = ({ administrator, index }: Props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [filter, setFilter] = useState<UserFilter>();
+  const initialState: UserFilter = {
+    search: '',
+    status: '',
+    currentPage: 1,
+    limit: 20
+  };
+  const [filter, setFilter] = useState(initialState);
 
   const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
@@ -125,16 +131,6 @@ const Administrator = ({ administrator, index }: Props) => {
               sx={{
                 background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
                 color: theme.palette.success.dark
-              }}
-            />
-          )}
-          {administrator.status === 2 && (
-            <Chip
-              label="Blocked"
-              size="small"
-              sx={{
-                background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-                color: theme.palette.orange.dark
               }}
             />
           )}

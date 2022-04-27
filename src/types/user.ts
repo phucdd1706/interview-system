@@ -30,7 +30,7 @@ export type Administrator = {
   username?: string;
   email?: string;
   phone?: string;
-  dob?: string;
+  dob?: string | null;
   gender?: string;
   status?: number;
   type?: number;
