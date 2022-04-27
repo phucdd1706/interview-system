@@ -30,6 +30,8 @@ import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
+import 'assets/scss/style.scss';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -169,13 +171,21 @@ const Index = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={languageState.pageCount} page={languageState.currentPage} color="primary" onChange={handleTableChange} />
+        {language?.length === 0 && (
+          <div className="noData">
+            <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+            <p>No data available</p>
+          </div>
+        )}
+        {language?.length > 0 && (
+          <Grid item xs={12} sx={{ p: 3 }}>
+            <Grid container justifyContent="space-between" spacing={gridSpacing}>
+              <Grid item>
+                <Pagination count={languageState.pageCount} page={languageState.currentPage} color="primary" onChange={handleTableChange} />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
       </MainCard>
       <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>

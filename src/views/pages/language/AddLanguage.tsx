@@ -14,10 +14,12 @@ import {
   TextField,
   Grid,
   InputLabel,
-  Dialog
+  Dialog,
+  useMediaQuery
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORT
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -36,6 +38,8 @@ interface Props {
 }
 
 const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props) => {
+  const theme = useTheme();
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [errors, setErrors] = useState<any>({});
 
   const handleAdd = (values: Languages) => {
@@ -98,7 +102,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().max(30).required('Name is required'),
+    name: yup.string().max(40).required('Name is required'),
     description: yup.string().max(255).required('Description is required')
   });
 
@@ -107,7 +111,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
     initialValues: {
       name: dataEdit?.name,
       description: dataEdit?.description,
-      status: dataEdit?.id ? dataEdit.status : 1
+      status: dataEdit?.id ? dataEdit?.status : 1
     },
     validationSchema,
     onSubmit: (values) => {
@@ -137,8 +141,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
           '&>div': {
             m: 0,
             borderRadius: '0px',
-            width: 850,
-            maxWidth: 850,
+            width: matchDownSM ? '100%' : 850,
             maxHeight: '100%'
           }
         }
@@ -148,16 +151,8 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={() => changeModal('close')}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -169,8 +164,16 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? `Edit ${dataEdit.name}` : 'Add new language'}
+                    {dataEdit?.id ? `Edit ${dataEdit?.name}` : 'Add new language'}
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={() => changeModal('close')}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>
@@ -185,7 +188,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                   <TextField
                     id="name"
                     name="name"
-                    value={formik.values?.name}
+                    value={formik?.values?.name}
                     label={
                       <span>
                         <span style={{ color: '#f44336' }}>*</span> Name
@@ -193,15 +196,15 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     }
                     fullWidth
                     onChange={formik.handleChange}
-                    error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
-                    helperText={(formik.touched.name && formik.errors.name) || errors?.name}
+                    error={(formik?.touched?.name && Boolean(formik?.errors?.name)) || errors?.name}
+                    helperText={(formik?.touched?.name && formik?.errors?.name) || errors?.name}
                   />
                 </Grid>
                 <Grid item xs={12} xl={12}>
                   <TextField
                     id="description"
                     name="description"
-                    value={formik.values?.description}
+                    value={formik?.values?.description}
                     label={
                       <span>
                         <span style={{ color: '#f44336' }}>*</span> Description
@@ -209,8 +212,8 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     }
                     fullWidth
                     onChange={formik.handleChange}
-                    error={(formik.touched.description && Boolean(formik.errors.description)) || errors?.description}
-                    helperText={(formik.touched.description && formik.errors.description) || errors?.description}
+                    error={(formik?.touched?.description && Boolean(formik?.errors?.description)) || errors?.description}
+                    helperText={(formik?.touched?.description && formik?.errors?.description) || errors?.description}
                   />
                 </Grid>
                 {dataEdit.id && (
@@ -222,7 +225,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                         name="status"
                         label="Status"
                         displayEmpty
-                        value={formik.values.status}
+                        value={formik?.values?.status}
                         onChange={formik.handleChange}
                         inputProps={{ 'aria-label': 'Without label' }}
                       >

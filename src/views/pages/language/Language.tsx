@@ -150,7 +150,7 @@ const Language = ({ language, index, getList }: Props) => {
   return (
     <>
       <TableRow hover key={language?.id}>
-        <TableCell sx={{ width: 110, minWidth: 110 }}>
+        <TableCell sx={{ width: '10%' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>

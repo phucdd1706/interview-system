@@ -2,7 +2,7 @@
 
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-import { getListCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/history';
+import { getListCandidate, createCandidate, updateCandidate } from 'api/history';
 import { Payload } from 'types/history';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
@@ -39,10 +39,6 @@ const historySlice = createSlice({
         }
         return history;
       });
-    },
-
-    deleteHistorySuccess(state, action) {
-      state.history = state.history.filter((history) => history.id !== action.payload.id);
     }
   }
 });
@@ -91,24 +87,6 @@ export function editCandidate({ id, params, callback }: Payload) {
     const response = await updateCandidate(id, params)
       .then((result) => {
         dispatch(historySlice.actions.editHistorySuccess(result.data.success));
-        return result;
-      })
-      .catch((err) => {
-        dispatch(historySlice.actions.hasError(err));
-        return err;
-      });
-
-    if (callback) {
-      callback(response);
-    }
-  };
-}
-
-export function removeCandidate({ id, callback }: Payload) {
-  return async () => {
-    const response = await deleteCandidate(id)
-      .then((result) => {
-        dispatch(historySlice.actions.deleteHistorySuccess(result.data.success));
         return result;
       })
       .catch((err) => {
