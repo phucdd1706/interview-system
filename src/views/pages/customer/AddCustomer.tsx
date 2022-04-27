@@ -19,7 +19,6 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
-
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
@@ -51,6 +50,11 @@ const validationSchema = yup.object({
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   phone: yup.string().required('Phone is required'),
+  password: yup.string().required('Password is required'),
+  password_confirmation: yup
+    .string()
+    .required('Password is required')
+    .oneOf([yup.ref('password'), null], 'Password must match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -111,7 +115,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: '',
+      dob: '11/11/2000',
       gender: 'male',
       type: 2
     },
@@ -260,6 +264,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
