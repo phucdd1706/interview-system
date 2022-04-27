@@ -28,6 +28,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { Administrator, SelectProps, UserFilter } from 'types/user';
 import { addAdministrator, getAdministratorList } from 'store/slices/user';
 import { useState } from 'react';
+import moment from 'moment';
 
 interface Props {
   open: boolean;
@@ -52,7 +53,13 @@ const validationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
   password: yup.string().required('Password is required'),
   password_confirmation: yup.string().required('password_confirmation is required'),
-  phone: yup.string().required('Phone is required'),
+  phone: yup
+    .string()
+    .matches(
+      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+      'Enter the correct format phone'
+    )
+    .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -114,7 +121,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      date: null,
+      dob: moment().format('L'),
       gender: 'male',
       type: 1
     },
@@ -184,7 +191,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
@@ -196,7 +207,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
@@ -208,7 +223,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
@@ -221,7 +240,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       id="password"
                       name="password"
                       type="password"
-                      label="Password"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Password
+                        </span>
+                      }
                       value={formik.values.password}
                       onChange={formik.handleChange}
                       error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
@@ -234,7 +257,11 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                       id="password_confirmation"
                       name="password_confirmation"
                       type="password"
-                      label="Confirm password"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Confirm password
+                        </span>
+                      }
                       value={formik.values.password_confirmation}
                       onChange={formik.handleChange}
                       error={(formik.touched.password_confirmation && Boolean(formik.errors?.password_confirmation)) || errors.password}
@@ -243,10 +270,15 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      type="number"
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
@@ -256,10 +288,10 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   <Grid item xs={12}>
                     <DesktopDatePicker
                       label="Date of Birth"
-                      value={formik.values.date}
+                      value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       onChange={(date) => {
-                        formik.setFieldValue('date', date);
+                        formik.setFieldValue('dob', date);
                       }}
                       renderInput={(props) => <TextField fullWidth {...props} />}
                     />

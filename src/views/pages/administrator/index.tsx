@@ -47,10 +47,6 @@ const SortStatus: SelectProps[] = [
   {
     value: 0,
     label: 'Inactive'
-  },
-  {
-    value: 2,
-    label: 'Blocked'
   }
 ];
 

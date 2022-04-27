@@ -118,7 +118,7 @@ export function deleteAdministrator(payload: Payload) {
   return async () => {
     const { id, callback } = payload;
     const resp = await axios
-      .put(ADMINISTRATOR_URL.delAdmin(id))
+      .delete(ADMINISTRATOR_URL.delAdmin(id))
       .then((result) => {
         dispatch(slice.actions.deleteAdministratorSuccess(result.data.success));
         return result;
