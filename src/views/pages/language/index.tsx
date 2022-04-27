@@ -29,7 +29,7 @@ import { fetchLanguages } from 'store/slices/language';
 import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
-import StatusFilters from 'components/Common/StatusFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -38,21 +38,18 @@ const Index = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const token = localStorage.getItem('serviceToken');
   const languageState = useSelector((state: RootState) => state.language);
 
   const [language, setLanguage] = useState<Languages[]>([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorElSort, setAnchorElSort] = useState(null);
 
-  const initialState: SearchValues = {
+  const [filters, setFilters] = useState<SearchValues>({
     search: '',
     status: '',
     currentPage: 1,
     limit: 20
-  };
-
-  const [filters, setFilters] = useState(initialState);
+  });
 
   useEffect(() => {
     setLanguage(languageState.language);
@@ -67,16 +64,20 @@ const Index = () => {
   }, [filters]);
 
   const getList = () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const filterData = async () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const handleSortClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setFilters({ ...filters, status: index });
     setAnchorElSort(null);
+  };
+
+  const handleTableChange = (e: any, pageTable: number) => {
+    setFilters({ ...filters, currentPage: pageTable! });
   };
 
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
@@ -94,6 +95,10 @@ const Index = () => {
 
   const addInProgress = () => {
     setVisibleAdd(!visibleAdd);
+  };
+
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
   };
 
   const renderSearchForm = () => (
@@ -140,10 +145,6 @@ const Index = () => {
     </Grid>
   );
 
-  const handleTableChange = (e: any, pageTable: number) => {
-    setFilters({ ...filters, currentPage: pageTable! });
-  };
-
   return (
     <>
       <MainCard title={renderSearchForm()} content={false}>
@@ -162,8 +163,8 @@ const Index = () => {
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {language?.map((row) => (
-                <Language key={row?.id} language={row} />
+              {language?.map((row, index: number) => (
+                <Language key={row?.id} language={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>
@@ -176,7 +177,7 @@ const Index = () => {
           </Grid>
         </Grid>
       </MainCard>
-      <AddLanguage visible={visibleAdd} dataEdit={{}} />
+      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

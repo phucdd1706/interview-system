@@ -68,8 +68,8 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
       <Formik
         enableReinitialize
         initialValues={{
-          email: 'contact@trants.io',
-          password: '123123',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({

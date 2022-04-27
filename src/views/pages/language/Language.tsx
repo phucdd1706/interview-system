@@ -7,19 +7,25 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
 import { removeLanguage } from 'store/slices/language';
+import { Languages } from 'types/language';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
-import { dispatch } from 'store';
+import { RootState, dispatch, useSelector } from 'store/index';
 
-const Language = (props: any) => {
-  const { language } = props;
+interface Props {
+  language: Languages;
+  index: number;
+  getList: () => void;
+}
+
+const Language = ({ language, index, getList }: Props) => {
   const theme = useTheme();
-  const token = localStorage.getItem('serviceToken');
 
-  const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleAdd, setVisibleAdd] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const languageState = useSelector((state: RootState) => state.language);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -35,39 +41,36 @@ const Language = (props: any) => {
       dispatch(
         removeLanguage({
           id: language.id,
-          token,
           callback: (res) => {
             if (res?.data?.success) {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: 'Delete record successfully!',
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'success'
-                  },
-                  close: true
-                })
-              );
+              getList();
+              openNotification('success', 'Delete record successfully!');
             } else {
-              dispatch(
-                openSnackbar({
-                  open: true,
-                  message: res?.message,
-                  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                  variant: 'alert',
-                  alert: {
-                    color: 'error'
-                  },
-                  close: true
-                })
-              );
+              openNotification('error', res?.message);
             }
           }
         })
       );
     }
+  };
+
+  const openNotification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
+
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
   };
 
   const renderMenuButton = () => (
@@ -141,16 +144,6 @@ const Language = (props: any) => {
           }}
         />
       )}
-      {status === 2 && (
-        <Chip
-          label="Blocked"
-          size="small"
-          sx={{
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-            color: theme.palette.orange.dark
-          }}
-        />
-      )}
     </>
   );
 
@@ -159,10 +152,10 @@ const Language = (props: any) => {
       <TableRow hover key={language?.id}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{language.id}</Typography>
+            <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: '15%', minWidth: 250, maxWidth: 'calc(100vw - 850px)', overflow: 'hidden' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -175,16 +168,16 @@ const Language = (props: any) => {
               cursor: 'pointer'
             }}
           >
-            {language.name}
+            {language?.name}
           </Link>
         </TableCell>
-        <TableCell>{language?.description}</TableCell>
+        <TableCell sx={{ width: '30%', minWidth: 250, maxWidth: 450, overflow: 'hidden' }}>{language?.description}</TableCell>
         <TableCell>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(language?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddLanguage visible={visibleAdd} dataEdit={language} />
+      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };

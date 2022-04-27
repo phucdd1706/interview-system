@@ -52,5 +52,5 @@ export interface ApplicantDataInterface {
   interviewQuestions: QuestionStackInterface[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
-  questions?: QuestionInterface[];
+  questions: QuestionInterface[];
 }

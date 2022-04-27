@@ -25,11 +25,13 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { SelectProps } from 'types/user';
-import { addAdministrator } from 'store/slices/user';
+import { Administrator, SelectProps, UserFilter } from 'types/user';
+import { addAdministrator, getAdministratorList } from 'store/slices/user';
+import { useState } from 'react';
 
 interface Props {
   open: boolean;
+  filter: UserFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -48,12 +50,61 @@ const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
+  password: yup.string().required('Password is required'),
+  password_confirmation: yup.string().required('password_confirmation is required'),
   phone: yup.string().required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
+const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
+  const [errors, setErrors] = useState<any>({});
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const addAdmin = (values: Administrator) => {
+    dispatch(
+      addAdministrator({
+        params: values,
+        callback: (resp) => {
+          if (resp?.data?.success) {
+            dispatch(getAdministratorList(filter));
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Submit Success',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: resp?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(resp?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -63,27 +114,13 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: '',
+      date: null,
       gender: 'male',
       type: 1
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(addAdministrator(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
-      formik.resetForm();
+      addAdmin(values);
     }
   });
 
@@ -131,7 +168,7 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    Add Customer
+                    Add Administrator
                   </Typography>
                 </Stack>
               </Grid>
@@ -150,8 +187,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -162,8 +199,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="User Name"
                       value={formik.values.username}
                       onChange={formik.handleChange}
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
+                      helperText={(formik.touched.username && formik.errors.username) || errors?.username}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -174,8 +211,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="Email"
                       value={formik.values.email}
                       onChange={formik.handleChange}
-                      error={formik.touched.email && Boolean(formik.errors.email)}
-                      helperText={formik.touched.email && formik.errors.email}
+                      error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
+                      helperText={(formik.touched.email && formik.errors.email) || errors?.email}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -187,8 +224,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="Password"
                       value={formik.values.password}
                       onChange={formik.handleChange}
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      helperText={formik.touched.password && formik.errors.password}
+                      error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                      helperText={(formik.touched.password && formik.errors.password) || errors?.password}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -200,8 +237,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="Confirm password"
                       value={formik.values.password_confirmation}
                       onChange={formik.handleChange}
-                      error={formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)}
-                      helperText={formik.touched.password_confirmation && formik.errors.password_confirmation}
+                      error={(formik.touched.password_confirmation && Boolean(formik.errors?.password_confirmation)) || errors.password}
+                      helperText={(formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -212,17 +249,17 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       label="Phone"
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      error={formik.touched.phone && Boolean(formik.errors.phone)}
-                      helperText={formik.touched.phone && formik.errors.phone}
+                      error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
+                      helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <DesktopDatePicker
                       label="Date of Birth"
-                      value={formik.values.dob}
+                      value={formik.values.date}
                       inputFormat="dd/MM/yyyy"
                       onChange={(date) => {
-                        formik.setFieldValue('dob', date);
+                        formik.setFieldValue('date', date);
                       }}
                       renderInput={(props) => <TextField fullWidth {...props} />}
                     />

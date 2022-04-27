@@ -9,19 +9,23 @@ import { CustomerStateProps } from 'types/customer';
 import { RankStateProps } from 'types/rank';
 import { SnackbarProps } from 'types/snackbar';
 import { UserStateProps } from 'types/user';
+import { ProfileStateProps } from 'types/profile';
+import { NotificationStateProps } from 'types/notification';
 import { DepartmentStateProps } from './department';
-import { CompleteStateProps } from './complete';
-import { InProgressStateProps } from './inProgress';
+import { HistoryStateProps } from './history';
 import { LanguageStateProps } from './language';
+import { QuestionStateProps } from './question';
 
 export interface DefaultRootStateProps {
   snackbar: SnackbarProps;
   user: UserStateProps;
   customer: CustomerStateProps;
   rank: RankStateProps;
+  question: QuestionStateProps;
+  profile: ProfileStateProps;
+  notification: NotificationStateProps;
   department: DepartmentStateProps;
-  complete: CompleteStateProps;
-  inProgress: InProgressStateProps;
+  history: HistoryStateProps;
   language: LanguageStateProps;
 }
 

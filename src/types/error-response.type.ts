@@ -6,3 +6,10 @@ export interface ErrorResponse {
     message?: string;
   };
 }
+interface DataError {
+  error: {
+    errors: string[];
+    message: string;
+  };
+  message: string;
+}

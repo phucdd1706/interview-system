@@ -7,6 +7,7 @@ import { SnackbarProps } from 'types/snackbar';
 const initialState: SnackbarProps = {
   action: false,
   open: false,
+  severity: 'info',
   message: 'Note archived',
   anchorOrigin: {
     vertical: 'bottom',
@@ -27,8 +28,9 @@ const snackbar = createSlice({
   initialState,
   reducers: {
     openSnackbar(state, action) {
-      const { open, message, anchorOrigin, variant, alert, transition, close, actionButton } = action.payload;
+      const { open, message, anchorOrigin, variant, alert, transition, close, actionButton, severity } = action.payload;
 
+      state.severity = severity;
       state.action = !state.action;
       state.open = open || initialState.open;
       state.message = message || initialState.message;
