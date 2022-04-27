@@ -52,7 +52,13 @@ const validationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
   password: yup.string().required('Password is required'),
   password_confirmation: yup.string().required('password_confirmation is required'),
-  phone: yup.string().required('Phone is required'),
+  phone: yup
+    .string()
+    .matches(
+      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+      'Enter the correct format phone'
+    )
+    .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -114,7 +120,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      date: null,
+      dob: null,
       gender: 'male',
       type: 1
     },
@@ -243,6 +249,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      type="number"
                       fullWidth
                       id="phone"
                       name="phone"
@@ -256,10 +263,10 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   <Grid item xs={12}>
                     <DesktopDatePicker
                       label="Date of Birth"
-                      value={formik.values.date}
+                      value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       onChange={(date) => {
-                        formik.setFieldValue('date', date);
+                        formik.setFieldValue('dob', date);
                       }}
                       renderInput={(props) => <TextField fullWidth {...props} />}
                     />

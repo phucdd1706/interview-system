@@ -81,7 +81,13 @@ const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup.string().required('Phone is required'),
+  phone: yup
+    .string()
+    .matches(
+      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+      'Enter the correct format phone'
+    )
+    .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
   status: yup.string().required('Status is required')

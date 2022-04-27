@@ -37,7 +37,13 @@ const Administrator = ({ administrator, index }: Props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [filter, setFilter] = useState<UserFilter>();
+  const initialState: UserFilter = {
+    search: '',
+    status: '',
+    currentPage: 1,
+    limit: 20
+  };
+  const [filter, setFilter] = useState(initialState);
 
   const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
