@@ -34,6 +34,7 @@ export type SortStatusProps = {
 
 export type QuestionType = {
   id?: number;
+  candidate_id?: number;
   rank_id?: number | string;
   department_id?: number | string;
   language_id?: number | string;
@@ -43,6 +44,8 @@ export type QuestionType = {
   language?: Languages;
   rank?: RankType;
   department?: Department;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type SelectProps = {

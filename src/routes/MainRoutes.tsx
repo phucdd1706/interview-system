@@ -18,7 +18,6 @@ const Profile = Loadable(lazy(() => import('views/pages/account')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
 const Question = Loadable(lazy(() => import('views/pages/questions')));
 const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
-const Interview = Loadable(lazy(() => import('views/pages/interview')));
 
 const MainRoutes = {
   path: '/',
@@ -72,18 +71,20 @@ const MainRoutes = {
     },
     {
       path: '/user/profile',
-      role: 1,
       element: <Profile />
     },
     {
       path: '/applicant',
       role: 2,
-      element: <AddNewApplicant />
-    },
-    {
-      path: '/interview/:applicantId',
-      role: 2,
-      element: <Interview />
+      exact: true,
+      element: <AddNewApplicant />,
+      children: [
+        {
+          path: '/applicant/:id',
+          role: 2,
+          element: <AddNewApplicant />
+        }
+      ]
     }
   ]
 };
