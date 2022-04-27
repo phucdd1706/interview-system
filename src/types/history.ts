@@ -1,5 +1,7 @@
 // PROJECT IMPORTS
 
+import { QuestionType } from './question';
+
 export interface Candidates {
   id?: number;
   name?: string;
@@ -10,6 +12,7 @@ export interface Candidates {
   created_at?: string;
   updated_at?: string;
   status?: any;
+  candidate_question?: any;
 }
 
 export interface SearchValues {

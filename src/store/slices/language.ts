@@ -47,6 +47,8 @@ const languageSlice = createSlice({
   }
 });
 
+export const { getLanguageListSuccess } = languageSlice.actions;
+
 export default languageSlice.reducer;
 
 export function fetchLanguages({ params, callback }: Payload) {

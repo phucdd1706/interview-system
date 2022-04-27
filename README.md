@@ -1,6 +1,6 @@
 # Introduction
 
-This is interview manager system: manager interview questions and answers
+This is interview manager system: manager interview-questions and answers
 
 # Getting Started
 
