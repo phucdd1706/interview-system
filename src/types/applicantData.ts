@@ -1,4 +1,5 @@
 import { QuestionStackInterface, QuestionInterface } from './interviewQuestion';
+import { QuestionType } from './question';
 
 export interface Job {
   id: string;
@@ -30,27 +31,47 @@ export interface InterviewerEvaluate {
 }
 
 export interface ApplicantInfo {
-  id?: string;
-  firstName: string;
-  lastName: string;
+  id?: number;
+  name: string;
   age: string;
   email: string;
   phone: string;
   address: string;
-  interviewTime: string;
-  experiences: Job[];
+  time: string;
+  questions?: Array<{ question_id: number; status?: number | string }>;
+  experiences?: Job[];
   applyPosition: Array<{
-    id: string;
-    position: string;
-    level: string;
+    rank_advanced_id: string;
+    language_id: string;
+    rank_id: string;
   }>;
-  notes: string;
+  status?: number;
+  note?: string;
+}
+
+export interface ApplicantDataAPI {
+  id?: number;
+  name: string;
+  age: string;
+  email: string;
+  phone: string;
+  address: string;
+  time: string;
+  questions?: Array<{ question_id: number; status?: number | string }>;
+  experiences?: Job[];
+  applyPosition?: Array<{
+    rank_advanced_id: string;
+    language_id: string;
+    rank_id: string;
+  }>;
+  status?: number;
+  note?: string;
 }
 
 export interface ApplicantDataInterface {
   applicantInfo: ApplicantInfo;
-  interviewQuestions: QuestionStackInterface[];
+  interviewQuestions: QuestionType[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
-  questions: QuestionInterface[];
+  questions: QuestionType[];
 }

@@ -3,19 +3,22 @@ const personalDetail = [
     label: 'Information',
     render: [
       {
-        key: 'firstName',
-        label: 'First Name',
-        type: 'text'
-      },
-      {
-        key: 'lastName',
-        label: 'Last Name',
-        type: 'text'
+        key: 'name',
+        label: 'Full Name',
+        type: 'text',
+        required: true
       },
       {
         key: 'age',
         label: 'Age',
-        type: 'number'
+        type: 'number',
+        required: true
+      },
+      {
+        key: 'phone',
+        label: 'Phone Number',
+        type: 'tel',
+        required: true
       }
     ]
   },
@@ -25,12 +28,8 @@ const personalDetail = [
       {
         key: 'email',
         label: 'Email',
-        type: 'email'
-      },
-      {
-        key: 'phone',
-        label: 'Phone Number',
-        type: 'tel'
+        type: 'email',
+        required: true
       }
     ]
   },
@@ -40,7 +39,8 @@ const personalDetail = [
       {
         key: 'address',
         label: 'Address',
-        type: 'text'
+        type: 'text',
+        required: true
       }
     ]
   },
@@ -48,18 +48,19 @@ const personalDetail = [
     label: 'Interview Time',
     render: [
       {
-        key: 'interviewTime',
+        key: 'time',
         label: 'Interview Time',
-        type: 'datetime-local'
+        type: 'datetime-local',
+        required: true
       }
     ]
   },
   {
-    label: 'Notes',
+    label: 'Note',
     render: [
       {
-        key: 'notes',
-        label: 'Notes',
+        key: 'note',
+        label: 'Note',
         type: 'text'
       }
     ]
