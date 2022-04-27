@@ -123,10 +123,6 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
     {
       value: 1,
       label: 'Active'
-    },
-    {
-      value: 2,
-      label: 'Blocked'
     }
   ];
 
@@ -185,7 +181,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
           <form onSubmit={formik.handleSubmit}>
             <DialogContent>
               <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                <Grid item xl={12}>
+                <Grid item xs={12} xl={12}>
                   <TextField
                     id="name"
                     name="name"
@@ -201,7 +197,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                   />
                 </Grid>
-                <Grid item xl={12}>
+                <Grid item xs={12} xl={12}>
                   <TextField
                     id="description"
                     name="description"

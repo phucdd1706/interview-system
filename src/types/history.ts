@@ -3,12 +3,10 @@
 export interface Candidates {
   id?: number;
   name?: string;
-  username?: string;
-  phone?: string;
+  age?: string;
   email?: string;
-  rank_id?: number | string;
-  password?: string;
-  password_confirmation?: string;
+  note?: number | string;
+  time?: string;
   created_at?: string;
   updated_at?: string;
   status?: any;
@@ -16,16 +14,15 @@ export interface Candidates {
 
 export interface SearchValues {
   search?: string;
-  rank_id?: number | string;
   status?: number | string;
   currentPage?: number | string;
   limit?: number;
 }
 
 export interface Payload {
-  id: string | number;
-  params: any;
-  callback: (response: any) => void;
+  id?: string | number;
+  params?: any;
+  callback?: (response: any) => void;
 }
 
 export type Status = {
@@ -33,8 +30,8 @@ export type Status = {
   label: string;
 };
 
-export interface InProgressStateProps {
-  inProgress: Candidates[];
+export interface HistoryStateProps {
+  history: Candidates[];
   pageCount: number;
   currentPage: number;
   error: object | string | null;

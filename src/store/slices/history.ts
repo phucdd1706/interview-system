@@ -2,63 +2,63 @@
 
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-import { getListCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/complete';
-import { Payload } from 'types/complete';
+import { getListCandidate, createCandidate, updateCandidate, deleteCandidate } from 'api/history';
+import { Payload } from 'types/history';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
 
-const initialState: DefaultRootStateProps['inProgress'] = {
-  inProgress: [],
+const initialState: DefaultRootStateProps['history'] = {
+  history: [],
   pageCount: 0,
   currentPage: 1,
   error: null
 };
 
-const inProgressSlice = createSlice({
-  name: 'inProgress',
+const historySlice = createSlice({
+  name: 'history',
   initialState,
   reducers: {
     hasError(state, action) {
       state.error = action.payload;
     },
 
-    getInProgressListSuccess(state, action) {
-      state.inProgress = action.payload.data;
+    getHistoryListSuccess(state, action) {
+      state.history = action.payload.data;
       state.pageCount = action.payload.last_page;
       state.currentPage = action.payload.current_page;
     },
 
-    addInProgressSuccess(state, action) {
-      state.inProgress.unshift(action.payload);
+    addHistorySuccess(state, action) {
+      state.history.unshift(action.payload);
     },
 
-    editInProgressSuccess(state, action) {
-      state.inProgress = state.inProgress.map((inProgress) => {
-        if (inProgress.id === action.payload.id) {
+    editHistorySuccess(state, action) {
+      state.history = state.history.map((history) => {
+        if (history.id === action.payload.id) {
           return action.payload;
         }
-        return inProgress;
+        return history;
       });
     },
 
-    deleteInProgressSuccess(state, action) {
-      state.inProgress = state.inProgress.filter((inProgress) => inProgress.id !== action.payload.id);
+    deleteHistorySuccess(state, action) {
+      state.history = state.history.filter((history) => history.id !== action.payload.id);
     }
   }
 });
 
-export default inProgressSlice.reducer;
+export default historySlice.reducer;
 
 export function fetchCandidates({ params, callback }: Payload) {
   return async () => {
     const query = new URLSearchParams(params).toString();
     const response = await getListCandidate(query)
       .then((result) => {
-        dispatch(inProgressSlice.actions.getInProgressListSuccess(result.data.success));
+        dispatch(historySlice.actions.getHistoryListSuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(inProgressSlice.actions.hasError(err));
+        dispatch(historySlice.actions.hasError(err));
         return err;
       });
 
@@ -72,11 +72,11 @@ export function addCandidate({ params, callback }: Payload) {
   return async () => {
     const response = await createCandidate(params)
       .then((result) => {
-        dispatch(inProgressSlice.actions.addInProgressSuccess(result.data.success));
+        dispatch(historySlice.actions.addHistorySuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(inProgressSlice.actions.hasError(err));
+        dispatch(historySlice.actions.hasError(err));
         return err;
       });
 
@@ -90,11 +90,11 @@ export function editCandidate({ id, params, callback }: Payload) {
   return async () => {
     const response = await updateCandidate(id, params)
       .then((result) => {
-        dispatch(inProgressSlice.actions.editInProgressSuccess(result.data.success));
+        dispatch(historySlice.actions.editHistorySuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(inProgressSlice.actions.hasError(err));
+        dispatch(historySlice.actions.hasError(err));
         return err;
       });
 
@@ -108,11 +108,11 @@ export function removeCandidate({ id, callback }: Payload) {
   return async () => {
     const response = await deleteCandidate(id)
       .then((result) => {
-        dispatch(inProgressSlice.actions.deleteInProgressSuccess(result.data.success));
+        dispatch(historySlice.actions.deleteHistorySuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(inProgressSlice.actions.hasError(err));
+        dispatch(historySlice.actions.hasError(err));
         return err;
       });
 

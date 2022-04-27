@@ -7,8 +7,7 @@ import { persistReducer } from 'redux-persist';
 import menuReducer from 'store/slices/menu';
 import snackbarReducer from 'store/slices/snackbar';
 import userReducer from 'store/slices/user';
-import completeReducer from 'store/slices/complete';
-import inProgressReducer from 'store/slices/inProgress';
+import historyReducer from 'store/slices/history';
 import customerReducer from './slices/customer';
 import applicantReferences from 'store/slices/applicant/applicantReferences';
 import rankReducer from 'store/slices/rank';
@@ -29,8 +28,7 @@ const reducer = combineReducers({
     userReducer
   ),
   menu: menuReducer,
-  complete: completeReducer,
-  inProgress: inProgressReducer,
+  history: historyReducer,
   department: departmentReducer,
   applicant: applicantReferences,
   customer: customerReducer,

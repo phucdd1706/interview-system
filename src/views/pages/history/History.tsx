@@ -1,31 +1,32 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
-import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stack, Link, Typography } from '@mui/material';
+import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import { Link } from 'react-router-dom';
 
 // PROJECT IMPORTS
-import { removeCandidate } from 'store/slices/complete';
-import { Candidates } from 'types/complete';
-import AddComplete from 'views/pages/complete/AddComplete';
+import { removeCandidate } from 'store/slices/history';
+import AddHistory from 'views/pages/history/AddHistory';
 import AlertDelete from 'ui-component/Alert/AlertDelete';
 import { openSnackbar } from 'store/slices/snackbar';
-import { dispatch, RootState, useSelector } from 'store';
+import { RootState, dispatch, useSelector } from 'store';
+import { Candidates } from 'types/history';
 
 interface Props {
-  complete: Candidates;
+  history: Candidates;
   index: number;
   getList: () => void;
 }
 
-const Complete = ({ complete, index, getList }: Props) => {
+const History = ({ history, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const completeState = useSelector((state: RootState) => state.complete);
+  const historyState = useSelector((state: RootState) => state.history);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -40,7 +41,7 @@ const Complete = ({ complete, index, getList }: Props) => {
     if (status) {
       dispatch(
         removeCandidate({
-          id: complete.id,
+          id: history.id,
           callback: (res) => {
             if (res?.data?.success) {
               getList();
@@ -67,45 +68,6 @@ const Complete = ({ complete, index, getList }: Props) => {
         close: true
       })
     );
-  };
-
-  const renderStatus = (status: number) => (
-    <>
-      {status === 0 && (
-        <Chip
-          label="Inactive"
-          size="small"
-          sx={{
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
-            color: theme.palette.warning.dark
-          }}
-        />
-      )}
-      {status === 1 && (
-        <Chip
-          label="Active"
-          size="small"
-          sx={{
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
-            color: theme.palette.success.dark
-          }}
-        />
-      )}
-      {status === 2 && (
-        <Chip
-          label="Blocked"
-          size="small"
-          sx={{
-            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-            color: theme.palette.orange.dark
-          }}
-        />
-      )}
-    </>
-  );
-
-  const handleVisibleModal = () => {
-    setVisibleAdd((prevState) => !prevState);
   };
 
   const renderMenuButton = () => (
@@ -137,6 +99,12 @@ const Complete = ({ complete, index, getList }: Props) => {
           horizontal: 'right'
         }}
       >
+        <MenuItem>
+          <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
+            Interview
+          </Link>
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
             handleClose();
@@ -145,6 +113,7 @@ const Complete = ({ complete, index, getList }: Props) => {
         >
           Edit
         </MenuItem>
+
         <MenuItem
           onClick={(e) => {
             handleClose();
@@ -157,40 +126,56 @@ const Complete = ({ complete, index, getList }: Props) => {
     </>
   );
 
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
+  const renderStatus = (status: number) => (
+    <>
+      {status === 0 && (
+        <Chip
+          label="Inactive"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.warning.light,
+            color: theme.palette.warning.dark
+          }}
+        />
+      )}
+      {status === 1 && (
+        <Chip
+          label="Active"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
+            color: theme.palette.success.dark
+          }}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
-      <TableRow hover key={complete?.id}>
+      <TableRow hover key={history?.id}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{index + 20 * (completeState.currentPage - 1) + 1}</Typography>
+            <Typography variant="body2">{index + 20 * (historyState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {complete.name}
-          </Link>
+        <TableCell sx={{ width: 250, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+          {history.name}
         </TableCell>
-        <TableCell>{complete?.phone}</TableCell>
-        <TableCell>{complete?.email}</TableCell>
-        <TableCell>{moment(complete.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{renderStatus(complete?.status)}</TableCell>
+        <TableCell>{history?.email}</TableCell>
+        <TableCell>{history?.age}</TableCell>
+        <TableCell>{moment(history.time).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{renderStatus(history?.status)}</TableCell>
         <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
-        {openModal && <AlertDelete name={complete?.name} open={openModal} handleClose={handleRemove} />}
+        {openModal && <AlertDelete name={history?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddComplete visible={visibleAdd} dataEdit={complete} handleVisibleModal={handleVisibleModal} />
+      <AddHistory visible={visibleAdd} dataEdit={history} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };
 
-export default Complete;
+export default History;

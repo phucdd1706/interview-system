@@ -1,6 +1,6 @@
 import axiosServices from 'utils/axios';
 
-const getListCandidate = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/users?${params}`);
+const getListCandidate = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/client/candidates?${params}`);
 
 const getOneCandidate = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`);
 
