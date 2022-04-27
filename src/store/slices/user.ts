@@ -6,7 +6,6 @@ import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
 import { Payload, UserFilter } from 'types/user';
-import { UserProfile } from '../../types/user-profile';
 
 export const ADMINISTRATOR_URL = {
   getAdmin: `${process.env.REACT_APP_API_URL}/v1/operator/users`,
@@ -118,7 +117,7 @@ export function deleteAdministrator(payload: Payload) {
   return async () => {
     const { id, callback } = payload;
     const resp = await axios
-      .put(ADMINISTRATOR_URL.delAdmin(id))
+      .delete(ADMINISTRATOR_URL.delAdmin(id))
       .then((result) => {
         dispatch(slice.actions.deleteAdministratorSuccess(result.data.success));
         return result;

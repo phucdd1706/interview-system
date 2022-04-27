@@ -27,7 +27,7 @@ import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
-import { Administrator } from 'types/user';
+import { UserProfile } from 'types/user-profile';
 
 interface Props {
   open: boolean;
@@ -49,7 +49,13 @@ const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup.string().required('Phone is required'),
+  phone: yup
+    .string()
+    .required('Phone is required')
+    .matches(
+      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+      'Enter the correct format phone'
+    ),
   password: yup.string().required('Password is required'),
   password_confirmation: yup
     .string()
@@ -68,7 +74,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       formik.resetForm();
     }
   };
-  const addCus = (values: Administrator) => {
+  const addCus = (values: UserProfile) => {
     dispatch(
       addCustomers({
         params: values,

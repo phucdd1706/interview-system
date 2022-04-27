@@ -81,7 +81,13 @@ const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup.string().required('Phone is required'),
+  phone: yup
+    .string()
+    .matches(
+      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+      'Enter the correct format phone'
+    )
+    .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
   status: yup.string().required('Status is required')
@@ -214,7 +220,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
@@ -226,7 +236,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       error={(formik.touched.username && Boolean(formik.errors.username)) || errors.username}
@@ -238,7 +252,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors.email}
@@ -250,7 +268,11 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors.phone}
