@@ -85,7 +85,6 @@ const Ranks = () => {
 
   React.useEffect(() => {
     filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -182,7 +181,7 @@ const Ranks = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>STT</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Status</TableCell>
@@ -195,7 +194,7 @@ const Ranks = () => {
             {data && data.map((rank, index) => <Rank key={rank.id} rank={rank} index={index} />)}
           </TableBody>
         </Table>
-        <AddRank open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+        <AddRank open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>

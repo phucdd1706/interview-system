@@ -24,17 +24,19 @@ import * as Yup from 'yup';
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
-import { dispatch } from 'store';
+import { dispatch, RootState, useSelector } from 'store';
 import { QuestionType, SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
 import { PutQuestion } from 'store/slices/question';
 import RankSelect from 'ui-component/CommonSelect/RankSelect';
 import LanguageSelect from 'ui-component/CommonSelect/LanguageSelect';
 import DepartmentSelect from 'ui-component/CommonSelect/DepartmentSelect';
+import { useState } from 'react';
 
 interface EditQuestionProps {
   question: QuestionType;
   open: boolean;
+  indexId: number;
   handleDrawerOpen: () => void;
 }
 const Type: SelectProps[] = [
@@ -67,7 +69,55 @@ const validationSchema = Yup.object({
   status: Yup.string().required('Question status is required')
 });
 
-const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) => {
+const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestionProps) => {
+  const [errors, setErrors] = useState<any>({});
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+  const EditQuestionFunc = (values: QuestionType) => {
+    dispatch(
+      PutQuestion({
+        id: values.id,
+        params: values,
+        callback: (response) => {
+          if (response?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Edit record successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: response?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(response?.errors);
+          }
+        }
+      })
+    );
+  };
+  const questionState = useSelector((state: RootState) => state.question);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -81,20 +131,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PutQuestion(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
+      EditQuestionFunc(values);
     }
   });
 
@@ -142,7 +179,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit question ${question.id}`}
+                    {`Edit "Question ${20 * (questionState.currentPage - 1) + indexId + 1}"`}
                   </Typography>
                 </Stack>
               </Grid>
@@ -190,24 +227,24 @@ const EditQuestion = ({ question, open, handleDrawerOpen }: EditQuestionProps) =
                     )}
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="question_content"
-                      name="question_content"
-                      label={
-                        <span>
-                          <span style={{ color: 'red' }}>*</span> Question content
-                        </span>
-                      }
-                      value={formik.values.question_content}
-                      error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.touched.question_content && formik.errors.question_content && (
-                      <FormHelperText error id="standard-weight-helper-text-rank-login">
-                        {formik.errors.question_content}
-                      </FormHelperText>
-                    )}
+                    <FormControl fullWidth>
+                      <TextField
+                        fullWidth
+                        id="question_content"
+                        name="question_content"
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Question content
+                          </span>
+                        }
+                        value={formik.values.question_content}
+                        error={
+                          (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
+                        }
+                        helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
+                        onChange={formik.handleChange}
+                      />
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>

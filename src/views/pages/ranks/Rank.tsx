@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { dispatch } from 'store';
+import { dispatch, RootState, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { DeleteRank } from 'store/slices/rank';
-import { RankType } from 'types/rank';
+import { DeleteRank, getRanksList } from 'store/slices/rank';
+import { RankFilter, RankType } from 'types/rank';
 import EditRank from './EditRank';
 import AlertRankDelete from './AlertRankDelete';
 
@@ -17,6 +17,28 @@ interface Props {
 }
 
 const Rank = ({ rank, index }: Props) => {
+  const initialState: RankFilter = {
+    search: '',
+    status: '',
+    id: '',
+    currentPage: 1
+  };
+  const [filter] = useState(initialState);
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
+  const rankState = useSelector((state: RootState) => state.rank);
   const theme = useTheme();
   const [openRankDrawer, setOpenRankDrawer] = useState<boolean>(false);
   const handleRankDrawerOpen = () => {
@@ -39,17 +61,17 @@ const Rank = ({ rank, index }: Props) => {
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(DeleteRank(rank));
       dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
+        DeleteRank({
+          id: rank.id,
+          callback: (response) => {
+            if (response?.data?.success) {
+              dispatch(getRanksList(filter));
+              Notification('success', 'Delete successfully');
+            } else {
+              Notification('error', response?.message);
+            }
+          }
         })
       );
     }
@@ -59,8 +81,8 @@ const Rank = ({ rank, index }: Props) => {
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{rank.id}</Typography>
+          <Stack direction="row" spacing={0.5} alignItems="center" style={{ marginLeft: '15px' }}>
+            <Typography variant="body2">{20 * (rankState.currentPage - 1) + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -79,7 +101,7 @@ const Rank = ({ rank, index }: Props) => {
             {rank.name}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: 410, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
