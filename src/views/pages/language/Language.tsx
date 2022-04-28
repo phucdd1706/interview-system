@@ -4,6 +4,7 @@ import { ButtonBase, Link, TableCell, TableRow, Chip, IconButton, Menu, MenuItem
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import { Edit, Delete } from '@mui/icons-material';
 
 // PROJECT IMPORTS
 import { removeLanguage } from 'store/slices/language';
@@ -108,6 +109,7 @@ const Language = ({ language, index, getList }: Props) => {
             setVisibleAdd(!visibleAdd);
           }}
         >
+          <Edit fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
           Edit
         </MenuItem>
         <MenuItem
@@ -116,6 +118,7 @@ const Language = ({ language, index, getList }: Props) => {
             setOpenModal(true);
           }}
         >
+          <Delete fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
           Delete
         </MenuItem>
       </Menu>

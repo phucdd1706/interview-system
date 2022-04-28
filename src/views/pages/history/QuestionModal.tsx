@@ -20,7 +20,8 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
-import Profile from 'assets/images/logo/profile.jpg';
+// import Profile from 'assets/images/logo/profile.jpg';
+import ProfileFemale from 'assets/images/logo/profile-female.jpg';
 
 // PROJECT IMPORT
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -71,7 +72,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
       age: dataCandidate?.age,
       phone: dataCandidate?.phone,
       address: dataCandidate?.address,
-      status: dataCandidate?.status
+      status: 1
     };
     dispatch(
       editCandidate({
@@ -161,65 +162,65 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
             <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
               {!matchDownSM && (
                 <Grid item xs={2}>
-                  <Box sx={{ border: '1px solid #000', m: 1, width: '80%' }}>
-                    <img style={{ width: '100%' }} src={Profile} alt="profile" />
+                  <Box sx={{ border: '1px solid #000', m: 1, width: '80%', height: '100%' }}>
+                    <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={ProfileFemale} alt="profile" />
                   </Box>
                 </Grid>
               )}
               <Grid item xs={12} md={10}>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Name:</Typography>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={7} xl={4}>
                     {dataCandidate?.name}
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Age:</Typography>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={7} xl={4}>
                     {dataCandidate?.age}
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Email:</Typography>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={7} xl={4}>
                     {dataCandidate?.email}
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Phone:</Typography>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={7} xl={4}>
                     {dataCandidate?.phone}
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Interview Time:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
+                  <Grid item xs={7} xl={10}>
                     {moment(dataCandidate.time).format('DD/MM/YYYY HH:mm')}
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Address:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
+                  <Grid item xs={7} xl={10}>
                     {dataCandidate?.address}
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} xl={2}>
                     <Typography variant="h4">Note:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
+                  <Grid item xs={7} xl={10}>
                     {dataCandidate?.note}
                   </Grid>
                 </Grid>
@@ -236,7 +237,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
                         <TableCell sx={{ width: '40%' }}>Question Content</TableCell>
                         <TableCell sx={{ width: '15%' }}>Rank</TableCell>
                         <TableCell sx={{ width: '15%' }}>Language</TableCell>
-                        <TableCell sx={{ width: '15%' }}>Question Type</TableCell>
+                        <TableCell sx={{ width: '15%' }}>Type</TableCell>
                         <TableCell sx={{ width: '10%' }} align="right">
                           Evaluate
                         </TableCell>

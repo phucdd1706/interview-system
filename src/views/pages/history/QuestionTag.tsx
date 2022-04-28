@@ -1,6 +1,7 @@
 // THIRD-PARTY
 import React from 'react';
-import { Stack, Typography, TableRow, TableCell, FormControl, MenuItem, Select } from '@mui/material';
+import { Stack, Typography, TableRow, TableCell, FormControl, MenuItem, Select, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORT
 import { QuestionType } from 'types/question';
@@ -12,6 +13,8 @@ interface Props {
 }
 
 const QuestionTag = ({ value, index, handleStatusQuestion }: Props) => {
+  const theme = useTheme();
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
   const renderStatusButton = () => (
     <FormControl variant="standard" sx={{ m: 1, minWidth: 60, height: 20 }}>
       <Select
@@ -42,8 +45,8 @@ const QuestionTag = ({ value, index, handleStatusQuestion }: Props) => {
           <Typography variant="body2">{index + 1}</Typography>
         </Stack>
       </TableCell>
-      <TableCell sx={{ width: '40%', whiteSpace: 'normal !important' }} component="th" scope="row">
-        <p style={{ width: '100%', wordBreak: 'break-word' }}>{value?.question_content}</p>
+      <TableCell sx={{ width: matchDownMD ? '400px' : '40%', whiteSpace: 'normal !important' }} component="th" scope="row">
+        <p style={{ width: matchDownMD ? '200px' : '100%', wordBreak: 'break-word' }}>{value?.question_content}</p>
       </TableCell>
       <TableCell sx={{ width: '15%' }} component="th" scope="row">
         {value?.rankName}

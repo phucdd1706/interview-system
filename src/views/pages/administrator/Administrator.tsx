@@ -171,7 +171,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 editAdministrator();
               }}
             >
-              <EditIcon fontSize="small" sx={{ color: '#3f50b5', mr: 1 }} />
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -180,7 +180,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 setOpenModal(true);
               }}
             >
-              <DeleteIcon fontSize="small" sx={{ color: '#ff1744', mr: 1 }} />
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
