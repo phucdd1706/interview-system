@@ -15,6 +15,7 @@ import { delDepartment, getDepartmentList } from 'store/slices/department';
 import AlertDepartmentDelete from './AlertDepartmentDelete';
 import EditDepartment from './EditDepartment';
 import moment from 'moment';
+import { margin } from '@mui/system';
 
 interface Props {
   department: Department;
