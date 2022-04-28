@@ -20,7 +20,7 @@ export type SortStatusProps = {
 };
 
 export type RankType = {
-  id?: string;
+  id?: string | number;
   name?: string;
   description?: string;
   status?: number;

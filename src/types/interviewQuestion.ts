@@ -1,11 +1,21 @@
+import { QuestionType } from './question';
+
 export interface QuestionInterface {
-  questionId: string;
+  id: string;
   question: string;
   answerScore?: string;
   notes?: string;
 }
 
+export interface InterviewQuestions {
+  [key: string]: QuestionType[];
+}
+
 export interface QuestionStackInterface {
   type: string;
-  questions: QuestionInterface[];
+  questions: InterviewQuestions;
+}
+
+export interface ResponseInterviewQuestion {
+  success: Array<InterviewQuestions>;
 }

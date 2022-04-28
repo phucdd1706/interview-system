@@ -74,7 +74,7 @@ const application = {
     },
     {
       id: 'applicant',
-      title: <FormattedMessage id="add new applicant reference" />,
+      title: <FormattedMessage id="add-new-applicant" />,
       type: 'item',
       role: 2,
       url: '/applicant',
