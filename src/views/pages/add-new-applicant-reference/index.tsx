@@ -64,7 +64,8 @@ const AddApplicantReference = () => {
     } else {
       data.status = 0;
       axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, data, 'Add applicant success').then((res: any) => {
-        res.success.id && navigate(`/applicant/${res.success.id}`);
+        console.log(res);
+        res && res.success.id && navigate(`/applicant/${res.success.id}`);
       });
     }
     setSubmitting(false);

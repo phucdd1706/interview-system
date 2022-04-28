@@ -1,6 +1,6 @@
 // THIRD-PARTY
 import React from 'react';
-import { Paper, Stack, Typography, FormControl, MenuItem, Select } from '@mui/material';
+import { Paper, Stack, Typography, FormControl, MenuItem, Select, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
@@ -24,7 +24,7 @@ const QuestionTag = ({ value, interviewing = false }: Props) => {
         </Typography>
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 100, height: 30 }}>
+            {/* <FormControl variant="standard" sx={{ m: 1, minWidth: 100, height: 30 }}>
               <Select
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
@@ -39,6 +39,22 @@ const QuestionTag = ({ value, interviewing = false }: Props) => {
                 <MenuItem value={1}>Fail</MenuItem>
                 <MenuItem value={2}>Pass</MenuItem>
               </Select>
+            </FormControl> */}
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                value={typeof value.status === 'number' ? value.status + 1 : 3}
+                onChange={(e) => {
+                  dispatch(handleAnswerStatus({ id: value.candidate_id || 0, status: Number(e.target.value) - 1 }));
+                }}
+                name="radio-buttons-group"
+              >
+                <Stack direction="row">
+                  <FormControlLabel value={3} control={<Radio />} label="Skip" labelPlacement="top" />
+                  <FormControlLabel value={1} control={<Radio />} label="Fail" labelPlacement="top" />
+                  <FormControlLabel value={2} control={<Radio />} label="Pass" labelPlacement="top" />
+                </Stack>
+              </RadioGroup>
             </FormControl>
             {/* <Button
               color="success"

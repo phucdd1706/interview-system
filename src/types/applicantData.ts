@@ -70,7 +70,7 @@ export interface ApplicantDataAPI {
 
 export interface ApplicantDataInterface {
   applicantInfo: ApplicantInfo;
-  interviewQuestions: QuestionType[];
+  interviewQuestions: QuestionStackInterface[];
   referenceEvaluate?: ReferenceEvaluate;
   interviewerEvaluate?: InterviewerEvaluate;
   questions: QuestionType[];
