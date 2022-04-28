@@ -93,20 +93,4 @@ const application = {
   ]
 };
 
-const userRole = JSON.parse(localStorage.getItem('user') || '{}');
-const hiddenRoute: Array<string> = [];
-const getHiddenRoute = (route: any) => {
-  if (route.children) {
-    route.children.forEach((element: any) => getHiddenRoute(element));
-  } else {
-    if (route.role !== userRole.type) {
-      hiddenRoute.push(route.url);
-    }
-    return hiddenRoute;
-  }
-  return hiddenRoute;
-};
-
-export const filterAuthorization = getHiddenRoute(application);
-
 export default application;

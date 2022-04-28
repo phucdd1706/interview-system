@@ -13,6 +13,7 @@ const initialState: ApplicantDataInterface = {
     email: '',
     phone: '',
     address: '',
+    status: 0,
     time: `${new Date().toISOString().split('T')[0]}T09:00`,
     applyPosition: [
       {
@@ -37,7 +38,7 @@ const applicantReferences = createSlice({
       state.interviewQuestions = action.payload.questions;
       state.applicantInfo = action.payload.applicant;
       state.applicantInfo.questions = [];
-      action.payload.questions.map((stack) => {
+      action.payload.questions.forEach((stack) => {
         Object.keys(stack.questions).forEach((key) => {
           stack.questions[key as 'base' | 'focus' | 'advanced'].forEach((question) => {
             state.applicantInfo.questions &&
@@ -103,7 +104,6 @@ const applicantReferences = createSlice({
     },
     handleAnswerStatus(state, action: { payload: { id: number; status: number | string } }) {
       const { id, status } = action.payload;
-      console.log(id, status);
       state.applicantInfo.questions?.forEach((element) => {
         if (element.question_id === id) {
           element.status = status;
@@ -113,7 +113,6 @@ const applicantReferences = createSlice({
         Object.keys(element.questions).forEach((key) => {
           element.questions[key as 'base' | 'focus' | 'advanced'].forEach((question) => {
             if (question.candidate_id === id) {
-              console.log(question);
               question.status = status;
             }
           });

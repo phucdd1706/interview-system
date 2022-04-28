@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Autocomplete,
-  TextField,
-  useMediaQuery
-} from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
 
 const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, required, type, name, readOnly }: any) => (
   <FormControl fullWidth error={Boolean(touched && errors && !readOnly)}>
@@ -22,10 +11,8 @@ const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, r
       type={type}
       value={values}
       name={name}
-      onBlur={handleBlur}
       onChange={handleChange}
       label={label}
-      inputProps={{}}
       readOnly={readOnly}
     />
     {touched && errors && !readOnly && (

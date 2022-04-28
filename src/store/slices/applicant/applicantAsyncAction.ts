@@ -1,13 +1,8 @@
 import { dispatch } from 'store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { applicantAPI, setApplicantInfo, setQuestions, setInterviewData } from './applicantReferences';
+import { applicantAPI, setApplicantInfo, setInterviewData } from './applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
 import { QuestionType } from 'types/question';
-
-// export const applicantReferenceInit = createAsyncThunk('applicantReferences/applicantReferenceInit', async (applicantId: string) => {
-//   const data = await applicantAPI.applicantReferenceInit(applicantId);
-//   return data && dispatch(setApplicantInfo(data));
-// });
 
 export const getQuestionsThunk = createAsyncThunk(
   'applicantReferences/getQuestionsThunk',
@@ -21,6 +16,7 @@ export const getInterviewQuestionThunk = createAsyncThunk(
   'applicant/getInterviewQuestionThunk',
   async (params: ApplicantInfo, thunkAPI) => {
     const data = await applicantAPI.getInterviewQuestionThunk({ data: params.applyPosition });
+    console.log(params.applyPosition);
     console.log('data', data.success);
     return data && dispatch(setApplicantInfo({ applicant: params, questions: data.success }));
   }
