@@ -29,7 +29,6 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 import { useState } from 'react';
-import { Administrator } from 'types/user';
 
 interface Props {
   customer: UserProfile;

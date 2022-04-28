@@ -83,33 +83,43 @@ export function PostQuestion(payload: Payload) {
     if (callback) {
       callback(response);
     }
-    // try {
-    //   const response = await axios.post(`${QUESTIONS_URL}`, question);
-    //   dispatch(slice.actions.postQuestionSuccess(response.data.success));
-    // } catch (error) {
-    //   dispatch(slice.actions.hasError(error));
-    // }
   };
 }
 
-export function DeleteQuestion(question: QuestionType) {
+export function DeleteQuestion(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.delete(`${QUESTIONS_URL}/${question.id}`);
-      dispatch(slice.actions.deleteQuestionSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const response = await axios
+      .delete(`${QUESTIONS_URL}/${id}`)
+      .then((result) => {
+        dispatch(slice.actions.deleteQuestionSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }
 
-export function PutQuestion(question: QuestionType) {
+export function PutQuestion(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${QUESTIONS_URL}/${question.id}`, question);
-      dispatch(slice.actions.putQuestionSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, params, callback } = payload;
+    const response = await axios
+      .put(`${QUESTIONS_URL}/${id}`, params)
+      .then((result) => {
+        dispatch(slice.actions.putQuestionSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }

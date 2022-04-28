@@ -28,10 +28,11 @@ const AddApplicantReference = () => {
   useEffect(() => {
     if (id) {
       dispatch(getInterviewDataThunk(id));
+      dispatch(activeItem(['']));
     } else {
       dispatch(applicantInit());
+      dispatch(activeItem(['applicant']));
     }
-    dispatch(activeItem(['applicant']));
   }, [id, dispatch]);
   return (
     <Box>
@@ -60,13 +61,13 @@ const AddApplicantReference = () => {
               status: 1,
               candidateQuestions: values.questions
             };
-            await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Success');
+            await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Success').then(() => navigate('/history'));
           } else {
             await axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, values, 'Add applicant success').then((res: any) => {
               res && res.success.id && navigate(`/applicant/${res.success.id}`);
             });
           }
-          setSubmitting(false);
+          await setSubmitting(false);
         }}
       >
         {(props: FormikProps<ApplicantInfo>) => (
