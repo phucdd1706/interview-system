@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/questions/SortStatus';
 import {
@@ -136,7 +136,6 @@ const Questions = () => {
   const handleDepartmentClick = (index: number | string) => {
     setFilter({ ...filter, department_id: index });
     setAnchorElDepartment(null);
-    console.log(index);
   };
   // department
 
@@ -153,7 +152,6 @@ const Questions = () => {
   const handleLanguageClick = (index: number | string) => {
     setFilter({ ...filter, language_id: index });
     setAnchorElLanguage(null);
-    console.log(121, index);
   };
   // language
   return (
@@ -270,7 +268,7 @@ const Questions = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>#</TableCell>
+              <TableCell sx={{ pl: 3 }}>STT</TableCell>
               <TableCell>Question Content</TableCell>
               <TableCell>Rank</TableCell>
               <TableCell>Department</TableCell>
@@ -286,7 +284,7 @@ const Questions = () => {
             {data && data.map((question, index) => <Question key={question.id} question={question} index={index} />)}
           </TableBody>
         </Table>
-        <AddQuestion open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+        <AddQuestion open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
