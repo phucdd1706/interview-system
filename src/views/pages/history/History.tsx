@@ -63,9 +63,9 @@ const History = ({ history, index, getList }: Props) => {
           horizontal: 'right'
         }}
       >
-        <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
+        {/* <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
           <MenuItem>{history?.status ? 'Edit interview' : 'Interview'}</MenuItem>
-        </Link>
+        </Link> */}
 
         <MenuItem
           onClick={() => {
