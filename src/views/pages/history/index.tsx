@@ -11,8 +11,6 @@ import {
   TableRow,
   TableContainer,
   TableHead,
-  Fab,
-  Tooltip,
   Pagination,
   Stack,
   useMediaQuery,
@@ -20,7 +18,6 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/AddTwoTone';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -32,7 +29,8 @@ import { Candidates, SearchValues, Status } from 'types/history';
 import { fetchCandidates } from 'store/slices/history';
 import History from 'views/pages/history/History';
 import { gridSpacing } from '../../../store/constant';
-import AddHistory from 'views/pages/history/AddHistory';
+import 'assets/scss/style.scss';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -44,7 +42,6 @@ const Index = () => {
   const historyState = useSelector((state: RootState) => state.history);
 
   const [candidate, setCandidate] = useState<Candidates[]>([]);
-  const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorElSort, setAnchorElSort] = useState(null);
   const openSort = Boolean(anchorElSort);
 
@@ -110,23 +107,15 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const addHistory = () => {
-    setVisibleAdd(!visibleAdd);
-  };
-
-  const handleVisibleAdd = () => {
-    setVisibleAdd((prevState) => !prevState);
-  };
-
   const renderSearchForm = () => {
     const sortLabel = SortStatus?.filter((items) => items.value === filters.status);
 
     return (
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12}>
           <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
             <Grid item>
-              <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+              <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 2 : spacingMD}>
                 <TextField
                   sx={{ width: { xs: 140, md: 'auto' } }}
                   InputProps={{
@@ -142,12 +131,10 @@ const Index = () => {
                   onChange={handleSearch}
                 />
 
-                <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
-                  |
-                </Typography>
+                <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
 
-                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <Typography variant="h5">Sort by: </Typography>
+                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: 'flex' }}>
+                  {!matchDownSM && <Typography variant="h5">Sort by: </Typography>}
                   <Button
                     id="demo-positioned-button"
                     aria-controls="demo-positioned-menu"
@@ -190,13 +177,6 @@ const Index = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
-          <Tooltip title="Add">
-            <Fab color="primary" size="small" onClick={addHistory} sx={{ boxShadow: 'none', ml: 1, width: 32, height: 32, minHeight: 32 }}>
-              <AddIcon fontSize="small" />
-            </Fab>
-          </Tooltip>
-        </Grid>
       </Grid>
     );
   };
@@ -212,13 +192,13 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pr: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Age</TableCell>
-                <TableCell>Interview Time</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
+                <TableCell sx={{ pr: 3, width: '5%' }}>#</TableCell>
+                <TableCell sx={{ width: '20%' }}>Name</TableCell>
+                <TableCell sx={{ width: '25%' }}>Email</TableCell>
+                <TableCell sx={{ width: '15%' }}>Age</TableCell>
+                <TableCell sx={{ width: '15%' }}>Interview Time</TableCell>
+                <TableCell sx={{ width: '10%' }}>Status</TableCell>
+                <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -230,15 +210,28 @@ const Index = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={historyState.pageCount} page={historyState.currentPage} color="primary" onChange={handleTableChange} />
+        {candidate?.length === 0 && (
+          <div className="noData">
+            <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+            <p>No data available</p>
+          </div>
+        )}
+        {candidate?.length > 0 && (
+          <Grid item xs={12} sx={{ p: 3, pl: matchDownSM ? 0 : 3 }}>
+            <Grid container justifyContent="space-between" spacing={gridSpacing}>
+              <Grid item>
+                <Pagination
+                  size={matchDownSM ? 'small' : 'medium'}
+                  count={historyState.pageCount}
+                  page={historyState.currentPage}
+                  color="primary"
+                  onChange={handleTableChange}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
       </MainCard>
-      <AddHistory visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleAdd} getList={() => getList()} />
     </>
   );
 };

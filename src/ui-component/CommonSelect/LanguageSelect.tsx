@@ -45,7 +45,7 @@ const LanguageSelect = (props: any) => {
     <>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span style={{ color: formik && formik.touched.language_id && Boolean(formik.errors.language_id) ? '#f44336' : '' }}>
+          <span style={{ color: formik?.touched?.language_id && Boolean(formik?.errors?.language_id) ? '#f44336' : '' }}>
             <span style={{ color: '#f44336' }}>*</span> Language
           </span>
         </InputLabel>
@@ -62,7 +62,7 @@ const LanguageSelect = (props: any) => {
           onChange={change}
           value={values}
           fullWidth={fullWidth}
-          error={formik && formik.touched.language_id && Boolean(formik.errors.language_id)}
+          error={formik?.touched?.language_id && Boolean(formik?.errors?.language_id)}
           MenuProps={MenuProps}
         >
           {data?.map((row: Languages) => (
@@ -71,9 +71,9 @@ const LanguageSelect = (props: any) => {
             </MenuItem>
           ))}
         </Select>
-        {formik.touched.language_id && formik.errors.language_id && (
+        {formik?.touched?.language_id && formik?.errors?.language_id && (
           <FormHelperText error id="standard-weight-helper-text-rank-login">
-            {formik.errors.language_id}
+            {formik?.errors?.language_id}
           </FormHelperText>
         )}
       </FormControl>

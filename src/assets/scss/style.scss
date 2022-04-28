@@ -136,3 +136,15 @@
     transform: translateX(10px);
   }
 }
+
+.noData {
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

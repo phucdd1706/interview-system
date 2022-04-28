@@ -7,12 +7,10 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { Link } from 'react-router-dom';
 
 // PROJECT IMPORTS
-import { removeCandidate } from 'store/slices/history';
 import AddHistory from 'views/pages/history/AddHistory';
-import AlertDelete from 'ui-component/Alert/AlertDelete';
-import { openSnackbar } from 'store/slices/snackbar';
-import { RootState, dispatch, useSelector } from 'store';
+import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
+import QuestionModal from 'views/pages/history/QuestionModal';
 
 interface Props {
   history: Candidates;
@@ -24,8 +22,8 @@ const History = ({ history, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleQuestionModal, setVisibleQuestionModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
   const historyState = useSelector((state: RootState) => state.history);
 
   const handleClick = (event: any) => {
@@ -34,40 +32,6 @@ const History = ({ history, index, getList }: Props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleRemove = (status: boolean) => {
-    setOpenModal(false);
-    if (status) {
-      dispatch(
-        removeCandidate({
-          id: history.id,
-          callback: (res) => {
-            if (res?.data?.success) {
-              getList();
-              openNotification('success', 'Delete record successfully!');
-            } else {
-              openNotification('error', res?.message);
-            }
-          }
-        })
-      );
-    }
-  };
-
-  const openNotification = (color: string, message: string) => {
-    dispatch(
-      openSnackbar({
-        open: true,
-        message,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        variant: 'alert',
-        alert: {
-          color
-        },
-        close: true
-      })
-    );
   };
 
   const renderMenuButton = () => (
@@ -99,10 +63,17 @@ const History = ({ history, index, getList }: Props) => {
           horizontal: 'right'
         }}
       >
-        <MenuItem>
-          <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
-            Interview
-          </Link>
+        {/* <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
+          <MenuItem>{history?.status ? 'Edit interview' : 'Interview'}</MenuItem>
+        </Link> */}
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setVisibleQuestionModal(!visibleQuestionModal);
+          }}
+        >
+          {history?.status ? 'Edit interview' : 'Interview'}
         </MenuItem>
 
         <MenuItem
@@ -113,21 +84,16 @@ const History = ({ history, index, getList }: Props) => {
         >
           Edit
         </MenuItem>
-
-        <MenuItem
-          onClick={(e) => {
-            handleClose();
-            setOpenModal(true);
-          }}
-        >
-          Delete
-        </MenuItem>
       </Menu>
     </>
   );
 
   const handleVisibleModal = () => {
     setVisibleAdd((prevState) => !prevState);
+  };
+
+  const handleVisibleQuestionModal = () => {
+    setVisibleQuestionModal((prevState) => !prevState);
   };
 
   const renderStatus = (status: number) => (
@@ -158,22 +124,24 @@ const History = ({ history, index, getList }: Props) => {
   return (
     <>
       <TableRow hover key={history?.id}>
-        <TableCell sx={{ width: 110, minWidth: 110 }}>
+        <TableCell sx={{ width: '5%' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{index + 20 * (historyState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 250, minWidth: 200, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ width: '20%' }} component="th" scope="row">
           {history.name}
         </TableCell>
-        <TableCell>{history?.email}</TableCell>
-        <TableCell>{history?.age}</TableCell>
-        <TableCell>{moment(history.time).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{renderStatus(history?.status)}</TableCell>
-        <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
-        {openModal && <AlertDelete name={history?.name} open={openModal} handleClose={handleRemove} />}
+        <TableCell sx={{ width: '25%' }}>{history?.email}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{history?.age}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{moment(history.time).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell sx={{ width: '10%' }}>{renderStatus(history?.status)}</TableCell>
+        <TableCell align="center" sx={{ width: '10%' }}>
+          {renderMenuButton()}
+        </TableCell>
       </TableRow>
       <AddHistory visible={visibleAdd} dataEdit={history} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
+      <QuestionModal visible={visibleQuestionModal} dataCandidate={history} handleVisibleQuestionModal={handleVisibleQuestionModal} />
     </>
   );
 };

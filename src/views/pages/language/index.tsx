@@ -30,6 +30,8 @@ import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
 import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
+import 'assets/scss/style.scss';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -106,7 +108,7 @@ const Index = () => {
       <Grid item xs={12} sm={6}>
         <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
           <Grid item>
-            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 2 : spacingMD}>
               <TextField
                 sx={{ width: { xs: 140, md: 'auto' } }}
                 InputProps={{
@@ -122,7 +124,7 @@ const Index = () => {
                 onChange={handleSearch}
               />
 
-              <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
+              <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
 
               <StatusFilters
                 filters={filters}
@@ -152,12 +154,12 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pl: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
+                <TableCell sx={{ pl: 3, width: '5%' }}>#</TableCell>
+                <TableCell sx={{ width: '20%' }}>Name</TableCell>
+                <TableCell sx={{ width: '35%' }}>Description</TableCell>
+                <TableCell sx={{ width: '15%' }}>Created</TableCell>
+                <TableCell sx={{ width: '10%' }}>Status</TableCell>
+                <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -169,13 +171,27 @@ const Index = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={languageState.pageCount} page={languageState.currentPage} color="primary" onChange={handleTableChange} />
+        {language?.length === 0 && (
+          <div className="noData">
+            <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+            <p>No data available</p>
+          </div>
+        )}
+        {language?.length > 0 && (
+          <Grid item xs={12} sx={{ p: 3, pl: matchDownSM ? 0 : 3 }}>
+            <Grid container justifyContent="space-between" spacing={gridSpacing}>
+              <Grid item>
+                <Pagination
+                  size={matchDownSM ? 'small' : 'medium'}
+                  count={languageState.pageCount}
+                  page={languageState.currentPage}
+                  color="primary"
+                  onChange={handleTableChange}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
       </MainCard>
       <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
