@@ -3,12 +3,12 @@ import { Stack, Typography, Box } from '@mui/material';
 import React from 'react';
 
 // PROJECT IMPORTS
-import QuestionTag from './questionTag';
 import { useDispatch } from 'store';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
 import { QuestionType } from 'types/question';
+import QuestionTag from './questionTag';
 
 interface Props {
   questionStack: QuestionStackInterface;

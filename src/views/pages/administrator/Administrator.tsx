@@ -12,6 +12,8 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
 import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
 import { UserFilter } from 'types/user';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Props {
   administrator: UserProfile;
@@ -43,7 +45,7 @@ const Administrator = ({ administrator, index }: Props) => {
     currentPage: 1,
     limit: 20
   };
-  const [filter, setFilter] = useState(initialState);
+  const [filter] = useState(initialState);
 
   const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
@@ -169,6 +171,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 editAdministrator();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#3f50b5', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -177,6 +180,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#ff1744', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
