@@ -39,7 +39,7 @@ const DepartmentSelect = (props: any) => {
     <>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span style={{ color: formik && formik.touched.department_id && Boolean(formik.errors.department_id) ? '#f44336' : '' }}>
+          <span style={{ color: formik?.touched?.department_id && Boolean(formik?.errors?.department_id) ? '#f44336' : '' }}>
             <span style={{ color: '#f44336' }}>*</span> Department
           </span>
         </InputLabel>
@@ -54,7 +54,7 @@ const DepartmentSelect = (props: any) => {
           }
           onChange={change}
           value={values}
-          error={formik.touched.department_id && Boolean(formik.errors.department_id)}
+          error={formik?.touched?.department_id && Boolean(formik?.errors?.department_id)}
           MenuProps={MenuProps}
         >
           {data?.map((row: Department) => (
@@ -63,9 +63,9 @@ const DepartmentSelect = (props: any) => {
             </MenuItem>
           ))}
         </Select>
-        {formik.touched.department_id && formik.errors.department_id && (
+        {formik?.touched?.department_id && formik?.errors?.department_id && (
           <FormHelperText error id="standard-weight-helper-text-rank-login">
-            {formik.errors.department_id}
+            {formik?.errors?.department_id}
           </FormHelperText>
         )}
       </FormControl>

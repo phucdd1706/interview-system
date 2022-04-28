@@ -1,19 +1,22 @@
 // THIRD-PARTY
-import { Button, Typography, Menu, MenuItem, Stack } from '@mui/material';
+import { Button, Typography, Menu, MenuItem, Stack, useMediaQuery } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
 import SortStatus from './SortStatus';
 
 const StatusFilters = (props: any) => {
+  const theme = useTheme();
   const { filters, handleSortClick, anchorElSort, handleSort, handleCloseSort } = props;
   const sortLabel = SortStatus?.filter((items) => items.value === filters.status);
 
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const openSort = Boolean(anchorElSort);
 
   return (
-    <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-      <Typography variant="h5">Sort by: </Typography>
+    <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: 'flex' }}>
+      {!matchDownSM && <Typography variant="h5">Sort by: </Typography>}
       <Button
         id="demo-positioned-button"
         aria-controls="demo-positioned-menu"

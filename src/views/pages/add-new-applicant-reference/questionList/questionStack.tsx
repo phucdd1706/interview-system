@@ -27,7 +27,7 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
     <Stack direction="column" spacing={2}>
       {Object.keys(questionStack.questions).map((key: string) =>
         questionStack.questions[key as 'base' | 'advanced' | 'focus'].map((question: QuestionType) => (
-          <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} />
+          <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} index={0} />
         ))
       )}
     </Stack>
