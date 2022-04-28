@@ -139,7 +139,7 @@ const Rank = ({ rank, index }: Props) => {
             />
           )}
         </TableCell>
-        <TableCell sx={{ width: 60, minWidth: 60 }}>
+        <TableCell align="center" sx={{ width: 60, minWidth: 60 }}>
           <ButtonBase
             className="more-button"
             sx={{ borderRadius: '12px' }}
