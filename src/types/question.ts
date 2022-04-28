@@ -45,6 +45,8 @@ export type QuestionType = {
   language?: Languages;
   rank?: RankType;
   department?: Department;
+  rankName?: string;
+  languageName?: string;
   created_at?: string;
   updated_at?: string;
 };

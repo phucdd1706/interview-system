@@ -2,12 +2,10 @@ import axiosServices from 'utils/axios';
 
 const getListCandidate = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/client/candidates?${params}`);
 
-const getOneCandidate = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`);
+const getOneCandidate = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`);
 
-const createCandidate = (params: any) => axiosServices.post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, params);
+const createCandidate = (params: any) => axiosServices.post(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, params);
 
-const updateCandidate = (id: any, params: any) => axiosServices.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`, params);
+const updateCandidate = (id: any, params: any) => axiosServices.put(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, params);
 
-const deleteCandidate = (id: any) => axiosServices.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`);
-
-export { getListCandidate, getOneCandidate, createCandidate, updateCandidate, deleteCandidate };
+export { getListCandidate, getOneCandidate, createCandidate, updateCandidate };

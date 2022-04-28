@@ -7,13 +7,65 @@ import MainCard from 'ui-component/cards/MainCard';
 type alertCase = 'add' | 'modify' | 'delete';
 interface Props {
   alertCase: alertCase;
-  type: string;
+  department: string;
   name: string;
   time: number;
   des?: string; // for case modify
   to?: string; // for case add
   from?: string; // for case delete
 }
+
+const Nofity: Props[] = [
+  {
+    alertCase: 'add',
+    department: 'Applicant',
+    name: 'John Doe',
+    time: 1651133902216,
+    to: 'applicant list'
+  },
+  {
+    alertCase: 'modify',
+    department: 'Applicant',
+    name: 'John Doe',
+    time: 1651132802216,
+    des: 'interview status'
+  },
+  {
+    alertCase: 'delete',
+    department: 'Applicant',
+    name: 'John Doe',
+    time: 1651131702216,
+    from: 'applicant list'
+  },
+  {
+    alertCase: 'add',
+    department: 'Rank',
+    name: 'Senior1',
+    time: 1651130602216,
+    to: 'rank list'
+  },
+  {
+    alertCase: 'add',
+    department: 'Rank',
+    name: 'Senior1',
+    time: 1651130502216,
+    to: 'rank list'
+  },
+  {
+    alertCase: 'add',
+    department: 'Rank',
+    name: 'Senior2',
+    time: 1651130202216,
+    to: 'rank list'
+  },
+  {
+    alertCase: 'delete',
+    department: 'Customer',
+    name: 'John Doe',
+    time: 1651130022126,
+    from: 'customer list'
+  }
+];
 
 const handleTime = (passTime: number) => {
   const durations = Date.now() - passTime;
@@ -63,14 +115,14 @@ const useStyles = makeStyles({
   }
 });
 
-const NotificationTag = ({ alertCase, type, name, time, des, from, to }: Props) => {
+const NotificationTag = ({ alertCase, department, name, time, des, from, to }: Props) => {
   const classes = useStyles({ alertCase });
   switch (alertCase) {
     case 'add':
       return (
         <Stack className={classes.root} direction="row" justifyContent="space-between" spacing={2} padding={2} margin={1}>
           <Typography variant="body1">
-            {type} <span className={classes.textFocus}>{name}</span> has been added {to && `to ${to}`}
+            {department} <span className={classes.textFocus}>{name}</span> has been added {to && `to ${to}`}
           </Typography>
           <Typography variant="body2">{handleTime(time)}</Typography>
         </Stack>
@@ -79,7 +131,7 @@ const NotificationTag = ({ alertCase, type, name, time, des, from, to }: Props) 
       return (
         <Stack className={classes.root} direction="row" justifyContent="space-between" spacing={2} padding={2} margin={1}>
           <Typography variant="body1">
-            {type} <span className={classes.textFocus}>{name}</span> has been modified {des}
+            {department} <span className={classes.textFocus}>{name}</span> has been modified {des}
           </Typography>
           <Typography variant="body2">{handleTime(time)}</Typography>
         </Stack>
@@ -88,7 +140,7 @@ const NotificationTag = ({ alertCase, type, name, time, des, from, to }: Props) 
       return (
         <Stack className={classes.root} direction="row" justifyContent="space-between" spacing={2} padding={2} margin={1}>
           <Typography variant="body1">
-            {type} <span className={classes.textFocus}>{name}</span> has been deleted {from && `from ${from}`}
+            {department} <span className={classes.textFocus}>{name}</span> has been deleted {from && `from ${from}`}
           </Typography>
           <Typography variant="body2">{handleTime(time)}</Typography>
         </Stack>
@@ -100,32 +152,9 @@ const NotificationTag = ({ alertCase, type, name, time, des, from, to }: Props) 
 
 const DashboardPage = () => (
   <MainCard title="Updates">
-    <NotificationTag alertCase="add" type="Applicant" name="Nguyen Van Minh" time={1651134902216} to="pending interview" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="modify" type="Applicant" name="Nguyen Van Minh" time={1650899102216} des="interview status" />
-    <NotificationTag alertCase="delete" type="Applicant" name="Nguyen Van Minh" time={1650899102216} from="history" />
+    {Nofity.map((item, index) => (
+      <NotificationTag key={index} {...item} />
+    ))}
   </MainCard>
 );
 

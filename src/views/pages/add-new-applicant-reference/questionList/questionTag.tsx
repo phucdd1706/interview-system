@@ -11,16 +11,17 @@ import { QuestionType } from 'types/question';
 interface Props {
   value: QuestionType;
   interviewing?: boolean;
+  index: number;
 }
 
-const QuestionTag = ({ value, interviewing = false }: Props) => {
+const QuestionTag = ({ value, interviewing = false, index }: Props) => {
   const classes = useStyles({ interviewing, status: value.status });
   const dispatch = useDispatch();
   return (
     <Paper className={classes.itemHovered} variant="outlined" sx={{ padding: '1em' }}>
       <Stack direction="row" alignItems="center" spacing={2}>
         <Typography variant="body1" component="span" sx={{ flexGrow: 1 }}>
-          {value.question_content}
+          Câu hỏi {index + 1}: {value.question_content}?
         </Typography>
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>

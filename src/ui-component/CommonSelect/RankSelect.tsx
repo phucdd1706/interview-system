@@ -45,7 +45,7 @@ const RankSelect = (props: any) => {
     <>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
-          <span style={{ color: formik && formik.touched.rank_id && Boolean(formik.errors.rank_id) ? '#f44336' : '' }}>
+          <span style={{ color: formik?.touched?.rank_id && Boolean(formik?.errors?.rank_id) ? '#f44336' : '' }}>
             <span style={{ color: '#f44336' }}>*</span> Rank
           </span>
         </InputLabel>
@@ -62,7 +62,7 @@ const RankSelect = (props: any) => {
           onChange={change}
           value={values}
           fullWidth={fullWidth}
-          error={formik && formik.touched.rank_id && Boolean(formik.errors.rank_id)}
+          error={formik?.touched?.rank_id && Boolean(formik?.errors?.rank_id)}
           MenuProps={MenuProps}
         >
           {data?.map((row: RankType) => (
@@ -71,9 +71,9 @@ const RankSelect = (props: any) => {
             </MenuItem>
           ))}
         </Select>
-        {formik.touched.rank_id && formik.errors.rank_id && (
+        {formik?.touched?.rank_id && formik?.errors?.rank_id && (
           <FormHelperText error id="standard-weight-helper-text-rank-login">
-            {formik.errors.rank_id}
+            {formik?.errors?.rank_id}
           </FormHelperText>
         )}
       </FormControl>

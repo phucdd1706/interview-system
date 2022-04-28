@@ -5,12 +5,14 @@ import { QuestionType } from './question';
 export interface Candidates {
   id?: number;
   name?: string;
-  age?: string;
+  age?: number;
   email?: string;
-  note?: number | string;
+  note?: string;
   time?: string;
   created_at?: string;
   updated_at?: string;
+  phone?: number;
+  address?: string;
   status?: any;
   candidate_question?: any;
 }

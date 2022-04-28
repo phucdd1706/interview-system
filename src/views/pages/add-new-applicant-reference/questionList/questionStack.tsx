@@ -3,12 +3,12 @@ import { Stack, Typography, Box } from '@mui/material';
 import React from 'react';
 
 // PROJECT IMPORTS
-import QuestionTag from './questionTag';
 import { useDispatch } from 'store';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';
 import { QuestionType } from 'types/question';
+import QuestionTag from './questionTag';
 
 interface Props {
   questionStack: QuestionStackInterface;
@@ -27,7 +27,7 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
     <Stack direction="column" spacing={2}>
       {Object.keys(questionStack.questions).map((key: string) =>
         questionStack.questions[key as 'base' | 'advanced' | 'focus'].map((question: QuestionType) => (
-          <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} />
+          <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} index={0} />
         ))
       )}
     </Stack>
