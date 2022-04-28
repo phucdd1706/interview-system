@@ -5,8 +5,6 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
-import { filterAuthorization } from 'menu-items/application';
-import PageNotFound from 'views/pages/404';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const History = Loadable(lazy(() => import('views/pages/history/index')));
@@ -90,10 +88,6 @@ const MainRoutes = {
 };
 
 const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-// filterAuthorization.forEach((item: string) => {
-//   MainRoutes.children = MainRoutes.children.filter((child) => child.path !== item);
-// });
 
 MainRoutes.children = MainRoutes.children.filter((child) => {
   if (child.role) {
