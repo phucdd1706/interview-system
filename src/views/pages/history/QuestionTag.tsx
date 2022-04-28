@@ -42,13 +42,19 @@ const QuestionTag = ({ value, index, handleStatusQuestion }: Props) => {
           <Typography variant="body2">{index + 1}</Typography>
         </Stack>
       </TableCell>
-      <TableCell sx={{ width: '55%' }} component="th" scope="row">
-        {value?.question_content}
+      <TableCell sx={{ width: '40%', whiteSpace: 'normal !important' }} component="th" scope="row">
+        <p style={{ width: '100%', wordBreak: 'break-word' }}>{value?.question_content}</p>
       </TableCell>
-      <TableCell sx={{ width: '20%' }}>
+      <TableCell sx={{ width: '15%' }} component="th" scope="row">
+        {value?.rankName}
+      </TableCell>
+      <TableCell sx={{ width: '15%' }} component="th" scope="row">
+        {value?.languageName}
+      </TableCell>
+      <TableCell sx={{ width: '15%' }}>
         {value?.type ? <span style={{ color: '#f44336' }}>Advanced</span> : <span style={{ color: '#1E88E5' }}>Basic</span>}
       </TableCell>
-      <TableCell sx={{ width: '20%' }} align="right">
+      <TableCell sx={{ width: '10%' }} align="right">
         {renderStatusButton()}
       </TableCell>
     </TableRow>

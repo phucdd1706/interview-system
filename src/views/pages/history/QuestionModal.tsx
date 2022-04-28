@@ -49,7 +49,9 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
       question_content: item?.question?.question_content,
       type: item?.question?.type,
       status: item?.status,
-      id: item?.id
+      id: item?.id,
+      rankName: item?.question?.rank?.name,
+      languageName: item?.question?.language?.name
     }));
     dataQuestion.sort((a: QuestionType, b: QuestionType) => (a.type !== b.type ? 1 : -1));
     setQuestionList(dataQuestion);
@@ -231,10 +233,12 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
                     <TableHead>
                       <TableRow>
                         <TableCell sx={{ pr: 3, width: '5%' }}>STT</TableCell>
-                        <TableCell sx={{ width: '65%' }}>Question Content</TableCell>
-                        <TableCell sx={{ width: '10%' }}>Question Type</TableCell>
-                        <TableCell sx={{ width: '20%' }} align="right">
-                          Question Result
+                        <TableCell sx={{ width: '40%' }}>Question Content</TableCell>
+                        <TableCell sx={{ width: '15%' }}>Rank</TableCell>
+                        <TableCell sx={{ width: '15%' }}>Language</TableCell>
+                        <TableCell sx={{ width: '15%' }}>Question Type</TableCell>
+                        <TableCell sx={{ width: '10%' }} align="right">
+                          Evaluate
                         </TableCell>
                       </TableRow>
                     </TableHead>
