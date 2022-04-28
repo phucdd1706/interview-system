@@ -16,6 +16,7 @@ const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
 const Department = Loadable(lazy(() => import('views/pages/department')));
 const Profile = Loadable(lazy(() => import('views/pages/account')));
+const Calendar = Loadable(lazy(() => import('views/pages/account/tabs/Calendar/Calendar')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
 const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
 const Interview = Loadable(lazy(() => import('views/pages/interview')));
@@ -30,11 +31,11 @@ const MainRoutes = {
   children: [
     {
       path: '/dashboard/analytics',
-      element: <Dashboard />
+      element: <Calendar />
     },
     {
       path: '/dashboard',
-      element: <Dashboard />
+      element: <Calendar />
     },
     {
       path: '/complete',

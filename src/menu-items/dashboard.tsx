@@ -34,7 +34,7 @@ const dashboard: DashboardMenuProps = {
       type: 'item',
       url: '/dashboard/analytics',
       icon: icons.IconDeviceAnalytics,
-      breadcrumbs: false
+      breadcrumbs: true
     }
   ]
 };
