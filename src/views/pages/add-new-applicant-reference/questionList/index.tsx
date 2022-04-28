@@ -4,15 +4,17 @@ import { useEffect, useState } from 'react';
 
 // PROJECT IMPORTS
 import QuestionTag from './questionTag';
+import QuestionStack from './questionStack';
 import { getQuestionsThunk } from 'store/slices/applicant/applicantAsyncAction';
 import { deleteInterviewQuestions, addInterviewQuestions } from 'store/slices/applicant/applicantReferences';
 import { useDispatch } from 'store';
 
 // TYPE IMPORTS
 import { QuestionType } from 'types/question';
+import { QuestionStackInterface } from 'types/interviewQuestion';
 
 interface Props {
-  questionList: QuestionType[];
+  questionList: QuestionStackInterface[];
   interviewing: boolean;
 }
 
@@ -40,7 +42,7 @@ const QuestionList = ({ questionList, interviewing }: Props) => {
     <>
       <Stack direction="column" spacing={2} sx={{ border: 'solid 1px #e9e9e9', borderRadius: 5, padding: 2 }}>
         {questionList.map((question, index) => (
-          <QuestionTag value={question} interviewing={interviewing} key={question.id} />
+          <QuestionStack questionStack={question} key={question.language} interviewing={interviewing} />
         ))}
       </Stack>
     </>

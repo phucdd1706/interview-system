@@ -1,6 +1,6 @@
 // PROJECT IMPORTS
 import { ApplicantDataInterface, ApplicantInfo, ReferenceEvaluate } from 'types/applicantData';
-import { ResponseInterviewQuestion, InterviewQuestions } from 'types/interviewQuestion';
+import { ResponseInterviewQuestion, InterviewQuestions, QuestionStackInterface } from 'types/interviewQuestion';
 import { axiosGet, axiosPost } from 'utils/helpers/axios';
 import { QuestionType } from 'types/question';
 // THIRD-PARTY
@@ -13,6 +13,7 @@ const initialState: ApplicantDataInterface = {
     email: '',
     phone: '',
     address: '',
+    status: 0,
     time: `${new Date().toISOString().split('T')[0]}T09:00`,
     applyPosition: [
       {
@@ -33,13 +34,23 @@ const applicantReferences = createSlice({
   initialState,
   reducers: {
     applicantInit: () => initialState,
-    setApplicantInfo(state, action: { payload: { applicant: ApplicantInfo; questions: QuestionType[] } }) {
+    setApplicantInfo(state, action: { payload: { applicant: ApplicantInfo; questions: QuestionStackInterface[] } }) {
       state.interviewQuestions = action.payload.questions;
       state.applicantInfo = action.payload.applicant;
       state.applicantInfo.questions = [];
-      action.payload.questions.forEach((question) => {
-        state.applicantInfo.questions && question.id && state.applicantInfo.questions.push({ question_id: question.id });
+      action.payload.questions.forEach((stack) => {
+        Object.keys(stack.questions).forEach((key) => {
+          stack.questions[key as 'base' | 'focus' | 'advanced'].forEach((question) => {
+            state.applicantInfo.questions &&
+              state.applicantInfo.questions.push({
+                question_id: question.id || 0
+              });
+          });
+        });
       });
+      // action.payload.questions.forEach((question) => {
+      //   state.applicantInfo.questions && question.id && state.applicantInfo.questions.push({ question_id: question.id });
+      // });
       // state.applicantInfo = action.payload.applicant;
       // const questions = action.payload.questions.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
       // state.applicantInfo.questions = [];
@@ -53,7 +64,7 @@ const applicantReferences = createSlice({
       action: {
         payload: {
           applicant: ApplicantInfo;
-          interviewQuestions: QuestionType[];
+          interviewQuestions: QuestionStackInterface[];
           questions: Array<{
             question_id: number;
             status?: string | number | undefined;
@@ -69,8 +80,8 @@ const applicantReferences = createSlice({
     //   Object.assign(state, { referenceEvaluate: action.payload });
     // },
     setQuestions(state, action: { payload: InterviewQuestions[] }) {
-      const questions = action.payload.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
-      state.questions = questions;
+      // const questions = action.payload.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
+      // state.questions = questions;
     },
     questionsInit(state) {
       state.questions = [];
@@ -99,9 +110,13 @@ const applicantReferences = createSlice({
         }
       });
       state.interviewQuestions.forEach((element) => {
-        if (element.candidate_id === id) {
-          element.status = status;
-        }
+        Object.keys(element.questions).forEach((key) => {
+          element.questions[key as 'base' | 'focus' | 'advanced'].forEach((question) => {
+            if (question.candidate_id === id) {
+              question.status = status;
+            }
+          });
+        });
       });
     }
     //   handleInterviewQuestionNotes(state, action: { payload: { id: string; notes: string } }) {
