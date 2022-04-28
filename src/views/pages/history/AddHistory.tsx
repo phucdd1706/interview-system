@@ -100,8 +100,11 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
   const validationSchema = yup.object().shape({
     name: yup.string().max(50).required('Name is required'),
-    email: yup.string().email('Must be a valid email').max(40).required('Email is required'),
-    phone: yup.string().max(10).required('Phone is required'),
+    email: yup.string().email('Enter a valid email').max(40).required('Email is required'),
+    phone: yup
+      .string()
+      .matches(/^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i, 'Enter a valid phone')
+      .required('Phone is required'),
     age: yup
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
@@ -241,7 +244,6 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                     <TextField
                       id="phone"
                       name="phone"
-                      type="number"
                       value={formik?.values?.phone}
                       label={
                         <span>
