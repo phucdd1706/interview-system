@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import AddHistory from 'views/pages/history/AddHistory';
 import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
+import QuestionModal from 'views/pages/history/QuestionModal';
 
 interface Props {
   history: Candidates;
@@ -21,6 +22,7 @@ const History = ({ history, index, getList }: Props) => {
   const theme = useTheme();
 
   const [visibleAdd, setVisibleAdd] = useState(false);
+  const [visibleQuestionModal, setVisibleQuestionModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const historyState = useSelector((state: RootState) => state.history);
 
@@ -62,8 +64,17 @@ const History = ({ history, index, getList }: Props) => {
         }}
       >
         <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
-          <MenuItem>Interview</MenuItem>
+          <MenuItem>{history?.status ? 'Edit interview' : 'Interview'}</MenuItem>
         </Link>
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setVisibleQuestionModal(!visibleQuestionModal);
+          }}
+        >
+          {history?.status ? 'Edit interview' : 'Interview'}
+        </MenuItem>
 
         <MenuItem
           onClick={() => {
@@ -79,6 +90,10 @@ const History = ({ history, index, getList }: Props) => {
 
   const handleVisibleModal = () => {
     setVisibleAdd((prevState) => !prevState);
+  };
+
+  const handleVisibleQuestionModal = () => {
+    setVisibleQuestionModal((prevState) => !prevState);
   };
 
   const renderStatus = (status: number) => (
@@ -109,7 +124,7 @@ const History = ({ history, index, getList }: Props) => {
   return (
     <>
       <TableRow hover key={history?.id}>
-        <TableCell sx={{ width: '10%' }}>
+        <TableCell sx={{ width: '5%' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{index + 20 * (historyState.currentPage - 1) + 1}</Typography>
           </Stack>
@@ -117,13 +132,16 @@ const History = ({ history, index, getList }: Props) => {
         <TableCell sx={{ width: '20%' }} component="th" scope="row">
           {history.name}
         </TableCell>
-        <TableCell sx={{ width: '20%' }}>{history?.email}</TableCell>
+        <TableCell sx={{ width: '25%' }}>{history?.email}</TableCell>
         <TableCell sx={{ width: '15%' }}>{history?.age}</TableCell>
         <TableCell sx={{ width: '15%' }}>{moment(history.time).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell sx={{ width: '10%' }}>{renderStatus(history?.status)}</TableCell>
-        <TableCell sx={{ width: '10%' }}>{renderMenuButton()}</TableCell>
+        <TableCell align="center" sx={{ width: '10%' }}>
+          {renderMenuButton()}
+        </TableCell>
       </TableRow>
       <AddHistory visible={visibleAdd} dataEdit={history} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
+      <QuestionModal visible={visibleQuestionModal} dataCandidate={history} handleVisibleQuestionModal={handleVisibleQuestionModal} />
     </>
   );
 };

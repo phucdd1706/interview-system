@@ -136,6 +136,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
       onClose={() => {
         changeModal('close');
       }}
+      fullScreen={matchDownSM}
       sx={{
         '&>div:nth-of-type(3)': {
           '&>div': {

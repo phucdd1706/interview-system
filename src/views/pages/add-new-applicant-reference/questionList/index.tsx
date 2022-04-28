@@ -39,8 +39,8 @@ const QuestionList = ({ questionList, interviewing }: Props) => {
   return (
     <>
       <Stack direction="column" spacing={2} sx={{ border: 'solid 1px #e9e9e9', borderRadius: 5, padding: 2 }}>
-        {questionList.map((question, index) => (
-          <QuestionTag value={question} interviewing={interviewing} key={question.id} />
+        {questionList?.map((question, index) => (
+          <QuestionTag index={index} value={question} interviewing={interviewing} key={`${question.id}_${index}`} />
         ))}
       </Stack>
     </>

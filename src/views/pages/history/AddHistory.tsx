@@ -96,6 +96,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
   const validationSchema = yup.object().shape({
     name: yup.string().max(50).required('Name is required'),
     email: yup.string().email('Must be a valid email').max(50).required('Email is required'),
+    phone: yup.string().max(10).required('Phone is required'),
     age: yup
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
@@ -108,8 +109,10 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     initialValues: {
       name: dataEdit?.name,
       email: dataEdit?.email,
+      phone: dataEdit?.phone,
       age: dataEdit?.age,
-      note: dataEdit?.note,
+      note: dataEdit?.note || '',
+      address: dataEdit?.address || '',
       time: dataEdit?.time || moment().format('L'),
       status: dataEdit?.id ? dataEdit?.status : 0
     },
@@ -133,6 +136,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       onClose={() => {
         changeModal('close');
       }}
+      fullScreen={matchDownSM}
       sx={{
         '&>div:nth-of-type(3)': {
           '&>div': {
@@ -161,7 +165,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? 'Edit record' : 'Add new record'}
+                    {dataEdit?.id ? `Edit candidate profile ${dataEdit?.name}` : 'Add new record'}
                   </Typography>
                   <Button
                     variant="text"
@@ -201,23 +205,6 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
                   <Grid item xs={12} xl={12}>
                     <TextField
-                      id="email"
-                      name="email"
-                      value={formik?.values?.email}
-                      label={
-                        <span>
-                          <span style={{ color: '#f44336' }}>*</span> Email
-                        </span>
-                      }
-                      fullWidth
-                      onChange={formik.handleChange}
-                      error={(formik?.touched?.email && Boolean(formik?.errors?.email)) || errors?.email}
-                      helperText={(formik?.touched?.email && formik?.errors?.email) || errors?.email}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} xl={12}>
-                    <TextField
                       id="age"
                       name="age"
                       value={formik?.values?.age}
@@ -231,6 +218,41 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                       onChange={formik.handleChange}
                       error={(formik?.touched?.age && Boolean(formik?.errors?.age)) || errors?.age}
                       helperText={(formik?.touched?.age && formik?.errors?.age) || errors?.age}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} xl={12}>
+                    <TextField
+                      id="phone"
+                      name="phone"
+                      type="number"
+                      value={formik?.values?.phone}
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
+                      fullWidth
+                      onChange={formik.handleChange}
+                      error={(formik?.touched?.phone && Boolean(formik?.errors?.phone)) || errors?.phone}
+                      helperText={(formik?.touched?.phone && formik?.errors?.phone) || errors?.phone}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} xl={12}>
+                    <TextField
+                      id="email"
+                      name="email"
+                      value={formik?.values?.email}
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
+                      fullWidth
+                      onChange={formik.handleChange}
+                      error={(formik?.touched?.email && Boolean(formik?.errors?.email)) || errors?.email}
+                      helperText={(formik?.touched?.email && formik?.errors?.email) || errors?.email}
                     />
                   </Grid>
 
@@ -269,6 +291,19 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                       onChange={formik.handleChange}
                       error={(formik?.touched?.note && Boolean(formik?.errors?.note)) || errors?.note}
                       helperText={(formik?.touched?.note && formik?.errors?.note) || errors?.note}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} xl={12}>
+                    <TextField
+                      id="address"
+                      name="address"
+                      value={formik?.values?.address}
+                      label={<span>Address</span>}
+                      fullWidth
+                      onChange={formik.handleChange}
+                      error={(formik?.touched?.address && Boolean(formik?.errors?.address)) || errors?.address}
+                      helperText={(formik?.touched?.address && formik?.errors?.address) || errors?.address}
                     />
                   </Grid>
 

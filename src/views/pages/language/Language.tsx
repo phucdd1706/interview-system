@@ -150,12 +150,12 @@ const Language = ({ language, index, getList }: Props) => {
   return (
     <>
       <TableRow hover key={language?.id}>
-        <TableCell sx={{ width: '10%' }}>
+        <TableCell sx={{ width: '5%', pl: 3 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: '15%', minWidth: 250, maxWidth: 'calc(100vw - 850px)', overflow: 'hidden' }} component="th" scope="row">
+        <TableCell sx={{ width: '20%', overflow: 'hidden' }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -171,10 +171,12 @@ const Language = ({ language, index, getList }: Props) => {
             {language?.name}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: '30%', minWidth: 250, maxWidth: 450, overflow: 'hidden' }}>{language?.description}</TableCell>
-        <TableCell>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{renderStatus(language?.status)}</TableCell>
-        <TableCell sx={{ width: 60, minWidth: 60 }}>{renderMenuButton()}</TableCell>
+        <TableCell sx={{ width: '35%', overflow: 'hidden' }}>{language?.description}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell sx={{ width: '10%' }}>{renderStatus(language?.status)}</TableCell>
+        <TableCell sx={{ width: '10%' }} align="center">
+          {renderMenuButton()}
+        </TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
       <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />

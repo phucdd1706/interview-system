@@ -108,7 +108,7 @@ const Index = () => {
       <Grid item xs={12} sm={6}>
         <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
           <Grid item>
-            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 2 : spacingMD}>
               <TextField
                 sx={{ width: { xs: 140, md: 'auto' } }}
                 InputProps={{
@@ -124,7 +124,7 @@ const Index = () => {
                 onChange={handleSearch}
               />
 
-              <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
+              <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
 
               <StatusFilters
                 filters={filters}
@@ -154,12 +154,12 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pl: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
+                <TableCell sx={{ pl: 3, width: '5%' }}>#</TableCell>
+                <TableCell sx={{ width: '20%' }}>Name</TableCell>
+                <TableCell sx={{ width: '35%' }}>Description</TableCell>
+                <TableCell sx={{ width: '15%' }}>Created</TableCell>
+                <TableCell sx={{ width: '10%' }}>Status</TableCell>
+                <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -178,10 +178,16 @@ const Index = () => {
           </div>
         )}
         {language?.length > 0 && (
-          <Grid item xs={12} sx={{ p: 3 }}>
+          <Grid item xs={12} sx={{ p: 3, pl: matchDownSM ? 0 : 3 }}>
             <Grid container justifyContent="space-between" spacing={gridSpacing}>
               <Grid item>
-                <Pagination count={languageState.pageCount} page={languageState.currentPage} color="primary" onChange={handleTableChange} />
+                <Pagination
+                  size={matchDownSM ? 'small' : 'medium'}
+                  count={languageState.pageCount}
+                  page={languageState.currentPage}
+                  color="primary"
+                  onChange={handleTableChange}
+                />
               </Grid>
             </Grid>
           </Grid>

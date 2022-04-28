@@ -115,7 +115,7 @@ const Index = () => {
         <Grid item xs={12} sm={12}>
           <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
             <Grid item>
-              <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+              <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 2 : spacingMD}>
                 <TextField
                   sx={{ width: { xs: 140, md: 'auto' } }}
                   InputProps={{
@@ -131,12 +131,10 @@ const Index = () => {
                   onChange={handleSearch}
                 />
 
-                <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
-                  |
-                </Typography>
+                <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
 
-                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
-                  <Typography variant="h5">Sort by: </Typography>
+                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: 'flex' }}>
+                  {!matchDownSM && <Typography variant="h5">Sort by: </Typography>}
                   <Button
                     id="demo-positioned-button"
                     aria-controls="demo-positioned-menu"
@@ -194,13 +192,13 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pr: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Age</TableCell>
-                <TableCell>Interview Time</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
+                <TableCell sx={{ pr: 3, width: '5%' }}>#</TableCell>
+                <TableCell sx={{ width: '20%' }}>Name</TableCell>
+                <TableCell sx={{ width: '25%' }}>Email</TableCell>
+                <TableCell sx={{ width: '15%' }}>Age</TableCell>
+                <TableCell sx={{ width: '15%' }}>Interview Time</TableCell>
+                <TableCell sx={{ width: '10%' }}>Status</TableCell>
+                <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -219,10 +217,16 @@ const Index = () => {
           </div>
         )}
         {candidate?.length > 0 && (
-          <Grid item xs={12} sx={{ p: 3 }}>
+          <Grid item xs={12} sx={{ p: 3, pl: matchDownSM ? 0 : 3 }}>
             <Grid container justifyContent="space-between" spacing={gridSpacing}>
               <Grid item>
-                <Pagination count={historyState.pageCount} page={historyState.currentPage} color="primary" onChange={handleTableChange} />
+                <Pagination
+                  size={matchDownSM ? 'small' : 'medium'}
+                  count={historyState.pageCount}
+                  page={historyState.currentPage}
+                  color="primary"
+                  onChange={handleTableChange}
+                />
               </Grid>
             </Grid>
           </Grid>

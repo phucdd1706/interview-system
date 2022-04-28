@@ -11,6 +11,8 @@ export interface Candidates {
   time?: string;
   created_at?: string;
   updated_at?: string;
+  phone?: number;
+  address?: string;
   status?: any;
   candidate_question?: any;
 }
