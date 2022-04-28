@@ -8,14 +8,16 @@ export interface QuestionInterface {
 }
 
 export interface InterviewQuestions {
-  [key: string]: QuestionType[];
+  base: QuestionType[];
+  focus: QuestionType[];
+  advanced: QuestionType[];
 }
 
 export interface QuestionStackInterface {
-  type: string;
+  language: string;
   questions: InterviewQuestions;
 }
 
 export interface ResponseInterviewQuestion {
-  success: Array<InterviewQuestions>;
+  success: Array<QuestionStackInterface>;
 }

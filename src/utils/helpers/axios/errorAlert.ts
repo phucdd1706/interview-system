@@ -36,3 +36,19 @@ export const alertRequestSuccess = (alert: string): void => {
     })
   );
 };
+
+export const alertError = (alert: string): void => {
+  dispatch(
+    openSnackbar({
+      open: true,
+      severity: 'error',
+      message: alert,
+      anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      variant: 'alert',
+      alert: {
+        color: 'error'
+      },
+      close: false
+    })
+  );
+};

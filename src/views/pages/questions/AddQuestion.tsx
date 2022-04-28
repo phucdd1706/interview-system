@@ -24,8 +24,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { gridSpacing } from 'store/constant';
-import { PostQuestion } from 'store/slices/question';
-import { QuestionType, SelectProps } from 'types/question';
+import { getQuestionsList, PostQuestion } from 'store/slices/question';
+import { QuestionFilter, QuestionType, SelectProps } from 'types/question';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useDispatch } from 'store';
 import RankSelect from 'ui-component/CommonSelect/RankSelect';
@@ -35,6 +35,7 @@ import { useState } from 'react';
 
 interface AddQuestionProps {
   open: boolean;
+  filter: QuestionFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -57,9 +58,23 @@ const validationSchema = Yup.object({
   type: Yup.string().required('Question type is required')
 });
 
-const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
+const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<any>({});
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
 
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -74,32 +89,11 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
         params: values,
         callback: (response) => {
           if (response?.data?.success) {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Add new question successfully!',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            dispatch(getQuestionsList(filter));
+            Notification('success', 'Add new question successfully');
             changeModal('close');
           } else {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: response?.message,
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'error'
-                },
-                close: true
-              })
-            );
+            Notification('error', response?.message);
             setErrors(response?.errors);
           }
         }
@@ -211,15 +205,10 @@ const AddQuestion = ({ open, handleDrawerOpen }: AddQuestionProps) => {
                         error={
                           (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
                         }
+                        helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
                         value={formik.values.question_content}
                         onChange={formik.handleChange}
                       />
-                      {(formik.touched.question_content && formik.errors.question_content && (
-                        <FormHelperText error id="standard-weight-helper-text-rank-login">
-                          {formik.errors.question_content}
-                        </FormHelperText>
-                      )) ||
-                        errors.question_content}
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>

@@ -55,7 +55,7 @@ const application = {
     },
     {
       id: 'manage-rank',
-      title: <FormattedMessage id="manage-rank" />,
+      title: <FormattedMessage id="Manage Rank" />,
       type: 'item',
       role: 1,
       url: '/ranks',
@@ -65,7 +65,7 @@ const application = {
 
     {
       id: 'manage-question',
-      title: <FormattedMessage id="manage-question" />,
+      title: <FormattedMessage id="Manage Question" />,
       type: 'item',
       role: 1,
       url: '/questions',
@@ -92,21 +92,5 @@ const application = {
     }
   ]
 };
-
-const userRole = JSON.parse(localStorage.getItem('user') || '{}');
-const hiddenRoute: Array<string> = [];
-const getHiddenRoute = (route: any) => {
-  if (route.children) {
-    route.children.forEach((element: any) => getHiddenRoute(element));
-  } else {
-    if (route.role !== userRole.type) {
-      hiddenRoute.push(route.url);
-    }
-    return hiddenRoute;
-  }
-  return hiddenRoute;
-};
-
-export const filterAuthorization = getHiddenRoute(application);
 
 export default application;
