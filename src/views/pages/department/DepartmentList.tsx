@@ -15,6 +15,8 @@ import { delDepartment, getDepartmentList } from 'store/slices/department';
 import AlertDepartmentDelete from './AlertDepartmentDelete';
 import EditDepartment from './EditDepartment';
 import moment from 'moment';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Props {
   department: Department;
@@ -163,6 +165,7 @@ const DepartmentList = ({ department, index }: Props) => {
                 editDepartment();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#3f50b5', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -171,6 +174,7 @@ const DepartmentList = ({ department, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#ff1744', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>

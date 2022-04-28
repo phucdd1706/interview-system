@@ -34,6 +34,7 @@ import AddIcon from '@mui/icons-material/AddTwoTone';
 import { getAdministratorList } from 'store/slices/user';
 import Administrator from 'views/pages/administrator/Administrator';
 import AddAdministrator from 'views/pages/administrator/AddAdministrator';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const SortStatus: SelectProps[] = [
   {
@@ -223,18 +224,26 @@ const Administrators = () => {
         </Table>
         <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
-      <Grid item xs={12} sx={{ p: 3 }}>
-        <Grid container justifyContent="space-between" spacing={gridSpacing}>
-          <Grid item>
-            <Pagination
-              count={administratorState.pageCount}
-              page={administratorState.currentPage}
-              onChange={handleChange}
-              color="primary"
-            />
+      {data?.length === 0 && (
+        <div className="noData">
+          <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+          <p>No data available</p>
+        </div>
+      )}
+      {data?.length > 0 && (
+        <Grid item xs={12} sx={{ p: 3 }}>
+          <Grid container justifyContent="space-between" spacing={gridSpacing}>
+            <Grid item>
+              <Pagination
+                count={administratorState.pageCount}
+                page={administratorState.currentPage}
+                onChange={handleChange}
+                color="primary"
+              />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
     </MainCard>
   );
 };

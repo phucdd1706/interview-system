@@ -34,6 +34,7 @@ import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { getDepartmentList } from 'store/slices/department';
 import DepartmentList from 'views/pages/department/DepartmentList';
 import AddDepartment from 'views/pages/department/AddDepartment';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const SortStatus: SelectProps[] = [
   {
@@ -219,13 +220,21 @@ const Departments = () => {
         </Table>
         <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>
-      <Grid item xs={12} sx={{ p: 3 }}>
-        <Grid container justifyContent="space-between" spacing={gridSpacing}>
-          <Grid item>
-            <Pagination count={departmentState.pageCount} page={departmentState.currentPage} onChange={handleChange} color="primary" />
+      {data?.length === 0 && (
+        <div className="noData">
+          <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+          <p>No data available</p>
+        </div>
+      )}
+      {data?.length > 0 && (
+        <Grid item xs={12} sx={{ p: 3 }}>
+          <Grid container justifyContent="space-between" spacing={gridSpacing}>
+            <Grid item>
+              <Pagination count={departmentState.pageCount} page={departmentState.currentPage} onChange={handleChange} color="primary" />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
     </MainCard>
   );
 };
