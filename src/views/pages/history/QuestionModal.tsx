@@ -48,14 +48,22 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
     const dataQuestion = dataCandidate?.candidate_question?.map((item: Question) => ({
       candidate_id: item?.candidate_id,
       question_content: item?.question?.question_content,
-      type: item?.question?.type,
+      type: item?.question?.type === 1 ? 'advanced' : 'basic',
       status: item?.status,
       id: item?.id,
       rankName: item?.question?.rank?.name,
       languageName: item?.question?.language?.name
     }));
-    dataQuestion.sort((a: QuestionType, b: QuestionType) => (a.type !== b.type ? 1 : -1));
-    setQuestionList(dataQuestion);
+    const dataQuestionSoft = dataQuestion.reduce((questionArr: any, question: any) => {
+      if (!questionArr[question.type]) questionArr[question.type] = [];
+      questionArr[question.type].push(question);
+      return questionArr;
+    }, {});
+
+    const basicQuestion = dataQuestionSoft?.basic || [];
+    const advancedQuestion = dataQuestionSoft?.advanced || [];
+
+    setQuestionList(basicQuestion.concat(advancedQuestion));
   }, [dataCandidate]);
 
   const handleStatusQuestion = (questionId: number | undefined, status: number | string) => {

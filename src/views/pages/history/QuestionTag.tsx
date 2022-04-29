@@ -54,7 +54,7 @@ const QuestionTag = ({ value, index, handleStatusQuestion }: Props) => {
         {value?.languageName}
       </TableCell>
       <TableCell sx={{ width: '15%' }}>
-        {value?.type ? <span style={{ color: '#f44336' }}>Advanced</span> : <span style={{ color: '#1E88E5' }}>Basic</span>}
+        {value?.type === 'advanced' ? <span style={{ color: '#f44336' }}>Advanced</span> : <span style={{ color: '#1E88E5' }}>Basic</span>}
       </TableCell>
       <TableCell sx={{ width: '10%' }} align="right">
         {renderStatusButton()}

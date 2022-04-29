@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/questions/SortStatus';
 import {
@@ -26,6 +26,7 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import Question from 'views/pages/questions/Question';
@@ -56,6 +57,7 @@ const Questions = () => {
 
   const questionState = useSelector((state: RootState) => state.question);
   const [data, setData] = React.useState<QuestionType[]>([]);
+  const [search, setSearch] = useState('');
 
   const [filter, setFilter] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -76,10 +78,12 @@ const Questions = () => {
     setFilter({ ...filter, currentPage: page! });
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+  const handleSearch = (searchValue: string) => {
+    setFilter({ ...filter, search: searchValue! });
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -171,10 +175,13 @@ const Questions = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={filter.search}
+                    value={search}
                     placeholder="Search...."
                     size="small"
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      debounceSearch(e.target.value);
+                    }}
                   />
 
                   <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
