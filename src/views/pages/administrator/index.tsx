@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
 // THIRD-PARTY
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Button,
   Fab,
@@ -23,6 +22,7 @@ import {
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
+import { debounce } from 'lodash';
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -86,10 +86,13 @@ const Administrators = () => {
     setAdminFilter({ ...adminFilter, currentPage: page! });
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setAdminFilter({ ...adminFilter, search: newString! });
+  const [search, setSearch] = useState('');
+  const handleSearch = (searchValue: string) => {
+    setAdminFilter({ ...adminFilter, search: searchValue });
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -142,10 +145,13 @@ const Administrators = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={adminFilter.search}
+                    value={search}
                     placeholder="Search...."
                     size="small"
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      debounceSearch(e.target.value);
+                    }}
                   />
 
                   <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>

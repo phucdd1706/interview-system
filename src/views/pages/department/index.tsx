@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
-
+// THIRD-PARTY
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import React, { useEffect, useState, useCallback } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/AddTwoTone';
 // THIRD-PARTY
 import {
   Button,
@@ -21,12 +24,8 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/AddTwoTone';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
 import { useTheme } from '@mui/material/styles';
+import { debounce } from 'lodash';
 
 import MainCard from 'ui-component/cards/MainCard';
 
@@ -71,6 +70,7 @@ const Departments = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
+  const [search, setSearch] = useState('');
   const [data, setData] = useState<Department[]>([]);
   const [depart, setDepart] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -83,10 +83,12 @@ const Departments = () => {
     setDepart({ ...depart, currentPage: page! });
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setDepart({ ...depart, search: newString! });
+  const handleSearch = (searchValue: string) => {
+    setDepart({ ...depart, search: searchValue });
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -139,10 +141,13 @@ const Departments = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={depart.search}
+                    value={search}
                     placeholder="Search...."
                     size="small"
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      debounceSearch(e.target.value);
+                    }}
                   />
 
                   <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
