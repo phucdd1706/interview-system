@@ -12,29 +12,23 @@ import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { delDepartment, getDepartmentList } from 'store/slices/department';
 
-import EditDepartment from './EditDepartment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AlertDepartmentDelete from './AlertDepartmentDelete';
 import { Department, DepartmentFilter } from 'types/department';
+import AlertDelete from 'ui-component/Alert/AlertDelete';
+import AddDepartment from './AddDepartment';
 
 interface Props {
   department: Department;
   index: number;
+  departFilter: DepartmentFilter;
 }
-const initialState: DepartmentFilter = {
-  search: '',
-  status: '',
-  currentPage: 1,
-  limit: 20
-};
 
-const DepartmentList = ({ department, index }: Props) => {
+const DepartmentList = ({ department, index, departFilter }: Props) => {
   const theme = useTheme();
   const departmentState = useSelector((state) => state.department);
 
   const [openModal, setOpenModal] = useState(false);
-  const [filter] = useState(initialState);
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
 
@@ -77,7 +71,7 @@ const DepartmentList = ({ department, index }: Props) => {
           id: department.id,
           callback: (resp) => {
             if (resp?.data?.success) {
-              dispatch(getDepartmentList(filter));
+              dispatch(getDepartmentList(departFilter));
               Notification('success', 'Delete successfully');
             } else {
               Notification('error', resp?.message);
@@ -185,10 +179,15 @@ const DepartmentList = ({ department, index }: Props) => {
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertDepartmentDelete name={department.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertDelete name={department.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditDepartment department={department} open={openDepartmentDrawer} handleDrawerOpen={handleDepartmentDrawerOpen} />
+      <AddDepartment
+        department={department}
+        open={openDepartmentDrawer}
+        handleDrawerOpen={handleDepartmentDrawerOpen}
+        departFilter={departFilter}
+      />
     </>
   );
 };

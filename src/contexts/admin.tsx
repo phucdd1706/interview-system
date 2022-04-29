@@ -1,5 +1,5 @@
 import { QLAdminResponse, QLAdmin } from '../types/manage-admin';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import axiosServices from 'utils/axios';
 
 export enum StatusAdmin {

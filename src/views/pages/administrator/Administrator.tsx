@@ -16,25 +16,19 @@ import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
 import { UserFilter } from 'types/user';
 import { UserProfile } from 'types/user-profile';
 
-import EditAdministrator from 'views/pages/administrator/EditAdministrator';
-import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
+import AlertDelete from 'ui-component/Alert/AlertDelete';
+import AddAdministrator from './AddAdministrator';
 
 interface Props {
   administrator: UserProfile;
   index: number;
+  adminFilter: UserFilter;
 }
-const initialState: UserFilter = {
-  search: '',
-  status: '',
-  currentPage: 1,
-  limit: 20
-};
 
-const Administrator = ({ administrator, index }: Props) => {
+const Administrator = ({ administrator, index, adminFilter }: Props) => {
   const theme = useTheme();
   const administratorState = useSelector((state) => state.user);
 
-  const [filter] = useState(initialState);
   const [openModal, setOpenModal] = useState(false);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
@@ -78,7 +72,7 @@ const Administrator = ({ administrator, index }: Props) => {
           id: administrator.id,
           callback: (resp) => {
             if (resp?.data?.success) {
-              dispatch(getAdministratorList(filter));
+              dispatch(getAdministratorList(adminFilter));
               Notification('success', 'Deleted successfully!');
             } else {
               Notification('error', resp?.message);
@@ -191,10 +185,15 @@ const Administrator = ({ administrator, index }: Props) => {
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertAdministratorDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditAdministrator administrator={administrator} open={openAdministratorDrawer} handleDrawerOpen={handleAdministratorDrawerOpen} />
+      <AddAdministrator
+        administrator={administrator}
+        adminFilter={adminFilter}
+        open={openAdministratorDrawer}
+        handleDrawerOpen={handleAdministratorDrawerOpen}
+      />
     </>
   );
 };
