@@ -237,10 +237,12 @@ const Administrators = () => {
           </TableHead>
           <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
             {data &&
-              data.map((administrator, index) => <Administrator key={administrator.id} administrator={administrator} index={index} />)}
+              data.map((administrator, index) => (
+                <Administrator key={administrator.id} administrator={administrator} index={index} adminFilter={adminFilter} />
+              ))}
           </TableBody>
         </Table>
-        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} adminFilter={adminFilter} />
+        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} adminFilter={adminFilter} administrator={{}} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">

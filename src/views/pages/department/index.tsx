@@ -72,19 +72,19 @@ const Departments = () => {
 
   const [search, setSearch] = useState('');
   const [data, setData] = useState<Department[]>([]);
-  const [depart, setDepart] = useState(initialState);
+  const [departFilter, setDepartFilter] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const openSort = Boolean(anchorEl);
-  const sortLabel = SortStatus.filter((items) => items.value === depart.status);
+  const sortLabel = SortStatus.filter((items) => items.value === departFilter.status);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setDepart({ ...depart, currentPage: page! });
+    setDepartFilter({ ...departFilter, currentPage: page! });
   };
 
   const handleSearch = (searchValue: string) => {
-    setDepart({ ...depart, search: searchValue });
+    setDepartFilter({ ...departFilter, search: searchValue });
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +95,7 @@ const Departments = () => {
   };
 
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-    setDepart({ ...depart, status: index });
+    setDepartFilter({ ...departFilter, status: index });
     setAnchorEl(null);
   };
 
@@ -112,7 +112,7 @@ const Departments = () => {
   };
 
   const getListDepart = async () => {
-    await dispatch(getDepartmentList(depart));
+    await dispatch(getDepartmentList(departFilter));
   };
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const Departments = () => {
   useEffect(() => {
     getListDepart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [depart]);
+  }, [departFilter]);
 
   return (
     <MainCard
@@ -185,7 +185,7 @@ const Departments = () => {
                         <MenuItem
                           sx={{ p: 1.5 }}
                           key={index}
-                          selected={status.value === depart.status}
+                          selected={status.value === departFilter.status}
                           onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
@@ -229,10 +229,13 @@ const Departments = () => {
             </TableRow>
           </TableHead>
           <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((department, index) => <DepartmentList key={department.id} department={department} index={index} />)}
+            {data &&
+              data.map((department, index) => (
+                <DepartmentList key={department.id} department={department} index={index} departFilter={departFilter} />
+              ))}
           </TableBody>
         </Table>
-        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} depart={depart} />
+        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} departFilter={departFilter} department={{}} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">
