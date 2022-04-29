@@ -28,7 +28,6 @@ import { RankType, SelectProps } from 'types/rank';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useState } from 'react';
 import { PutRank } from 'store/slices/rank';
-import { max } from 'date-fns';
 
 interface EditRankProps {
   rank: RankType;
