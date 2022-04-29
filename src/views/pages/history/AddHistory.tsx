@@ -34,6 +34,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { Candidates } from 'types/history';
 import { SelectProps } from 'types/customer';
+import { isPhone, isFullName, isEmail } from 'utils/regexHelper';
 
 interface Props {
   dataEdit: Candidates;
@@ -99,21 +100,28 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().max(50).required('Name is required'),
-    email: yup.string().email('Enter a valid email').max(40).required('Email is required'),
+    name: yup.string().max(2).max(50).matches(isFullName, 'Sorry, only letters (a-z) are allowed ').required('Name is required'),
+    email: yup
+      .string()
+      .matches(
+        isEmail,
+        'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
+      )
+      .email('Please enter a valid email')
+      .max(40)
+      .required('Email is required'),
     phone: yup
       .string()
-      .max(10, 'Enter the correct phone number format')
-      .matches(
-        /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
-        'Enter the correct phone number format'
-      )
+      .max(10, 'Please enter the correct phone number format')
+      .matches(isPhone, 'Please enter the correct phone number format')
       .required('Phone is required'),
     age: yup
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
       .required('Age is required'),
-    time: yup.string().required('Interview time is required')
+    time: yup.string().required('Interview time is required'),
+    address: yup.string().max(255),
+    note: yup.string().max(255)
   });
 
   const formik = useFormik({
@@ -278,6 +286,19 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                     />
                   </Grid>
 
+                  <Grid item xs={12} xl={12}>
+                    <TextField
+                      id="address"
+                      name="address"
+                      value={formik?.values?.address}
+                      label={<span>Address</span>}
+                      fullWidth
+                      onChange={formik.handleChange}
+                      error={(formik?.touched?.address && Boolean(formik?.errors?.address)) || errors?.address}
+                      helperText={(formik?.touched?.address && formik?.errors?.address) || errors?.address}
+                    />
+                  </Grid>
+
                   <Grid item xs={12}>
                     <DateTimePicker
                       renderInput={(props) => <TextField fullWidth {...props} />}
@@ -305,6 +326,8 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
                   <Grid item xs={12} xl={12}>
                     <TextField
+                      minRows={2}
+                      rows={2}
                       id="note"
                       name="note"
                       value={formik?.values?.note}
@@ -313,19 +336,6 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                       onChange={formik.handleChange}
                       error={(formik?.touched?.note && Boolean(formik?.errors?.note)) || errors?.note}
                       helperText={(formik?.touched?.note && formik?.errors?.note) || errors?.note}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} xl={12}>
-                    <TextField
-                      id="address"
-                      name="address"
-                      value={formik?.values?.address}
-                      label={<span>Address</span>}
-                      fullWidth
-                      onChange={formik.handleChange}
-                      error={(formik?.touched?.address && Boolean(formik?.errors?.address)) || errors?.address}
-                      helperText={(formik?.touched?.address && formik?.errors?.address) || errors?.address}
                     />
                   </Grid>
 
