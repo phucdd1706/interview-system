@@ -157,16 +157,8 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -180,6 +172,14 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   >
                     Add Administrator
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>

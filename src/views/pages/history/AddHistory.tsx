@@ -103,7 +103,11 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     email: yup.string().email('Enter a valid email').max(40).required('Email is required'),
     phone: yup
       .string()
-      .matches(/^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i, 'Enter a valid phone')
+      .max(10, 'Enter the correct phone number format')
+      .matches(
+        /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+        'Enter the correct phone number format'
+      )
       .required('Phone is required'),
     age: yup
       .string()
@@ -117,7 +121,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     initialValues: {
       name: dataEdit?.name,
       email: dataEdit?.email,
-      phone: dataEdit?.phone,
+      phone: dataEdit?.phone || '',
       age: dataEdit?.age,
       note: dataEdit?.note || '',
       address: dataEdit?.address || '',

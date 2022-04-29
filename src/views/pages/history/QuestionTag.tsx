@@ -21,7 +21,6 @@ const QuestionTag = ({ value, index, handleStatusQuestion }: Props) => {
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
         label="Evaluate"
-        // @ts-ignore
         value={value?.status === null ? 2 : value?.status}
         onChange={(e) => handleStatusQuestion(value?.id, Number(e.target.value))}
       >

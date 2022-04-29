@@ -17,7 +17,7 @@ export interface SearchValues {
 }
 
 export interface Payload {
-  id?: string | number;
+  id?: string | number | undefined;
   params?: any;
   callback?: (response: any) => void;
 }

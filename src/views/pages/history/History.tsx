@@ -125,7 +125,7 @@ const History = ({ history, index, getList }: Props) => {
       <TableRow hover key={history?.id}>
         <TableCell sx={{ width: '5%' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{index + 20 * (historyState.currentPage - 1) + 1}</Typography>
+            <Typography variant="body2">{index + 20 * (historyState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: '20%' }} component="th" scope="row">

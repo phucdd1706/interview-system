@@ -183,8 +183,8 @@ const Index = () => {
               <Grid item>
                 <Pagination
                   size={matchDownSM ? 'small' : 'medium'}
-                  count={languageState.pageCount}
-                  page={languageState.currentPage}
+                  count={languageState?.pageCount}
+                  page={languageState?.currentPage}
                   color="primary"
                   onChange={handleTableChange}
                 />

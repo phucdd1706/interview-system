@@ -20,12 +20,12 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
-// import Profile from 'assets/images/logo/profile.jpg';
-import ProfileFemale from 'assets/images/logo/profile-female.jpg';
+import Profile from 'assets/images/logo/profile.jpg';
+// import ProfileFemale from 'assets/images/logo/profile-female.jpg';
 
 // PROJECT IMPORT
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { Candidates } from 'types/history';
+import { Candidates, Question } from 'types/history';
 import QuestionTag from 'views/pages/history/QuestionTag';
 import { QuestionType } from 'types/question';
 import { gridSpacing } from 'store/constant';
@@ -45,7 +45,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    const dataQuestion = dataCandidate?.candidate_question?.map((item: any) => ({
+    const dataQuestion = dataCandidate?.candidate_question?.map((item: Question) => ({
       candidate_id: item?.candidate_id,
       question_content: item?.question?.question_content,
       type: item?.question?.type,
@@ -163,7 +163,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
               {!matchDownSM && (
                 <Grid item xs={2}>
                   <Box sx={{ border: '1px solid #000', m: 1, width: '80%', height: '100%' }}>
-                    <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={ProfileFemale} alt="profile" />
+                    <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={Profile} alt="profile" />
                   </Box>
                 </Grid>
               )}
@@ -203,7 +203,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
                     <Typography variant="h4">Interview Time:</Typography>
                   </Grid>
                   <Grid item xs={7} xl={10}>
-                    {moment(dataCandidate.time).format('DD/MM/YYYY HH:mm')}
+                    {moment(dataCandidate?.time).format('DD/MM/YYYY HH:mm')}
                   </Grid>
                 </Grid>
 
@@ -248,7 +248,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
                         <QuestionTag
                           index={index}
                           value={question}
-                          key={`${question.id}_${index}`}
+                          key={`${question?.id}_${index}`}
                           handleStatusQuestion={handleStatusQuestion}
                         />
                       ))}
