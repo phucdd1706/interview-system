@@ -1,53 +1,75 @@
-// THIRD-PARTY
 import React, { useState } from 'react';
+// THIRD-PARTY
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+
 import moment from 'moment';
 
 // PROJECT IMPORTS
-import { UserProfile } from 'types/user-profile';
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
-import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import EditAdministrator from 'views/pages/administrator/EditAdministrator';
 import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
-import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
+
 import { UserFilter } from 'types/user';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { UserProfile } from 'types/user-profile';
+
+import EditAdministrator from 'views/pages/administrator/EditAdministrator';
+import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
 
 interface Props {
   administrator: UserProfile;
   index: number;
 }
+const initialState: UserFilter = {
+  search: '',
+  status: '',
+  currentPage: 1,
+  limit: 20
+};
 
 const Administrator = ({ administrator, index }: Props) => {
   const theme = useTheme();
   const administratorState = useSelector((state) => state.user);
+
+  const [filter] = useState(initialState);
+  const [openModal, setOpenModal] = useState(false);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+    setAnchorEl(event?.currentTarget);
+  };
+
   const handleAdministratorDrawerOpen = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
+  };
+
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const editAdministrator = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
-  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-    setAnchorEl(event?.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const initialState: UserFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter] = useState(initialState);
-
-  const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
@@ -66,21 +88,6 @@ const Administrator = ({ administrator, index }: Props) => {
       );
     }
   };
-  const Notification = (color: string, message: string) => {
-    dispatch(
-      openSnackbar({
-        open: true,
-        message,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        variant: 'alert',
-        alert: {
-          color
-        },
-        close: true
-      })
-    );
-  };
-
   return (
     <>
       <TableRow hover key={index}>

@@ -25,6 +25,7 @@ const LanguageFilters = (props: any) => {
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const languageLabel = dataLanguage?.filter((items) => items.id === filters.language_id);

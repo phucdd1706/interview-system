@@ -27,6 +27,7 @@ const DepartmentSelect = ({ change, values, fullWidth, size, formik }: Props) =>
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ITEM_HEIGHT = 40;

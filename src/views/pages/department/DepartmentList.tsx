@@ -1,31 +1,51 @@
-// THIRD-PARTY
 import React, { useState } from 'react';
 
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography } from '@mui/material';
+// THIRD-PARTY
 import { useTheme } from '@mui/material/styles';
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography } from '@mui/material';
+
+import moment from 'moment';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
-
 import { dispatch, useSelector } from 'store';
-
 import { openSnackbar } from 'store/slices/snackbar';
-import { Department, DepartmentFilter } from 'types/department';
 import { delDepartment, getDepartmentList } from 'store/slices/department';
-import AlertDepartmentDelete from './AlertDepartmentDelete';
+
 import EditDepartment from './EditDepartment';
-import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AlertDepartmentDelete from './AlertDepartmentDelete';
+import { Department, DepartmentFilter } from 'types/department';
 
 interface Props {
   department: Department;
   index: number;
 }
+const initialState: DepartmentFilter = {
+  search: '',
+  status: '',
+  currentPage: 1,
+  limit: 20
+};
+
 const DepartmentList = ({ department, index }: Props) => {
-  const departmentState = useSelector((state) => state.department);
   const theme = useTheme();
+  const departmentState = useSelector((state) => state.department);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [filter] = useState(initialState);
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+    setAnchorEl(event?.currentTarget);
+  };
+
   const handleDepartmentDrawerOpen = () => {
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
@@ -33,22 +53,7 @@ const DepartmentList = ({ department, index }: Props) => {
   const editDepartment = () => {
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
-  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-    setAnchorEl(event?.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const [openModal, setOpenModal] = useState(false);
-  const initialState: DepartmentFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter] = useState(initialState);
   const Notification = (color: string, message: string) => {
     dispatch(
       openSnackbar({
@@ -63,6 +68,7 @@ const DepartmentList = ({ department, index }: Props) => {
       })
     );
   };
+
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
@@ -108,6 +114,7 @@ const DepartmentList = ({ department, index }: Props) => {
         </TableCell>
         <TableCell>{department.code}</TableCell>
         <TableCell>{moment(department.created_at).format('DD/MM/YYYY')}</TableCell>
+        <TableCell>{moment(department.update_at).format('DD/MM/YYYY')}</TableCell>
         <TableCell>
           {department.status === 0 && (
             <Chip

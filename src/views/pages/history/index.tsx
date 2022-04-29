@@ -76,10 +76,12 @@ const Index = () => {
 
   useEffect(() => {
     getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const getList = () => {

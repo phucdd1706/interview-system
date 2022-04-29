@@ -81,7 +81,7 @@ const Nofity: Props[] = [
 ];
 
 const handleTime = (passTime: number) => {
-  const durations = Date.now() - passTime;
+  // const durations = Date.now() - passTime;
   const seconds = {
     title: 'second',
     value: Math.floor((Date.now() - passTime) / 1000)

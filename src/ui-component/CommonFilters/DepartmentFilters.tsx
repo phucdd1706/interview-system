@@ -24,6 +24,7 @@ const DepartmentFilters = (props: any) => {
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const departmentLabel = dataDepartment?.filter((items) => items.id === filters.department_id);
