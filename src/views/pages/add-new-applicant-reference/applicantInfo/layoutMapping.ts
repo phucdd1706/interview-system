@@ -39,8 +39,7 @@ const personalDetail = [
       {
         key: 'address',
         label: 'Address',
-        type: 'text',
-        required: true
+        type: 'text'
       }
     ]
   },

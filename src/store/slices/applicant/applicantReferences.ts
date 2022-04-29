@@ -5,6 +5,7 @@ import { axiosGet, axiosPost } from 'utils/helpers/axios';
 import { QuestionType } from 'types/question';
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
+import { alertError } from 'utils/helpers/axios/errorAlert';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
