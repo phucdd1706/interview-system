@@ -235,6 +235,7 @@ const Administrators = () => {
           <Grid container justifyContent="space-between" spacing={gridSpacing}>
             <Grid item>
               <Pagination
+                size={matchDownSM ? 'small' : 'medium'}
                 count={administratorState.pageCount}
                 page={administratorState.currentPage}
                 onChange={handleChange}

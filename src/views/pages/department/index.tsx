@@ -230,7 +230,13 @@ const Departments = () => {
         <Grid item xs={12} sx={{ p: 3 }}>
           <Grid container justifyContent="space-between" spacing={gridSpacing}>
             <Grid item>
-              <Pagination count={departmentState.pageCount} page={departmentState.currentPage} onChange={handleChange} color="primary" />
+              <Pagination
+                size={matchDownSM ? 'small' : 'medium'}
+                count={departmentState.pageCount}
+                page={departmentState.currentPage}
+                onChange={handleChange}
+                color="primary"
+              />
             </Grid>
           </Grid>
         </Grid>

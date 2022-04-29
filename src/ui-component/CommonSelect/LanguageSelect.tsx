@@ -7,16 +7,17 @@ import { Languages } from 'types/language';
 import { getLanguagesAll } from 'store/slices/language';
 import { useDispatch } from 'store';
 
-const LanguageSelect = (props: any) => {
-  const dispatch = useDispatch();
-  const { change, values, size, formik, fullWidth } = props;
-  const [data, setData] = useState<Languages[]>([]);
+interface Props {
+  values: number | string | undefined;
+  fullWidth: boolean;
+  size: 'small' | 'medium' | undefined;
+  change: (e: any) => void;
+  formik: any;
+}
 
-  // const initialRankState: RankFilter = {
-  //   search: '',
-  //   status: '1',
-  //   currentPage: 1
-  // };
+const LanguageSelect = ({ change, values, size, formik, fullWidth }: Props) => {
+  const dispatch = useDispatch();
+  const [data, setData] = useState<Languages[]>([]);
 
   useEffect(() => {
     dispatch(
