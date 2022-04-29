@@ -21,7 +21,7 @@ const QuestionTag = ({ value, interviewing = false, index }: Props) => {
     <Paper className={classes.itemHovered} variant="outlined" sx={{ padding: '1em' }}>
       <Stack direction="row" alignItems="center" spacing={2}>
         <Typography variant="body1" component="span" sx={{ flexGrow: 1 }}>
-          Câu hỏi {index + 1}: {value.question_content}?
+          Câu hỏi : {value.question_content}?
         </Typography>
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>

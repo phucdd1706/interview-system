@@ -11,7 +11,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AddHistory from 'views/pages/history/AddHistory';
 import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
-import QuestionModal from 'views/pages/history/QuestionModal';
+import QuestionModal from 'views/pages/history/Interview/QuestionModal';
 
 interface Props {
   history: Candidates;
@@ -70,7 +70,7 @@ const History = ({ history, index, getList }: Props) => {
             setVisibleQuestionModal(!visibleQuestionModal);
           }}
         >
-          <EventAvailableIcon fontSize="small" sx={{ color: '#ffc107', mr: 1 }} />
+          <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
           {history?.status ? 'Edit Result' : 'Interview'}
         </MenuItem>
 
