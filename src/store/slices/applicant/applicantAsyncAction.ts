@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { applicantAPI, setApplicantInfo, setInterviewData } from './applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
 import { QuestionType } from 'types/question';
+import { alertError } from 'utils/helpers/axios/errorAlert';
 
 export const getQuestionsThunk = createAsyncThunk(
   'applicantReferences/getQuestionsThunk',
@@ -16,9 +17,13 @@ export const getInterviewQuestionThunk = createAsyncThunk(
   'applicant/getInterviewQuestionThunk',
   async (params: ApplicantInfo, thunkAPI) => {
     const data = await applicantAPI.getInterviewQuestionThunk({ data: params.applyPosition });
-    console.log(params.applyPosition);
-    console.log('data', data.success);
-    return data && dispatch(setApplicantInfo({ applicant: params, questions: data.success }));
+    const hasQuestions =
+      data &&
+      data.success.some((item) => item.questions.base.length > 0 || item.questions.focus.length > 0 || item.questions.advanced.length > 0);
+    if (hasQuestions) {
+      return data && dispatch(setApplicantInfo({ applicant: params, questions: data.success }));
+    }
+    return alertError('No questions found');
   }
 );
 

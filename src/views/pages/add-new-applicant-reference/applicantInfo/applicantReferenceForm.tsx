@@ -161,8 +161,8 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                         setFieldValue(
                           'applyPosition',
                           values.applyPosition.filter(
-                            (position: { rank_advanced_id: string; language_id: string; rank_id: string }) =>
-                              position.language_id !== item.language_id
+                            (position: { rank_advanced_id: string; language_id: string; rank_id: string }, positionIndex: number) =>
+                              positionIndex !== index
                           )
                         );
                       }}

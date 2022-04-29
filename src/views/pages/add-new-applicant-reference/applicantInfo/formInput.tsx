@@ -14,6 +14,7 @@ const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, r
       onChange={handleChange}
       label={label}
       readOnly={readOnly}
+      placeholder={label}
     />
     {touched && errors && !readOnly && (
       <FormHelperText error id="standard-weight-helper-text-last-name">

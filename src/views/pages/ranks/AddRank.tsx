@@ -23,7 +23,7 @@ interface AddRankProps {
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required')
+  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
 });
 
 const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
@@ -102,16 +102,8 @@ const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -125,6 +117,14 @@ const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
                   >
                     Add Rank
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>

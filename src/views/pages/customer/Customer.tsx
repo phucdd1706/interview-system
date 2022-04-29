@@ -1,6 +1,8 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
 import moment from 'moment';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // PROJECT IMPORTS
 import { UserProfile } from 'types/user-profile';
@@ -157,6 +159,7 @@ const Customer = ({ customer, index }: Props) => {
                 editCustomer();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -165,6 +168,7 @@ const Customer = ({ customer, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>

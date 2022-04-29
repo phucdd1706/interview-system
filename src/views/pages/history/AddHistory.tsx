@@ -12,7 +12,11 @@ import {
   Grid,
   Dialog,
   FormHelperText,
-  useMediaQuery
+  useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -29,6 +33,7 @@ import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { Candidates } from 'types/history';
+import { SelectProps } from 'types/customer';
 
 interface Props {
   dataEdit: Candidates;
@@ -95,8 +100,15 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
   const validationSchema = yup.object().shape({
     name: yup.string().max(50).required('Name is required'),
-    email: yup.string().email('Must be a valid email').max(50).required('Email is required'),
-    phone: yup.string().max(10).required('Phone is required'),
+    email: yup.string().email('Enter a valid email').max(40).required('Email is required'),
+    phone: yup
+      .string()
+      .max(10, 'Enter the correct phone number format')
+      .matches(
+        /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
+        'Enter the correct phone number format'
+      )
+      .required('Phone is required'),
     age: yup
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
@@ -109,7 +121,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     initialValues: {
       name: dataEdit?.name,
       email: dataEdit?.email,
-      phone: dataEdit?.phone,
+      phone: dataEdit?.phone || '',
       age: dataEdit?.age,
       note: dataEdit?.note || '',
       address: dataEdit?.address || '',
@@ -129,6 +141,17 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       formik.resetForm();
     }
   };
+
+  const Status: SelectProps[] = [
+    {
+      value: 0,
+      label: 'InProgress'
+    },
+    {
+      value: 1,
+      label: 'Complete'
+    }
+  ];
 
   return (
     <Dialog
@@ -225,7 +248,6 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                     <TextField
                       id="phone"
                       name="phone"
-                      type="number"
                       value={formik?.values?.phone}
                       label={
                         <span>
@@ -306,6 +328,31 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                       helperText={(formik?.touched?.address && formik?.errors?.address) || errors?.address}
                     />
                   </Grid>
+
+                  {dataEdit.status === 1 && (
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>
+                          <span style={{ color: '#f44336' }}>*</span> Status
+                        </InputLabel>
+                        <Select
+                          id="status"
+                          name="status"
+                          label="Status"
+                          displayEmpty
+                          value={formik?.values?.status}
+                          onChange={formik.handleChange}
+                          inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                          {Status.map((status: SelectProps, index: number) => (
+                            <MenuItem key={index} value={status.value}>
+                              {status.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
 
                   <Grid item xs={12}>
                     <AnimateButton>

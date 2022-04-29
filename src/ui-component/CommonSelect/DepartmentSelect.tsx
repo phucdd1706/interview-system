@@ -7,9 +7,16 @@ import { Department } from 'types/department';
 import { getDepartmentsAll } from 'store/slices/department';
 import { useDispatch } from 'store';
 
-const DepartmentSelect = (props: any) => {
+interface Props {
+  values: number | string | undefined;
+  fullWidth: boolean;
+  size: 'small' | 'medium' | undefined;
+  change: (e: any) => void;
+  formik: any;
+}
+
+const DepartmentSelect = ({ change, values, fullWidth, size, formik }: Props) => {
   const dispatch = useDispatch();
-  const { change, values, size, formik } = props;
   const [data, setData] = useState<Department[]>([]);
 
   useEffect(() => {

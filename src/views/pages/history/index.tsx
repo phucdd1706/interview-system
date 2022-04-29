@@ -196,9 +196,10 @@ const Index = () => {
               <TableRow>
                 <TableCell sx={{ pr: 3, width: '5%' }}>#</TableCell>
                 <TableCell sx={{ width: '20%' }}>Name</TableCell>
-                <TableCell sx={{ width: '25%' }}>Email</TableCell>
-                <TableCell sx={{ width: '15%' }}>Age</TableCell>
-                <TableCell sx={{ width: '15%' }}>Interview Time</TableCell>
+                <TableCell sx={{ width: '20%' }}>Email</TableCell>
+                <TableCell sx={{ width: '10%' }}>Age</TableCell>
+                <TableCell sx={{ width: '12.5%' }}>Interview Time</TableCell>
+                <TableCell sx={{ width: '12.5%' }}>Complete Time</TableCell>
                 <TableCell sx={{ width: '10%' }}>Status</TableCell>
                 <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
@@ -224,8 +225,8 @@ const Index = () => {
               <Grid item>
                 <Pagination
                   size={matchDownSM ? 'small' : 'medium'}
-                  count={historyState.pageCount}
-                  page={historyState.currentPage}
+                  count={historyState?.pageCount}
+                  page={historyState?.currentPage}
                   color="primary"
                   onChange={handleTableChange}
                 />
