@@ -80,6 +80,7 @@ const Ranks = () => {
   };
   const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const filterData = async () => {
     await dispatch(getRanksList(filter));
   };
