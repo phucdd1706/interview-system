@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TextField,
   Grid,
@@ -20,6 +20,7 @@ import {
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -45,6 +46,7 @@ const Index = () => {
   const [language, setLanguage] = useState<Languages[]>([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorElSort, setAnchorElSort] = useState(null);
+  const [search, setSearch] = useState('');
 
   const [filters, setFilters] = useState<SearchValues>({
     search: '',
@@ -82,10 +84,11 @@ const Index = () => {
     setFilters({ ...filters, currentPage: pageTable! });
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilters({ ...filters, search: newString! });
+  const handleSearch = (searchValue: string) => {
+    setFilters({ ...filters, search: searchValue! });
   };
+
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleSort = (event: any) => {
     setAnchorElSort(event.currentTarget);
@@ -118,10 +121,13 @@ const Index = () => {
                     </InputAdornment>
                   )
                 }}
-                value={filters.search}
+                value={search}
                 placeholder="Search...."
                 size="small"
-                onChange={handleSearch}
+                onChange={(e) => {
+                  debounceSearch(e.target.value);
+                  setSearch(e.target.value);
+                }}
               />
 
               <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>

@@ -17,13 +17,13 @@ export interface Candidates {
 }
 
 export interface Question {
-  candidate_id: number;
-  status: string | number;
-  id: number;
-  created_at: string;
-  update_at: string;
-  question_id: number;
-  question: QuestionType;
+  id?: number;
+  candidate_id?: number;
+  status?: string | number;
+  created_at?: string;
+  update_at?: string;
+  question_id?: number;
+  question?: QuestionType;
 }
 
 export interface SearchValues {

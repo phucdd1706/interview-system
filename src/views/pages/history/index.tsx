@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TextField,
   Grid,
@@ -21,6 +21,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -32,6 +33,28 @@ import { gridSpacing } from '../../../store/constant';
 import 'assets/scss/style.scss';
 import NoDataImg from 'assets/images/logo/nodata.png';
 
+const initialState: SearchValues = {
+  search: '',
+  status: '',
+  currentPage: 1,
+  limit: 20
+};
+
+const SortStatus: Status[] = [
+  {
+    value: '',
+    label: 'All'
+  },
+  {
+    value: 0,
+    label: 'InProgress'
+  },
+  {
+    value: 1,
+    label: 'Complete'
+  }
+];
+
 const Index = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -42,32 +65,10 @@ const Index = () => {
   const historyState = useSelector((state: RootState) => state.history);
 
   const [candidate, setCandidate] = useState<Candidates[]>([]);
+  const [filters, setFilters] = useState(initialState);
+  const [search, setSearch] = useState('');
   const [anchorElSort, setAnchorElSort] = useState(null);
   const openSort = Boolean(anchorElSort);
-
-  const initialState: SearchValues = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-
-  const SortStatus: Status[] = [
-    {
-      value: '',
-      label: 'All'
-    },
-    {
-      value: 0,
-      label: 'InProgress'
-    },
-    {
-      value: 1,
-      label: 'Complete'
-    }
-  ];
-
-  const [filters, setFilters] = useState(initialState);
 
   useEffect(() => {
     setCandidate(historyState.history);
@@ -94,10 +95,11 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilters({ ...filters, search: newString! });
+  const handleSearch = (searchValue: string) => {
+    setFilters({ ...filters, search: searchValue! });
   };
+
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleSort = (event: any) => {
     setAnchorElSort(event.currentTarget);
@@ -125,10 +127,13 @@ const Index = () => {
                       </InputAdornment>
                     )
                   }}
-                  value={filters.search}
+                  value={search}
                   placeholder="Search...."
                   size="small"
-                  onChange={handleSearch}
+                  onChange={(e) => {
+                    debounceSearch(e.target.value);
+                    setSearch(e.target.value);
+                  }}
                 />
 
                 <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>

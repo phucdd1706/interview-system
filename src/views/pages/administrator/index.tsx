@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Button,
   Fab,
@@ -23,6 +23,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -72,10 +73,12 @@ const Administrators = () => {
     limit: 20
   };
   const [filter, setFilter] = useState(initialState);
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+  const [search, setSearch] = useState('');
+  const handleSearch = (searchValue: string) => {
+    setFilter({ ...filter, search: searchValue! });
   };
+
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openSort = Boolean(anchorEl);
@@ -130,10 +133,13 @@ const Administrators = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={filter.search}
+                    value={search}
                     placeholder="Search...."
                     size="small"
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      debounceSearch(e.target.value);
+                      setSearch(e.target.value);
+                    }}
                   />
 
                   <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>

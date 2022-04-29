@@ -2,7 +2,7 @@
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import SortStatus from 'views/pages/ranks/SortStatus';
 import {
@@ -26,6 +26,7 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import Rank from 'views/pages/ranks/Rank';
@@ -44,6 +45,7 @@ const Ranks = () => {
   const dispatch = useDispatch();
   const [data, setData] = React.useState<RankType[]>([]);
   const rankState = useSelector((state) => state.rank);
+  const [search, setSearch] = useState('');
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
     setFilter({ ...filter, currentPage: page! });
@@ -55,10 +57,12 @@ const Ranks = () => {
     currentPage: 1
   };
   const [filter, setFilter] = useState(initialState);
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+
+  const handleSearch = (searchValue: string) => {
+    setFilter({ ...filter, search: searchValue! });
   };
+
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openSort = Boolean(anchorEl);
@@ -113,10 +117,13 @@ const Ranks = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={filter.search}
+                    value={search}
                     placeholder="Search...."
                     size="small"
-                    onChange={handleSearch}
+                    onChange={(e) => {
+                      debounceSearch(e.target.value);
+                      setSearch(e.target.value);
+                    }}
                   />
 
                   <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>
