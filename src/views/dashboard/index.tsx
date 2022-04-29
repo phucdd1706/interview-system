@@ -6,17 +6,24 @@ import MainCard from 'ui-component/cards/MainCard';
 
 type alertCase = 'add' | 'modify' | 'delete';
 interface Props {
-  alertCase: alertCase;
-  department: string;
-  name: string;
-  time: number;
-  des?: string; // for case modify
-  to?: string; // for case add
-  from?: string; // for case delete
+  id: string | number;
+  alertCase: alertCase; // dựa theo method của request post=add, put=modify, delete=delete
+  department: string; // language || question || adminstrator user ...
+  name: string; // tên của đối tượng
+  time: number; // thời gian update
+  modified?: string; // for case modify ''
+  to?: string; // for case add ví dụ: 'ranks list' 'applicant list'
+  from?: string; // for case delete ví dụ: 'rank list' 'applicant list'
 }
+
+// {department} {name} has been added {to && `to ${to}`}
+// {department} {name} has been modified {modified && modified}
+// {department} {name} has been deleted {from && `from ${from}`}
+// Applicant Nguyen Van Minh has been added to applicant list
 
 const Nofity: Props[] = [
   {
+    id: 0,
     alertCase: 'add',
     department: 'Applicant',
     name: 'John Doe',
@@ -24,13 +31,15 @@ const Nofity: Props[] = [
     to: 'applicant list'
   },
   {
+    id: 1,
     alertCase: 'modify',
     department: 'Applicant',
     name: 'John Doe',
     time: 1651132802216,
-    des: 'interview status'
+    modified: 'interview status'
   },
   {
+    id: 2,
     alertCase: 'delete',
     department: 'Applicant',
     name: 'John Doe',
@@ -38,6 +47,7 @@ const Nofity: Props[] = [
     from: 'applicant list'
   },
   {
+    id: 3,
     alertCase: 'add',
     department: 'Rank',
     name: 'Senior1',
@@ -45,6 +55,7 @@ const Nofity: Props[] = [
     to: 'rank list'
   },
   {
+    id: 4,
     alertCase: 'add',
     department: 'Rank',
     name: 'Senior1',
@@ -52,6 +63,7 @@ const Nofity: Props[] = [
     to: 'rank list'
   },
   {
+    id: 5,
     alertCase: 'add',
     department: 'Rank',
     name: 'Senior2',
@@ -59,6 +71,7 @@ const Nofity: Props[] = [
     to: 'rank list'
   },
   {
+    id: 6,
     alertCase: 'delete',
     department: 'Customer',
     name: 'John Doe',
@@ -115,7 +128,7 @@ const useStyles = makeStyles({
   }
 });
 
-const NotificationTag = ({ alertCase, department, name, time, des, from, to }: Props) => {
+const NotificationTag = ({ alertCase, department, name, time, modified, from, to, id }: Props) => {
   const classes = useStyles({ alertCase });
   switch (alertCase) {
     case 'add':
@@ -131,7 +144,7 @@ const NotificationTag = ({ alertCase, department, name, time, des, from, to }: P
       return (
         <Stack className={classes.root} direction="row" justifyContent="space-between" spacing={2} padding={2} margin={1}>
           <Typography variant="body1">
-            {department} <span className={classes.textFocus}>{name}</span> has been modified {des}
+            {department} <span className={classes.textFocus}>{name}</span> has been modified {modified}
           </Typography>
           <Typography variant="body2">{handleTime(time)}</Typography>
         </Stack>
