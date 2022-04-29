@@ -4,7 +4,6 @@ import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stac
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { Link } from 'react-router-dom';
 
 // PROJECT IMPORTS
 import AddHistory from 'views/pages/history/AddHistory';

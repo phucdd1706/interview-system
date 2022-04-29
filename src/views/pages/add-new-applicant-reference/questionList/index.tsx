@@ -3,14 +3,13 @@ import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 // PROJECT IMPORTS
-import QuestionTag from './questionTag';
 import QuestionStack from './questionStack';
 import { getQuestionsThunk } from 'store/slices/applicant/applicantAsyncAction';
-import { deleteInterviewQuestions, addInterviewQuestions } from 'store/slices/applicant/applicantReferences';
+// import { deleteInterviewQuestions, addInterviewQuestions } from 'store/slices/applicant/applicantReferences';
 import { useDispatch } from 'store';
 
 // TYPE IMPORTS
-import { QuestionType } from 'types/question';
+// import { QuestionType } from 'types/question';
 import { QuestionStackInterface } from 'types/interviewQuestion';
 
 interface Props {
@@ -19,23 +18,24 @@ interface Props {
 }
 
 const QuestionList = ({ questionList, interviewing }: Props) => {
-  const [searchQuestion, setSearchQuestion] = useState({
+  const [searchQuestion] = useState({
     rank_id: 0,
     language_id: 0
   });
   const dispatch = useDispatch();
-  const deleteQuestion = (questionType: string, id: number) => {
-    dispatch(deleteInterviewQuestions({ questionType, id }));
-  };
-  const addQuestion = (questionType: string, languageT: string, question: QuestionType) => {
-    dispatch(addInterviewQuestions({ questionType, language: languageT, question }));
-  };
+  // const deleteQuestion = (questionType: string, id: number) => {
+  //   dispatch(deleteInterviewQuestions({ questionType, id }));
+  // };
+  // const addQuestion = (questionType: string, languageT: string, question: QuestionType) => {
+  //   dispatch(addInterviewQuestions({ questionType, language: languageT, question }));
+  // };
   const getQuestions = (language_id: number, rank_id: number) => {
     dispatch(getQuestionsThunk({ language_id, rank_id }));
   };
 
   useEffect(() => {
     searchQuestion.language_id && searchQuestion.rank_id && getQuestions(searchQuestion.language_id, searchQuestion.rank_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuestion]);
 
   return (
