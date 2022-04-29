@@ -101,6 +101,7 @@ const Index = () => {
     setFilters({ ...filters, search: searchValue! });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleSort = (event: any) => {
@@ -133,8 +134,8 @@ const Index = () => {
                   placeholder="Search...."
                   size="small"
                   onChange={(e) => {
-                    debounceSearch(e.target.value);
                     setSearch(e.target.value);
+                    debounceSearch(e.target.value);
                   }}
                 />
 

@@ -83,11 +83,11 @@ const Departments = () => {
     setDepart({ ...depart, currentPage: page! });
   };
 
-  const [filter, setFilter] = useState(initialState);
   const handleSearch = (searchValue: string) => {
-    setFilter({ ...filter, search: searchValue! });
+    setDepart({ ...depart, search: searchValue });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
@@ -145,8 +145,8 @@ const Departments = () => {
                     placeholder="Search...."
                     size="small"
                     onChange={(e) => {
-                      debounceSearch(e.target.value);
                       setSearch(e.target.value);
+                      debounceSearch(e.target.value);
                     }}
                   />
 
