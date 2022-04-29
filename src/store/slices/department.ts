@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { Department, DepartmentFilter, Payload } from 'types/department';
+import { DepartmentFilter, Payload } from 'types/department';
 
 export const DEPARTMENT_URL = {
   getDepartmen: `${process.env.REACT_APP_API_URL}/v1/operator/department`,

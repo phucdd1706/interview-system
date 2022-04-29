@@ -31,6 +31,7 @@ const RankFilters = (props: any) => {
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const rankLabel = dataRank?.filter((items) => items.id === filters.rank_id);

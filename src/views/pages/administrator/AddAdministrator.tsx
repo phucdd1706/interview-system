@@ -1,9 +1,5 @@
+import React, { useState } from 'react';
 // THIRD-PARTY
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import * as yup from 'yup';
 import {
   Box,
   Button,
@@ -18,21 +14,30 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import AnimateButton from 'ui-component/extended/AnimateButton';
+
+import moment from 'moment';
+
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 
 // PROJECT IMPORTS
-import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { Administrator, SelectProps, UserFilter } from 'types/user';
 import { addAdministrator, getAdministratorList } from 'store/slices/user';
-import { useState } from 'react';
-import moment from 'moment';
+
+import { Administrator, SelectProps, UserFilter } from 'types/user';
 
 interface Props {
   open: boolean;
-  filter: UserFilter;
+  adminFilter: UserFilter;
   handleDrawerOpen: () => void;
 }
 
@@ -48,8 +53,8 @@ const Gender: SelectProps[] = [
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  username: yup.string().required('Username is required'),
+  name: yup.string().max(255, 'Maximum 255 characters').required('Name is required'),
+  username: yup.string().max(255, 'Maximum 255 characters').required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   password: yup.string().required('Password is required'),
   password_confirmation: yup
@@ -58,17 +63,17 @@ const validationSchema = yup.object({
     .required('Password_confirmation is required'),
   phone: yup
     .string()
-    .matches(
-      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
-      'Enter the correct format phone'
-    )
+    .min(10, 'Minimum 10 characters ')
+    .max(10, 'Maximum 10 characters ')
+    .matches(/^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i, 'Enter a valid phone')
     .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
+const AddAdministrator = ({ open, handleDrawerOpen, adminFilter }: Props) => {
   const [errors, setErrors] = useState<any>({});
+
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
@@ -76,39 +81,32 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
       formik.resetForm();
     }
   };
+
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
   const addAdmin = (values: Administrator) => {
     dispatch(
       addAdministrator({
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {
-            dispatch(getAdministratorList(filter));
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Submit Success',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            dispatch(getAdministratorList(adminFilter));
+            Notification('success', 'Add administrator successfully!');
             changeModal('close');
           } else {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: resp?.message,
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'error'
-                },
-                close: true
-              })
-            );
+            Notification('error', resp?.message);
             setErrors(resp?.errors);
           }
         }
@@ -157,16 +155,8 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -180,6 +170,14 @@ const AddAdministrator = ({ open, handleDrawerOpen, filter }: Props) => {
                   >
                     Add Administrator
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>

@@ -86,7 +86,8 @@ const Ranks = () => {
 
   React.useEffect(() => {
     filterData();
-  }, [filter, filterData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const handleDrawerOpen = () => {
@@ -200,7 +201,13 @@ const Ranks = () => {
       <Grid item xs={12} sx={{ p: 3 }}>
         <Grid container justifyContent="space-between" spacing={gridSpacing}>
           <Grid item>
-            <Pagination count={rankState.pageCount} page={rankState.currentPage} onChange={handleChange} color="primary" />
+            <Pagination
+              size={matchDownSM ? 'small' : 'medium'}
+              count={rankState.pageCount}
+              page={rankState.currentPage}
+              onChange={handleChange}
+              color="primary"
+            />
           </Grid>
         </Grid>
       </Grid>

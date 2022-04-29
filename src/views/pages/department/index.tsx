@@ -1,8 +1,6 @@
-// THIRD-PARTY
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React, { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/AddTwoTone';
+
+// THIRD-PARTY
 import {
   Button,
   Fab,
@@ -23,18 +21,24 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
+
+import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import { useTheme } from '@mui/material/styles';
 
-// PROJECT IMPORTS
-
 import MainCard from 'ui-component/cards/MainCard';
-import { useDispatch, useSelector } from 'store';
-import { gridSpacing } from 'store/constant';
-import { Department, DepartmentFilter, SelectProps } from 'types/department';
-import { getDepartmentList } from 'store/slices/department';
-import DepartmentList from 'views/pages/department/DepartmentList';
-import AddDepartment from 'views/pages/department/AddDepartment';
+
+// PROJECT IMPORTS
 import NoDataImg from 'assets/images/logo/nodata.png';
+import AddDepartment from 'views/pages/department/AddDepartment';
+import DepartmentList from 'views/pages/department/DepartmentList';
+
+import { gridSpacing } from 'store/constant';
+import { useDispatch, useSelector } from 'store';
+import { getDepartmentList } from 'store/slices/department';
+import { Department, DepartmentFilter, SelectProps } from 'types/department';
 
 const SortStatus: SelectProps[] = [
   {
@@ -51,61 +55,52 @@ const SortStatus: SelectProps[] = [
   }
 ];
 
+const initialState: DepartmentFilter = {
+  search: '',
+  status: '',
+  currentPage: 1,
+  limit: 20
+};
+
 const Departments = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const departmentState = useSelector((state) => state.department);
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const dispatch = useDispatch();
-  const [data, setData] = React.useState<Department[]>([]);
-  const departmentState = useSelector((state) => state.department);
+  const [data, setData] = useState<Department[]>([]);
+  const [depart, setDepart] = useState(initialState);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const openSort = Boolean(anchorEl);
+  const sortLabel = SortStatus.filter((items) => items.value === depart.status);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setFilter({ ...filter, currentPage: page! });
+    setDepart({ ...depart, currentPage: page! });
   };
 
-  const initialState: DepartmentFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter, setFilter] = useState(initialState);
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+    setDepart({ ...depart, search: newString! });
   };
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openSort = Boolean(anchorEl);
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+    setDepart({ ...depart, status: index });
+    setAnchorEl(null);
   };
 
   const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-    setFilter({ ...filter, status: index });
-    setAnchorEl(null);
-  };
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const filterData = async () => {
-    await dispatch(getDepartmentList(filter));
-  };
-
-  useEffect(() => {
-    setData(departmentState.department);
-  }, [departmentState]);
-
-  useEffect(() => {
-    filterData();
-  }, [filter]);
-
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const handleDrawerOpen = () => {
     setOpenDrawer((prevState) => !prevState);
   };
@@ -113,6 +108,19 @@ const Departments = () => {
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
+
+  const getListDepart = async () => {
+    await dispatch(getDepartmentList(depart));
+  };
+
+  useEffect(() => {
+    setData(departmentState.department);
+  }, [departmentState]);
+
+  useEffect(() => {
+    getListDepart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [depart]);
 
   return (
     <MainCard
@@ -131,7 +139,7 @@ const Departments = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={filter.search}
+                    value={depart.search}
                     placeholder="Search...."
                     size="small"
                     onChange={handleSearch}
@@ -172,7 +180,7 @@ const Departments = () => {
                         <MenuItem
                           sx={{ p: 1.5 }}
                           key={index}
-                          selected={status.value === filter.status}
+                          selected={status.value === depart.status}
                           onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
@@ -208,8 +216,9 @@ const Departments = () => {
                 STT
               </TableCell>
               <TableCell sx={{ width: 180, minWidth: 180 }}>Name</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Code</TableCell>
+              <TableCell sx={{ width: 160, minWidth: 160 }}>Code</TableCell>
               <TableCell sx={{ width: 180, minWidth: 180 }}>Create At</TableCell>
+              <TableCell sx={{ width: 180, minWidth: 180 }}>Update At</TableCell>
               <TableCell sx={{ width: 170, minWidth: 170 }}>Status</TableCell>
               <TableCell sx={{ pr: 3, width: 10, minWidth: 10 }}>Actions</TableCell>
             </TableRow>
@@ -218,7 +227,7 @@ const Departments = () => {
             {data && data.map((department, index) => <DepartmentList key={department.id} department={department} index={index} />)}
           </TableBody>
         </Table>
-        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
+        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} depart={depart} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">
@@ -230,7 +239,13 @@ const Departments = () => {
         <Grid item xs={12} sx={{ p: 3 }}>
           <Grid container justifyContent="space-between" spacing={gridSpacing}>
             <Grid item>
-              <Pagination count={departmentState.pageCount} page={departmentState.currentPage} onChange={handleChange} color="primary" />
+              <Pagination
+                size={matchDownSM ? 'small' : 'medium'}
+                count={departmentState.pageCount}
+                page={departmentState.currentPage}
+                onChange={handleChange}
+                color="primary"
+              />
             </Grid>
           </Grid>
         </Grid>

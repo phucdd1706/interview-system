@@ -59,10 +59,12 @@ const Index = () => {
 
   useEffect(() => {
     getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const getList = () => {
@@ -183,8 +185,8 @@ const Index = () => {
               <Grid item>
                 <Pagination
                   size={matchDownSM ? 'small' : 'medium'}
-                  count={languageState.pageCount}
-                  page={languageState.currentPage}
+                  count={languageState?.pageCount}
+                  page={languageState?.currentPage}
                   color="primary"
                   onChange={handleTableChange}
                 />

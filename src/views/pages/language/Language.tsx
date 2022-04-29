@@ -4,6 +4,7 @@ import { ButtonBase, Link, TableCell, TableRow, Chip, IconButton, Menu, MenuItem
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import { Edit, Delete } from '@mui/icons-material';
 
 // PROJECT IMPORTS
 import { removeLanguage } from 'store/slices/language';
@@ -108,6 +109,7 @@ const Language = ({ language, index, getList }: Props) => {
             setVisibleAdd(!visibleAdd);
           }}
         >
+          <Edit fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
           Edit
         </MenuItem>
         <MenuItem
@@ -116,6 +118,7 @@ const Language = ({ language, index, getList }: Props) => {
             setOpenModal(true);
           }}
         >
+          <Delete fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
           Delete
         </MenuItem>
       </Menu>
@@ -152,7 +155,7 @@ const Language = ({ language, index, getList }: Props) => {
       <TableRow hover key={language?.id}>
         <TableCell sx={{ width: '5%', pl: 3 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{index + 20 * (languageState.currentPage - 1) + 1}</Typography>
+            <Typography variant="body2">{index + 20 * (languageState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: '20%', overflow: 'hidden' }} component="th" scope="row">
@@ -172,7 +175,7 @@ const Language = ({ language, index, getList }: Props) => {
           </Link>
         </TableCell>
         <TableCell sx={{ width: '35%', overflow: 'hidden' }}>{language?.description}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{moment(language.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{moment(language?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell sx={{ width: '10%' }}>{renderStatus(language?.status)}</TableCell>
         <TableCell sx={{ width: '10%' }} align="center">
           {renderMenuButton()}

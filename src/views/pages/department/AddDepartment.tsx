@@ -2,34 +2,36 @@
 import React, { useState } from 'react';
 
 import { Box, Button, Dialog, DialogContent, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-// PROJECT IMPORTS
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
-import { gridSpacing } from 'store/constant';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
+// PROJECT IMPORTS
 import { dispatch } from 'store';
+import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { postDepartment, getDepartmentList } from 'store/slices/department';
+
 import { Department, DepartmentFilter } from 'types/department';
+import { postDepartment, getDepartmentList } from 'store/slices/department';
 
 interface AddDepartmentProps {
   open: boolean;
-  filter: DepartmentFilter;
+  depart: DepartmentFilter;
   handleDrawerOpen: () => void;
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  code: Yup.string().required('Code is required')
+  name: Yup.string().max(255, 'Maximum 255 characters').required('Name is required'),
+  code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required')
 });
 
-const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) => {
+const AddDepartment = ({ open, handleDrawerOpen, depart }: AddDepartmentProps) => {
   const [errors, setErrors] = useState<any>({});
 
   const changeModal = (type: string) => {
@@ -39,23 +41,7 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
       formik.resetForm();
     }
   };
-  const AddDepart = (values: Department) => {
-    dispatch(
-      postDepartment({
-        params: values,
-        callback: (resp) => {
-          if (resp?.data?.success) {
-            dispatch(getDepartmentList(filter));
-            Notification('success', 'Add new record successfully!');
-            changeModal('close');
-          } else {
-            Notification('error', resp?.message);
-            setErrors(resp?.errors);
-          }
-        }
-      })
-    );
-  };
+
   const Notification = (color: string, message: string) => {
     dispatch(
       openSnackbar({
@@ -67,6 +53,24 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
           color
         },
         close: true
+      })
+    );
+  };
+
+  const AddDepart = (values: Department) => {
+    dispatch(
+      postDepartment({
+        params: values,
+        callback: (resp) => {
+          if (resp?.data?.success) {
+            dispatch(getDepartmentList(depart));
+            Notification('success', 'Add new record successfully!');
+            changeModal('close');
+          } else {
+            Notification('error', resp?.message);
+            setErrors(resp?.errors);
+          }
+        }
       })
     );
   };
@@ -104,16 +108,8 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -126,7 +122,15 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
                     }}
                   >
                     Add Department
-                  </Typography>
+                  </Typography>{' '}
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>

@@ -32,6 +32,7 @@ export type Department = {
   code?: string;
   status?: number;
   created_at?: Date;
+  update_at?: Date;
 };
 export type SelectProps = {
   value?: any;

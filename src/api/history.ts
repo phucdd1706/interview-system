@@ -1,11 +1,14 @@
 import axiosServices from 'utils/axios';
+import { Candidates } from 'types/history';
 
-const getListCandidate = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/client/candidates?${params}`);
+const URL_API = `${process.env.REACT_APP_API_URL}/v1/client/candidates`;
 
-const getOneCandidate = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`);
+const getListCandidate = (params: string) => axiosServices.get(`${URL_API}?${params}`);
 
-const createCandidate = (params: any) => axiosServices.post(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, params);
+const getOneCandidate = (id: number | string | undefined) => axiosServices.get(`${URL_API}/${id}`);
 
-const updateCandidate = (id: any, params: any) => axiosServices.put(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, params);
+const createCandidate = (params: Candidates) => axiosServices.post(`${URL_API}`, params);
+
+const updateCandidate = (id: number | string | undefined, params: Candidates) => axiosServices.put(`${URL_API}/${id}`, params);
 
 export { getListCandidate, getOneCandidate, createCandidate, updateCandidate };

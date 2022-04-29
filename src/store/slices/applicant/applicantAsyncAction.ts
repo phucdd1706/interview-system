@@ -8,7 +8,7 @@ import { alertError } from 'utils/helpers/axios/errorAlert';
 export const getQuestionsThunk = createAsyncThunk(
   'applicantReferences/getQuestionsThunk',
   async (params: { language_id: number; rank_id: number }) => {
-    const data = await applicantAPI.getQuestionsThunk(params.language_id, params.rank_id);
+    await applicantAPI.getQuestionsThunk(params.language_id, params.rank_id);
     // return data && dispatch(setQuestions(data.success));
   }
 );

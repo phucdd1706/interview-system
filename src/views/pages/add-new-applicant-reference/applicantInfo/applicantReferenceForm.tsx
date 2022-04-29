@@ -95,7 +95,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
-                          value={language.find((element) => element.id == item.language_id)}
+                          value={language.find((element) => element.id === item.language_id)}
                           getOptionLabel={(option: Languages) => option.name || ''}
                           renderInput={(params) => (
                             <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
@@ -117,7 +117,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
-                          value={ranks.find((element) => element.id == item.rank_id)}
+                          value={ranks.find((element) => element.id === item.rank_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
                           renderInput={(params) => <TextField {...params} variant="standard" label="Rank" placeholder="Rank" />}
                           sx={{ flexGrow: 1 }}
@@ -137,7 +137,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
                           }}
-                          value={ranks.find((element) => element.id == item.rank_advanced_id)}
+                          value={ranks.find((element) => element.id === item.rank_advanced_id)}
                           getOptionLabel={(option: RankType) => option.name || ''}
                           renderInput={(params) => (
                             <TextField {...params} variant="standard" label="Rank Advanced" placeholder="Rank Advanced" />
