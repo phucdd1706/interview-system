@@ -24,6 +24,9 @@ export interface Question {
   update_at?: string;
   question_id?: number;
   question?: QuestionType;
+  rankId: string | number;
+  languageId: string | number;
+  type: string;
 }
 
 export interface SearchValues {
@@ -31,6 +34,12 @@ export interface SearchValues {
   status?: number | string;
   currentPage?: number | string;
   limit?: number;
+}
+
+export interface SearchQuestions {
+  rank_id?: number | string;
+  language_id?: number | string;
+  typeId?: number | string;
 }
 
 export interface Payload {

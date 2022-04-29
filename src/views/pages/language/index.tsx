@@ -163,7 +163,7 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pl: 3, width: '5%' }}>#</TableCell>
+                <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
                 <TableCell sx={{ width: '20%' }}>Name</TableCell>
                 <TableCell sx={{ width: '35%' }}>Description</TableCell>
                 <TableCell sx={{ width: '15%' }}>Created</TableCell>

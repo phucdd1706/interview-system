@@ -11,7 +11,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AddHistory from 'views/pages/history/AddHistory';
 import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
-import QuestionModal from 'views/pages/history/QuestionModal';
+import QuestionModal from 'views/pages/history/Interview/QuestionModal';
 
 interface Props {
   history: Candidates;

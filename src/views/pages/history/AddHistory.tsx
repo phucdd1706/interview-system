@@ -113,7 +113,8 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
       .required('Age is required'),
-    time: yup.string().required('Interview time is required')
+    time: yup.string().required('Interview time is required'),
+    address: yup.string().max(255)
   });
 
   const formik = useFormik({
