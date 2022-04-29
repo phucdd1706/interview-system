@@ -33,6 +33,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 
 import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { postDepartment, getDepartmentList, putDepartment } from 'store/slices/department';
+import { isFullName } from 'utils/regexHelper';
 
 interface AddDepartmentProps {
   open: boolean;
@@ -53,7 +54,10 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string().max(255, 'Maximum 255 characters').required('Name is required'),
+  name: Yup.string()
+    .max(255, 'Maximum 255 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
   code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required')
 });
 
