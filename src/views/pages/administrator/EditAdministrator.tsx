@@ -1,9 +1,5 @@
+import React, { useState } from 'react';
 // THIRD-PARTY
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import * as yup from 'yup';
 import {
   Box,
   Button,
@@ -18,17 +14,25 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 
-// PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
+
+// PROJECT IMPORTS
 import { dispatch } from 'store';
-import { editAdministrator } from 'store/slices/user';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { Administrator, SelectProps } from 'types/user';
+import { editAdministrator } from 'store/slices/user';
+
 import { UserProfile } from 'types/user-profile';
-import { useState } from 'react';
+import { Administrator, SelectProps } from 'types/user';
 
 interface Props {
   administrator: UserProfile;
@@ -74,15 +78,14 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  username: yup.string().required('Username is required'),
+  name: yup.string().max(255, 'Maximum 255 characters').required('Name is required'),
+  username: yup.string().max(255, 'Maximum 255 characters').required('Username is required'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   phone: yup
     .string()
-    .matches(
-      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
-      'Enter the correct format phone'
-    )
+    .min(10, 'Minimum 10 characters ')
+    .max(10, 'Maximum 10 characters ')
+    .matches(/^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i, 'Enter a valid phone')
     .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
@@ -91,12 +94,25 @@ const validationSchema = yup.object({
 
 const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => {
   const [errors, setErrors] = useState<any>({});
+
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
       setErrors({});
       formik.resetForm();
     }
+  };
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: { color },
+        close: true
+      })
+    );
   };
   const EditAdmin = (values: Administrator) => {
     dispatch(
@@ -105,32 +121,10 @@ const EditAdministrator = ({ administrator, open, handleDrawerOpen }: Props) => 
         params: values,
         callback: (resp) => {
           if (resp?.data?.success) {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Edit record successfully!',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            Notification('success', 'Edit record successfully!');
             changeModal('close');
           } else {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: resp?.message,
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'error'
-                },
-                close: true
-              })
-            );
+            Notification('error', resp?.message);
             setErrors(resp?.errors);
           }
         }
