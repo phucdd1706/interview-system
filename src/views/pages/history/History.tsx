@@ -70,7 +70,7 @@ const History = ({ history, index, getList }: Props) => {
             setVisibleQuestionModal(!visibleQuestionModal);
           }}
         >
-          <EventAvailableIcon fontSize="small" sx={{ color: '#ffc107', mr: 1 }} />
+          <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
           {history?.status ? 'Edit Result' : 'Interview'}
         </MenuItem>
 

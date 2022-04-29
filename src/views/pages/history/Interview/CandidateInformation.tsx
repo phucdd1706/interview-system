@@ -1,4 +1,5 @@
 // THIRD PARTY
+import { useEffect, useState } from 'react';
 import { Box, Typography, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
@@ -16,7 +17,10 @@ interface Props {
 const CandidateInformation = ({ dataCandidate }: Props) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const numberRandom = Math.floor(Math.random() * 100);
+  const [numberRandom, setNumberRandom] = useState(0);
+  useEffect(() => {
+    setNumberRandom(Math.floor(Math.random() * 100));
+  }, []);
 
   return (
     <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
