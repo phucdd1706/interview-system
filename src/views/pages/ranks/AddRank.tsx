@@ -23,7 +23,7 @@ interface AddRankProps {
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required')
+  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
 });
 
 const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
