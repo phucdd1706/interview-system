@@ -44,14 +44,14 @@ const AddApplicantReference = () => {
           age: Yup.number().required('Age is required'),
           email: Yup.string().email('Email is invalid').required('Email is required'),
           phone: Yup.string().required('Phone is required'),
-          address: Yup.string().required('Address is required'),
           applyPosition: Yup.array().of(
             Yup.object().shape({
               language_id: Yup.string().required('Language is required'),
               rank_id: Yup.string().required('Rank is required'),
               rank_advanced_id: Yup.string().required('Rank advanced is required')
             })
-          )
+          ),
+          time: Yup.string().required('Time is required')
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
@@ -61,7 +61,9 @@ const AddApplicantReference = () => {
               status: 1,
               candidateQuestions: values.questions
             };
-            await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Success').then(() => navigate('/history'));
+            await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then(() =>
+              navigate('/history')
+            );
           } else {
             await axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, values, 'Add applicant success').then((res: any) => {
               res && res.success.id && navigate(`/applicant/${res.success.id}`);
