@@ -28,6 +28,7 @@ import { RankType, SelectProps } from 'types/rank';
 import { openSnackbar } from 'store/slices/snackbar';
 import { useState } from 'react';
 import { PutRank } from 'store/slices/rank';
+import { max } from 'date-fns';
 
 interface EditRankProps {
   rank: RankType;
@@ -48,7 +49,7 @@ const Status: SelectProps[] = [
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required'),
+  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required'),
   status: Yup.number().required('Status is required')
 });
 

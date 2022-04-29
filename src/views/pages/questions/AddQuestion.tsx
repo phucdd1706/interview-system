@@ -54,7 +54,7 @@ const validationSchema = Yup.object({
   rank_id: Yup.string().required('Rank is required'),
   department_id: Yup.string().required('Department is required'),
   language_id: Yup.string().required('Language is required'),
-  question_content: Yup.string().required('Question content is required'),
+  question_content: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Question content is required'),
   type: Yup.string().required('Question type is required')
 });
 

@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { QuestionType, QuestionFilter, Payload } from 'types/question';
+import { QuestionFilter, Payload } from 'types/question';
 
 export const QUESTIONS_URL = `${process.env.REACT_APP_API_URL}/v1/operator/questions`;
 
