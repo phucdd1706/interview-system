@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 // THIRD-PARTY
-
 import {
   Box,
   Button,
@@ -15,25 +15,22 @@ import {
   Typography
 } from '@mui/material';
 
-// PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { gridSpacing } from 'store/constant';
-// import { useDispatch } from 'store';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-
-import { openSnackbar } from 'store/slices/snackbar';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+
+// PROJECT IMPORTS
 import { dispatch } from 'store';
-import { Department, SelectProps } from 'types/department';
-import { putDepartment } from 'store/slices/department';
-import { useState } from 'react';
+import { gridSpacing } from 'store/constant';
+import { openSnackbar } from 'store/slices/snackbar';
 
-// const Transition = forwardRef((props: SlideProps, ref) => <Slide direction="left" ref={ref} {...props} />);
+import { putDepartment } from 'store/slices/department';
+import { Department, SelectProps } from 'types/department';
 
 interface EditDepartmentProps {
   department: Department;
@@ -52,8 +49,8 @@ const Status: SelectProps[] = [
   }
 ];
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  code: Yup.string().required('Code is required'),
+  name: Yup.string().max(255, 'Maximum 255 characters').required('Name is required'),
+  code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required'),
   status: Yup.string().required('Status is required')
 });
 

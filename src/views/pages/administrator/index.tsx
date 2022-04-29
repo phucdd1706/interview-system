@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from 'react';
+
 // THIRD-PARTY
-import React, { useState } from 'react';
 import {
   Button,
   Fab,
@@ -20,21 +21,27 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/AddTwoTone';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import { useTheme } from '@mui/material/styles';
+
+import MainCard from 'ui-component/cards/MainCard';
 
 // PROJECT IMPORTS
-import MainCard from 'ui-component/cards/MainCard';
-import { useDispatch, useSelector } from 'store';
-import { UserProfile } from 'types/user-profile';
 import { gridSpacing } from 'store/constant';
-import { UserFilter, SelectProps } from 'types/user';
-import AddIcon from '@mui/icons-material/AddTwoTone';
+import { useDispatch, useSelector } from 'store';
 import { getAdministratorList } from 'store/slices/user';
+
+import { UserProfile } from 'types/user-profile';
+import { UserFilter, SelectProps } from 'types/user';
+
+import NoDataImg from 'assets/images/logo/nodata.png';
+
 import Administrator from 'views/pages/administrator/Administrator';
 import AddAdministrator from 'views/pages/administrator/AddAdministrator';
-import NoDataImg from 'assets/images/logo/nodata.png';
 
 const SortStatus: SelectProps[] = [
   {
@@ -51,67 +58,72 @@ const SortStatus: SelectProps[] = [
   }
 ];
 
+const initialState: UserFilter = {
+  search: '',
+  status: '',
+  currentPage: 1,
+  limit: 20
+};
 const Administrators = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const administratorState = useSelector((state) => state.user);
 
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+
+  const [adminFilter, setAdminFilter] = useState(initialState);
+  const [data, setData] = React.useState<UserProfile[]>([]);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const openSort = Boolean(anchorEl);
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const dispatch = useDispatch();
-  const [data, setData] = React.useState<UserProfile[]>([]);
-  const administratorState = useSelector((state) => state.user);
+  const sortLabel = SortStatus.filter((items) => items.value === adminFilter.status);
+
   const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    setFilter({ ...filter, currentPage: page! });
+    setAdminFilter({ ...adminFilter, currentPage: page! });
   };
 
-  const initialState: UserFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter, setFilter] = useState(initialState);
   const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
     const newString = event?.target.value;
-    setFilter({ ...filter, search: newString! });
+    setAdminFilter({ ...adminFilter, search: newString! });
   };
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const openSort = Boolean(anchorEl);
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleSortStatusClose = () => {
     setAnchorEl(null);
   };
+
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-    setFilter({ ...filter, status: index });
+    setAdminFilter({ ...adminFilter, status: index });
     setAnchorEl(null);
   };
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
 
-  const filterData = async () => {
-    await dispatch(getAdministratorList(filter));
-  };
-
-  React.useEffect(() => {
-    setData(administratorState.users);
-  }, [administratorState]);
-
-  React.useEffect(() => {
-    filterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
-
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const handleDrawerOpen = () => {
     setOpenDrawer((prevState) => !prevState);
+  };
+
+  const getListAdmin = async () => {
+    await dispatch(getAdministratorList(adminFilter));
   };
 
   const addAdministrator = () => {
     setOpenDrawer((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    setData(administratorState.users);
+  }, [administratorState]);
+
+  useEffect(() => {
+    getListAdmin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adminFilter]);
 
   return (
     <MainCard
@@ -130,7 +142,7 @@ const Administrators = () => {
                         </InputAdornment>
                       )
                     }}
-                    value={filter.search}
+                    value={adminFilter.search}
                     placeholder="Search...."
                     size="small"
                     onChange={handleSearch}
@@ -171,7 +183,7 @@ const Administrators = () => {
                         <MenuItem
                           sx={{ p: 1.5 }}
                           key={index}
-                          selected={status.value === filter.status}
+                          selected={status.value === adminFilter.status}
                           onClick={(event) => handleMenuItemClick(event, status.value)}
                         >
                           {status.label}
@@ -222,7 +234,7 @@ const Administrators = () => {
               data.map((administrator, index) => <Administrator key={administrator.id} administrator={administrator} index={index} />)}
           </TableBody>
         </Table>
-        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
+        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} adminFilter={adminFilter} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">

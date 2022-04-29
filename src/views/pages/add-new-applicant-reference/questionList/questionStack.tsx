@@ -3,7 +3,6 @@ import { Stack, Typography, Box } from '@mui/material';
 import React from 'react';
 
 // PROJECT IMPORTS
-import { useDispatch } from 'store';
 
 // TYPE IMPORTS
 import { QuestionStackInterface } from 'types/interviewQuestion';

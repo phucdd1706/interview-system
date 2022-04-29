@@ -85,6 +85,7 @@ const Ranks = () => {
 
   React.useEffect(() => {
     filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
