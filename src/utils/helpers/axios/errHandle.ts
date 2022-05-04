@@ -26,8 +26,6 @@ const errorCode = {
   notCatch: 'Something went wrong'
 };
 
-type ErrorCode = keyof typeof errorCode;
-
 export const getSeverityType = (errStatus: number | undefined): 'error' | 'warning' => {
   if (errStatus === 401) {
     return 'error';

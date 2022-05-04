@@ -9,6 +9,8 @@ import RTLLayout from 'ui-component/RTLLayout';
 import ThemeCustomization from 'themes';
 import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
 import Snackbar from 'ui-component/extended/Snackbar';
+import Index from 'views/pages/history';
+import { Route } from 'react-router-dom';
 
 const App = () => (
   <ThemeCustomization>

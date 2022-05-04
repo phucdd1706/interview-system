@@ -1,31 +1,45 @@
-// THIRD-PARTY
 import React, { useState } from 'react';
 
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography } from '@mui/material';
+// THIRD-PARTY
 import { useTheme } from '@mui/material/styles';
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography } from '@mui/material';
+
+import moment from 'moment';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 
 // PROJECT IMPORTS
-
 import { dispatch, useSelector } from 'store';
-
 import { openSnackbar } from 'store/slices/snackbar';
-import { Department, DepartmentFilter } from 'types/department';
 import { delDepartment, getDepartmentList } from 'store/slices/department';
-import AlertDepartmentDelete from './AlertDepartmentDelete';
-import EditDepartment from './EditDepartment';
-import moment from 'moment';
+
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Department, DepartmentFilter } from 'types/department';
+import AlertDelete from 'ui-component/Alert/AlertDelete';
+import AddDepartment from './AddDepartment';
 
 interface Props {
   department: Department;
   index: number;
+  departFilter: DepartmentFilter;
 }
-const DepartmentList = ({ department, index }: Props) => {
-  const departmentState = useSelector((state) => state.department);
+
+const DepartmentList = ({ department, index, departFilter }: Props) => {
   const theme = useTheme();
+  const departmentState = useSelector((state) => state.department);
+
+  const [openModal, setOpenModal] = useState(false);
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+    setAnchorEl(event?.currentTarget);
+  };
+
   const handleDepartmentDrawerOpen = () => {
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
@@ -33,22 +47,7 @@ const DepartmentList = ({ department, index }: Props) => {
   const editDepartment = () => {
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
-  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-    setAnchorEl(event?.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const [openModal, setOpenModal] = useState(false);
-  const initialState: DepartmentFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter] = useState(initialState);
   const Notification = (color: string, message: string) => {
     dispatch(
       openSnackbar({
@@ -63,6 +62,7 @@ const DepartmentList = ({ department, index }: Props) => {
       })
     );
   };
+
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
@@ -71,7 +71,7 @@ const DepartmentList = ({ department, index }: Props) => {
           id: department.id,
           callback: (resp) => {
             if (resp?.data?.success) {
-              dispatch(getDepartmentList(filter));
+              dispatch(getDepartmentList(departFilter));
               Notification('success', 'Delete successfully');
             } else {
               Notification('error', resp?.message);
@@ -108,6 +108,7 @@ const DepartmentList = ({ department, index }: Props) => {
         </TableCell>
         <TableCell>{department.code}</TableCell>
         <TableCell>{moment(department.created_at).format('DD/MM/YYYY')}</TableCell>
+        <TableCell>{moment(department.update_at).format('DD/MM/YYYY')}</TableCell>
         <TableCell>
           {department.status === 0 && (
             <Chip
@@ -165,7 +166,7 @@ const DepartmentList = ({ department, index }: Props) => {
                 editDepartment();
               }}
             >
-              <EditIcon fontSize="small" sx={{ color: '#3f50b5', mr: 1 }} />
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -174,14 +175,19 @@ const DepartmentList = ({ department, index }: Props) => {
                 setOpenModal(true);
               }}
             >
-              <DeleteIcon fontSize="small" sx={{ color: '#ff1744', mr: 1 }} />
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertDepartmentDelete name={department.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertDelete name={department.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditDepartment department={department} open={openDepartmentDrawer} handleDrawerOpen={handleDepartmentDrawerOpen} />
+      <AddDepartment
+        department={department}
+        open={openDepartmentDrawer}
+        handleDrawerOpen={handleDepartmentDrawerOpen}
+        departFilter={departFilter}
+      />
     </>
   );
 };

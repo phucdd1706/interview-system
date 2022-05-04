@@ -1,71 +1,50 @@
-// THIRD-PARTY
 import React, { useState } from 'react';
+// THIRD-PARTY
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+
 import moment from 'moment';
 
 // PROJECT IMPORTS
-import { UserProfile } from 'types/user-profile';
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
-import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import EditAdministrator from 'views/pages/administrator/EditAdministrator';
 import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
-import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
+
 import { UserFilter } from 'types/user';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { UserProfile } from 'types/user-profile';
+
+import AlertDelete from 'ui-component/Alert/AlertDelete';
+import AddAdministrator from './AddAdministrator';
 
 interface Props {
   administrator: UserProfile;
   index: number;
+  adminFilter: UserFilter;
 }
 
-const Administrator = ({ administrator, index }: Props) => {
+const Administrator = ({ administrator, index, adminFilter }: Props) => {
   const theme = useTheme();
   const administratorState = useSelector((state) => state.user);
+
+  const [openModal, setOpenModal] = useState(false);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+    setAnchorEl(event?.currentTarget);
+  };
+
   const handleAdministratorDrawerOpen = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
-  const editAdministrator = () => {
-    setOpenAdministratorDrawer((prevState) => !prevState);
-  };
-
-  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-    setAnchorEl(event?.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const initialState: UserFilter = {
-    search: '',
-    status: '',
-    currentPage: 1,
-    limit: 20
-  };
-  const [filter] = useState(initialState);
-
-  const [openModal, setOpenModal] = useState(false);
-  const handleModalClose = (status: boolean) => {
-    setOpenModal(false);
-    if (status) {
-      dispatch(
-        deleteAdministrator({
-          id: administrator.id,
-          callback: (resp) => {
-            if (resp?.data?.success) {
-              dispatch(getAdministratorList(filter));
-              Notification('success', 'Deleted successfully!');
-            } else {
-              Notification('error', resp?.message);
-            }
-          }
-        })
-      );
-    }
-  };
   const Notification = (color: string, message: string) => {
     dispatch(
       openSnackbar({
@@ -81,6 +60,28 @@ const Administrator = ({ administrator, index }: Props) => {
     );
   };
 
+  const editAdministrator = () => {
+    setOpenAdministratorDrawer((prevState) => !prevState);
+  };
+
+  const handleModalClose = (status: boolean) => {
+    setOpenModal(false);
+    if (status) {
+      dispatch(
+        deleteAdministrator({
+          id: administrator.id,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getAdministratorList(adminFilter));
+              Notification('success', 'Deleted successfully!');
+            } else {
+              Notification('error', resp?.message);
+            }
+          }
+        })
+      );
+    }
+  };
   return (
     <>
       <TableRow hover key={index}>
@@ -171,7 +172,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 editAdministrator();
               }}
             >
-              <EditIcon fontSize="small" sx={{ color: '#3f50b5', mr: 1 }} />
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -180,14 +181,19 @@ const Administrator = ({ administrator, index }: Props) => {
                 setOpenModal(true);
               }}
             >
-              <DeleteIcon fontSize="small" sx={{ color: '#ff1744', mr: 1 }} />
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertAdministratorDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditAdministrator administrator={administrator} open={openAdministratorDrawer} handleDrawerOpen={handleAdministratorDrawerOpen} />
+      <AddAdministrator
+        administrator={administrator}
+        adminFilter={adminFilter}
+        open={openAdministratorDrawer}
+        handleDrawerOpen={handleAdministratorDrawerOpen}
+      />
     </>
   );
 };

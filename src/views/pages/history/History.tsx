@@ -4,13 +4,15 @@ import { ButtonBase, TableCell, TableRow, Chip, IconButton, Menu, MenuItem, Stac
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 // PROJECT IMPORTS
 import AddHistory from 'views/pages/history/AddHistory';
 import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
-import QuestionModal from 'views/pages/history/QuestionModal';
+import QuestionModal from 'views/pages/history/Interview/QuestionModal';
+import { Link } from 'react-router-dom';
 
 interface Props {
   history: Candidates;
@@ -63,9 +65,17 @@ const History = ({ history, index, getList }: Props) => {
           horizontal: 'right'
         }}
       >
-        {/* <Link to={`/applicant/${history.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
-          <MenuItem>{history?.status ? 'Edit interview' : 'Interview'}</MenuItem>
-        </Link> */}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setVisibleQuestionModal(!visibleQuestionModal);
+          }}
+        >
+          <Link to={`/applicant/${history?.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
+            <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
+            {history?.status ? 'Edit Result' : 'Interview'}
+          </Link>
+        </MenuItem>
 
         <MenuItem
           onClick={() => {
@@ -73,7 +83,8 @@ const History = ({ history, index, getList }: Props) => {
             setVisibleQuestionModal(!visibleQuestionModal);
           }}
         >
-          {history?.status ? 'Edit interview' : 'Interview'}
+          <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
+          {history?.status ? 'Edit Result v2' : 'Interview v2'}
         </MenuItem>
 
         <MenuItem
@@ -82,6 +93,7 @@ const History = ({ history, index, getList }: Props) => {
             setVisibleAdd(!visibleAdd);
           }}
         >
+          <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
           Edit
         </MenuItem>
       </Menu>
@@ -126,7 +138,7 @@ const History = ({ history, index, getList }: Props) => {
       <TableRow hover key={history?.id}>
         <TableCell sx={{ width: '5%' }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{index + 20 * (historyState.currentPage - 1) + 1}</Typography>
+            <Typography variant="body2">{index + 20 * (historyState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: '20%' }} component="th" scope="row">
@@ -134,7 +146,8 @@ const History = ({ history, index, getList }: Props) => {
         </TableCell>
         <TableCell sx={{ width: '25%' }}>{history?.email}</TableCell>
         <TableCell sx={{ width: '15%' }}>{history?.age}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{moment(history.time).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{moment(history?.time).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell sx={{ width: '15%' }}>{history?.status ? moment(history?.updated_at).format('DD/MM/YYYY HH:mm') : 'N/A'}</TableCell>
         <TableCell sx={{ width: '10%' }}>{renderStatus(history?.status)}</TableCell>
         <TableCell align="center" sx={{ width: '10%' }}>
           {renderMenuButton()}

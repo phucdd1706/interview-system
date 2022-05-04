@@ -64,7 +64,7 @@ const validationSchema = Yup.object({
   rank_id: Yup.string().required('Rank is required'),
   department_id: Yup.string().required('Department is required'),
   language_id: Yup.string().required('Language is required'),
-  question_content: Yup.string().required('Question content is required'),
+  question_content: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Question content is required'),
   type: Yup.string().required('Question type is required'),
   status: Yup.string().required('Question status is required')
 });
@@ -158,16 +158,8 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -181,6 +173,14 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
                   >
                     {`Edit "Question ${20 * (questionState.currentPage - 1) + indexId + 1}"`}
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>

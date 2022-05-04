@@ -1,5 +1,7 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
@@ -173,6 +175,7 @@ const Rank = ({ rank, index }: Props) => {
                 editRank();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -181,6 +184,7 @@ const Rank = ({ rank, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>

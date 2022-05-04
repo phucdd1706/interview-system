@@ -8,7 +8,6 @@ import { SyntheticEvent } from 'react';
 import { closeSnackbar } from 'store/slices/snackbar';
 import { KeyedObject } from 'types';
 import { useDispatch, useSelector } from 'store';
-import { makeStyles } from '@mui/styles';
 
 // animation function
 function TransitionSlideLeft(props: SlideProps) {

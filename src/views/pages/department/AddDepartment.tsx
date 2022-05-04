@@ -1,37 +1,68 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
 
-import { Box, Button, Dialog, DialogContent, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  Divider,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
 
-// PROJECT IMPORTS
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
-import { gridSpacing } from 'store/constant';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
+// PROJECT IMPORTS
 import { dispatch } from 'store';
+import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { postDepartment, getDepartmentList } from 'store/slices/department';
-import { Department, DepartmentFilter } from 'types/department';
+
+import { Department, DepartmentFilter, SelectProps } from 'types/department';
+import { postDepartment, getDepartmentList, putDepartment } from 'store/slices/department';
+import { isFullName } from 'utils/regexHelper';
 
 interface AddDepartmentProps {
   open: boolean;
-  filter: DepartmentFilter;
+  departFilter: DepartmentFilter;
+  department: Department;
   handleDrawerOpen: () => void;
 }
 
+const Status: SelectProps[] = [
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  }
+];
+
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  code: Yup.string().required('Code is required')
+  name: Yup.string()
+    .max(255, 'Maximum 255 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
+  code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required')
 });
 
-const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) => {
+const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {
   const [errors, setErrors] = useState<any>({});
-
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
@@ -39,23 +70,7 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
       formik.resetForm();
     }
   };
-  const AddDepart = (values: Department) => {
-    dispatch(
-      postDepartment({
-        params: values,
-        callback: (resp) => {
-          if (resp?.data?.success) {
-            dispatch(getDepartmentList(filter));
-            Notification('success', 'Add new record successfully!');
-            changeModal('close');
-          } else {
-            Notification('error', resp?.message);
-            setErrors(resp?.errors);
-          }
-        }
-      })
-    );
-  };
+
   const Notification = (color: string, message: string) => {
     dispatch(
       openSnackbar({
@@ -71,11 +86,48 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
     );
   };
 
+  const AddDepart = (values: Department) => {
+    if (department?.id) {
+      dispatch(
+        putDepartment({
+          id: department.id,
+          params: values,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              Notification('success', 'Edit department successfully!');
+              changeModal('close');
+            } else {
+              Notification('error', resp?.message);
+              setErrors(resp?.errors);
+            }
+          }
+        })
+      );
+    } else {
+      dispatch(
+        postDepartment({
+          params: values,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getDepartmentList(departFilter));
+              Notification('success', 'Add new record successfully!');
+              changeModal('close');
+            } else {
+              Notification('error', resp?.message);
+              setErrors(resp?.errors);
+            }
+          }
+        })
+      );
+    }
+  };
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: '',
-      code: ''
+      name: department?.name,
+      code: department?.code,
+      status: department?.id ? department?.status : 1
     },
     validationSchema,
     onSubmit: (values) => {
@@ -104,16 +156,8 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -125,8 +169,16 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
                       verticalAlign: 'middle'
                     }}
                   >
-                    Add Department
-                  </Typography>
+                    {department?.id ? `Edit "${department?.name}"` : 'Add new language'}
+                  </Typography>{' '}
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>
@@ -168,6 +220,28 @@ const AddDepartment = ({ open, handleDrawerOpen, filter }: AddDepartmentProps) =
                       helperText={(formik.touched.code && formik.errors.code) || errors?.code}
                     />
                   </Grid>
+                  {department.id && (
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                          id="status"
+                          name="status"
+                          label="Status"
+                          displayEmpty
+                          value={formik?.values?.status}
+                          onChange={formik.handleChange}
+                          inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                          {Status.map((status: SelectProps, index: number) => (
+                            <MenuItem key={index} value={status.value}>
+                              {status.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                   <Grid item xs={12}>
                     <AnimateButton>
                       <Button fullWidth variant="contained" type="submit">

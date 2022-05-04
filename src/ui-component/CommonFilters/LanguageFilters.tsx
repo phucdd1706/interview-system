@@ -25,6 +25,7 @@ const LanguageFilters = (props: any) => {
         }
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const languageLabel = dataLanguage?.filter((items) => items.id === filters.language_id);
@@ -32,7 +33,7 @@ const LanguageFilters = (props: any) => {
   return (
     <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
       <Typography variant="h5" style={{ width: '120px' }}>
-        Sort by Language:{' '}
+        Sort by language:{' '}
       </Typography>
       <Button
         id="demo-positioned-button"
