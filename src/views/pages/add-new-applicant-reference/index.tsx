@@ -85,17 +85,20 @@ const AddApplicantReference = () => {
                     <QuestionList questionList={applicant.interviewQuestions} interviewing={!!id} />
                   </Stack>
                 </MainCard>
-                <MainCard>
-                  <TextareaAutosize
-                    name="note"
-                    onChange={props.handleChange}
-                    aria-label="minimum height"
-                    minRows={3}
-                    placeholder="Note"
-                    value={props.values.note}
-                    style={{ width: '100%', padding: '8px' }}
-                  />
-                </MainCard>
+                {id && (
+                  <MainCard>
+                    <TextareaAutosize
+                      name="note"
+                      onChange={props.handleChange}
+                      aria-label="minimum height"
+                      minRows={3}
+                      placeholder="Note"
+                      value={props.values.note}
+                      style={{ width: '100%', padding: '8px' }}
+                    />
+                  </MainCard>
+                )}
+
                 <MainCard sx={{ margin: '1em 0' }}>
                   <AnimateButton>
                     <Button
