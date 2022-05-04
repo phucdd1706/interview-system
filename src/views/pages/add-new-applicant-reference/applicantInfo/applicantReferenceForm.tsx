@@ -23,7 +23,7 @@ import { Languages } from 'types/language';
 import FormInput from './formInput';
 import { alertError } from 'utils/helpers/axios/errorAlert';
 
-type personalDetailType = 'name' | 'email' | 'phone' | 'address' | 'note';
+type personalDetailType = 'name' | 'email' | 'phone' | 'address';
 
 const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleSubmit, setFieldValue, touched, values }: any) => {
   const intl = useIntl();
