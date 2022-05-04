@@ -12,6 +12,7 @@ import AddHistory from 'views/pages/history/AddHistory';
 import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
 import QuestionModal from 'views/pages/history/Interview/QuestionModal';
+import { Link } from 'react-router-dom';
 
 interface Props {
   history: Candidates;
@@ -70,8 +71,20 @@ const History = ({ history, index, getList }: Props) => {
             setVisibleQuestionModal(!visibleQuestionModal);
           }}
         >
+          <Link to={`/applicant/${history?.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
+            <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
+            {history?.status ? 'Edit Result' : 'Interview'}
+          </Link>
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setVisibleQuestionModal(!visibleQuestionModal);
+          }}
+        >
           <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
-          {history?.status ? 'Edit Result' : 'Interview'}
+          {history?.status ? 'Edit Result v2' : 'Interview v2'}
         </MenuItem>
 
         <MenuItem
