@@ -53,16 +53,6 @@ const personalDetail = [
         required: true
       }
     ]
-  },
-  {
-    label: 'Note',
-    render: [
-      {
-        key: 'note',
-        label: 'Note',
-        type: 'text'
-      }
-    ]
   }
 ];
 

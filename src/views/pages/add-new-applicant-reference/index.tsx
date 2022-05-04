@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, TextareaAutosize, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -74,6 +74,7 @@ const AddApplicantReference = () => {
       >
         {(props: FormikProps<ApplicantInfo>) => (
           <form noValidate onSubmit={props.handleSubmit}>
+            {console.log(props.values)}
             <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
               <ApplicantForm interviewing={!!id} {...props} />
             </MainCard>
@@ -84,6 +85,20 @@ const AddApplicantReference = () => {
                     <QuestionList questionList={applicant.interviewQuestions} interviewing={!!id} />
                   </Stack>
                 </MainCard>
+                {id && (
+                  <MainCard>
+                    <TextareaAutosize
+                      name="note"
+                      onChange={props.handleChange}
+                      aria-label="minimum height"
+                      minRows={3}
+                      placeholder="Note"
+                      value={props.values.note}
+                      style={{ width: '100%', padding: '8px' }}
+                    />
+                  </MainCard>
+                )}
+
                 <MainCard sx={{ margin: '1em 0' }}>
                   <AnimateButton>
                     <Button
