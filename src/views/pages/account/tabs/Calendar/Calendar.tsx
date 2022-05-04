@@ -5,19 +5,25 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CalendarPicker from '@mui/lab/CalendarPicker';
 import Grid from '@mui/material/Grid';
-import { useTheme } from '@mui/material';
+import { Alert, useTheme } from '@mui/material';
 import FullCalendar, { DateSelectArg, EventClickArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import viLocale from '@fullcalendar/core/locales/vi';
+import enLocale from '@fullcalendar/core/locales/en-gb';
+import viPickerLocale from 'date-fns/locale/vi';
+import enPickerLocale from 'date-fns/locale/en-US';
 import { Calendar } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
 
 // PROJECT IMPORTS
+import useConfig from 'hooks/useConfig';
 import MainCard from 'ui-component/cards/MainCard';
 import ViewEventDialog from './ViewEventDialog';
 import SelectDialog from './SelectDialog';
 import './calendar.css';
+import Locales from 'ui-component/Locales';
 
 export default function SubComponentsPickers() {
   const theme = useTheme();
@@ -32,18 +38,24 @@ export default function SubComponentsPickers() {
   const [selectInfo, setSelectInfo] = useState<any>();
 
   const dataEvent = [
-    { title: 'event 1', start: '2022-04-26T10:36:24', end: '2022-04-26T16:36:24', date: '2022-04-26' },
-    { title: 'event 10', start: '2022-04-28T10:36:24', end: '2022-04-28T16:36:24' },
-    { title: 'event 3', date: '2022-04-26', color: '#E53935' },
-    { title: 'event 4', date: '2022-04-26' },
-    { title: 'event 5', date: '2022-04-26' },
-    { title: 'event 2', date: '2022-04-27' }
+    { title: 'Event 1', start: '2022-04-26T10:36:24', end: '2022-04-26T16:36:24', date: '2022-04-26' },
+    { title: 'Event 10', start: '2022-04-28T10:36:24', end: '2022-04-28T16:36:24' },
+    { title: 'Event 3', date: '2022-04-26', color: '#E53935' },
+    { title: 'Event 4', date: '2022-04-26' },
+    { title: 'Event 5', date: '2022-04-26' },
+    { title: 'Event 2', date: '2022-04-27' }
   ];
+  const { locale } = useConfig();
+  const localeMap = {
+    en: enPickerLocale,
+    vi: viPickerLocale
+  };
 
   React.useEffect(() => {
     setStartDate(date);
     setEndDate(date);
   }, [date]);
+
   // const start = new Date();
   // startDate.setHours(0, 0, 0, 0);
   // const startTime = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000).toISOString();
@@ -64,12 +76,12 @@ export default function SubComponentsPickers() {
   // eslint-disable-next-line no-plusplus
   const createEventId = () => String(eventGuid++);
 
+  // alert(arg.dateStr);
   const handleDateClick = (arg: { dateStr: any }) => {
-    alert(arg.dateStr);
+    <Alert severity="success">This is a success alert — {arg.dateStr}!</Alert>;
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    // alert(`Detail Event ${clickInfo.event.start?.toLocaleTimeString()}`);
     setEventInfo(clickInfo.event);
     setOpenEvent((prevState: any) => !prevState);
   };
@@ -102,7 +114,7 @@ export default function SubComponentsPickers() {
 
   return (
     <MainCard>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} locale={locale === 'vi' ? viPickerLocale : enPickerLocale}>
         <Grid container spacing={3} alignContent="center">
           <Grid item xs={12} md={4}>
             <MainCard>
@@ -110,31 +122,36 @@ export default function SubComponentsPickers() {
             </MainCard>
           </Grid>
           <Grid item xs={12} md={8}>
-            <FullCalendar
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              ref={calendarRef}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-              }}
-              initialView="dayGridMonth"
-              // dateClick={handleDateClick}
-              events={dataEvent}
-              eventClick={handleEventClick}
-              // eventContent={renderEventContent}
-              editable
-              selectable
-              selectMirror
-              select={handleDataSelect}
-              dayMaxEvents
-              nowIndicator
-              handleWindowResize
-              progressiveEventRendering
-              dayMaxEventRows
-            />
+            <MainCard>
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                ref={calendarRef}
+                headerToolbar={{
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }}
+                initialView="dayGridMonth"
+                // dateClick={handleDateClick}
+                events={dataEvent} // Event Init
+                eventClick={handleEventClick}
+                // eventContent={renderEventContent}
+                editable
+                selectable // Select Event Enable
+                selectMirror
+                select={handleDataSelect}
+                locale={locale === 'vi' ? 'viLocale' : ''}
+                dayMaxEvents
+                nowIndicator
+                handleWindowResize
+                progressiveEventRendering
+                dayMaxEventRows
+                stickyFooterScrollbar
+              />
+            </MainCard>
           </Grid>
         </Grid>
+        <SelectDialog open={openSelect} setOpen={setOpenSelect} selectInfo={selectInfo} createEventId={createEventId} />
         <ViewEventDialog open={openEvent} setOpen={setOpenEvent} eventInfo={eventInfo} />
       </LocalizationProvider>
     </MainCard>

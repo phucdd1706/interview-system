@@ -17,7 +17,8 @@ import {
   MenuList,
   MenuItem,
   DialogTitle,
-  IconButton
+  IconButton,
+  useTheme
 } from '@mui/material';
 
 // PROJECT IMPORTS
@@ -34,6 +35,8 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 interface Props {
   open: boolean;
@@ -48,21 +51,42 @@ export interface DialogTitleProps {
   onClose: () => void;
 }
 
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
+const EventDialogTitle = (props: DialogTitleProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle sx={{ m: 0, pb: 0, pt: 0, pr: 2, display: 'flex', width: '100%', justifyContent: 'right' }} {...other}>
       {/* {children} */}
+      <IconButton
+        aria-label="delete"
+        onClick={onClose}
+        sx={{
+          position: 'relative',
+          right: 8,
+          color: (theme) => theme.palette.grey[500]
+        }}
+      >
+        <EditOutlinedIcon />
+      </IconButton>
+      <IconButton
+        aria-label="delete"
+        onClick={onClose}
+        sx={{
+          position: 'relative',
+          right: 8,
+          color: (theme) => theme.palette.grey[500]
+        }}
+      >
+        <DeleteOutlinedIcon />
+      </IconButton>
       {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: 'absolute',
+            position: 'relative',
             right: 8,
-            top: 8,
             color: (theme) => theme.palette.grey[500]
           }}
         >
@@ -79,6 +103,7 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
   const PersonCreater = 'Do Dinh Phuc';
   const HasMeet = true;
 
+  const theme = useTheme();
   const [openButton, setOpenButton] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -93,6 +118,17 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex].title}`);
+    switch (selectedIndex) {
+      case 0:
+        console.log('Yes, in a meeting room');
+        break;
+      case 1:
+        console.log('Yes');
+        break;
+      case 2:
+        console.log('Yes, joining virtually');
+        break;
+    }
   };
 
   // const renderMenuItem = (option: any, index: number) => {
@@ -135,9 +171,8 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
   return (
     <Dialog
       open={open}
-      // onClose={() => setOpen(false)}
       onClose={handleDialogClose}
-      // aria-labelledby="event-dialog"
+      aria-labelledby="event-dialog"
       scroll="paper"
       fullWidth
       maxWidth="xs"
@@ -151,7 +186,7 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
         }
       }}
     >
-      <BootstrapDialogTitle id="customized-dialog-title" onClose={handleDialogClose} />
+      <EventDialogTitle id="select-dialog-title" onClose={handleDialogClose} />
       <Card>
         <CardHeader
           sx={{ paddingLeft: 3, paddingBottom: 1, paddingTop: 1 }}
@@ -267,7 +302,7 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
           </Grid>
           <Grid item>
             <>
-              <ButtonGroup size="small" variant="outlined" ref={anchorRef} aria-label="split button">
+              <ButtonGroup sx={{ mr: 1 }} size="small" variant="outlined" ref={anchorRef} aria-label="split button">
                 <Button onClick={handleClick}>{options[selectedIndex].title}</Button>
                 <Button
                   size="small"
@@ -308,10 +343,10 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
                 )}
               </Popper>
             </>
-            <Button size="small" variant="outlined">
+            <Button sx={{ mr: 1 }} size="small" variant="outlined">
               No
             </Button>
-            <Button size="small" variant="outlined">
+            <Button sx={{ mr: 1 }} size="small" variant="outlined">
               Maybe
             </Button>
           </Grid>

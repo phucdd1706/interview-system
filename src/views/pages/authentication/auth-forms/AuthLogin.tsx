@@ -68,8 +68,8 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
       <Formik
         enableReinitialize
         initialValues={{
-          email: 'contact@trants.io',
-          password: '123123',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -101,12 +101,13 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
                 value={values.email}
                 name="email"
+                autoComplete="off"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 label="Email Address / Username"
@@ -126,6 +127,7 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
                 type={showPassword ? 'text' : 'password'}
                 value={values.password}
                 name="password"
+                autoComplete="off"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 endAdornment={

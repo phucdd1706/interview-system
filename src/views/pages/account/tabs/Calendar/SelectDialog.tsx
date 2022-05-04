@@ -1,45 +1,43 @@
 // THIRD-PARTY
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Dialog,
   DialogActions,
   Button,
-  Typography,
   Grid,
-  CardHeader,
-  Card,
-  CardContent,
-  Link,
-  ButtonGroup,
-  Popper,
-  Grow,
-  Paper,
-  MenuList,
-  MenuItem,
   DialogTitle,
-  IconButton
+  IconButton,
+  TextField,
+  DialogContent,
+  Tab,
+  Tabs,
+  useTheme,
+  FormControl,
+  Box,
+  Typography
 } from '@mui/material';
-
-// PROJECT IMPORTS
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
 
 // Icons Import
-import NoiseControlOffOutlinedIcon from '@mui/icons-material/NoiseControlOffOutlined';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import PhoneIcon from '@mui/icons-material/Phone';
-import EventIcon from '@mui/icons-material/Event';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 import CloseIcon from '@mui/icons-material/Close';
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
+import EventTabs from './SelectTabs/EventTabs';
+import InterviewTabs from './SelectTabs/InterviewTabs';
+import ReminderTabs from './SelectTabs/ReminderTabs';
+
+// PROJECT IMPORTS
 
 interface Props {
   open: boolean;
   // handleDialogOpen: () => void;
   setOpen: any;
   selectInfo: any;
+  createEventId: any;
+}
+
+export interface RefObject {
+  SayHi: () => void;
+  FileTitle: any;
 }
 
 export interface DialogTitleProps {
@@ -73,35 +71,51 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const SelectDialog = ({ open, setOpen, selectInfo }: Props) => {
-  const GoogleMeetURL = 'meet.google.com/fmf-qqrg-cbg';
-  const PhoneMeet = '0123456789';
-  const PersonCreater = 'Do Dinh Phuc';
-  const HasMeet = true;
+const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
+  const theme = useTheme();
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [tabsValue, setTabsValue] = useState('1');
+  const [title, setTitle] = useState('');
+  const selectRef = useRef<RefObject>(null);
 
-  const [openButton, setOpenButton] = React.useState(false);
-  const anchorRef = React.useRef<HTMLDivElement>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
-    setSelectedIndex(index);
-    setOpenButton(false);
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTabsValue(newValue);
   };
 
-  const handleToggle = () => {
-    setOpenButton((prevOpenButton) => !prevOpenButton);
-  };
-
-  const handleClose = (event: Event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
+  const handleSave = () => {
+    const calendarApi = selectInfo.view.calendar;
+    // const title = prompt(`Please enter a new title for your event from ${selectInfo.startStr} to ${selectInfo.endStr}`);
+    console.log(selectInfo);
+    calendarApi.unselect();
+    if (title && title !== '') {
+      calendarApi.addEvent({
+        id: createEventId(),
+        title,
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay
+      });
+      handleDialogClose();
+    } else {
+      console.error('Some Error Occurred While Saving Event!');
     }
+  };
 
-    setOpenButton(false);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
   };
 
   const handleDialogClose = () => {
+    setTitle('');
     setOpen(false);
+  };
+
+  // test function
+  const onButtonClick = () => {
+    if (selectRef.current) {
+      selectRef.current.SayHi();
+      alert(selectRef.current.FileTitle);
+    }
   };
 
   return (
@@ -113,6 +127,9 @@ const SelectDialog = ({ open, setOpen, selectInfo }: Props) => {
       scroll="paper"
       fullWidth
       maxWidth="xs"
+      PaperProps={{
+        style: { borderRadius: 5 }
+      }}
       sx={{
         '&>div:nth-of-type(3)': {
           '&>div': {
@@ -123,7 +140,81 @@ const SelectDialog = ({ open, setOpen, selectInfo }: Props) => {
         }
       }}
     >
+      {/* Header */}
       <BootstrapDialogTitle id="customized-dialog-title" onClose={handleDialogClose} />
+      {/* Body */}
+      <DialogContent sx={{ padding: '0px 0px 20px' }}>
+        <Grid container>
+          <Grid item width="95%" sx={{ marginLeft: 8 }}>
+            <FormControl fullWidth>
+              <TextField
+                id="select-title-input"
+                value={title}
+                onChange={handleTitleChange}
+                variant="standard"
+                label="Add Title"
+                inputProps={{ style: { fontSize: 18 } }} // font size of input text
+                InputLabelProps={{ style: { fontSize: 18 } }} // font size of input label
+                fullWidth
+                sx={{ paddingTop: 1 }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <TabContext value={tabsValue}>
+              <Box>
+                <Tabs
+                  value={tabsValue}
+                  onChange={handleChange}
+                  variant="fullWidth"
+                  sx={{
+                    height: 10,
+                    marginLeft: 8,
+                    marginTop: 1,
+                    '& .MuiTabs-indicator': {
+                      height: 0
+                    },
+                    '& .MuiTab-root.Mui-selected': {
+                      backgroundColor: theme.palette.primary.light
+                    },
+                    "& button[aria-selected='true']": {
+                      borderRadius: 1.5
+                    }
+                  }}
+                  // TabIndicatorProps={{
+                  //   style: {
+                  //     transition: 'none'
+                  //   }
+                  // }}
+                >
+                  <Tab label="Interview" value="1" />
+                  <Tab label="Event" value="2" />
+                  <Tab label="Reminder" value="3" />
+                </Tabs>
+              </Box>
+              <TabPanel value="1">
+                {' '}
+                <InterviewTabs selectInfo={selectInfo} ref={selectRef} />{' '}
+              </TabPanel>
+              <TabPanel value="2">
+                {' '}
+                <EventTabs selectInfo={selectInfo} ref={selectRef} />{' '}
+              </TabPanel>
+              <TabPanel value="3">
+                {' '}
+                <ReminderTabs selectInfo={selectInfo} ref={selectRef} />{' '}
+              </TabPanel>
+            </TabContext>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      {/* Footer */}
+      <DialogActions>
+        <Button onClick={onButtonClick}>More Options</Button>
+        <Button variant="contained" onClick={handleSave}>
+          Save
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
