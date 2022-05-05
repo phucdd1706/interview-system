@@ -158,6 +158,10 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     {
       value: 1,
       label: 'Complete'
+    },
+    {
+      value: 2,
+      label: 'Cancel'
     }
   ];
 
@@ -339,30 +343,28 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                     />
                   </Grid>
 
-                  {dataEdit.status === 1 && (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel>
-                          <span style={{ color: '#f44336' }}>*</span> Status
-                        </InputLabel>
-                        <Select
-                          id="status"
-                          name="status"
-                          label="Status"
-                          displayEmpty
-                          value={formik?.values?.status}
-                          onChange={formik.handleChange}
-                          inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                          {Status.map((status: SelectProps, index: number) => (
-                            <MenuItem key={index} value={status.value}>
-                              {status.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel>
+                        <span style={{ color: '#f44336' }}>*</span> Status
+                      </InputLabel>
+                      <Select
+                        id="status"
+                        name="status"
+                        label="Status"
+                        displayEmpty
+                        value={formik?.values?.status}
+                        onChange={formik.handleChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                      >
+                        {Status.map((status: SelectProps, index: number) => (
+                          <MenuItem key={index} value={status.value}>
+                            {status.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
 
                   <Grid item xs={12}>
                     <AnimateButton>
