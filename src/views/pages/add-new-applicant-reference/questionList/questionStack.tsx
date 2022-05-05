@@ -24,11 +24,16 @@ const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickD
       </Typography>
     </Stack>
     <Stack direction="column" spacing={2}>
-      {Object.keys(questionStack.questions).map((key: string) =>
-        questionStack.questions[key as 'base' | 'advanced' | 'focus'].map((question: QuestionType) => (
-          <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} index={0} />
-        ))
-      )}
+      {Object.keys(questionStack.questions).map((key: string) => (
+        <Box>
+          <Typography variant="h5" component="h5" sx={{ flexGrow: 1, padding: '8px 0' }}>
+            {key.toUpperCase()}
+          </Typography>
+          {questionStack.questions[key as 'base' | 'advanced' | 'focus'].map((question: QuestionType) => (
+            <QuestionTag value={question} key={`${questionStack.language}-${question.id}`} interviewing={interviewing} index={0} />
+          ))}
+        </Box>
+      ))}
     </Stack>
   </Box>
 );
