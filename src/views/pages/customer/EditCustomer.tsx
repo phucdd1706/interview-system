@@ -80,6 +80,12 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
+  password: yup.string().min(6, 'your password must be at least 6 character').required('Password is required'),
+  cfpassword: yup
+    .string()
+    .min(6, 'your password must be at least 6 character')
+    .required('Password is required')
+    .oneOf([yup.ref('password'), null], 'Password must match'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   phone: yup.string().required('Phone is required'),
   gender: yup.string().required('Gender is required'),
@@ -88,6 +94,7 @@ const validationSchema = yup.object({
 });
 
 const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -141,6 +148,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
       id: customer.id,
       name: customer.name,
       username: customer.username,
+      password: customer.password,
+      cfpassword: customer.cfpassword,
       email: customer.email,
       phone: customer.phone,
       dob: customer.dob,
@@ -243,6 +252,32 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
                       helperText={(formik.touched.email && formik.errors.email) || errors?.email}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="password"
+                      name="password"
+                      label="Password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                      helperText={(formik.touched.password && formik.errors.password) || errors?.password}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="cfpassword"
+                      name="cfpassword"
+                      label="Confirm Password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formik.values.cfpassword}
+                      onChange={formik.handleChange}
+                      error={(formik.touched.cfpassword && Boolean(formik.errors.cfpassword)) || errors?.cfpassword}
+                      helperText={(formik.touched.cfpassword && formik.errors.cfpassword) || errors?.cfpassword}
                     />
                   </Grid>
                   <Grid item xs={12}>
