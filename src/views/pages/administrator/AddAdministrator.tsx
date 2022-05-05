@@ -349,6 +349,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
