@@ -3,7 +3,7 @@ export type UserProfile = {
   name?: string;
   username?: string;
   password?: string;
-  cfpassword?: string;
+  password_confirmation?: string;
   email?: string;
   dob?: string;
   phone?: string;

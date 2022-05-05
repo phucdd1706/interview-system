@@ -80,11 +80,10 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
-  password: yup.string().min(6, 'your password must be at least 6 character').required('Password is required'),
-  cfpassword: yup
+  password: yup.string().min(6, 'your password must be at least 6 character'),
+  password_confirmation: yup
     .string()
     .min(6, 'your password must be at least 6 character')
-    .required('Password is required')
     .oneOf([yup.ref('password'), null], 'Password must match'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   phone: yup.string().required('Phone is required'),
@@ -148,8 +147,8 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
       id: customer.id,
       name: customer.name,
       username: customer.username,
-      password: customer.password,
-      cfpassword: customer.cfpassword,
+      password: '',
+      password_confirmation: '',
       email: customer.email,
       phone: customer.phone,
       dob: customer.dob,
@@ -270,14 +269,19 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      id="cfpassword"
-                      name="cfpassword"
+                      id="password_confirmation"
+                      name="password_confirmation"
                       label="Confirm Password"
                       type={showPassword ? 'text' : 'password'}
-                      value={formik.values.cfpassword}
+                      value={formik.values.password_confirmation}
                       onChange={formik.handleChange}
-                      error={(formik.touched.cfpassword && Boolean(formik.errors.cfpassword)) || errors?.cfpassword}
-                      helperText={(formik.touched.cfpassword && formik.errors.cfpassword) || errors?.cfpassword}
+                      error={
+                        (formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) ||
+                        errors?.password_confirmation
+                      }
+                      helperText={
+                        (formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password_confirmation
+                      }
                     />
                   </Grid>
                   <Grid item xs={12}>
