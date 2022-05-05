@@ -1,100 +1,49 @@
 // THIRD-PARTY
 import React from 'react';
-import { Paper, Stack, Typography, Button, FormControl, MenuItem, Select } from '@mui/material';
-import { IconX, IconPlus, IconDotsVertical } from '@tabler/icons';
+import { Paper, Stack, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 // PROJECT IMPORT
 import useStyles from '../useStylesHook/makeStyle';
 import { useDispatch } from 'store';
-import { handleAnswerScore, handleInterviewQuestionNotes } from 'store/slices/applicantReferences';
-import ButtonRounded from 'views/pages/add-new-applicant-reference/buttonRounded';
+import { handleAnswerStatus } from 'store/slices/applicant/applicantReferences';
+import { QuestionType } from 'types/question';
 
 interface Props {
-  value: {
-    questionId: string;
-    question: string;
-    notes?: string;
-    answerScore?: string;
-  };
-  type: string;
+  value: QuestionType;
   interviewing?: boolean;
-  onDeleteTag?: (type: string, questionId: string) => void;
-  onAddTag?: (type: string, question: { questionId: string; question: string }) => void;
+  index: number;
 }
 
-const QuestionTag = ({ value, interviewing = false, type, onDeleteTag, onAddTag }: Props) => {
-  const classes = useStyles();
-  const [showNote, setShowNote] = React.useState(false);
+const QuestionTag = ({ value, interviewing = false, index }: Props) => {
+  const classes = useStyles({ interviewing, status: value.status });
   const dispatch = useDispatch();
   return (
     <Paper className={classes.itemHovered} variant="outlined" sx={{ padding: '1em' }}>
       <Stack direction="row" alignItems="center" spacing={2}>
         <Typography variant="body1" component="span" sx={{ flexGrow: 1 }}>
-          {value.question}
+          Câu hỏi : {value.question_content}?
         </Typography>
-        {onDeleteTag && (
-          <Button
-            color="error"
-            sx={{ width: '24px', height: '24px', padding: 0, minWidth: 'auto', borderRadius: 99 }}
-            onClick={() => {
-              onDeleteTag(type, value.questionId);
-            }}
-          >
-            <IconX height={22} />
-          </Button>
-        )}
-        {onAddTag && (
-          <ButtonRounded
-            onClick={() => {
-              onAddTag(type, value);
-            }}
-          >
-            <IconPlus height={22} />
-          </ButtonRounded>
-        )}
         {interviewing && (
           <Stack direction="row" alignItems="center" spacing={2}>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 100, height: 30 }}>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                label="Evaluate"
-                value={value.answerScore || ''}
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                value={typeof value.status === 'number' ? value.status + 1 : 3}
                 onChange={(e) => {
-                  dispatch(handleAnswerScore({ questionId: value.questionId, answerScore: e.target.value }));
+                  dispatch(handleAnswerStatus({ id: value.candidate_id || 0, status: Number(e.target.value) - 1 }));
                 }}
+                name="radio-buttons-group"
               >
-                <MenuItem value="">
-                  <em>Do not enter</em>
-                </MenuItem>
-                <MenuItem value="bad">Bad</MenuItem>
-                <MenuItem value="good">Good</MenuItem>
-                <MenuItem value="excellent">Excellent</MenuItem>
-              </Select>
+                <Stack direction="row">
+                  <FormControlLabel value={3} control={<Radio />} label="Skip" labelPlacement="top" />
+                  <FormControlLabel value={1} control={<Radio />} label="Fail" labelPlacement="top" />
+                  <FormControlLabel value={2} control={<Radio />} label="Pass" labelPlacement="top" />
+                </Stack>
+              </RadioGroup>
             </FormControl>
-            <Button
-              color="success"
-              sx={{ width: '24px', height: '24px', padding: 0, minWidth: 'auto', borderRadius: 99 }}
-              onClick={() => {
-                setShowNote(!showNote);
-              }}
-            >
-              <IconDotsVertical height={22} />
-            </Button>
           </Stack>
         )}
       </Stack>
-      {showNote && (
-        <textarea
-          value={value.notes}
-          onChange={(e) => {
-            dispatch(handleInterviewQuestionNotes({ questionId: value.questionId, notes: e.target.value }));
-          }}
-          rows={3}
-          style={{ width: '100%', resize: 'none', marginTop: '1em', padding: '0.5em' }}
-          placeholder="Notes"
-        />
-      )}
     </Paper>
   );
 };

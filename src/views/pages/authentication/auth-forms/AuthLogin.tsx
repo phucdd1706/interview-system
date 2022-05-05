@@ -68,17 +68,17 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
       <Formik
         enableReinitialize
         initialValues={{
-          email: 'contact@trants.io',
-          password: '123123',
+          account: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          account: Yup.string().max(255).required('Email/Username is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await login(values.email, values.password).then(
+            await login(values.account, values.password).then(
               () => {},
               (err: any) => {
                 if (scriptedRef.current) {
@@ -100,21 +100,21 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
-            <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+            <FormControl fullWidth error={Boolean(touched.account && errors.account)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-account-login">Email Address / Username</InputLabel>
               <OutlinedInput
-                id="outlined-adornment-email-login"
-                type="email"
-                value={values.email}
-                name="email"
+                id="outlined-adornment-account-login"
+                type="account"
+                value={values.account}
+                name="account"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 label="Email Address / Username"
                 inputProps={{}}
               />
-              {touched.email && errors.email && (
-                <FormHelperText error id="standard-weight-helper-text-email-login">
-                  {errors.email}
+              {touched.account && errors.account && (
+                <FormHelperText error id="standard-weight-helper-text-account-login">
+                  {errors.account}
                 </FormHelperText>
               )}
             </FormControl>

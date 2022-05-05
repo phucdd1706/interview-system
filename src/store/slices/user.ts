@@ -5,10 +5,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { UserFilter } from 'types/user';
-import { UserProfile } from '../../types/user-profile';
+import { Payload, UserFilter } from 'types/user';
 
-export const ADMINISTRATOR_URL = `${process.env.REACT_APP_API_URL}/v1/operator/users`;
+export const ADMINISTRATOR_URL = {
+  getAdmin: `${process.env.REACT_APP_API_URL}/v1/operator/users`,
+  postAdmin: `${process.env.REACT_APP_API_URL}/v1/operator/users`,
+  putAdmin: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`,
+  delAdmin: (id: any) => `${process.env.REACT_APP_API_URL}/v1/operator/users/${id}`
+};
 
 const initialState: DefaultRootStateProps['user'] = {
   users: [],
@@ -27,6 +31,8 @@ const slice = createSlice({
 
     getAdministratorListSuccess(state, action) {
       state.users = action.payload.data;
+      state.pageCount = action.payload.last_page;
+      state.currentPage = action.payload.current_page;
     },
 
     addAdministratorSuccess(state, action) {
@@ -61,7 +67,7 @@ export function getAdministratorList(filter?: UserFilter) {
 
   return async () => {
     try {
-      const response = await axios.get(`${ADMINISTRATOR_URL}?${queryParams}`);
+      const response = await axios.get(`${ADMINISTRATOR_URL.getAdmin}?${queryParams}`);
       dispatch(slice.actions.getAdministratorListSuccess(response.data.success));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -69,35 +75,59 @@ export function getAdministratorList(filter?: UserFilter) {
   };
 }
 
-export function addAdministrator(administrator: UserProfile) {
+export function addAdministrator(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/operator/users`, administrator);
-      dispatch(slice.actions.addAdministratorSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const resp = await axios
+      .post(ADMINISTRATOR_URL.postAdmin, params)
+      .then((result) => {
+        dispatch(slice.actions.addAdministratorSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }
 
-export function editAdministrator(user: UserProfile) {
+export function editAdministrator(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/operator/users/${user.id}`, user);
-      dispatch(slice.actions.editAdministratorSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, params, callback } = payload;
+    const resp = await axios
+      .put(ADMINISTRATOR_URL.putAdmin(id), params)
+      .then((result) => {
+        dispatch(slice.actions.editAdministratorSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }
 
-export function deleteAdministrator(user: UserProfile) {
+export function deleteAdministrator(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/v1/operator/users/${user.id}`);
-      dispatch(slice.actions.deleteAdministratorSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const resp = await axios
+      .delete(ADMINISTRATOR_URL.delAdmin(id))
+      .then((result) => {
+        dispatch(slice.actions.deleteAdministratorSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(resp);
     }
   };
 }

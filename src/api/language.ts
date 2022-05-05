@@ -1,20 +1,18 @@
 import axiosServices from 'utils/axios';
+import { Languages } from 'types/language';
 
-const getListLanguage = (params: any, token: any) =>
-  axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+const URL_API = `${process.env.REACT_APP_API_URL}/v1/operator/languages`;
 
-const getOneLanguage = (id: any, token: any) =>
-  axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+const getListLanguage = (params: string) => axiosServices.get(`${URL_API}?${params}`);
 
-const createLanguage = (params: any, token: any) =>
-  axiosServices.post(`${process.env.REACT_APP_API_URL}/v1/operator/languages`, params, { headers: { Authorization: `Bearer ${token}` } });
+const getAllLanguage = () => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/languages/all`);
 
-const updateLanguage = (id: any, params: any, token: any) =>
-  axiosServices.put(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`, params, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+const getOneLanguage = (id: number | string | undefined) => axiosServices.get(`${URL_API}/${id}`);
 
-const deleteLanguage = (id: any, token: any) =>
-  axiosServices.delete(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+const createLanguage = (params: Languages) => axiosServices.post(`${URL_API}`, params);
 
-export { getListLanguage, getOneLanguage, createLanguage, updateLanguage, deleteLanguage };
+const updateLanguage = (id: number | string | undefined, params: Languages) => axiosServices.put(`${URL_API}/${id}`, params);
+
+const deleteLanguage = (id: number | string | undefined) => axiosServices.delete(`${URL_API}/${id}`);
+
+export { getListLanguage, getOneLanguage, createLanguage, updateLanguage, deleteLanguage, getAllLanguage };

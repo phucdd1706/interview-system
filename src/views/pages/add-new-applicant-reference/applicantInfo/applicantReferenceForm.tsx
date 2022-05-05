@@ -1,231 +1,170 @@
 // THIRD-PARTY
-import { useState } from 'react';
-import { Formik } from 'formik';
+import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Autocomplete,
-  TextField,
-  useMediaQuery
-} from '@mui/material';
+import axios from 'axios';
+import { Box, Button, FormControl, FormHelperText, Stack, Autocomplete, TextField, useMediaQuery } from '@mui/material';
 import { IconX } from '@tabler/icons';
-import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+import { useIntl } from 'react-intl';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import axiosServices from 'utils/axios';
 import LegendWrapper from '../legend';
-import { useDispatch } from 'store';
-import { ApplicantInfo } from 'types/applicantData';
-import { getInterviewQuestionThunk } from 'store/slices/applicantReferences';
+import { useDispatch, useSelector } from 'store';
+import { getRanksListSuccess } from 'store/slices/rank';
+import { getLanguageListSuccess } from 'store/slices/language';
+import { getInterviewQuestionThunk } from 'store/slices/applicant/applicantAsyncAction';
 import personalDetail from './layoutMapping';
-import { jobPosition, jobLevel, workingExperiences } from './constant';
 
-type personalDetailType = 'firstName' | 'lastName' | 'email' | 'phone' | 'address' | 'notes';
+// TYPE IMPORTS
+import { RankType } from 'types/rank';
+import { Languages } from 'types/language';
+import FormInput from './formInput';
+import { alertError } from 'utils/helpers/axios/errorAlert';
 
-const initialEmployeeForm: ApplicantInfo = {
-  id: '',
-  firstName: '',
-  lastName: '',
-  age: '',
-  email: '',
-  phone: '',
-  address: '',
-  applyPosition: [
-    {
-      id: uuidv4(),
-      position: '',
-      level: ''
-    }
-  ],
-  experiences: [
-    {
-      id: uuidv4(),
-      position: '',
-      durations: ''
-    }
-  ],
-  notes: '',
-  interviewTime: `${new Date().toISOString().split('T')[0]}T00:00`
-};
+type personalDetailType = 'name' | 'email' | 'phone' | 'address';
 
-const EmployeeForm = () => {
-  const [employeeForm, setEmployeeForm] = useState(initialEmployeeForm);
+const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleSubmit, setFieldValue, touched, values }: any) => {
+  const intl = useIntl();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-
-  const addMoreApplyPosition = () => {
-    setEmployeeForm({ ...employeeForm, applyPosition: [...employeeForm.applyPosition, { id: uuidv4(), position: '', level: '' }] });
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
+  const { language } = useSelector((state) => state.language);
+  const { ranks } = useSelector((state) => state.rank);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  React.useEffect(() => {
+    axios.all([axiosServices.get('/v1/languages/all'), axiosServices.get('/v1/ranks/all')]).then((res) => {
+      dispatch(getLanguageListSuccess({ data: res[0].data.success }));
+      dispatch(getRanksListSuccess({ data: res[1].data.success }));
+    });
+  }, [dispatch]);
+  const getInterviewQuestion = async () => {
+    const isReady = values.applyPosition.every(
+      (item: { language_id: string; rank_id: string; rank_advanced_id: string }) =>
+        item.language_id && item.rank_id && item.rank_advanced_id
+    );
+    if (isReady) {
+      setIsSubmitting(true);
+      await dispatch(getInterviewQuestionThunk(values));
+      setIsSubmitting(false);
+    } else {
+      alertError('Please select all field in apply position');
+    }
   };
-  const addMoreExperiences = () => {
-    setEmployeeForm({ ...employeeForm, experiences: [...employeeForm.experiences, { id: uuidv4(), position: '', durations: '' }] });
-  };
-  const removeExperience = (id: string) => {
-    const newExperiences = employeeForm.experiences.filter((experience) => experience.id !== id);
-    setEmployeeForm({ ...employeeForm, experiences: newExperiences });
-  };
-  const removeApplyPosition = (id: string) => {
-    const newApplyPosition = employeeForm.applyPosition.filter((applyPosition) => applyPosition.id !== id);
-    setEmployeeForm({ ...employeeForm, applyPosition: newApplyPosition });
-  };
-
   return (
     <Box>
-      <Formik
-        enableReinitialize
-        initialValues={employeeForm}
-        validationSchema={Yup.object().shape({
-          firstName: Yup.string().required('First name is required'),
-          lastName: Yup.string().required('Last name is required'),
-          age: Yup.number().required('Age is required'),
-          email: Yup.string().email('Email is invalid').required('Email is required'),
-          phone: Yup.string().required('Phone is required'),
-          address: Yup.string().required('Address is required'),
-          applyPosition: Yup.array().of(
-            Yup.object().shape({
-              position: Yup.string().required('position is required'),
-              level: Yup.string().required('Level is required')
-            })
-          )
+      <>
+        {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string; required?: boolean }[] }) => {
+          const { render } = row;
+          return (
+            <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
+              {render.map((item: { key: string; label: string; type: string; required?: boolean }) => {
+                const key: personalDetailType = item.key as personalDetailType;
+                const { label, type, required } = item;
+                return (
+                  <FormInput
+                    key={`${row.label}-${label}`}
+                    touched={touched[key]}
+                    errors={errors[key]}
+                    label={label}
+                    type={type}
+                    values={values[key]}
+                    name={key}
+                    handleBlur={handleBlur}
+                    handleChange={handleChange}
+                    required={required}
+                    readOnly={interviewing}
+                  />
+                );
+              })}
+            </Stack>
+          );
         })}
-        onSubmit={async (values, { setSubmitting }) => {
-          setSubmitting(true);
-          await dispatch(getInterviewQuestionThunk(values));
-          setSubmitting(false);
-        }}
-      >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            {personalDetail.map((row: { label: string; render: { key: string; label: string; type: string }[] }) => {
-              const { render } = row;
-              return (
-                <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
-                  {render.map((item: { key: string; label: string; type: string }) => {
-                    const key: personalDetailType = item.key as personalDetailType;
-                    const { label, type } = item;
-                    return (
-                      <FormControl fullWidth error={Boolean(touched[key] && errors[key])} key={`${row.label}-${label}`}>
-                        <InputLabel htmlFor={`outlined-adornment-${row.label}-${label}`}>{label}</InputLabel>
-                        <OutlinedInput
-                          id={`outlined-adornment-${row.label}-${label}`}
-                          type={type}
-                          value={values[key]}
-                          name={key}
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          label={label}
-                          inputProps={{}}
-                        />
-                        {touched[key] && errors[key] && (
-                          <FormHelperText error id="standard-weight-helper-text-last-name">
-                            {errors[key]}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                    );
-                  })}
-                </Stack>
-              );
-            })}
 
-            <LegendWrapper legend="Experiences">
+        {!interviewing && (
+          <>
+            <LegendWrapper legend={intl.formatMessage({ id: 'apply-positions' })}>
               <Box>
-                {values.experiences.map((item: { id: string; position: string; durations: string }, index: number) => (
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
-                    <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
-                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
-                        <Autocomplete
-                          options={jobPosition}
-                          onChange={(event, value) => {
-                            const newExperiences = [...values.experiences];
-                            newExperiences[index].position = (value && value.title) || '';
-                            setEmployeeForm({ ...employeeForm, experiences: newExperiences });
-                          }}
-                          getOptionLabel={(option) => option.title}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Position" placeholder="Position" />}
-                          sx={{ flexGrow: 1 }}
-                        />
-                      </FormControl>
-                      <FormControl fullWidth error={Boolean(touched.experiences && errors.experiences)}>
-                        <Autocomplete
-                          options={workingExperiences}
-                          onChange={(event, value) => {
-                            const newExperiences = [...values.experiences];
-                            newExperiences[index].durations = (value && value.title) || '';
-                            setEmployeeForm({ ...employeeForm, experiences: newExperiences });
-                          }}
-                          getOptionLabel={(option) => option.title}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Durations" placeholder="Durations" />}
-                          sx={{ flexGrow: 1 }}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => {
-                        removeExperience(item.id);
-                      }}
-                      sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
-                    >
-                      <IconX />
-                    </Button>
-                  </Stack>
-                ))}
-                <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button variant="outlined" onClick={addMoreExperiences} sx={{ marginTop: 2 }}>
-                    + Add more experiences
-                  </Button>
-                </Stack>
-              </Box>
-            </LegendWrapper>
-
-            <LegendWrapper legend="Apply Positions">
-              <Box>
-                {values.applyPosition.map((item: { id: string; position: string; level: string }, index: number) => (
-                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={item.id}>
-                    <Stack direction={matchDownSM ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
+                {values.applyPosition.map((item: { rank_advanced_id: string; language_id: string; rank_id: string }, index: number) => (
+                  <Stack direction="row" alignItems="center" spacing={2} sx={{ padding: '1em 0' }} key={uuidv4()}>
+                    <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={jobPosition}
+                          options={language}
                           onChange={(event, value) => {
-                            const newApplyPosition = [...values.applyPosition];
-                            newApplyPosition[index].position = (value && value.title) || '';
-                            setEmployeeForm({ ...employeeForm, applyPosition: newApplyPosition });
+                            setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
-                          getOptionLabel={(option) => option.title}
+                          value={language.find((element) => element.id === item.language_id)}
+                          getOptionLabel={(option: Languages) => option.name || ''}
                           renderInput={(params) => (
                             <TextField {...params} variant="standard" label="Apply Position" placeholder="Position" />
                           )}
                           sx={{ flexGrow: 1 }}
                         />
+                        {touched.applyPosition && errors.applyPosition && (
+                          <FormHelperText error id="standard-weight-helper-text-last-name">
+                            {
+                              // @ts-ignore:next-line
+                              errors.applyPosition[index] && errors.applyPosition[index].language_id
+                            }
+                          </FormHelperText>
+                        )}
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={jobLevel}
+                          options={ranks}
                           onChange={(event, value) => {
-                            const newApplyPosition = [...values.applyPosition];
-                            newApplyPosition[index].level = (value && value.title) || '';
-                            setEmployeeForm({ ...employeeForm, applyPosition: newApplyPosition });
+                            setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
-                          getOptionLabel={(option) => option.title}
-                          renderInput={(params) => <TextField {...params} variant="standard" label="Level" placeholder="Level" />}
+                          value={ranks.find((element) => element.id === item.rank_id)}
+                          getOptionLabel={(option: RankType) => option.name || ''}
+                          renderInput={(params) => <TextField {...params} variant="standard" label="Rank" placeholder="Rank" />}
                           sx={{ flexGrow: 1 }}
                         />
+                        {touched.applyPosition && errors.applyPosition && (
+                          <FormHelperText error id="standard-weight-helper-text-last-name">
+                            {
+                              // @ts-ignore:next-line
+                              errors.applyPosition[index] && errors.applyPosition[index].rank_id
+                            }
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                      <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
+                        <Autocomplete
+                          options={ranks}
+                          onChange={(event, value) => {
+                            setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
+                          }}
+                          value={ranks.find((element) => element.id === item.rank_advanced_id)}
+                          getOptionLabel={(option: RankType) => option.name || ''}
+                          renderInput={(params) => (
+                            <TextField {...params} variant="standard" label="Rank Advanced" placeholder="Rank Advanced" />
+                          )}
+                          sx={{ flexGrow: 1 }}
+                        />
+                        {touched.applyPosition && errors.applyPosition && (
+                          <FormHelperText error id="standard-weight-helper-text-last-name">
+                            {
+                              // @ts-ignore:next-line
+                              errors.applyPosition[index] && errors.applyPosition[index].rank_advanced_id
+                            }
+                          </FormHelperText>
+                        )}
                       </FormControl>
                     </Stack>
                     <Button
                       variant="outlined"
                       color="error"
                       onClick={() => {
-                        removeApplyPosition(item.id);
+                        setFieldValue(
+                          'applyPosition',
+                          values.applyPosition.filter(
+                            (position: { rank_advanced_id: string; language_id: string; rank_id: string }, positionIndex: number) =>
+                              positionIndex !== index
+                          )
+                        );
                       }}
                       sx={{ borderRadius: 9999, width: '28px', height: '28px', padding: '3px', minWidth: 'auto' }}
                     >
@@ -234,7 +173,13 @@ const EmployeeForm = () => {
                   </Stack>
                 ))}
                 <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                  <Button variant="outlined" onClick={addMoreApplyPosition} sx={{ marginTop: 2 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      setFieldValue('applyPosition', values.applyPosition.concat({ rank_advanced_id: '', language_id: '', rank_id: '' }));
+                    }}
+                    sx={{ marginTop: 2 }}
+                  >
                     + Add more position
                   </Button>
                 </Stack>
@@ -245,22 +190,23 @@ const EmployeeForm = () => {
                 <Button
                   disableElevation
                   disabled={isSubmitting}
+                  onClick={getInterviewQuestion}
                   fullWidth
                   size="large"
-                  type="submit"
+                  // type="submit"
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                   sx={{ marginTop: 4 }}
                 >
                   Get Interview Question
                 </Button>
               </AnimateButton>
             </Box>
-          </form>
+          </>
         )}
-      </Formik>
+      </>
     </Box>
   );
 };
 
-export default EmployeeForm;
+export default ApplicantForm;

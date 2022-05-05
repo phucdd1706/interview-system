@@ -1,67 +1,124 @@
 // THIRD-PARTY
-import { Box, Button } from '@mui/material';
+import { Box, Button, TextareaAutosize, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
+import { Formik, FormikProps } from 'formik';
+import * as Yup from 'yup';
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
-import EmployeeForm from './applicantInfo/applicantReferenceForm';
+import ApplicantForm from './applicantInfo/applicantReferenceForm';
 import QuestionList from './questionList/index';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { activeItem } from 'store/slices/menu';
 import { useSelector } from 'store';
-import axiosServices from 'utils/axios';
+import { applicantInit } from 'store/slices/applicant/applicantReferences';
+import { ApplicantInfo } from 'types/applicantData';
+import { axiosPost, axiosPut } from 'utils/helpers/axios';
+import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
-  const applicantInfo = useSelector((state) => state.applicant);
+  const applicant = useSelector((state) => state.applicant);
+  const { id } = useParams();
   const intl = useIntl();
   const navigate = useNavigate();
-  const [isSubmitting, setSubmitting] = useState(false);
-  useEffect(() => {
-    dispatch(activeItem(['applicant']));
-  }, [dispatch]);
 
-  const submitInfo = () => {
-    setSubmitting(true);
-    axiosServices
-      .post(`${process.env.REACT_APP_FAKE_API_URL}/applicant`, applicantInfo)
-      .then(async (res) => {
-        setSubmitting(false);
-        navigate('/interview/1', { replace: true });
-      })
-      .catch((err) => err);
-  };
+  useEffect(() => {
+    if (id) {
+      dispatch(getInterviewDataThunk(id));
+      dispatch(activeItem(['']));
+    } else {
+      dispatch(applicantInit());
+      dispatch(activeItem(['applicant']));
+    }
+  }, [id, dispatch]);
   return (
     <Box>
-      <MainCard title={intl.formatMessage({ id: 'applicant reference form' })}>
-        <EmployeeForm />
-      </MainCard>
-      {applicantInfo.interviewQuestions.length > 0 && (
-        <>
-          <MainCard title={intl.formatMessage({ id: 'list questions' })} sx={{ margin: '1em 0' }}>
-            <QuestionList questionList={applicantInfo.interviewQuestions} />
-          </MainCard>
-          <MainCard sx={{ margin: '1em 0' }}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={isSubmitting}
-                onClick={submitInfo}
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                color="secondary"
-              >
-                Submit
-              </Button>
-            </AnimateButton>
-          </MainCard>
-        </>
-      )}
+      <Formik
+        enableReinitialize
+        initialValues={applicant.applicantInfo}
+        validationSchema={Yup.object().shape({
+          name: Yup.string().required('First name is required'),
+          age: Yup.number().required('Age is required'),
+          email: Yup.string().email('Email is invalid').required('Email is required'),
+          phone: Yup.string().required('Phone is required'),
+          applyPosition: Yup.array().of(
+            Yup.object().shape({
+              language_id: Yup.string().required('Language is required'),
+              rank_id: Yup.string().required('Rank is required'),
+              rank_advanced_id: Yup.string().required('Rank advanced is required')
+            })
+          ),
+          time: Yup.string().required('Time is required')
+        })}
+        onSubmit={async (values, { setSubmitting }) => {
+          setSubmitting(true);
+          if (id) {
+            const data = {
+              ...values,
+              status: 1,
+              candidateQuestions: values.questions
+            };
+            await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then(() =>
+              navigate('/history')
+            );
+          } else {
+            await axiosPost(`${process.env.REACT_APP_API_URL}/v1/client/candidates`, values, 'Add applicant success').then((res: any) => {
+              res && res.success.id && navigate(`/applicant/${res.success.id}`);
+            });
+          }
+          await setSubmitting(false);
+        }}
+      >
+        {(props: FormikProps<ApplicantInfo>) => (
+          <form noValidate onSubmit={props.handleSubmit}>
+            {console.log(props.values)}
+            <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
+              <ApplicantForm interviewing={!!id} {...props} />
+            </MainCard>
+            {applicant.interviewQuestions.length > 0 && (
+              <>
+                <MainCard title={intl.formatMessage({ id: 'interview-questions' })} sx={{ margin: '1em 0' }}>
+                  <Stack direction="column" spacing={2}>
+                    <QuestionList questionList={applicant.interviewQuestions} interviewing={!!id} />
+                  </Stack>
+                </MainCard>
+                {id && (
+                  <MainCard>
+                    <TextareaAutosize
+                      name="note"
+                      onChange={props.handleChange}
+                      aria-label="minimum height"
+                      minRows={3}
+                      placeholder="Note"
+                      value={props.values.note}
+                      style={{ width: '100%', padding: '8px' }}
+                    />
+                  </MainCard>
+                )}
+
+                <MainCard sx={{ margin: '1em 0' }}>
+                  <AnimateButton>
+                    <Button
+                      disableElevation
+                      disabled={props.isSubmitting}
+                      type="submit"
+                      fullWidth
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                    >
+                      {id ? 'Send Interview Result' : 'Submit'}
+                    </Button>
+                  </AnimateButton>
+                </MainCard>
+              </>
+            )}
+          </form>
+        )}
+      </Formik>
     </Box>
   );
 };
