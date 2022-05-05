@@ -74,7 +74,6 @@ const AddApplicantReference = () => {
       >
         {(props: FormikProps<ApplicantInfo>) => (
           <form noValidate onSubmit={props.handleSubmit}>
-            {console.log(props.values)}
             <MainCard title={intl.formatMessage({ id: 'applicant-reference-form' })}>
               <ApplicantForm interviewing={!!id} {...props} />
             </MainCard>

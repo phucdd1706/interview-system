@@ -65,6 +65,7 @@ const MainRoutes = {
     },
     {
       path: '/questions',
+      role: 1,
       element: <Question />
     },
     {
