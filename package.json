@@ -1,6 +1,6 @@
 {
   "name": "interview-manager-system",
-  "description": "This is interview manager system: manager interview questions and answers",
+  "description": "This is interview manager system: manager interview-questions and answers",
   "authors": [
     {
       "name": "Son T. Tran",
@@ -31,6 +31,7 @@
     "@hookform/resolvers": "^2.8.8",
     "@material-ui/core": "^4.12.4",
     "@material-ui/data-grid": "^4.0.0-alpha.37",
+    "@material-ui/styles": "^4.11.5",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.68",
     "@mui/material": "^5.5.3",
@@ -38,6 +39,7 @@
     "@mui/system": "^5.4.1",
     "@mui/utils": "^5.4.1",
     "@mui/x-data-grid": "^5.5.0",
+    "@mui/x-date-pickers": "^5.0.0-alpha.2",
     "@reduxjs/toolkit": "^1.7.2",
     "@tabler/icons": "^1.53.0",
     "amazon-cognito-identity-js": "^5.2.6",

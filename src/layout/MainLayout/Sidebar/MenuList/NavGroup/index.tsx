@@ -24,21 +24,18 @@ export interface NavGroupProps {
 const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  console.log(user);
-  // menu list collapse & items
   const items = item.children?.map((menu) => {
-    console.log(menu);
     switch (menu.type) {
       case 'collapse':
-        if (menu.role === user.type) {
+        if (menu.role === user.type || !menu.role) {
           return <NavCollapse key={menu.id} menu={menu} level={1} />;
         }
-        return <></>;
+        return null;
       case 'item':
-        if (menu.role === user.type) {
+        if (menu.role === user.type || !menu.role) {
           return <NavItem key={menu.id} item={menu} level={1} />;
         }
-        return <></>;
+        return null;
 
       default:
         return (

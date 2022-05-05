@@ -81,14 +81,15 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
     };
 
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (state.isInitialized !== undefined && !state.isInitialized) {
     return <Loader />;
   }
 
-  const login = async (email: string, password: string) => {
-    const response = await axios.post(LOGIN_URL, { email, password });
+  const login = async (account: string, password: string) => {
+    const response = await axios.post(LOGIN_URL, { account, password });
     const { token, user } = response.data.success;
     setSession(token);
     setUser(user);

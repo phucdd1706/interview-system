@@ -1,67 +1,93 @@
-// THIRD-PARTY
 import React, { useState } from 'react';
+// THIRD-PARTY
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+
 import moment from 'moment';
 
 // PROJECT IMPORTS
-import { UserProfile } from 'types/user-profile';
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
-import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import EditAdministrator from 'views/pages/administrator/EditAdministrator';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { deleteAdministrator } from 'store/slices/user';
-import AlertAdministratorDelete from 'views/pages/administrator/AlertAdministratorDelete';
+import { deleteAdministrator, getAdministratorList } from 'store/slices/user';
+
+import { UserFilter } from 'types/user';
+import { UserProfile } from 'types/user-profile';
+
+import AlertDelete from 'ui-component/Alert/AlertDelete';
+import AddAdministrator from './AddAdministrator';
 
 interface Props {
   administrator: UserProfile;
   index: number;
+  adminFilter: UserFilter;
 }
 
-const Administrator = ({ administrator, index }: Props) => {
+const Administrator = ({ administrator, index, adminFilter }: Props) => {
   const theme = useTheme();
+  const administratorState = useSelector((state) => state.user);
+
+  const [openModal, setOpenModal] = useState(false);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+    setAnchorEl(event?.currentTarget);
+  };
+
   const handleAdministratorDrawerOpen = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
+  };
+
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
   };
 
   const editAdministrator = () => {
     setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
-  const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-    setAnchorEl(event?.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const [openModal, setOpenModal] = useState(false);
   const handleModalClose = (status: boolean) => {
     setOpenModal(false);
     if (status) {
-      dispatch(deleteAdministrator(administrator));
       dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Deleted successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
+        deleteAdministrator({
+          id: administrator.id,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getAdministratorList(adminFilter));
+              Notification('success', 'Deleted successfully!');
+            } else {
+              Notification('error', resp?.message);
+            }
+          }
         })
       );
     }
   };
-
   return (
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{administrator.id}</Typography>
+          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+            <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
@@ -89,7 +115,7 @@ const Administrator = ({ administrator, index }: Props) => {
           {administrator.gender === 'female' && 'Female'}
           {(administrator.gender === null || administrator.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY ')}</TableCell>
         <TableCell>
           {administrator.status === 0 && (
             <Chip
@@ -108,16 +134,6 @@ const Administrator = ({ administrator, index }: Props) => {
               sx={{
                 background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
                 color: theme.palette.success.dark
-              }}
-            />
-          )}
-          {administrator.status === 2 && (
-            <Chip
-              label="Blocked"
-              size="small"
-              sx={{
-                background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.orange.light + 80,
-                color: theme.palette.orange.dark
               }}
             />
           )}
@@ -156,6 +172,7 @@ const Administrator = ({ administrator, index }: Props) => {
                 editAdministrator();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -164,13 +181,19 @@ const Administrator = ({ administrator, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
-          {openModal && <AlertAdministratorDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
+          {openModal && <AlertDelete name={administrator.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditAdministrator administrator={administrator} open={openAdministratorDrawer} handleDrawerOpen={handleAdministratorDrawerOpen} />
+      <AddAdministrator
+        administrator={administrator}
+        adminFilter={adminFilter}
+        open={openAdministratorDrawer}
+        handleDrawerOpen={handleAdministratorDrawerOpen}
+      />
     </>
   );
 };

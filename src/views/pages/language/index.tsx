@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TextField,
   Grid,
@@ -20,6 +20,7 @@ import {
 import AddIcon from '@mui/icons-material/AddTwoTone';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
+import { debounce } from 'lodash';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -29,7 +30,9 @@ import { fetchLanguages } from 'store/slices/language';
 import Language from 'views/pages/language/Language';
 import { gridSpacing } from '../../../store/constant';
 import AddLanguage from 'views/pages/language/AddLanguage';
-import StatusFilters from 'components/Common/StatusFilters';
+import StatusFilters from 'ui-component/CommonFilters/StatusFilters';
+import 'assets/scss/style.scss';
+import NoDataImg from 'assets/images/logo/nodata.png';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -38,21 +41,19 @@ const Index = () => {
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
   const spacingMD = matchDownMD ? 1 : 1.5;
 
-  const token = localStorage.getItem('serviceToken');
   const languageState = useSelector((state: RootState) => state.language);
 
   const [language, setLanguage] = useState<Languages[]>([]);
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [anchorElSort, setAnchorElSort] = useState(null);
+  const [search, setSearch] = useState('');
 
-  const initialState: SearchValues = {
+  const [filters, setFilters] = useState<SearchValues>({
     search: '',
     status: '',
     currentPage: 1,
     limit: 20
-  };
-
-  const [filters, setFilters] = useState(initialState);
+  });
 
   useEffect(() => {
     setLanguage(languageState.language);
@@ -60,18 +61,20 @@ const Index = () => {
 
   useEffect(() => {
     getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     filterData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const getList = () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const filterData = async () => {
-    dispatch(fetchLanguages({ params: filters, token }));
+    dispatch(fetchLanguages({ params: filters }));
   };
 
   const handleSortClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
@@ -79,10 +82,16 @@ const Index = () => {
     setAnchorElSort(null);
   };
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | undefined) => {
-    const newString = event?.target.value;
-    setFilters({ ...filters, search: newString! });
+  const handleTableChange = (e: any, pageTable: number) => {
+    setFilters({ ...filters, currentPage: pageTable! });
   };
+
+  const handleSearch = (searchValue: string) => {
+    setFilters({ ...filters, search: searchValue! });
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleSort = (event: any) => {
     setAnchorElSort(event.currentTarget);
@@ -96,12 +105,16 @@ const Index = () => {
     setVisibleAdd(!visibleAdd);
   };
 
+  const handleVisibleModal = () => {
+    setVisibleAdd((prevState) => !prevState);
+  };
+
   const renderSearchForm = () => (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
         <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
           <Grid item>
-            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 2 : spacingMD}>
               <TextField
                 sx={{ width: { xs: 140, md: 'auto' } }}
                 InputProps={{
@@ -111,13 +124,16 @@ const Index = () => {
                     </InputAdornment>
                   )
                 }}
-                value={filters.search}
+                value={search}
                 placeholder="Search...."
                 size="small"
-                onChange={handleSearch}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  debounceSearch(e.target.value);
+                }}
               />
 
-              <Typography sx={{ display: { xs: 'none', sm: 'flex' }, fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
+              <Typography sx={{ display: 'flex', fontSize: '1rem', color: 'grey.500', fontWeight: 400 }}>|</Typography>
 
               <StatusFilters
                 filters={filters}
@@ -140,10 +156,6 @@ const Index = () => {
     </Grid>
   );
 
-  const handleTableChange = (e: any, pageTable: number) => {
-    setFilters({ ...filters, currentPage: pageTable! });
-  };
-
   return (
     <>
       <MainCard title={renderSearchForm()} content={false}>
@@ -151,32 +163,46 @@ const Index = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ pl: 3 }}>#</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="center" sx={{ pr: 3 }}>
+                <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
+                <TableCell sx={{ width: '20%' }}>Name</TableCell>
+                <TableCell sx={{ width: '35%' }}>Description</TableCell>
+                <TableCell sx={{ width: '15%' }}>Created</TableCell>
+                <TableCell sx={{ width: '10%' }}>Status</TableCell>
+                <TableCell align="center" sx={{ pr: 3, width: '10%' }}>
                   Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-              {language?.map((row) => (
-                <Language key={row?.id} language={row} />
+              {language?.map((row, index: number) => (
+                <Language key={row?.id} language={row} index={index} getList={() => getList()} />
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={gridSpacing}>
-            <Grid item>
-              <Pagination count={languageState.pageCount} page={languageState.currentPage} color="primary" onChange={handleTableChange} />
+        {language?.length === 0 && (
+          <div className="noData">
+            <img src={NoDataImg} alt="NoDataImg" style={{ marginRight: matchDownSM ? 8 : 16 }} />
+            <p>No data available</p>
+          </div>
+        )}
+        {language?.length > 0 && (
+          <Grid item xs={12} sx={{ p: 3, pl: matchDownSM ? 0 : 3 }}>
+            <Grid container justifyContent="space-between" spacing={gridSpacing}>
+              <Grid item>
+                <Pagination
+                  size={matchDownSM ? 'small' : 'medium'}
+                  count={languageState?.pageCount}
+                  page={languageState?.currentPage}
+                  color="primary"
+                  onChange={handleTableChange}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
       </MainCard>
-      <AddLanguage visible={visibleAdd} dataEdit={{}} />
+      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
     </>
   );
 };
