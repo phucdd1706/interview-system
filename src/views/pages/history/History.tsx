@@ -6,6 +6,8 @@ import { useTheme } from '@mui/material/styles';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import EditIcon from '@mui/icons-material/Edit';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { CancelTwoTone } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
 
 // PROJECT IMPORTS
 import AddHistory from 'views/pages/history/AddHistory';
@@ -13,6 +15,7 @@ import { RootState, useSelector } from 'store';
 import { Candidates } from 'types/history';
 import QuestionModal from 'views/pages/history/Interview/QuestionModal';
 import { Link } from 'react-router-dom';
+import { editCandidate } from 'store/slices/history';
 
 interface Props {
   history: Candidates;
@@ -22,7 +25,7 @@ interface Props {
 
 const History = ({ history, index, getList }: Props) => {
   const theme = useTheme();
-
+  const dispatch = useDispatch();
   const [visibleAdd, setVisibleAdd] = useState(false);
   const [visibleQuestionModal, setVisibleQuestionModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -127,6 +130,16 @@ const History = ({ history, index, getList }: Props) => {
           sx={{
             background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.success.light + 60,
             color: theme.palette.success.dark
+          }}
+        />
+      )}
+      {status === 2 && (
+        <Chip
+          label="Canceled"
+          size="small"
+          sx={{
+            background: theme.palette.mode === 'dark' ? theme.palette.dark.main : theme.palette.error.light + 60,
+            color: theme.palette.error.dark
           }}
         />
       )}
