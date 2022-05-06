@@ -283,7 +283,7 @@ const Questions = () => {
               <TableCell>Type</TableCell>
               <TableCell sx={{ width: '10%' }}>Created At</TableCell>
               <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
-              <TableCell sx={{ width: '5%' }}>Status</TableCell>
+              <TableCell sx={{ width: '8%' }}>Status</TableCell>
               <TableCell align="center" sx={{ pr: 3, width: '5%' }}>
                 Actions
               </TableCell>

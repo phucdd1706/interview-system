@@ -222,7 +222,7 @@ const Departments = () => {
               <TableCell sx={{ width: 'auto' }}>Code</TableCell>
               <TableCell sx={{ width: '10%' }}>Created At</TableCell>
               <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
-              <TableCell sx={{ width: '5%' }}>Status</TableCell>
+              <TableCell sx={{ width: '8%' }}>Status</TableCell>
               <TableCell sx={{ pr: 3, width: '5%' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
