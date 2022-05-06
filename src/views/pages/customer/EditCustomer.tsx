@@ -83,7 +83,6 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup
     .string()
-    .trim()
     .max(50, 'Maximum 50 characters')
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
@@ -103,10 +102,10 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  phone: yup.string().trim().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  gender: yup.string().trim().required('Gender is required'),
-  type: yup.string().trim().required('Type is required'),
-  status: yup.string().trim().required('Status is required')
+  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  gender: yup.string().required('Gender is required'),
+  type: yup.string().required('Type is required'),
+  status: yup.string().required('Status is required')
 });
 
 const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
