@@ -78,22 +78,16 @@ const validationSchema = yup.object({
   name: yup
     .string()
     .max(50, 'Maximum 50 characters')
+    .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
   username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
-  email: yup
-    .string()
-    .matches(
-      isEmail,
-      'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
-    )
-    .email('Enter a valid email')
-    .required('Email is required'),
+  email: yup.string().email('Enter a valid email').required('Email is required'),
   password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   password_confirmation: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Password_confirmation must match')
-    .required('Password_confirmation is required'),
+    .oneOf([yup.ref('password'), null], 'Password do not match')
+    .required('Cofirm password is required'),
   phone: yup
     .string()
     .min(10, 'Minimum 10 characters ')
