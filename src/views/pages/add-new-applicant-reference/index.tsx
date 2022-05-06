@@ -42,12 +42,14 @@ const AddApplicantReference = () => {
         initialValues={applicant.applicantInfo}
         validationSchema={Yup.object().shape({
           name: Yup.string()
+            .trim()
             .min(3, 'Name must have at least 3 characters')
             .max(50, `Maximum characters allowed is 50`)
             .required('Name is required'),
           age: Yup.number().max(65, 'Too old').min(15, 'Too young').required('Age is required'),
-          email: Yup.string().email('Email is not valid').required('Email is required'),
+          email: Yup.string().trim().email('Email is not valid').required('Email is required'),
           phone: Yup.string()
+            .trim()
             .min(8, 'Minimum character is 8')
             .max(15, 'Maximum character is 15')
             .matches(isPhone, 'Please enter valid phone number')

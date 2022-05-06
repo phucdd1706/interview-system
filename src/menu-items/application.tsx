@@ -45,7 +45,7 @@ const application = {
       breadcrumbs: true
     },
     {
-      id: 'manage-department',
+      id: 'department',
       title: <FormattedMessage id="department" />,
       type: 'item',
       role: 1,
@@ -54,7 +54,7 @@ const application = {
       breadcrumbs: true
     },
     {
-      id: 'manage-rank',
+      id: 'ranks',
       title: <FormattedMessage id="manage-rank" />,
       type: 'item',
       role: 1,
@@ -64,7 +64,7 @@ const application = {
     },
 
     {
-      id: 'manage-question',
+      id: 'questions',
       title: <FormattedMessage id="manage-question" />,
       type: 'item',
       role: 1,

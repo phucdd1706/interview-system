@@ -54,11 +54,8 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string()
-    .max(255, 'Maximum 255 characters')
-    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
-    .required('Name is required'),
-  code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required')
+  name: Yup.string().trim().max(255, 'Maximum 255 characters').required('Name is required'),
+  code: Yup.string().trim().max(255, 'Maximum 255 characters').required('Code is required')
 });
 
 const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {
@@ -169,7 +166,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       verticalAlign: 'middle'
                     }}
                   >
-                    {department?.id ? `Edit "${department?.name}"` : 'Add new language'}
+                    {department?.id ? `Edit "${department?.name}"` : 'Add new department'}
                   </Typography>{' '}
                   <Button
                     variant="text"
