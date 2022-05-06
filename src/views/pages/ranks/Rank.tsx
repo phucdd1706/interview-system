@@ -87,7 +87,7 @@ const Rank = ({ rank, index }: Props) => {
             <Typography variant="body2">{20 * (rankState.currentPage - 1) + index + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -103,7 +103,7 @@ const Rank = ({ rank, index }: Props) => {
             {rank.name}
           </Link>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 250 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -111,6 +111,7 @@ const Rank = ({ rank, index }: Props) => {
               overflow: 'hidden',
               display: 'block',
               textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
