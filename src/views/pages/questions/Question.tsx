@@ -12,6 +12,7 @@ import { QuestionFilter, QuestionType } from 'types/question';
 import { DeleteQuestion, getQuestionsList } from 'store/slices/question';
 import AlertQuestionDelete from './AlertQuestionDelete';
 import EditQuestion from './EditQuestion';
+import moment from 'moment';
 
 interface Props {
   question: QuestionType;
@@ -160,6 +161,12 @@ const Question = ({ question, index }: Props) => {
           {question.type === 0 && 'Basic'}
           {question.type === 1 && 'Advanced'}
         </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(question.updated_at).format('DD/MM/yy hh:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(question.updated_at).format('DD/MM/yy hh:mm')}
+        </TableCell>
         <TableCell>
           {question.status === 0 && (
             <Chip
@@ -182,7 +189,7 @@ const Question = ({ question, index }: Props) => {
             />
           )}
         </TableCell>
-        <TableCell align="center" sx={{ width: 60, minWidth: 60 }}>
+        <TableCell align="center">
           <ButtonBase
             className="more-button"
             sx={{ borderRadius: '12px' }}
