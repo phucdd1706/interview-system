@@ -7,6 +7,7 @@ import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
 import { Notification } from 'types/notification';
+import NotificationsPage from 'views/pages/account/NotificationsPage';
 
 const initialState: DefaultRootStateProps['notification'] = {
   error: null,
@@ -37,6 +38,9 @@ export function editNotifications(notifications: Notification) {
     try {
       // Send to API
       dispatch(slice.actions.editNotificationsSuccess(notifications));
+      if (notifications.desktop === true) {
+        NotificationsPage();
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

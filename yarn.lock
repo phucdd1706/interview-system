@@ -1731,6 +1731,22 @@
   dependencies:
     tslib "^2.1.0"
 
+"@fullcalendar/common@~5.11.0":
+  "integrity" "sha512-gWjbMAnN1u73Oqlgjbyky7i+3bY0hvFSnGT0YBPx44n874AkQa9e9OU12PMLTMOPy0tXPb8DEwRelFQ7CJNbcw=="
+  "resolved" "https://registry.npmjs.org/@fullcalendar/common/-/common-5.11.0.tgz"
+  "version" "5.11.0"
+  dependencies:
+    "tslib" "^2.1.0"
+
+"@fullcalendar/core@^5.11.0":
+  "integrity" "sha512-cF/d9LuJb/6xw14ms0urv1H4BiA70c4jrufe/EuVzLR6qTDpK92IZ3JK7GVtZtzptfTYZ/NQgDV9YCzIaO9Blw=="
+  "resolved" "https://registry.npmjs.org/@fullcalendar/core/-/core-5.11.0.tgz"
+  "version" "5.11.0"
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    "preact" "^10.0.5"
+    "tslib" "^2.1.0"
+
 "@fullcalendar/daygrid@^5.10.1", "@fullcalendar/daygrid@~5.10.1":
   version "5.10.1"
   resolved "https://registry.npmjs.org/@fullcalendar/daygrid/-/daygrid-5.10.1.tgz"
