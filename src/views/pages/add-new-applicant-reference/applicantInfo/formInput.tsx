@@ -1,19 +1,17 @@
 import React from 'react';
-import { FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
+import { FormControl, FormHelperText, InputLabel, OutlinedInput, TextField } from '@mui/material';
 
 const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, required, type, name, readOnly }: any) => (
   <FormControl fullWidth error={Boolean(touched && errors && !readOnly)}>
-    <InputLabel htmlFor={`outlined-adornment-${label.split(' ').join('-')}`} required={required}>
-      {label}
-    </InputLabel>
-    <OutlinedInput
+    <TextField
       id={`outlined-adornment-${label.split(' ').join('-')}`}
       type={type}
+      required={required}
+      InputProps={type === 'number' ? { inputProps: { min: 0, max: 10, readOnly } } : { readOnly }}
       value={values}
       name={name}
       onChange={handleChange}
       label={label}
-      readOnly={readOnly}
       placeholder={label}
     />
     {touched && errors && !readOnly && (
