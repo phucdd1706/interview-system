@@ -78,6 +78,7 @@ const validationSchema = yup.object({
   name: yup
     .string()
     .max(50, 'Maximum 50 characters')
+    .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
   username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
