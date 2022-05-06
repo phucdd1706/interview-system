@@ -217,15 +217,13 @@ const Departments = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }} style={{ width: '70px' }}>
-                STT
-              </TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Name</TableCell>
-              <TableCell sx={{ width: 160, minWidth: 160 }}>Code</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Create At</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Update At</TableCell>
-              <TableCell sx={{ width: 170, minWidth: 170 }}>Status</TableCell>
-              <TableCell sx={{ pr: 3, width: 10, minWidth: 10 }}>Actions</TableCell>
+              <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
+              <TableCell sx={{ width: '20%' }}>Name</TableCell>
+              <TableCell sx={{ width: 'auto' }}>Code</TableCell>
+              <TableCell sx={{ width: '10%' }}>Created At</TableCell>
+              <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
+              <TableCell sx={{ width: '5%' }}>Status</TableCell>
+              <TableCell sx={{ pr: 3, width: '5%' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>

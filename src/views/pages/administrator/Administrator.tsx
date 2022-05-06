@@ -87,7 +87,7 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
   return (
     <>
       <TableRow hover key={index}>
-        <TableCell sx={{ width: 110, minWidth: 110 }}>
+        <TableCell sx={{ pl: 3 }}>
           <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
             <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
@@ -115,7 +115,8 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
           {administrator.gender === 'female' && 'Female'}
           {(administrator.gender === null || administrator.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY ')}</TableCell>
+        <TableCell>{moment(administrator.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>
           {administrator.status === 0 && (
             <Chip
@@ -138,7 +139,7 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
             />
           )}
         </TableCell>
-        <TableCell sx={{ width: 60, minWidth: 60 }}>
+        <TableCell align="center">
           <ButtonBase
             className="more-button"
             sx={{ borderRadius: '12px' }}

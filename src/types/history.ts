@@ -21,7 +21,7 @@ export interface Question {
   candidate_id?: number;
   status?: string | number;
   created_at?: string;
-  update_at?: string;
+  updated_at?: string;
   question_id?: number;
   question?: QuestionType;
   rankId: string | number;

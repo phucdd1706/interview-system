@@ -191,11 +191,13 @@ const Ranks = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 3 }}>STT</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Name</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Description</TableCell>
-              <TableCell sx={{ width: 180, minWidth: 180 }}>Status</TableCell>
-              <TableCell align="center" sx={{ pr: 3 }}>
+              <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
+              <TableCell sx={{ width: '20%' }}>Name</TableCell>
+              <TableCell sx={{ width: 'auto' }}>Description</TableCell>
+              <TableCell sx={{ width: '10%' }}>Created At</TableCell>
+              <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
+              <TableCell sx={{ width: '5%' }}>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3, width: '5%' }}>
                 Actions
               </TableCell>
             </TableRow>

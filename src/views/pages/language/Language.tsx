@@ -174,12 +174,11 @@ const Language = ({ language, index, getList }: Props) => {
             {language?.name}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: '35%', overflow: 'hidden' }}>{language?.description}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{moment(language?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell sx={{ width: '10%' }}>{renderStatus(language?.status)}</TableCell>
-        <TableCell sx={{ width: '10%' }} align="center">
-          {renderMenuButton()}
-        </TableCell>
+        <TableCell>{language?.description}</TableCell>
+        <TableCell>{moment(language?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(language?.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{renderStatus(language?.status)}</TableCell>
+        <TableCell align="center">{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
       <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
