@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonBase, Chip, IconButton, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme, Link } from '@mui/material';
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 // PROJECT IMPORTS
 import { UserProfile } from 'types/user-profile';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';

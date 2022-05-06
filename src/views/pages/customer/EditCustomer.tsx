@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // THIRD-PARTY
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -82,12 +83,13 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup
     .string()
+    .trim()
     .max(50, 'Maximum 50 characters')
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
-  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  username: yup.string().trim().max(50, 'Maximum 50 characters').required('Username is required'),
+  password: yup.string().trim().min(6, 'Your Password mus be at least 6 character').required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
@@ -101,10 +103,10 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  gender: yup.string().required('Gender is required'),
-  type: yup.string().required('Type is required'),
-  status: yup.string().required('Status is required')
+  phone: yup.string().trim().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  gender: yup.string().trim().required('Gender is required'),
+  type: yup.string().trim().required('Type is required'),
+  status: yup.string().trim().required('Status is required')
 });
 
 const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
@@ -238,7 +240,11 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       inputProps={{ readOnly: !editing }}
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
@@ -251,7 +257,11 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       inputProps={{ readOnly: !editing }}
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
                       error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
@@ -264,7 +274,11 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       inputProps={{ readOnly: !editing }}
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
@@ -311,7 +325,11 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
                       error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}

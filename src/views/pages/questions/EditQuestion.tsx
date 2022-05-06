@@ -61,12 +61,15 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  rank_id: Yup.string().required('Rank is required'),
-  department_id: Yup.string().required('Department is required'),
-  language_id: Yup.string().required('Language is required'),
-  question_content: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Question content is required'),
-  type: Yup.string().required('Question type is required'),
-  status: Yup.string().required('Question status is required')
+  rank_id: Yup.string().trim().required('Rank is required'),
+  department_id: Yup.string().trim().required('Department is required'),
+  language_id: Yup.string().trim().required('Language is required'),
+  question_content: Yup.string()
+    .trim()
+    .max(255, 'content is too long, must be lower than 256 character')
+    .required('Question content is required'),
+  type: Yup.string().trim().required('Question type is required'),
+  status: Yup.string().trim().required('Question status is required')
 });
 
 const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestionProps) => {

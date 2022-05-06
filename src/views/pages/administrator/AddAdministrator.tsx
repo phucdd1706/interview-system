@@ -182,8 +182,6 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
       addAdmin(values);
     }
   });
-  console.log(11222, formik);
-
   return (
     <Dialog
       open={open}
