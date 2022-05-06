@@ -226,7 +226,7 @@ const Departments = () => {
               <TableCell sx={{ pr: 3, width: '5%' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+          <TableBody>
             {data &&
               data.map((department, index) => (
                 <DepartmentList key={department.id} department={department} index={index} departFilter={departFilter} />

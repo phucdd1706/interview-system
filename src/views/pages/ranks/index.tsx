@@ -202,9 +202,7 @@ const Ranks = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((rank, index) => <Rank key={rank.id} rank={rank} index={index} />)}
-          </TableBody>
+          <TableBody>{data && data.map((rank, index) => <Rank key={rank.id} rank={rank} index={index} />)}</TableBody>
         </Table>
         <AddRank open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>

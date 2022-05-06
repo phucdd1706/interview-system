@@ -165,7 +165,7 @@ const Index = () => {
               <TableRow>
                 <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
                 <TableCell sx={{ width: '20%' }}>Name</TableCell>
-                <TableCell sx={{ width: 'auto' }}>Description</TableCell>
+                <TableCell sx={{ width: 'auto', maxWidth: '40%' }}>Description</TableCell>
                 <TableCell sx={{ width: '10%' }}>Created At</TableCell>
                 <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
                 <TableCell sx={{ width: '8%' }}>Status</TableCell>
@@ -174,7 +174,7 @@ const Index = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            <TableBody>
               {language?.map((row, index: number) => (
                 <Language key={row?.id} language={row} index={index} getList={() => getList()} />
               ))}

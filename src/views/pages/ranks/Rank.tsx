@@ -111,7 +111,6 @@ const Rank = ({ rank, index }: Props) => {
               overflow: 'hidden',
               display: 'block',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}

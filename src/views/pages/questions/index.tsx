@@ -289,9 +289,7 @@ const Questions = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((question, index) => <Question key={question.id} question={question} index={index} />)}
-          </TableBody>
+          <TableBody>{data && data.map((question, index) => <Question key={question.id} question={question} index={index} />)}</TableBody>
         </Table>
         <AddQuestion open={openDrawer} handleDrawerOpen={handleDrawerOpen} filter={filter} />
       </TableContainer>

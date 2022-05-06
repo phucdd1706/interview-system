@@ -236,7 +236,7 @@ const Administrators = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+          <TableBody>
             {data &&
               data.map((administrator, index) => (
                 <Administrator key={administrator.id} administrator={administrator} index={index} adminFilter={adminFilter} />

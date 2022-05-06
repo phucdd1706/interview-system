@@ -229,9 +229,7 @@ const Customers = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((customer, index) => <Customer key={customer.id} customer={customer} index={index} />)}
-          </TableBody>
+          <TableBody>{data && data.map((customer, index) => <Customer key={customer.id} customer={customer} index={index} />)}</TableBody>
         </Table>
         <AddCustomer open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
       </TableContainer>

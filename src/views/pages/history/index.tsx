@@ -213,7 +213,7 @@ const Index = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+            <TableBody>
               {candidate?.map((row, index: number) => (
                 <History key={row?.id} history={row} index={index} getList={() => getList()} />
               ))}
