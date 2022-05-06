@@ -33,6 +33,7 @@ import { useState } from 'react';
 interface Props {
   customer: UserProfile;
   open: boolean;
+  editing: boolean;
   handleDrawerOpen: () => void;
 }
 
@@ -92,7 +93,7 @@ const validationSchema = yup.object({
   status: yup.string().required('Status is required')
 });
 
-const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
+const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
@@ -198,7 +199,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit "${customer.name}"`}
+                    {`${editing ? 'Edit' : 'Customer'} ${customer.name}`}
                   </Typography>
                   <Button
                     variant="text"
@@ -220,6 +221,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      inputProps={{ readOnly: !editing }}
                       id="name"
                       name="name"
                       label="Name"
@@ -232,6 +234,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      inputProps={{ readOnly: !editing }}
                       id="username"
                       name="username"
                       label="User Name"
@@ -244,6 +247,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      inputProps={{ readOnly: !editing }}
                       id="email"
                       name="email"
                       label="Email"
@@ -256,6 +260,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
+                      inputProps={{ readOnly: !editing }}
                       id="password"
                       name="password"
                       label="Password"
@@ -298,6 +303,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <DesktopDatePicker
+                      readOnly={!editing}
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
@@ -312,6 +318,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                     <FormControl fullWidth>
                       <Select
                         id="gender"
+                        readOnly={!editing}
                         name="gender"
                         displayEmpty
                         value={formik.values.gender}
@@ -330,6 +337,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                     <FormControl fullWidth>
                       <Select
                         id="type"
+                        readOnly={!editing}
                         name="type"
                         displayEmpty
                         value={formik.values.type}
@@ -348,6 +356,7 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                     <FormControl fullWidth>
                       <Select
                         id="status"
+                        readOnly={!editing}
                         name="status"
                         displayEmpty
                         value={formik.values.status}
@@ -362,13 +371,15 @@ const EditCustomer = ({ customer, open, handleDrawerOpen }: Props) => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <AnimateButton>
-                      <Button fullWidth variant="contained" type="submit">
-                        Save
-                      </Button>
-                    </AnimateButton>
-                  </Grid>
+                  {editing && (
+                    <Grid item xs={12}>
+                      <AnimateButton>
+                        <Button fullWidth variant="contained" type="submit">
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </DialogContent>
             </LocalizationProvider>

@@ -94,8 +94,8 @@ const validationSchema = yup.object({
   password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   password_confirmation: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Password_confirmation must match')
-    .required('Password_confirmation is required'),
+    .oneOf([yup.ref('password'), null], 'Password do not match')
+    .required('Cofirm password is required'),
   phone: yup
     .string()
     .min(10, 'Minimum 10 characters ')
