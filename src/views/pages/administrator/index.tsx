@@ -242,7 +242,7 @@ const Administrators = () => {
               ))}
           </TableBody>
         </Table>
-        <AddAdministrator open={openDrawer} handleDrawerOpen={handleDrawerOpen} adminFilter={adminFilter} administrator={{}} />
+        <AddAdministrator editing open={openDrawer} handleDrawerOpen={handleDrawerOpen} adminFilter={adminFilter} administrator={{}} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">

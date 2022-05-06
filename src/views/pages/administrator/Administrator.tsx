@@ -28,7 +28,7 @@ interface Props {
 const Administrator = ({ administrator, index, adminFilter }: Props) => {
   const theme = useTheme();
   const administratorState = useSelector((state) => state.user);
-
+  const [editing, setEditing] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
   const [openAdministratorDrawer, setOpenAdministratorDrawer] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
@@ -41,7 +41,8 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
     setAnchorEl(event?.currentTarget);
   };
 
-  const handleAdministratorDrawerOpen = () => {
+  const handleAdministratorDrawerOpen = async () => {
+    await setEditing(false);
     setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
@@ -60,7 +61,8 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
     );
   };
 
-  const editAdministrator = () => {
+  const editAdministrator = async () => {
+    await setEditing(true);
     setOpenAdministratorDrawer((prevState) => !prevState);
   };
 
@@ -90,21 +92,19 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
             <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {administrator.name}
-          </Link>
+        <TableCell
+          sx={{
+            width: 110,
+            minWidth: 110,
+            maxWidth: 'calc(100vw - 850px)',
+            cursor: 'pointer',
+            ':hover': { color: 'primary.main', textDecoration: 'underline' }
+          }}
+          component="th"
+          scope="row"
+          onClick={handleAdministratorDrawerOpen}
+        >
+          {administrator.name}
         </TableCell>
         <TableCell>{administrator.username}</TableCell>
         <TableCell>{administrator.email}</TableCell>
@@ -189,6 +189,7 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
         </TableCell>
       </TableRow>
       <AddAdministrator
+        editing={editing}
         administrator={administrator}
         adminFilter={adminFilter}
         open={openAdministratorDrawer}

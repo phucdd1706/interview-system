@@ -19,6 +19,8 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
+import moment from 'moment';
+
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
@@ -121,7 +123,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: '11/11/2000',
+      dob: moment().format('L'),
       gender: 'male',
       type: 2
     },
@@ -150,6 +152,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
         }
       }}
     >
+      {console.log(formik.values)}
       {open && (
         <>
           <Box sx={{ p: 3 }}>
