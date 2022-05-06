@@ -47,8 +47,8 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required'),
+  name: Yup.string().trim().required('Name is required'),
+  description: Yup.string().trim().max(255, 'content is too long, must be lower than 256 character').required('Description is required'),
   status: Yup.number().required('Status is required')
 });
 
@@ -173,8 +173,12 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                     <TextField
                       fullWidth
                       id="name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       name="name"
-                      label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
@@ -186,7 +190,11 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       fullWidth
                       id="description"
                       name="description"
-                      label="Description"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Description
+                        </span>
+                      }
                       value={formik.values.description}
                       onChange={formik.handleChange}
                       error={formik.touched.description && Boolean(formik.errors.description)}
