@@ -28,6 +28,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
 import { UserProfile } from 'types/user-profile';
+import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
@@ -46,21 +47,28 @@ const Gender: SelectProps[] = [
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  username: yup.string().required('Username is required'),
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup
+  name: yup
     .string()
-    .required('Phone is required')
+    .max(50, 'Maximum 50 characters')
+    .min(3, 'Minimum 3 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
+  username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
+  email: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
     .matches(
-      /^(\+84[9|8|7|5|3]|0[9|8|7|5|3]|84[9|8|7|5|3])+([0-9]{2})+([ ]?)+([0-9]{3})+([ ]?)+([0-9]{3})\b$/i,
-      'Enter the correct format phone'
-    ),
-  password: yup.string().required('Password is required'),
+      isEmail,
+      'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
+    )
+    .email('Enter a valid email')
+    .required('Email is required'),
+  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   password_confirmation: yup
     .string()
-    .required('Password is required')
-    .oneOf([yup.ref('password'), null], 'Password must match'),
+    .oneOf([yup.ref('password'), null], 'Password do not match')
+    .required('Confirm password is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
