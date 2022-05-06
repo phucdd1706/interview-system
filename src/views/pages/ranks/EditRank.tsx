@@ -23,10 +23,11 @@ import * as Yup from 'yup';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { gridSpacing } from 'store/constant';
 import { dispatch } from 'store';
-import { PutRank } from 'store/slices/rank';
 import { RankType, SelectProps } from 'types/rank';
 
 import { openSnackbar } from 'store/slices/snackbar';
+import { useState } from 'react';
+import { PutRank } from 'store/slices/rank';
 
 interface EditRankProps {
   rank: RankType;
@@ -47,11 +48,59 @@ const Status: SelectProps[] = [
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required'),
+  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required'),
   status: Yup.number().required('Status is required')
 });
 
 const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
+  const [errors, setErrors] = useState<any>({});
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+
+  const EditRankFunc = (values: RankType) => {
+    dispatch(
+      PutRank({
+        id: values.id,
+        params: values,
+        callback: (response) => {
+          if (response?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Edit record successfully!',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+            changeModal('close');
+          } else {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: response?.message,
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                },
+                close: true
+              })
+            );
+            setErrors(response?.errors);
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -62,20 +111,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(PutRank(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Updated successfully!',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
+      EditRankFunc(values);
     }
   });
 
@@ -83,8 +119,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
     <Dialog
       open={open}
       onClose={() => {
-        handleDrawerOpen();
-        formik.resetForm();
+        changeModal('close');
       }}
       sx={{
         '&>div:nth-of-type(3)': {
@@ -102,16 +137,8 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -125,6 +152,14 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                   >
                     {`Edit "${rank.name}"`}
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>
@@ -142,8 +177,8 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>

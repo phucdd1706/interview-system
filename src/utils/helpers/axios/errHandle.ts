@@ -26,8 +26,6 @@ const errorCode = {
   notCatch: 'Something went wrong'
 };
 
-type ErrorCode = keyof typeof errorCode;
-
 export const getSeverityType = (errStatus: number | undefined): 'error' | 'warning' => {
   if (errStatus === 401) {
     return 'error';
@@ -40,7 +38,7 @@ export const getErrMessage = (errResponse: AxiosResponse<{ message: string; erro
     return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText}: Could not find the resource`;
   }
   if (errResponse.status === 401) {
-    return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errorCode[401]}: Username or password is incorrect`;
+    return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errorCode[401]}: Email/Username or password is incorrect`;
   }
   if (errResponse) {
     return `[${getSeverityType(errResponse.status).toUpperCase()}] ${errResponse.statusText} ${

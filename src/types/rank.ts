@@ -10,6 +10,7 @@ export interface RankStateProps {
 export type RankFilter = {
   search?: string;
   status?: string;
+  id?: string;
   currentPage?: number;
 };
 
@@ -19,7 +20,7 @@ export type SortStatusProps = {
 };
 
 export type RankType = {
-  id?: string;
+  id?: string | number;
   name?: string;
   description?: string;
   status?: number;

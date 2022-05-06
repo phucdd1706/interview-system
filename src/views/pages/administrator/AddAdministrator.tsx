@@ -1,9 +1,5 @@
+import React, { useState } from 'react';
 // THIRD-PARTY
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import * as yup from 'yup';
 import {
   Box,
   Button,
@@ -12,26 +8,51 @@ import {
   Divider,
   FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
   Typography
 } from '@mui/material';
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import AnimateButton from 'ui-component/extended/AnimateButton';
+
+import moment from 'moment';
+
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 
 // PROJECT IMPORTS
-import AnimateButton from 'ui-component/extended/AnimateButton';
 import { dispatch } from 'store';
 import { gridSpacing } from 'store/constant';
 import { openSnackbar } from 'store/slices/snackbar';
-import { SelectProps } from 'types/user';
-import { addAdministrator } from 'store/slices/user';
+import { addAdministrator, editAdministrator, getAdministratorList } from 'store/slices/user';
+
+import { Administrator, SelectProps, UserFilter } from 'types/user';
+import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
+  adminFilter: UserFilter;
+  administrator: Administrator;
   handleDrawerOpen: () => void;
 }
+const Type: SelectProps[] = [
+  {
+    value: 1,
+    label: 'Administrator'
+  },
+  {
+    value: 2,
+    label: 'Customer'
+  }
+];
 
 const Gender: SelectProps[] = [
   {
@@ -43,49 +64,127 @@ const Gender: SelectProps[] = [
     label: 'Female'
   }
 ];
-
+const Status: SelectProps[] = [
+  {
+    value: 0,
+    label: 'Inactive'
+  },
+  {
+    value: 1,
+    label: 'Active'
+  }
+];
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  username: yup.string().required('Username is required'),
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup.string().required('Phone is required'),
+  name: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
+  username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
+  email: yup
+    .string()
+    .matches(
+      isEmail,
+      'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
+    )
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Password_confirmation must match')
+    .required('Password_confirmation is required'),
+  phone: yup
+    .string()
+    .min(10, 'Minimum 10 characters ')
+    .max(10, 'Maximum 10 characters ')
+    .matches(isPhone, 'Enter a valid phone')
+    .required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
+const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }: Props) => {
+  const [errors, setErrors] = useState<any>({});
+
+  const changeModal = (type: string) => {
+    if (type === 'close') {
+      handleDrawerOpen();
+      setErrors({});
+      formik.resetForm();
+    }
+  };
+
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
+
+  const addAdmin = (values: Administrator) => {
+    if (administrator?.id) {
+      dispatch(
+        editAdministrator({
+          id: administrator?.id,
+          params: values,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              Notification('success', 'Edit administrator successfully!');
+              changeModal('close');
+            } else {
+              Notification('error', resp?.message);
+              setErrors(resp?.errors);
+            }
+          }
+        })
+      );
+    } else {
+      dispatch(
+        addAdministrator({
+          params: values,
+          callback: (resp) => {
+            if (resp?.data?.success) {
+              dispatch(getAdministratorList(adminFilter));
+              Notification('success', 'Add administrator successfully!');
+              changeModal('close');
+            } else {
+              Notification('error', resp?.message);
+              setErrors(resp?.errors);
+            }
+          }
+        })
+      );
+    }
+  };
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: '',
-      username: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-      phone: '',
-      dob: '',
-      gender: 'male',
-      type: 1
+      name: administrator?.name,
+      username: administrator?.username,
+      email: administrator?.email,
+      password: administrator?.id ? 'tuansnn' : '',
+      password_confirmation: administrator?.id ? 'tuansnn' : '',
+      phone: administrator?.phone,
+      dob: administrator?.dob || moment().format('L'),
+      gender: administrator?.gender || 'male',
+      status: administrator?.id ? administrator?.status : 1,
+      type: administrator?.id ? administrator?.type : 1
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(addAdministrator(values));
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Submit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: true
-        })
-      );
-      handleDrawerOpen();
-      formik.resetForm();
+      addAdmin(values);
     }
   });
+  console.log(11222, formik);
 
   return (
     <Dialog
@@ -110,16 +209,8 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
         <>
           <Box sx={{ p: 3 }}>
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
-              <Grid item sx={{ width: 'calc(100% - 50px)' }}>
+              <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
-                  <Button
-                    variant="text"
-                    color="error"
-                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
-                    onClick={handleDrawerOpen}
-                  >
-                    <HighlightOffIcon />
-                  </Button>
                   <Typography
                     variant="h4"
                     sx={{
@@ -131,8 +222,16 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    Add Customer
+                    {administrator?.id ? `Edit "${administrator?.name}"` : `Add Administrator`}
                   </Typography>
+                  <Button
+                    variant="text"
+                    color="error"
+                    sx={{ p: 0.5, minWidth: 32, display: { xs: 'block', md: 'none' } }}
+                    onClick={handleDrawerOpen}
+                  >
+                    <HighlightOffIcon />
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>
@@ -147,11 +246,15 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="name"
                       name="name"
-                      label="Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
+                      helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -159,11 +262,15 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="username"
                       name="username"
-                      label="User Name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> User Name
+                        </span>
+                      }
                       value={formik.values.username}
                       onChange={formik.handleChange}
-                      error={formik.touched.username && Boolean(formik.errors.username)}
-                      helperText={formik.touched.username && formik.errors.username}
+                      error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
+                      helperText={(formik.touched.username && formik.errors.username) || errors?.username}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -171,49 +278,70 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="email"
                       name="email"
-                      label="Email"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Email
+                        </span>
+                      }
                       value={formik.values.email}
                       onChange={formik.handleChange}
-                      error={formik.touched.email && Boolean(formik.errors.email)}
-                      helperText={formik.touched.email && formik.errors.email}
+                      error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
+                      helperText={(formik.touched.email && formik.errors.email) || errors?.email}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="password"
-                      name="password"
-                      type="password"
-                      label="Password"
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      helperText={formik.touched.password && formik.errors.password}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="password_confirmation"
-                      name="password_confirmation"
-                      type="password"
-                      label="Confirm password"
-                      value={formik.values.password_confirmation}
-                      onChange={formik.handleChange}
-                      error={formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)}
-                      helperText={formik.touched.password_confirmation && formik.errors.password_confirmation}
-                    />
-                  </Grid>
+                  {!administrator.id && (
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="password"
+                        name="password"
+                        type="password"
+                        label={
+                          <span>
+                            <span style={{ color: '#f44336' }}>*</span> Password
+                          </span>
+                        }
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                        helperText={(formik.touched.password && formik.errors.password) || errors?.password}
+                      />
+                    </Grid>
+                  )}
+                  {!administrator.id && (
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        type="password"
+                        label={
+                          <span>
+                            <span style={{ color: '#f44336' }}>*</span> Confirm password
+                          </span>
+                        }
+                        value={formik.values.password_confirmation}
+                        onChange={formik.handleChange}
+                        error={(formik.touched.password_confirmation && Boolean(formik.errors?.password_confirmation)) || errors.password}
+                        helperText={(formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password}
+                      />
+                    </Grid>
+                  )}
+
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
                       id="phone"
                       name="phone"
-                      label="Phone"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Phone
+                        </span>
+                      }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      error={formik.touched.phone && Boolean(formik.errors.phone)}
-                      helperText={formik.touched.phone && formik.errors.phone}
+                      error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
+                      helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -229,9 +357,11 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
+                      <InputLabel>Gender</InputLabel>
                       <Select
                         id="gender"
                         name="gender"
+                        label="Gender"
                         displayEmpty
                         value={formik.values.gender}
                         onChange={formik.handleChange}
@@ -245,6 +375,50 @@ const AddAdministrator = ({ open, handleDrawerOpen }: Props) => {
                       </Select>
                     </FormControl>
                   </Grid>
+                  {administrator.id && (
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Status</InputLabel>
+                        <Select
+                          id="status"
+                          name="status"
+                          label="Status"
+                          displayEmpty
+                          value={formik?.values?.status}
+                          onChange={formik.handleChange}
+                          inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                          {Status.map((status: SelectProps, index: number) => (
+                            <MenuItem key={index} value={status.value}>
+                              {status.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                  {administrator.id && (
+                    <Grid item xs={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Type</InputLabel>
+                        <Select
+                          id="type"
+                          name="type"
+                          label="Type"
+                          displayEmpty
+                          value={formik.values.type}
+                          onChange={formik.handleChange}
+                          inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                          {Type.map((type: SelectProps, index: number) => (
+                            <MenuItem key={index} value={type.value}>
+                              {type.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                   <Grid item xs={12}>
                     <AnimateButton>
                       <Button fullWidth variant="contained" type="submit">

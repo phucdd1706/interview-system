@@ -5,7 +5,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CalendarPicker from '@mui/lab/CalendarPicker';
 import Grid from '@mui/material/Grid';
-import { Alert, useTheme } from '@mui/material';
+import { Alert, Button, useTheme } from '@mui/material';
 import FullCalendar, { DateSelectArg, EventClickArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -38,12 +38,12 @@ export default function SubComponentsPickers() {
   const [selectInfo, setSelectInfo] = useState<any>();
 
   const dataEvent = [
-    { title: 'Event 1', start: '2022-04-26T10:36:24', end: '2022-04-26T16:36:24', date: '2022-04-26' },
-    { title: 'Event 10', start: '2022-04-28T10:36:24', end: '2022-04-28T16:36:24' },
-    { title: 'Event 3', date: '2022-04-26', color: '#E53935' },
-    { title: 'Event 4', date: '2022-04-26' },
-    { title: 'Event 5', date: '2022-04-26' },
-    { title: 'Event 2', date: '2022-04-27' }
+    { title: 'Event 1', start: '2022-05-06T10:36:24', end: '2022-05-06T16:36:24', date: '2022-05-06' },
+    { title: 'Event 10', start: '2022-05-08T10:36:24', end: '2022-05-08T16:36:24' },
+    { title: 'Event 3', date: '2022-05-06', color: '#E53935' },
+    { title: 'Event 4', date: '2022-05-06' },
+    { title: 'Event 5', date: '2022-05-06' },
+    { title: 'Event 2', date: '2022-05-07' }
   ];
   const { locale } = useConfig();
   const localeMap = {
@@ -64,7 +64,6 @@ export default function SubComponentsPickers() {
   // const endTime = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000).toISOString();
 
   const handlePickDate = async (newDate: Date | null) => {
-    console.log('newDate: ', newDate);
     await setDate(newDate || new Date());
     await setGoToDate(newDate || new Date());
     // console.log(newDate, goToDate);
@@ -92,6 +91,7 @@ export default function SubComponentsPickers() {
 
   const handleDataSelect = (selectInformation: DateSelectArg) => {
     setSelectInfo(selectInformation);
+    setDate(new Date(selectInformation.startStr));
     setOpenSelect((prevState: any) => !prevState);
     // const title = prompt(`Please enter a new title for your event from ${selectInfo.startStr} to ${selectInfo.endStr}`);
     // const calendarApi = selectInfo.view.calendar;
@@ -118,7 +118,7 @@ export default function SubComponentsPickers() {
         <Grid container spacing={3} alignContent="center">
           <Grid item xs={12} md={4}>
             <MainCard>
-              <CalendarPicker date={date} onChange={handlePickDate} />
+              <CalendarPicker date={date} onChange={handlePickDate} ref={calendarRef} />
             </MainCard>
           </Grid>
           <Grid item xs={12} md={8}>
@@ -130,6 +130,60 @@ export default function SubComponentsPickers() {
                   left: 'prev,next today',
                   center: 'title',
                   right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }}
+                customButtons={{
+                  prev: {
+                    click() {
+                      calendarRef.current.getApi().prev();
+                      switch (calendarRef.current.getApi().view.type) {
+                        case 'timeGridDay': {
+                          const nextDate = new Date(date.getTime() - 24 * 60 * 60 * 1000);
+                          setDate(nextDate);
+                          break;
+                        }
+                        case 'timeGridWeek': {
+                          const nextDate = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+                          setDate(nextDate);
+                          break;
+                        }
+                        case 'dayGridMonth': {
+                          const nextDate = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+                          setDate(nextDate);
+                          break;
+                        }
+                        default: {
+                          console.error('Some Error Occurred while click next button');
+                          break;
+                        }
+                      }
+                    }
+                  },
+                  next: {
+                    click() {
+                      calendarRef.current.getApi().next();
+                      switch (calendarRef.current.getApi().view.type) {
+                        case 'timeGridDay': {
+                          const nextDay = new Date(date.getTime() + 24 * 60 * 60 * 1000);
+                          setDate(nextDay);
+                          break;
+                        }
+                        case 'timeGridWeek': {
+                          const nextWeek = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+                          setDate(nextWeek);
+                          break;
+                        }
+                        case 'dayGridMonth': {
+                          const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+                          setDate(nextMonth);
+                          break;
+                        }
+                        default: {
+                          console.error('Some Error Occurred while click next button');
+                          break;
+                        }
+                      }
+                    }
+                  }
                 }}
                 initialView="dayGridMonth"
                 // dateClick={handleDateClick}

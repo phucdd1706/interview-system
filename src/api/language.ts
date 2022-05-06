@@ -1,13 +1,18 @@
 import axiosServices from 'utils/axios';
+import { Languages } from 'types/language';
 
-const getListLanguage = (params: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages?${params}`);
+const URL_API = `${process.env.REACT_APP_API_URL}/v1/operator/languages`;
 
-const getOneLanguage = (id: any) => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`);
+const getListLanguage = (params: string) => axiosServices.get(`${URL_API}?${params}`);
 
-const createLanguage = (params: any) => axiosServices.post(`${process.env.REACT_APP_API_URL}/v1/operator/languages`, params);
+const getAllLanguage = () => axiosServices.get(`${process.env.REACT_APP_API_URL}/v1/languages/all`);
 
-const updateLanguage = (id: any, params: any) => axiosServices.put(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`, params);
+const getOneLanguage = (id: number | string | undefined) => axiosServices.get(`${URL_API}/${id}`);
 
-const deleteLanguage = (id: any) => axiosServices.delete(`${process.env.REACT_APP_API_URL}/v1/operator/languages/${id}`);
+const createLanguage = (params: Languages) => axiosServices.post(`${URL_API}`, params);
 
-export { getListLanguage, getOneLanguage, createLanguage, updateLanguage, deleteLanguage };
+const updateLanguage = (id: number | string | undefined, params: Languages) => axiosServices.put(`${URL_API}/${id}`, params);
+
+const deleteLanguage = (id: number | string | undefined) => axiosServices.delete(`${URL_API}/${id}`);
+
+export { getListLanguage, getOneLanguage, createLanguage, updateLanguage, deleteLanguage, getAllLanguage };

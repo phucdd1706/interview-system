@@ -1,14 +1,15 @@
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-import { Payload } from 'types/complete';
+import { Payload } from 'types/history';
 
 // PROJECT IMPORTS
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { RankType, RankFilter } from 'types/rank';
+import { RankFilter } from 'types/rank';
 
 export const RANKS_URL = `${process.env.REACT_APP_API_URL}/v1/operator/ranks`;
+export const RANKS_URL_ALL = `${process.env.REACT_APP_API_URL}/v1/ranks/all`;
 
 const initialState: DefaultRootStateProps['rank'] = {
   ranks: [],
@@ -52,6 +53,8 @@ const slice = createSlice({
   }
 });
 
+export const { getRanksListSuccess } = slice.actions;
+
 export default slice.reducer;
 
 export function getRanksList(filter?: RankFilter) {
@@ -73,7 +76,7 @@ export function getRanksAll(payload: Payload) {
   return async () => {
     const { callback } = payload;
     const response = await await axios
-      .get(`${RANKS_URL}/all`)
+      .get(`${RANKS_URL_ALL}`)
       .then((result) => result)
       .catch((err) => err);
 
@@ -83,35 +86,59 @@ export function getRanksAll(payload: Payload) {
   };
 }
 
-export function PostRank(rank: RankType) {
+export function PostRank(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.post(`${RANKS_URL}`, rank);
-      dispatch(slice.actions.postRankSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const response = await axios
+      .post(`${RANKS_URL}`, params)
+      .then((result) => {
+        dispatch(slice.actions.postRankSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }
 
-export function DeleteRank(rank: RankType) {
+export function DeleteRank(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.delete(`${RANKS_URL}/${rank.id}`);
-      dispatch(slice.actions.deleteRankSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, callback } = payload;
+    const response = await axios
+      .delete(`${RANKS_URL}/${id}`)
+      .then((result) => {
+        dispatch(slice.actions.deleteRankSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }
 
-export function PutRank(rank: RankType) {
+export function PutRank(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${RANKS_URL}/${rank.id}`, rank);
-      dispatch(slice.actions.putRankSuccess(response.data.success));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { id, params, callback } = payload;
+    const response = await axios
+      .put(`${RANKS_URL}/${id}`, params)
+      .then((result) => {
+        dispatch(slice.actions.putRankSuccess(result.data.success));
+        return result;
+      })
+      .catch((error) => {
+        dispatch(slice.actions.hasError(error));
+        return error;
+      });
+    if (callback) {
+      callback(response);
     }
   };
 }

@@ -1,7 +1,6 @@
 // THIRD-PARTY
 import { alertRequestError } from './helpers/axios/errorAlert';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { ErrorResponse } from 'types/error-response.type';
+import axios, { AxiosError } from 'axios';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const TOKEN =

@@ -1,7 +1,7 @@
 // PROJECT IMPORTS
 
 export interface Languages {
-  id?: number;
+  id?: number | string;
   name?: string;
   description?: string;
   created_at?: string;
@@ -12,12 +12,12 @@ export interface Languages {
 export interface SearchValues {
   search?: string;
   status?: number | string;
-  currentPage?: number;
+  currentPage?: number | string;
   limit?: number;
 }
 
 export interface Payload {
-  id?: string | number;
+  id?: string | number | undefined;
   params?: any;
   callback?: (response: any) => void;
 }

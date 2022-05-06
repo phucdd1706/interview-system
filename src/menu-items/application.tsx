@@ -1,9 +1,10 @@
 // THIRD-PARTY
 import { FormattedMessage } from 'react-intl';
 import { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, IconWorld } from '@tabler/icons';
+import QuizIcon from '@mui/icons-material/Quiz';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
-const icons = { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, CorporateFareIcon, IconWorld };
+const icons = { IconStairsUp, IconUserCheck, IconHistory, IconFilePlus, CorporateFareIcon, IconWorld, QuizIcon };
 
 const application = {
   id: 'application',
@@ -35,29 +36,6 @@ const application = {
       ]
     },
     {
-      id: 'history',
-      title: <FormattedMessage id="history" />,
-      type: 'collapse',
-      role: 2,
-      icon: icons.IconHistory,
-      children: [
-        {
-          id: 'complete',
-          title: <FormattedMessage id="complete" />,
-          type: 'item',
-          role: 2,
-          url: '/complete'
-        },
-        {
-          id: 'inprogress',
-          title: <FormattedMessage id="inProgress" />,
-          type: 'item',
-          role: 2,
-          url: '/inprogress'
-        }
-      ]
-    },
-    {
       id: 'language',
       title: <FormattedMessage id="language" />,
       type: 'item',
@@ -84,32 +62,35 @@ const application = {
       icon: icons.IconStairsUp,
       breadcrumbs: true
     },
+
+    {
+      id: 'manage-question',
+      title: <FormattedMessage id="manage-question" />,
+      type: 'item',
+      role: 1,
+      url: '/questions',
+      icon: icons.QuizIcon,
+      breadcrumbs: true
+    },
     {
       id: 'applicant',
-      title: <FormattedMessage id="add new applicant reference" />,
+      title: <FormattedMessage id="add-new-applicant" />,
       type: 'item',
       role: 2,
       url: '/applicant',
       icon: icons.IconFilePlus,
       breadcrumbs: true
+    },
+    {
+      id: 'history',
+      title: <FormattedMessage id="history" />,
+      type: 'item',
+      role: 2,
+      url: '/history',
+      icon: icons.IconHistory,
+      breadcrumbs: true
     }
   ]
 };
-
-const userRole = JSON.parse(localStorage.getItem('user') || '{}');
-const hiddenRoute: Array<string> = [];
-const getHiddenRoute = (route: any) => {
-  if (route.children) {
-    route.children.forEach((element: any) => getHiddenRoute(element));
-  } else {
-    if (route.role !== userRole.type) {
-      hiddenRoute.push(route.url);
-    }
-    return hiddenRoute;
-  }
-  return hiddenRoute;
-};
-
-export const filterAuthorization = getHiddenRoute(application);
 
 export default application;

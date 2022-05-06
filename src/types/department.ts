@@ -6,6 +6,11 @@ export interface DepartmentStateProps {
   currentPage: number;
   error: DataError[];
 }
+export interface Payload {
+  id?: string | number;
+  params?: Department;
+  callback?: (response: any) => void;
+}
 interface DataError {
   error: {
     errors: string[];
@@ -27,6 +32,7 @@ export type Department = {
   code?: string;
   status?: number;
   created_at?: Date;
+  update_at?: Date;
 };
 export type SelectProps = {
   value?: any;

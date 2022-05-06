@@ -37,7 +37,8 @@ interface Props {
 
 export interface RefObject {
   SayHi: () => void;
-  FileTitle: any;
+  startTime: Date | null;
+  endTime: Date | null;
 }
 
 export interface DialogTitleProps {
@@ -114,7 +115,7 @@ const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
   const onButtonClick = () => {
     if (selectRef.current) {
       selectRef.current.SayHi();
-      alert(selectRef.current.FileTitle);
+      alert(selectRef.current.startTime);
     }
   };
 
@@ -156,11 +157,12 @@ const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
                 inputProps={{ style: { fontSize: 18 } }} // font size of input text
                 InputLabelProps={{ style: { fontSize: 18 } }} // font size of input label
                 fullWidth
+                required
                 sx={{ paddingTop: 1 }}
               />
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item width="95%">
             <TabContext value={tabsValue}>
               <Box>
                 <Tabs
