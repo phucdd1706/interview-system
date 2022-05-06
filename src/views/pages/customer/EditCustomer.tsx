@@ -81,6 +81,11 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   username: yup.string().required('Username is required'),
+  password: yup.string().min(6, 'your password must be at least 6 character'),
+  password_confirmation: yup
+    .string()
+    .min(6, 'your password must be at least 6 character')
+    .oneOf([yup.ref('password'), null], 'Password must match'),
   email: yup.string().email('Enter a valid email').required('Email is required'),
   phone: yup.string().required('Phone is required'),
   gender: yup.string().required('Gender is required'),
@@ -89,6 +94,7 @@ const validationSchema = yup.object({
 });
 
 const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -142,6 +148,8 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
       id: customer.id,
       name: customer.name,
       username: customer.username,
+      password: '',
+      password_confirmation: '',
       email: customer.email,
       phone: customer.phone,
       dob: customer.dob,
@@ -253,6 +261,37 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                     <TextField
                       fullWidth
                       inputProps={{ readOnly: !editing }}
+                      id="password"
+                      name="password"
+                      label="Password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                      helperText={(formik.touched.password && formik.errors.password) || errors?.password}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="password_confirmation"
+                      name="password_confirmation"
+                      label="Confirm Password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formik.values.password_confirmation}
+                      onChange={formik.handleChange}
+                      error={
+                        (formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) ||
+                        errors?.password_confirmation
+                      }
+                      helperText={
+                        (formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password_confirmation
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
                       id="phone"
                       name="phone"
                       label="Phone"

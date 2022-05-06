@@ -24,7 +24,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
-import { useSelector } from 'store';
+import { dispatch, useSelector } from 'store';
 import { editNotifications } from 'store/slices/notification';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
@@ -39,7 +39,6 @@ export default function SettingPage() {
   const notifiState = useSelector((state) => state.notification.notifications);
 
   const [state, setState] = React.useState(notifiState);
-
   const [FacebookURL, setFacebookURL] = React.useState('');
   const [LinkedInURL, setLinkedInURL] = React.useState('');
   const [TwitterURL, setTwitterURL] = React.useState('');
@@ -59,7 +58,7 @@ export default function SettingPage() {
   };
 
   const handleSettingsChange = () => {
-    editNotifications(state);
+    dispatch(editNotifications(state));
     setOpenSettings(true);
   };
 

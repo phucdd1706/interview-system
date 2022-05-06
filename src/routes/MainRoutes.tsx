@@ -11,9 +11,10 @@ const History = Loadable(lazy(() => import('views/pages/history/index')));
 const Language = Loadable(lazy(() => import('views/pages/language/index')));
 const Administrator = Loadable(lazy(() => import('views/pages/administrator')));
 const Customer = Loadable(lazy(() => import('views/pages/customer')));
-const CustomerRootInfo = Loadable(lazy(() => import('views/pages/customer/customer-root-info')));
 const Department = Loadable(lazy(() => import('views/pages/department')));
 const Profile = Loadable(lazy(() => import('views/pages/account')));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Calendar = Loadable(lazy(() => import('views/pages/account/tabs/Calendar/Calendar')));
 const Ranks = Loadable(lazy(() => import('views/pages/ranks')));
 const Question = Loadable(lazy(() => import('views/pages/questions')));
 const AddNewApplicant = Loadable(lazy(() => import('views/pages/add-new-applicant-reference')));
@@ -52,14 +53,7 @@ const MainRoutes = {
     {
       path: '/user/customer',
       role: 1,
-      exact: true,
       element: <Customer />
-    },
-    {
-      path: '/user/customer/:id',
-      role: 1,
-      exact: true,
-      element: <CustomerRootInfo />
     },
     {
       path: '/department',

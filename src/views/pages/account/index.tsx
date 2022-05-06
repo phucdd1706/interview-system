@@ -7,6 +7,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import Profile from 'views/pages/account/tabs/Profile';
 import ChangePassword from 'views/pages/account/tabs/ChangePassword';
 import SettingPage from 'views/pages/account/tabs/SettingsPage';
+import Calendar from 'views/pages/account/tabs/Calendar/Calendar';
 import { Grid, Paper, CardContent } from '@mui/material';
 
 export default function LabTabs() {
@@ -26,7 +27,8 @@ export default function LabTabs() {
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                   <Tab label="Profile" value="1" />
                   <Tab label="Change Password" value="2" />
-                  <Tab label="Settings" value="3" />
+                  <Tab label="Setings" value="3" />
+                  <Tab label="Calendar" value="4" />
                 </TabList>
               </Box>
               <TabPanel value="1">
@@ -40,6 +42,10 @@ export default function LabTabs() {
               <TabPanel value="3">
                 {' '}
                 <SettingPage />{' '}
+              </TabPanel>
+              <TabPanel value="4">
+                {' '}
+                <Calendar />{' '}
               </TabPanel>
             </TabContext>
           </Grid>
