@@ -24,6 +24,8 @@ export type RankType = {
   name?: string;
   description?: string;
   status?: number;
+  created_at?: Date;
+  updated_at?: Date;
 };
 
 export type SelectProps = {

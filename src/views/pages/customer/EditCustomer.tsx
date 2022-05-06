@@ -257,38 +257,41 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       helperText={(formik.touched.email && formik.errors.email) || errors?.email}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      inputProps={{ readOnly: !editing }}
-                      id="password"
-                      name="password"
-                      label="Password"
-                      type={showPassword ? 'text' : 'password'}
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
-                      helperText={(formik.touched.password && formik.errors.password) || errors?.password}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="password_confirmation"
-                      name="password_confirmation"
-                      label="Confirm Password"
-                      type={showPassword ? 'text' : 'password'}
-                      value={formik.values.password_confirmation}
-                      onChange={formik.handleChange}
-                      error={
-                        (formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) ||
-                        errors?.password_confirmation
-                      }
-                      helperText={
-                        (formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password_confirmation
-                      }
-                    />
-                  </Grid>
+                  {editing && (
+                    <>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="password"
+                          name="password"
+                          label="Password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={formik.values.password}
+                          onChange={formik.handleChange}
+                          error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
+                          helperText={(formik.touched.password && formik.errors.password) || errors?.password}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          id="password_confirmation"
+                          name="password_confirmation"
+                          label="Confirm Password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={formik.values.password_confirmation}
+                          onChange={formik.handleChange}
+                          error={
+                            (formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)) ||
+                            errors?.password_confirmation
+                          }
+                          helperText={
+                            (formik.touched.password_confirmation && formik.errors.password_confirmation) || errors?.password_confirmation
+                          }
+                        />
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xs={12}>
                     <TextField
                       fullWidth

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import moment from 'moment';
 // PROJECT IMPORTS
 import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
@@ -82,12 +82,12 @@ const Rank = ({ rank, index }: Props) => {
   return (
     <>
       <TableRow hover key={index}>
-        <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} alignItems="center" style={{ marginLeft: '15px' }}>
+        <TableCell sx={{ pl: 3 }}>
+          <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{20 * (rankState.currentPage - 1) + index + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -103,7 +103,7 @@ const Rank = ({ rank, index }: Props) => {
             {rank.name}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -111,13 +111,18 @@ const Rank = ({ rank, index }: Props) => {
               overflow: 'hidden',
               display: 'block',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
           >
             {rank.description}
           </Link>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(rank.created_at).format('DD/MM/yy hh:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(rank.updated_at).format('DD/MM/yy hh:mm')}
         </TableCell>
         <TableCell>
           {rank.status === 0 && (
@@ -141,7 +146,7 @@ const Rank = ({ rank, index }: Props) => {
             />
           )}
         </TableCell>
-        <TableCell align="center" sx={{ width: 60, minWidth: 60 }}>
+        <TableCell align="center">
           <ButtonBase
             className="more-button"
             sx={{ borderRadius: '12px' }}

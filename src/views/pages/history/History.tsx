@@ -154,17 +154,16 @@ const History = ({ history, index, getList }: Props) => {
             <Typography variant="body2">{index + 20 * (historyState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: '20%' }} component="th" scope="row">
+        <TableCell component="th" scope="row">
           {history.name}
         </TableCell>
-        <TableCell sx={{ width: '25%' }}>{history?.email}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{history?.age}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{moment(history?.time).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell sx={{ width: '15%' }}>{history?.status ? moment(history?.updated_at).format('DD/MM/YYYY HH:mm') : 'N/A'}</TableCell>
-        <TableCell sx={{ width: '10%' }}>{renderStatus(history?.status)}</TableCell>
-        <TableCell align="center" sx={{ width: '10%' }}>
-          {renderMenuButton()}
-        </TableCell>
+        <TableCell>{history?.email}</TableCell>
+        <TableCell>{history?.age}</TableCell>
+        <TableCell>{moment(history?.time).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{moment(history?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell>{history?.status ? moment(history?.updated_at).format('DD/MM/YYYY HH:mm') : 'N/A'}</TableCell>
+        <TableCell>{renderStatus(history?.status)}</TableCell>
+        <TableCell align="center">{renderMenuButton()}</TableCell>
       </TableRow>
       <AddHistory visible={visibleAdd} dataEdit={history} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
       <QuestionModal visible={visibleQuestionModal} dataCandidate={history} handleVisibleQuestionModal={handleVisibleQuestionModal} />

@@ -41,6 +41,7 @@ interface Props {
   open: boolean;
   adminFilter: UserFilter;
   administrator: Administrator;
+  editing?: boolean;
   handleDrawerOpen: () => void;
 }
 const Type: SelectProps[] = [
@@ -95,18 +96,13 @@ const validationSchema = yup.object({
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
-    .required('Cofirm password is required'),
-  phone: yup
-    .string()
-    .min(10, 'Minimum 10 characters ')
-    .max(10, 'Maximum 10 characters ')
-    .matches(isPhone, 'Enter a valid phone')
-    .required('Phone is required'),
+    .required('Confirm password is required'),
+  phone: yup.string().matches(isPhone, 'Enter the correct format phone').required('Phone is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
 
-const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }: Props) => {
+const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, administrator }: Props) => {
   const [errors, setErrors] = useState<any>({});
 
   const changeModal = (type: string) => {
@@ -248,6 +244,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                       fullWidth
                       id="name"
                       name="name"
+                      inputProps={{ readOnly: !editing }}
                       label={
                         <span>
                           <span style={{ color: '#f44336' }}>*</span> Name
@@ -263,6 +260,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                     <TextField
                       fullWidth
                       id="username"
+                      inputProps={{ readOnly: !editing }}
                       name="username"
                       label={
                         <span>
@@ -279,6 +277,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                     <TextField
                       fullWidth
                       id="email"
+                      inputProps={{ readOnly: !editing }}
                       name="email"
                       label={
                         <span>
@@ -297,6 +296,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                         fullWidth
                         id="password"
                         name="password"
+                        inputProps={{ readOnly: !editing }}
                         type="password"
                         label={
                           <span>
@@ -316,6 +316,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                         fullWidth
                         id="password_confirmation"
                         name="password_confirmation"
+                        inputProps={{ readOnly: !editing }}
                         type="password"
                         label={
                           <span>
@@ -334,6 +335,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                     <TextField
                       fullWidth
                       id="phone"
+                      inputProps={{ readOnly: !editing }}
                       name="phone"
                       label={
                         <span>
@@ -351,6 +353,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      readOnly={!editing}
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
@@ -364,6 +367,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                       <Select
                         id="gender"
                         name="gender"
+                        readOnly={!editing}
                         label="Gender"
                         displayEmpty
                         value={formik.values.gender}
@@ -384,6 +388,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                         <InputLabel>Status</InputLabel>
                         <Select
                           id="status"
+                          readOnly={!editing}
                           name="status"
                           label="Status"
                           displayEmpty
@@ -406,6 +411,7 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                         <InputLabel>Type</InputLabel>
                         <Select
                           id="type"
+                          readOnly={!editing}
                           name="type"
                           label="Type"
                           displayEmpty
@@ -422,13 +428,15 @@ const AddAdministrator = ({ open, handleDrawerOpen, adminFilter, administrator }
                       </FormControl>
                     </Grid>
                   )}
-                  <Grid item xs={12}>
-                    <AnimateButton>
-                      <Button fullWidth variant="contained" type="submit">
-                        Save
-                      </Button>
-                    </AnimateButton>
-                  </Grid>
+                  {editing && (
+                    <Grid item xs={12}>
+                      <AnimateButton>
+                        <Button fullWidth variant="contained" type="submit">
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </DialogContent>
             </LocalizationProvider>

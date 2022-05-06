@@ -366,7 +366,7 @@ const QuestionModal = ({ dataCandidate, visible, handleVisibleQuestionModal }: P
                         </TableCell>
                       </TableRow>
                     </TableHead>
-                    <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
+                    <TableBody>
                       {questionList?.map((question, index) => (
                         <QuestionTag
                           index={index}

@@ -85,12 +85,12 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
   return (
     <>
       <TableRow hover key={index}>
-        <TableCell sx={{ width: 110, minWidth: 110 }}>
-          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+        <TableCell sx={{ width: '5%', pl: 3 }}>
+          <Stack direction="row" spacing={0.5}>
             <Typography variant="body2">{index + 20 * (departmentState.currentPage - 1) + 1} </Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -107,8 +107,8 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
           </Link>
         </TableCell>
         <TableCell>{department.code}</TableCell>
-        <TableCell>{moment(department.created_at).format('DD/MM/YYYY')}</TableCell>
-        <TableCell>{moment(department.update_at).format('DD/MM/YYYY')}</TableCell>
+        <TableCell>{moment(department.created_at).format('DD/MM/yy hh:mm')}</TableCell>
+        <TableCell>{moment(department.updated_at).format('DD/MM/yy hh:mm')}</TableCell>
         <TableCell>
           {department.status === 0 && (
             <Chip
@@ -132,7 +132,7 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
           )}
         </TableCell>
 
-        <TableCell sx={{ width: 60, minWidth: 60 }}>
+        <TableCell align="center">
           <ButtonBase
             className="more-button"
             sx={{ borderRadius: '12px' }}

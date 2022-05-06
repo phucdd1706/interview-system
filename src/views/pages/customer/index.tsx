@@ -214,23 +214,22 @@ const Customers = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ pl: 2 }}>STT</TableCell>
+              <TableCell sx={{ pl: 3, width: '5%' }}>STT</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Username</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Phone</TableCell>
-              <TableCell>Date of Birth</TableCell>
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>Date of Birth</TableCell>
               <TableCell>Gender</TableCell>
-              <TableCell>Updated</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="center" sx={{ pr: 3 }}>
+              <TableCell sx={{ width: '10%' }}>Created At</TableCell>
+              <TableCell sx={{ width: '10%' }}>Updated At</TableCell>
+              <TableCell sx={{ width: '8%' }}>Status</TableCell>
+              <TableCell align="center" sx={{ pr: 3, width: '5%' }}>
                 Actions
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ '& th,& td': { whiteSpace: 'nowrap' } }}>
-            {data && data.map((customer, index) => <Customer key={customer.id} customer={customer} index={index} />)}
-          </TableBody>
+          <TableBody>{data && data.map((customer, index) => <Customer key={customer.id} customer={customer} index={index} />)}</TableBody>
         </Table>
         <AddCustomer open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
       </TableContainer>
