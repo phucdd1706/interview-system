@@ -1,29 +1,29 @@
 // PROJECT IMPORTS
 
 export interface Languages {
-  id: number;
-  name: string;
-  description: string;
-  created_at: string;
-  status: number;
+  id?: number | string;
+  name?: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  status?: any;
 }
 
 export interface SearchValues {
   search?: string;
   status?: number | string;
-  currentPage?: number;
+  currentPage?: number | string;
   limit?: number;
 }
 
 export interface Payload {
-  id?: string | number;
+  id?: string | number | undefined;
   params?: any;
-  token?: any;
   callback?: (response: any) => void;
 }
 
 export type Status = {
-  value?: any;
+  value?: number | string;
   label: string;
 };
 

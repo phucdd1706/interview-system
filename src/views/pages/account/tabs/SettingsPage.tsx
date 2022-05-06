@@ -24,6 +24,8 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
+import { dispatch, useSelector } from 'store';
+import { editNotifications } from 'store/slices/notification';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -32,11 +34,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
 export default function SettingPage() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [state, setState] = React.useState({
-    email: true,
-    desktop: false,
-    attempted: false
-  });
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const notifiState = useSelector((state) => state.notification.notifications);
+
+  const [state, setState] = React.useState(notifiState);
   const [FacebookURL, setFacebookURL] = React.useState('');
   const [LinkedInURL, setLinkedInURL] = React.useState('');
   const [TwitterURL, setTwitterURL] = React.useState('');
@@ -52,8 +54,19 @@ export default function SettingPage() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
+  };
+
+  const handleSettingsChange = () => {
+    dispatch(editNotifications(state));
+    setOpenSettings(true);
+  };
+
+  const handleSettingsClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSettings(false);
   };
 
   const handleFacebookURLChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,6 +164,18 @@ export default function SettingPage() {
                   </FormGroup>
                 </Grid>
               </Grid>
+              <Grid container direction="row" alignItems="flex-end" justifyContent="flex-end" spacing={gridSpacing} sx={{ mt: 2 }}>
+                <Grid item>
+                  <Button size="large" type="submit" variant="contained" color="primary" onClick={handleSettingsChange}>
+                    Apply Change
+                  </Button>
+                </Grid>
+                <Snackbar open={openSettings} autoHideDuration={2500} onClose={handleSettingsClose}>
+                  <Alert onClose={handleSettingsClose} severity="success" sx={{ width: '100%' }}>
+                    Apply Settings Change Successfully!
+                  </Alert>
+                </Snackbar>
+              </Grid>
             </CardContent>
           </MainCard>
         </Grid>
@@ -230,7 +255,7 @@ export default function SettingPage() {
                   </Stack>
                   <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                      Change Password Successfully!
+                      Connected Successfully!
                     </Alert>
                   </Snackbar>
                 </Grid>

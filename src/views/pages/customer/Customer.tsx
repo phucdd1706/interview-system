@@ -1,13 +1,14 @@
 // THIRD-PARTY
 import React, { useState } from 'react';
 import moment from 'moment';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ButtonBase, Chip, IconButton, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme, Link } from '@mui/material';
 // PROJECT IMPORTS
 import { UserProfile } from 'types/user-profile';
-import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import EditCustomer from 'views/pages/customer/EditCustomer';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { deleteCustomer } from 'store/slices/customer';
 import AlertCustomerDelete from 'views/pages/customer/AlertCustomerDelete';
@@ -19,12 +20,16 @@ interface Props {
 
 const Customer = ({ customer, index }: Props) => {
   const theme = useTheme();
+  const customerState = useSelector((state) => state.customer);
   const [openCustomerDrawer, setOpenCustomerDrawer] = useState<boolean>(false);
-  const handleCustomerDrawerOpen = () => {
+  const [editing, setEditing] = useState<boolean>(false);
+  const handleCustomerDrawerOpen = async () => {
+    await setEditing(false);
     setOpenCustomerDrawer((prevState) => !prevState);
   };
 
-  const editCustomer = () => {
+  const editCustomer = async () => {
+    await setEditing(true);
     setOpenCustomerDrawer((prevState) => !prevState);
   };
 
@@ -61,24 +66,22 @@ const Customer = ({ customer, index }: Props) => {
       <TableRow hover key={index}>
         <TableCell sx={{ width: 110, minWidth: 110 }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2">{customer.id}</Typography>
+            <Typography variant="body2">{(customerState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {customer.name}
-          </Link>
+        <TableCell
+          sx={{
+            width: 110,
+            minWidth: 110,
+            maxWidth: 'calc(100vw - 850px)',
+            cursor: 'pointer',
+            ':hover': { color: 'primary.main', textDecoration: 'underline' }
+          }}
+          component="th"
+          scope="row"
+          onClick={handleCustomerDrawerOpen}
+        >
+          {customer.name}
         </TableCell>
         <TableCell>{customer.username}</TableCell>
         <TableCell>{customer.email}</TableCell>
@@ -156,6 +159,7 @@ const Customer = ({ customer, index }: Props) => {
                 editCustomer();
               }}
             >
+              <EditIcon fontSize="small" sx={{ color: '#2196f3', mr: 1 }} />
               Edit
             </MenuItem>
             <MenuItem
@@ -164,13 +168,14 @@ const Customer = ({ customer, index }: Props) => {
                 setOpenModal(true);
               }}
             >
+              <DeleteIcon fontSize="small" sx={{ color: '#f44336', mr: 1 }} />
               Delete
             </MenuItem>
           </Menu>
           {openModal && <AlertCustomerDelete name={customer.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditCustomer customer={customer} open={openCustomerDrawer} handleDrawerOpen={handleCustomerDrawerOpen} />
+      <EditCustomer customer={customer} editing={editing} open={openCustomerDrawer} handleDrawerOpen={handleCustomerDrawerOpen} />
     </>
   );
 };

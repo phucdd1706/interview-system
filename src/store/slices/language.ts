@@ -2,7 +2,7 @@
 
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
-import { getListLanguage, createLanguage, updateLanguage, deleteLanguage } from 'api/language';
+import { getListLanguage, createLanguage, updateLanguage, deleteLanguage, getAllLanguage } from 'api/language';
 import { Payload } from 'types/language';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
@@ -14,7 +14,7 @@ const initialState: DefaultRootStateProps['language'] = {
   error: null
 };
 
-const completeSlice = createSlice({
+const languageSlice = createSlice({
   name: 'language',
   initialState,
   reducers: {
@@ -22,17 +22,17 @@ const completeSlice = createSlice({
       state.error = action.payload;
     },
 
-    getCompleteListSuccess(state, action) {
+    getLanguageListSuccess(state, action) {
       state.language = action.payload.data;
       state.pageCount = action.payload.last_page;
       state.currentPage = action.payload.current_page;
     },
 
-    addCompleteSuccess(state, action) {
+    addLanguageSuccess(state, action) {
       state.language.unshift(action.payload);
     },
 
-    editCompleteSuccess(state, action) {
+    editLanguageSuccess(state, action) {
       state.language = state.language.map((language) => {
         if (language.id === action.payload.id) {
           return action.payload;
@@ -41,25 +41,26 @@ const completeSlice = createSlice({
       });
     },
 
-    deleteCompleteSuccess(state, action) {
+    deleteLanguageSuccess(state, action) {
       state.language = state.language.filter((language) => language.id !== action.payload.id);
     }
   }
 });
 
-export default completeSlice.reducer;
+export const { getLanguageListSuccess } = languageSlice.actions;
 
-export function fetchLanguages(payload: Payload) {
+export default languageSlice.reducer;
+
+export function fetchLanguages({ params, callback }: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
     const query = new URLSearchParams(params).toString();
-    const response = await getListLanguage(query, token)
+    const response = await getListLanguage(query)
       .then((result) => {
-        dispatch(completeSlice.actions.getCompleteListSuccess(result.data.success));
+        dispatch(languageSlice.actions.getLanguageListSuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(completeSlice.actions.hasError(err));
+        dispatch(languageSlice.actions.hasError(err));
         return err;
       });
 
@@ -69,16 +70,28 @@ export function fetchLanguages(payload: Payload) {
   };
 }
 
-export function addLanguage(payload: Payload) {
+export function getLanguagesAll(payload: Payload) {
   return async () => {
-    const { params, token, callback } = payload;
-    const response = await createLanguage(params, token)
+    const { callback } = payload;
+    const response = await getAllLanguage()
+      .then((result) => result)
+      .catch((err) => err);
+
+    if (callback) {
+      callback(response);
+    }
+  };
+}
+
+export function addLanguage({ params, callback }: Payload) {
+  return async () => {
+    const response = await createLanguage(params)
       .then((result) => {
-        dispatch(completeSlice.actions.addCompleteSuccess(result.data.success));
+        dispatch(languageSlice.actions.addLanguageSuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(completeSlice.actions.hasError(err));
+        dispatch(languageSlice.actions.hasError(err));
         return err;
       });
 
@@ -88,16 +101,15 @@ export function addLanguage(payload: Payload) {
   };
 }
 
-export function editLanguage(payload: Payload) {
+export function editLanguage({ id, params, callback }: Payload) {
   return async () => {
-    const { id, params, token, callback } = payload;
-    const response = await updateLanguage(id, params, token)
+    const response = await updateLanguage(id, params)
       .then((result) => {
-        dispatch(completeSlice.actions.editCompleteSuccess(result.data.success));
+        dispatch(languageSlice.actions.editLanguageSuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(completeSlice.actions.hasError(err));
+        dispatch(languageSlice.actions.hasError(err));
         return err;
       });
 
@@ -107,16 +119,15 @@ export function editLanguage(payload: Payload) {
   };
 }
 
-export function removeLanguage(payload: Payload) {
+export function removeLanguage({ id, callback }: Payload) {
   return async () => {
-    const { id, token, callback } = payload;
-    const response = await deleteLanguage(id, token)
+    const response = await deleteLanguage(id)
       .then((result) => {
-        dispatch(completeSlice.actions.deleteCompleteSuccess(result.data.success));
+        dispatch(languageSlice.actions.deleteLanguageSuccess(result.data.success));
         return result;
       })
       .catch((err) => {
-        dispatch(completeSlice.actions.hasError(err));
+        dispatch(languageSlice.actions.hasError(err));
         return err;
       });
 

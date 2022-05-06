@@ -11,11 +11,12 @@ interface DashboardMenuProps {
   id: string;
   title: React.ReactNode | string;
   type: string;
-  role: number;
+  role?: number;
   children: {
     id: string;
     title: React.ReactNode | string;
     type: string;
+    role?: number;
     url: string;
     icon: OverrideIcon;
     breadcrumbs: boolean;
@@ -26,7 +27,6 @@ const dashboard: DashboardMenuProps = {
   id: 'dashboard',
   title: <FormattedMessage id="dashboard" />,
   type: 'group',
-  role: 1,
   children: [
     {
       id: 'analytics',
@@ -34,7 +34,7 @@ const dashboard: DashboardMenuProps = {
       type: 'item',
       url: '/dashboard/analytics',
       icon: icons.IconDeviceAnalytics,
-      breadcrumbs: false
+      breadcrumbs: true
     }
   ]
 };
