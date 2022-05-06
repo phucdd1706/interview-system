@@ -4,9 +4,7 @@ import { RefObject } from '../SelectDialog';
 import DatePicker from '@mui/lab/DatePicker/DatePicker';
 import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import CalendarPicker from '@mui/lab/CalendarPicker';
 
 // ICONS IMPORT
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
@@ -25,7 +23,6 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(new Date(selectInfo.start));
   const [endTime, setEndTime] = useState<Date | null>(new Date(selectInfo.end));
-  const [tabsValue, setTabsValue] = useState(1);
 
   useImperativeHandle(selectRef, () => ({ SayHi, startTime, endTime }));
 

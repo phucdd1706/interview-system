@@ -13,8 +13,7 @@ import {
   Tabs,
   useTheme,
   FormControl,
-  Box,
-  Typography
+  Box
 } from '@mui/material';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
@@ -74,7 +73,6 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
   const theme = useTheme();
-  const anchorRef = useRef<HTMLDivElement>(null);
   const [tabsValue, setTabsValue] = useState('1');
   const [title, setTitle] = useState('');
   const selectRef = useRef<RefObject>(null);
@@ -115,6 +113,7 @@ const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
   const onButtonClick = () => {
     if (selectRef.current) {
       selectRef.current.SayHi();
+      // eslint-disable-next-line no-alert
       alert(selectRef.current.startTime);
     }
   };
