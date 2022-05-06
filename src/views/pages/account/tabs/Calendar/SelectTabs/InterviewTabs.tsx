@@ -10,7 +10,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import EventIcon from '@mui/icons-material/Event';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import SubjectIcon from '@mui/icons-material/Subject';
 
@@ -56,7 +55,6 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
     }
   };
 
-  console.log(startTime);
   console.error = () => {}; // --------------- Disable Console Error --------------
 
   return (
@@ -292,7 +290,7 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
               renderTags={(value: readonly string[], getTagProps) =>
                 value.map((option: string, index: number) => <Chip variant="outlined" label={option} {...getTagProps({ index })} />)
               }
-              renderInput={(params) => <TextField {...params} variant="filled" label="freeSolo" placeholder="Favorites" />}
+              renderInput={(params) => <TextField {...params} variant="filled" label="Add Candidate" placeholder="Candidates" />}
             />
           </Grid>
         </Grid>

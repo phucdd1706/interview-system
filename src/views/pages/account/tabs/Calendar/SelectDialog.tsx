@@ -84,7 +84,6 @@ const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
   const handleSave = () => {
     const calendarApi = selectInfo.view.calendar;
     // const title = prompt(`Please enter a new title for your event from ${selectInfo.startStr} to ${selectInfo.endStr}`);
-    console.log(selectInfo);
     calendarApi.unselect();
     if (title && title !== '') {
       calendarApi.addEvent({
@@ -113,8 +112,6 @@ const SelectDialog = ({ open, setOpen, selectInfo, createEventId }: Props) => {
   const onButtonClick = () => {
     if (selectRef.current) {
       selectRef.current.SayHi();
-      // eslint-disable-next-line no-alert
-      alert(selectRef.current.startTime);
     }
   };
 

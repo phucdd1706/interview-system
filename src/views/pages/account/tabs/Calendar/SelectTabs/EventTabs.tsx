@@ -1,5 +1,5 @@
 import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
-import { Box, Card, Grid, SelectChangeEvent, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { RefObject } from '../SelectDialog';
 
 import DatePicker from '@mui/lab/DatePicker/DatePicker';
@@ -7,7 +7,6 @@ import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LoopIcon from '@mui/icons-material/Loop';
 import SubjectIcon from '@mui/icons-material/Subject';
 
 const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObject>) => {
@@ -19,19 +18,12 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
   const [openStartTimePicker, setOpenStartTimePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
   const [openEndTimePicker, setOpenEndTimePicker] = useState(false);
-  const [checked, setChecked] = React.useState(false);
 
   useImperativeHandle(selectRef, () => ({ SayHi, startTime, endTime }));
   function SayHi() {
     // eslint-disable-next-line no-alert
     alert(`${selectInfo?.start}`);
   }
-
-  const [loopOptions, setLoopOptions] = React.useState('');
-
-  const handleBoxChange = (event: SelectChangeEvent) => {
-    setLoopOptions(event.target.value as string);
-  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     switch (newValue) {
@@ -44,10 +36,6 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
       default:
         console.error('Some Error Occurred While Choose Date or Time');
     }
-  };
-
-  const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
   };
 
   return (

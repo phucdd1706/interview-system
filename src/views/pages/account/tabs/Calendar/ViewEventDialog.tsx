@@ -121,12 +121,15 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
     switch (selectedIndex) {
       case 0:
         console.log('Yes, in a meeting room');
+        handleDialogClose();
         break;
       case 1:
         console.log('Yes');
+        handleDialogClose();
         break;
       case 2:
         console.log('Yes, joining virtually');
+        handleDialogClose();
         break;
     }
   };
