@@ -29,6 +29,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 import { useState } from 'react';
+import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
 
 interface Props {
   customer: UserProfile;
@@ -79,15 +80,29 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  username: yup.string().required('Username is required'),
-  password: yup.string().min(6, 'your password must be at least 6 character'),
-  password_confirmation: yup
+  name: yup
     .string()
-    .min(6, 'your password must be at least 6 character')
-    .oneOf([yup.ref('password'), null], 'Password must match'),
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  phone: yup.string().required('Phone is required'),
+    .max(50, 'Maximum 50 characters')
+    .min(3, 'Minimum 3 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
+  username: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
+    .required('Username is required'),
+  email: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(
+      isEmail,
+      'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
+    )
+    .email('Enter a valid email')
+    .required('Email is required'),
+  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().min(6, 'Minimum 6 characters'),
+  password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Password do not match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
   status: yup.string().required('Status is required')
