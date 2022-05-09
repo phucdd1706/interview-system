@@ -158,6 +158,8 @@ const EditQuestion = ({ question, open, edit, handleDrawerOpen, indexId }: EditQ
         break;
       case 1:
         formik.setFieldValue('type', 1);
+        formik.setFieldValue('rank_id', '');
+        formik.setFieldValue('department_id', '');
         break;
       default:
         break;

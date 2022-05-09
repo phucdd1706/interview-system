@@ -164,7 +164,8 @@ const Language = ({ language, index, getList }: Props) => {
             <Typography variant="body2">{index + 20 * (languageState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: '20%', overflow: 'hidden' }} component="th" scope="row">
+        {/* There're no onClick Dialog */}
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -179,7 +180,7 @@ const Language = ({ language, index, getList }: Props) => {
             }}
             onClick={openPropertyModal}
           >
-            {language?.name}
+            {language.name}
           </Link>
         </TableCell>
         <TableCell sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '624px' }}>{language?.description}</TableCell>

@@ -103,6 +103,7 @@ const ViewEventDialog = ({ open, setOpen, eventInfo }: Props) => {
   const PersonCreater = 'Do Dinh Phuc';
   const HasMeet = true;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme();
   const [openButton, setOpenButton] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);

@@ -19,7 +19,6 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
-import moment from 'moment';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -30,7 +29,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
 import { UserProfile } from 'types/user-profile';
-import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
@@ -55,7 +54,11 @@ const validationSchema = yup.object({
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  username: yup.string().max(50, 'Maximum 50 characters').required('Username is required'),
+  username: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
+    .required('Username is required'),
   email: yup
     .string()
     .max(50, 'Maximum 50 characters')
@@ -66,11 +69,12 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password: yup.string().trim().min(6, 'Minimum 6 characters').required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
+  dob: yup.string().required('Date of Birth is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -131,7 +135,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: moment().format('L'),
+      dob: '',
       gender: 'male',
       type: 2
     },
@@ -140,7 +144,6 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       addCus(values);
     }
   });
-
   return (
     <Dialog
       open={open}
@@ -160,7 +163,6 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
         }
       }}
     >
-      {console.log(formik.values)}
       {open && (
         <>
           <Box sx={{ p: 3 }}>
@@ -302,14 +304,25 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <DesktopDatePicker
-                      label="Date of Birth"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Date of Birth
+                        </span>
+                      }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
-                      renderInput={(props) => <TextField fullWidth {...props} />}
+                      renderInput={(props) => (
+                        <TextField
+                          error={(formik.touched.dob && Boolean(formik.errors.dob)) || errors?.dob}
+                          helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                          fullWidth
+                          {...props}
+                        />
+                      )}
                     />
                   </Grid>
                   <Grid item xs={12}>

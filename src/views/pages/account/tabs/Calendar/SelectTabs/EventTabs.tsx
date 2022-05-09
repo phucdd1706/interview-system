@@ -33,6 +33,12 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
       case 2:
         setOpenStartTimePicker(() => !openStartTimePicker);
         break;
+      case 3:
+        setOpenEndDatePicker(() => !openEndDatePicker);
+        break;
+      case 4:
+        setOpenEndTimePicker(() => !openEndTimePicker);
+        break;
       default:
         console.error('Some Error Occurred While Choose Date or Time');
     }
@@ -238,7 +244,7 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
                           hour: 'numeric', // numeric, 2-digit
                           minute: 'numeric' // numeric, 2-digit
                         })}
-                        value={2}
+                        value={4}
                       />
                     </Tabs>
                   </Box>

@@ -96,7 +96,7 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
             <Typography variant="body2">{index + 20 * (departmentState.currentPage - 1) + 1} </Typography>
           </Stack>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"

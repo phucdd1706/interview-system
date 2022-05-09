@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonBase, Chip, IconButton, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 // PROJECT IMPORTS
 import { UserProfile } from 'types/user-profile';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
@@ -92,8 +92,12 @@ const Customer = ({ customer, index }: Props) => {
           {customer.gender === 'female' && 'Female'}
           {(customer.gender === null || customer.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(customer.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{moment(customer.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell component="th" scope="row">
+          {moment(customer.created_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(customer.updated_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
         <TableCell>
           {customer.status === 0 && (
             <Chip
