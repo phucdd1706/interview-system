@@ -46,14 +46,14 @@ const AddApplicantReference = () => {
             .min(3, 'Name must have at least 3 characters')
             .max(50, `Maximum characters allowed is 50`)
             .required('Name is required'),
-          age: Yup.number().max(65, 'Too old').min(15, 'Too young').required('Age is required'),
+          age: Yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
           email: Yup.string().trim().email('Email is not valid').required('Email is required'),
           phone: Yup.string()
             .trim()
-            .min(8, 'Minimum character is 8')
-            .max(15, 'Maximum character is 15')
-            .matches(isPhone, 'Please enter valid phone number')
+            .max(10, 'Please enter the correct phone number format')
+            .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
+          address: Yup.string().max(255),
           applyPosition: Yup.array().of(
             Yup.object().shape({
               language_id: Yup.string().required('Language is required'),
@@ -119,7 +119,12 @@ const AddApplicantReference = () => {
                       variant="contained"
                       color="primary"
                     >
-                      {id ? 'Send Interview Result' : 'Submit'}
+                      {id
+                        ? `Send Interview Result (${
+                            applicant.applicantInfo.questions &&
+                            applicant.applicantInfo.questions.filter((item) => item.status !== 2).length
+                          }/${applicant.applicantInfo.questions && applicant.applicantInfo.questions.length} answered)`
+                        : 'Submit'}
                     </Button>
                   </AnimateButton>
                 </MainCard>

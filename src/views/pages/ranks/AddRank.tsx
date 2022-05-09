@@ -18,15 +18,16 @@ import { useState } from 'react';
 interface AddRankProps {
   open: boolean;
   filter: RankFilter;
+  edit?: boolean;
   handleDrawerOpen: () => void;
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().trim().max(50, 'Maximum character allowed is 50').required('Name is required'),
+  name: Yup.string().trim().max(50).required('Name is required'),
   description: Yup.string().trim().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
 });
 
-const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
+const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<any>({});
   const Notification = (color: string, message: string) => {

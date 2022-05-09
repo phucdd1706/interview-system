@@ -92,75 +92,24 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
             <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
-        {/* sx={{ width: 110, minWidth: 110, maxWidth: 200 }} */}
-        <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 200 }} component="th" scope="row" onClick={handleAdministratorDrawerOpen}>
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {administrator.name}
-          </Link>
+        <TableCell
+          sx={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
+            cursor: 'pointer',
+            ':hover': { color: 'primary.main', textDecoration: 'underline' }
+          }}
+          component="th"
+          scope="row"
+          onClick={handleAdministratorDrawerOpen}
+        >
+          {administrator.name}
         </TableCell>
-        {/* sx={{ width: 110, minWidth: 110, maxWidth: 250 }} */}
-        <TableCell sx={{ width: 250, minWidth: 250, maxWidth: 250 }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {administrator.username}
-          </Link>
-        </TableCell>
-        <TableCell sx={{ width: 250, minWidth: 250, maxWidth: 250 }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {administrator.email}
-          </Link>
-        </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {administrator.phone}
-          </Link>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {administrator.dob ? moment(administrator.dob).format('DD/MM/YYYY') : 'N/A'}
-        </TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{administrator.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{administrator.email}</TableCell>
+        <TableCell>{administrator.phone}</TableCell>
+        <TableCell>{administrator.dob ? moment(administrator.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>
           {administrator.gender === 'male' && 'Male'}
           {administrator.gender === 'female' && 'Female'}

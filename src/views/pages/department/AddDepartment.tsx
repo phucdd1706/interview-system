@@ -38,6 +38,7 @@ interface AddDepartmentProps {
   open: boolean;
   departFilter: DepartmentFilter;
   department: Department;
+  edit?: boolean;
   handleDrawerOpen: () => void;
 }
 
@@ -53,11 +54,11 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string().trim().max(255, 'Maximum 255 characters').required('Name is required'),
-  code: Yup.string().trim().max(255, 'Maximum 255 characters').required('Code is required')
+  name: Yup.string().trim().max(50).required('Name is required'),
+  code: Yup.string().trim().max(255).required('Code is required')
 });
 
-const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {
+const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -165,7 +166,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       verticalAlign: 'middle'
                     }}
                   >
-                    {department?.id ? `Edit "${department?.name}"` : 'Add new department'}
+                    {department?.id ? `${edit ? 'Edit' : 'Department'} "${department?.name}"` : 'Add new department'}
                   </Typography>{' '}
                   <Button
                     variant="text"
@@ -190,6 +191,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       name="name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
+                      inputProps={{ readOnly: !edit }}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
                       helperText={(formik.touched.name && formik.errors.name) || errors?.name}
                       fullWidth
@@ -212,6 +214,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       }
                       onChange={formik.handleChange}
                       value={formik.values.code}
+                      inputProps={{ readOnly: !edit }}
                       error={(formik.touched.code && Boolean(formik.errors.code)) || errors?.code}
                       helperText={(formik.touched.code && formik.errors.code) || errors?.code}
                     />
@@ -227,6 +230,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                           displayEmpty
                           value={formik?.values?.status}
                           onChange={formik.handleChange}
+                          readOnly={!edit}
                           inputProps={{ 'aria-label': 'Without label' }}
                         >
                           {Status.map((status: SelectProps, index: number) => (
@@ -238,13 +242,15 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       </FormControl>
                     </Grid>
                   )}
-                  <Grid item xs={12}>
-                    <AnimateButton>
-                      <Button fullWidth variant="contained" type="submit">
-                        Save
-                      </Button>
-                    </AnimateButton>
-                  </Grid>
+                  {edit && (
+                    <Grid item xs={12}>
+                      <AnimateButton>
+                        <Button fullWidth variant="contained" type="submit">
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </DialogContent>
             </LocalizationProvider>
