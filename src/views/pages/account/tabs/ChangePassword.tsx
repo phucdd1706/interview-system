@@ -15,7 +15,13 @@ import { dispatch } from 'store';
 import { changeNewPassword } from 'store/slices/profile';
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required')
+  name: Yup.string().required('Name is required'),
+  phone: Yup.string().required('Phone is required'),
+  gender: Yup.string().required('Gender is required'),
+  password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password_confirmation: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Password do not match')
+    .required('Confirm password is required')
 });
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
@@ -59,9 +65,10 @@ export default function ChangePassword() {
       password_confirmation: ''
     },
     validationSchema,
-    onSubmit: (values) => {
-      dispatch(changeNewPassword(values));
-      handleClickChange();
+    onSubmit: async (values) => {
+      await dispatch(changeNewPassword(values)).then(() => {
+        handleClickChange();
+      });
     }
   });
   return (
@@ -88,7 +95,11 @@ export default function ChangePassword() {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   onChange={formik.handleChange}
-                  label="Password"
+                  label={
+                    <span>
+                      <span style={{ color: '#f44336' }}>*</span> Password
+                    </span>
+                  }
                 />
                 {formik.touched.password && formik.errors.password && (
                   <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -106,7 +117,11 @@ export default function ChangePassword() {
                   type={showPassword ? 'text' : 'password'}
                   name="password_confirmation"
                   onChange={formik.handleChange}
-                  label="Password Confirmation"
+                  label={
+                    <span>
+                      <span style={{ color: '#f44336' }}>*</span> Confirm password
+                    </span>
+                  }
                   inputProps={{}}
                 />
                 {formik.touched.password_confirmation && formik.errors.password_confirmation && (
