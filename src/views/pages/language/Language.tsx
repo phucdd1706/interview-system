@@ -158,7 +158,8 @@ const Language = ({ language, index, getList }: Props) => {
             <Typography variant="body2">{index + 20 * (languageState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: '20%', overflow: 'hidden' }} component="th" scope="row">
+        {/* There're no onClick Dialog */}
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
@@ -171,12 +172,32 @@ const Language = ({ language, index, getList }: Props) => {
               cursor: 'pointer'
             }}
           >
-            {language?.name}
+            {language.name}
           </Link>
         </TableCell>
-        <TableCell>{language?.description}</TableCell>
-        <TableCell>{moment(language?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{moment(language?.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        {/* Percentage of maxWidth is not work for Cell? */}
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 250 }} component="th" scope="row">
+          <Link
+            underline="hover"
+            color="default"
+            sx={{
+              overflow: 'hidden',
+              display: 'block',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              ':hover': { color: 'primary.main' },
+              cursor: 'pointer'
+            }}
+          >
+            {language.description}
+          </Link>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(language?.created_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(language?.updated_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
         <TableCell>{renderStatus(language?.status)}</TableCell>
         <TableCell align="center">{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}

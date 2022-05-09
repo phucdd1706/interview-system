@@ -44,8 +44,8 @@ export default function Profile() {
   };
 
   const userStr: string = user?.dob!;
-  const d = new Date(userStr);
-  const dobLocale = d.toLocaleDateString();
+  const d = userStr ? new Date(userStr) : 'N/A';
+  const dobLocale = (d !== 'N/A' && d.toLocaleDateString()) || d;
 
   const [displayGender, setDisplayGender] = React.useState<string>('');
   useEffect(() => {

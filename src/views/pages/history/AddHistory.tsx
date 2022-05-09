@@ -100,7 +100,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().max(2).max(50).matches(isFullName, 'Sorry, only letters (a-z) are allowed ').required('Name is required'),
+    name: yup.string().trim().max(2).max(50).matches(isFullName, 'Sorry, only letters (a-z) are allowed ').required('Name is required'),
     email: yup
       .string()
       .matches(
@@ -119,9 +119,9 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
       .required('Age is required'),
-    time: yup.string().required('Interview time is required'),
-    address: yup.string().max(255),
-    note: yup.string().max(255)
+    time: yup.string().trim().required('Interview time is required'),
+    address: yup.string().trim().max(255),
+    note: yup.string().trim().max(255)
   });
 
   const formik = useFormik({

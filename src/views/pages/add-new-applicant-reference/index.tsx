@@ -17,6 +17,7 @@ import { applicantInit } from 'store/slices/applicant/applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
 import { axiosPost, axiosPut } from 'utils/helpers/axios';
 import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
+import { isPhone } from 'utils/regexHelper';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -40,10 +41,19 @@ const AddApplicantReference = () => {
         enableReinitialize
         initialValues={applicant.applicantInfo}
         validationSchema={Yup.object().shape({
-          name: Yup.string().required('First name is required'),
-          age: Yup.number().required('Age is required'),
-          email: Yup.string().email('Email is invalid').required('Email is required'),
-          phone: Yup.string().required('Phone is required'),
+          name: Yup.string()
+            .trim()
+            .min(3, 'Name must have at least 3 characters')
+            .max(50, `Maximum characters allowed is 50`)
+            .required('Name is required'),
+          age: Yup.number().max(65, 'Too old').min(15, 'Too young').required('Age is required'),
+          email: Yup.string().trim().email('Email is not valid').required('Email is required'),
+          phone: Yup.string()
+            .trim()
+            .min(8, 'Minimum character is 8')
+            .max(15, 'Maximum character is 15')
+            .matches(isPhone, 'Please enter valid phone number')
+            .required('Phone number is required'),
           applyPosition: Yup.array().of(
             Yup.object().shape({
               language_id: Yup.string().required('Language is required'),

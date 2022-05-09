@@ -102,8 +102,8 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().max(40).required('Name is required'),
-    description: yup.string().max(255).required('Description is required')
+    name: yup.string().trim().max(40).required('Name is required'),
+    description: yup.string().trim().max(255).required('Description is required')
   });
 
   const formik = useFormik({

@@ -23,8 +23,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
-import moment from 'moment';
-
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -176,7 +174,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
       password: administrator?.id ? 'tuansnn' : '',
       password_confirmation: administrator?.id ? 'tuansnn' : '',
       phone: administrator?.phone,
-      dob: administrator?.dob || moment().format('L'),
+      dob: administrator?.dob || '',
       gender: administrator?.gender || 'male',
       status: administrator?.id ? administrator?.status : 1,
       type: administrator?.id ? administrator?.type : 1
@@ -238,6 +236,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
           </Box>
           <Divider />
           <form onSubmit={formik.handleSubmit}>
+            {console.log(formik.values)}
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
@@ -352,7 +351,11 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                   </Grid>
                   <Grid item xs={12}>
                     <DesktopDatePicker
-                      label="Date of Birth"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Date of Birth
+                        </span>
+                      }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       readOnly={!editing}
@@ -360,7 +363,14 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
-                      renderInput={(props) => <TextField fullWidth {...props} />}
+                      renderInput={(props) => (
+                        <TextField
+                          error={(formik.touched.dob && Boolean(formik.errors.dob)) || errors?.dob}
+                          helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                          fullWidth
+                          {...props}
+                        />
+                      )}
                     />
                   </Grid>
                   <Grid item xs={12}>

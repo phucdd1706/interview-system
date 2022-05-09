@@ -33,7 +33,6 @@ import { openSnackbar } from 'store/slices/snackbar';
 
 import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { postDepartment, getDepartmentList, putDepartment } from 'store/slices/department';
-import { isFullName } from 'utils/regexHelper';
 
 interface AddDepartmentProps {
   open: boolean;
@@ -54,11 +53,8 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string()
-    .max(255, 'Maximum 255 characters')
-    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
-    .required('Name is required'),
-  code: Yup.string().max(255, 'Maximum 255 characters').required('Code is required')
+  name: Yup.string().trim().max(255, 'Maximum 255 characters').required('Name is required'),
+  code: Yup.string().trim().max(255, 'Maximum 255 characters').required('Code is required')
 });
 
 const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {
@@ -169,7 +165,7 @@ const AddDepartment = ({ open, handleDrawerOpen, departFilter, department }: Add
                       verticalAlign: 'middle'
                     }}
                   >
-                    {department?.id ? `Edit "${department?.name}"` : 'Add new language'}
+                    {department?.id ? `Edit "${department?.name}"` : 'Add new department'}
                   </Typography>{' '}
                   <Button
                     variant="text"
