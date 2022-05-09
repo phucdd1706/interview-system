@@ -28,12 +28,20 @@ const dashboard: DashboardMenuProps = {
   title: <FormattedMessage id="dashboard" />,
   type: 'group',
   children: [
+    // {
+    //   id: 'analytics',
+    //   title: <FormattedMessage id="analytics" />,
+    //   type: 'item',
+    //   url: '/dashboard/analytics',
+    //   icon: icons.IconDeviceAnalytics,
+    //   breadcrumbs: true
+    // },
     {
-      id: 'analytics',
-      title: <FormattedMessage id="analytics" />,
+      id: 'Dashboard',
+      title: <FormattedMessage id="Dashboard" />,
       type: 'item',
-      url: '/dashboard/analytics',
-      icon: icons.IconDeviceAnalytics,
+      url: '/dashboard/Dashboard',
+      icon: icons.IconDashboard,
       breadcrumbs: true
     }
   ]
