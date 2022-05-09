@@ -64,7 +64,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
     initialValues: {
       name: user?.name,
       phone: user?.phone,
-      dob: '',
+      dob: user?.dob,
       gender: user?.gender
     },
     validationSchema,
@@ -170,6 +170,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
