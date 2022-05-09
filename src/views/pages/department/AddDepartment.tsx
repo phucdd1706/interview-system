@@ -33,7 +33,6 @@ import { openSnackbar } from 'store/slices/snackbar';
 
 import { Department, DepartmentFilter, SelectProps } from 'types/department';
 import { postDepartment, getDepartmentList, putDepartment } from 'store/slices/department';
-import { isFullName } from 'utils/regexHelper';
 
 interface AddDepartmentProps {
   open: boolean;
