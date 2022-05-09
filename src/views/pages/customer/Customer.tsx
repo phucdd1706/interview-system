@@ -71,9 +71,9 @@ const Customer = ({ customer, index }: Props) => {
         </TableCell>
         <TableCell
           sx={{
-            width: 110,
-            minWidth: 110,
-            maxWidth: 'calc(100vw - 850px)',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
             cursor: 'pointer',
             ':hover': { color: 'primary.main', textDecoration: 'underline' }
           }}
@@ -83,8 +83,8 @@ const Customer = ({ customer, index }: Props) => {
         >
           {customer.name}
         </TableCell>
-        <TableCell>{customer.username}</TableCell>
-        <TableCell>{customer.email}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{customer.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{customer.email}</TableCell>
         <TableCell>{customer.phone}</TableCell>
         <TableCell>{customer.dob ? moment(customer.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>

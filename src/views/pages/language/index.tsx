@@ -203,7 +203,9 @@ const Index = () => {
           </Grid>
         )}
       </MainCard>
-      <AddLanguage visible={visibleAdd} dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
+      {visibleAdd && (
+        <AddLanguage visible={visibleAdd} edit dataEdit={{}} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
+      )}
     </>
   );
 };

@@ -94,9 +94,9 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
         </TableCell>
         <TableCell
           sx={{
-            width: 110,
-            minWidth: 110,
-            maxWidth: 'calc(100vw - 850px)',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
             cursor: 'pointer',
             ':hover': { color: 'primary.main', textDecoration: 'underline' }
           }}
@@ -106,8 +106,8 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
         >
           {administrator.name}
         </TableCell>
-        <TableCell>{administrator.username}</TableCell>
-        <TableCell>{administrator.email}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{administrator.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{administrator.email}</TableCell>
         <TableCell>{administrator.phone}</TableCell>
         <TableCell>{administrator.dob ? moment(administrator.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>

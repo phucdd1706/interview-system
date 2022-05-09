@@ -33,15 +33,15 @@ import { SelectProps } from 'types/customer';
 interface Props {
   dataEdit: Languages;
   visible: boolean;
+  edit: boolean;
   handleVisibleModal: () => void;
   getList: () => void;
 }
 
-const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props) => {
+const AddInProgress = ({ dataEdit, visible, edit, handleVisibleModal, getList }: Props) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [errors, setErrors] = useState<any>({});
-
   const handleAdd = (values: Languages) => {
     if (dataEdit.id) {
       dispatch(
@@ -102,7 +102,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().trim().max(40).required('Name is required'),
+    name: yup.string().trim().max(50).required('Name is required'),
     description: yup.string().trim().max(255).required('Description is required')
   });
 
@@ -165,7 +165,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? `Edit ${dataEdit?.name}` : 'Add new department'}
+                    {dataEdit?.id ? `${edit ? 'Edit' : 'Language'} "${dataEdit?.name}"` : 'Add new department'}
                   </Typography>
                   <Button
                     variant="text"
@@ -189,6 +189,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                   <TextField
                     id="name"
                     name="name"
+                    inputProps={{ readOnly: !edit }}
                     value={formik?.values?.name}
                     label={
                       <span>
@@ -205,6 +206,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                   <TextField
                     id="description"
                     name="description"
+                    inputProps={{ readOnly: !edit }}
                     value={formik?.values?.description}
                     label={
                       <span>
@@ -228,6 +230,7 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                         displayEmpty
                         value={formik?.values?.status}
                         onChange={formik.handleChange}
+                        readOnly={!edit}
                         inputProps={{ 'aria-label': 'Without label' }}
                       >
                         {Status.map((status: SelectProps, index: number) => (
@@ -239,13 +242,15 @@ const AddInProgress = ({ dataEdit, visible, handleVisibleModal, getList }: Props
                     </FormControl>
                   </Grid>
                 )}
-                <Grid item xs={12}>
-                  <AnimateButton>
-                    <Button fullWidth variant="contained" type="submit">
-                      Save
-                    </Button>
-                  </AnimateButton>
-                </Grid>
+                {edit && (
+                  <Grid item xs={12}>
+                    <AnimateButton>
+                      <Button fullWidth variant="contained" type="submit">
+                        Save
+                      </Button>
+                    </AnimateButton>
+                  </Grid>
+                )}
               </Grid>
             </DialogContent>
           </form>

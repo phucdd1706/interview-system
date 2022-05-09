@@ -157,7 +157,7 @@ const History = ({ history, index, getList }: Props) => {
         <TableCell component="th" scope="row">
           {history.name}
         </TableCell>
-        <TableCell>{history?.email}</TableCell>
+        <TableCell sx={{ maxWidth: '200px', textOverflow: 'ellipsis', overflow: 'hidden' }}>{history?.email}</TableCell>
         <TableCell>{history?.age}</TableCell>
         <TableCell>{moment(history?.time).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{moment(history?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>

@@ -27,7 +27,7 @@ interface Props {
 const DepartmentList = ({ department, index, departFilter }: Props) => {
   const theme = useTheme();
   const departmentState = useSelector((state) => state.department);
-
+  const [edit, setEdit] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openDepartmentDrawer, setOpenDepartmentDrawer] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<Element | ((element: Element) => Element) | null | undefined>(null);
@@ -44,7 +44,13 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
 
-  const editDepartment = () => {
+  const editDepartment = async () => {
+    await setEdit(true);
+    setOpenDepartmentDrawer((prevState) => !prevState);
+  };
+
+  const openPropertyModal = async () => {
+    await setEdit(false);
     setOpenDepartmentDrawer((prevState) => !prevState);
   };
 
@@ -97,16 +103,18 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
             sx={{
               overflow: 'hidden',
               display: 'block',
+              maxWidth: '285px',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
+            onClick={openPropertyModal}
           >
             {department.name}
           </Link>
         </TableCell>
-        <TableCell>{department.code}</TableCell>
+        <TableCell sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '624px' }}>{department.code}</TableCell>
         <TableCell>{moment(department.created_at).format('DD/MM/yy hh:mm')}</TableCell>
         <TableCell>{moment(department.updated_at).format('DD/MM/yy hh:mm')}</TableCell>
         <TableCell>
@@ -182,12 +190,14 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
           {openModal && <AlertDelete name={department.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <AddDepartment
-        department={department}
-        open={openDepartmentDrawer}
-        handleDrawerOpen={handleDepartmentDrawerOpen}
-        departFilter={departFilter}
-      />
+      {openDepartmentDrawer && (
+        <AddDepartment
+          department={department}
+          open={openDepartmentDrawer}
+          handleDrawerOpen={handleDepartmentDrawerOpen}
+          departFilter={departFilter}
+        />
+      )}
     </>
   );
 };
