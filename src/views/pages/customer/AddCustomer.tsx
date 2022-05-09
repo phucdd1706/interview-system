@@ -19,7 +19,6 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
-import moment from 'moment';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -71,6 +70,7 @@ const validationSchema = yup.object({
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
+  dob: yup.string().required('Date of Birth is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -131,7 +131,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: moment().format('L'),
+      dob: '',
       gender: 'male',
       type: 2
     },
@@ -302,14 +302,25 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                   </Grid>
                   <Grid item xs={12}>
                     <DesktopDatePicker
-                      label="Date of Birth"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Date of Birth
+                        </span>
+                      }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
-                      renderInput={(props) => <TextField fullWidth {...props} />}
+                      renderInput={(props) => (
+                        <TextField
+                          error={(formik.touched.dob && Boolean(formik.errors.dob)) || errors?.dob}
+                          helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                          fullWidth
+                          {...props}
+                        />
+                      )}
                     />
                   </Grid>
                   <Grid item xs={12}>
