@@ -183,6 +183,13 @@ export default function SubComponentsPickers() {
                         }
                       }
                     }
+                  },
+                  today: {
+                    text: 'today',
+                    click() {
+                      calendarRef.current.getApi().today();
+                      setDate(new Date());
+                    }
                   }
                 }}
                 initialView="dayGridMonth"
