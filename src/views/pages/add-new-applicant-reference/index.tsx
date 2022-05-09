@@ -29,12 +29,17 @@ const AddApplicantReference = () => {
   useEffect(() => {
     if (id) {
       dispatch(getInterviewDataThunk(id));
-      dispatch(activeItem(['']));
     } else {
       dispatch(applicantInit());
-      dispatch(activeItem(['applicant']));
     }
   }, [id, dispatch]);
+  useEffect(() => {
+    if (id) {
+      dispatch(activeItem(['interview']));
+    } else {
+      dispatch(activeItem(['applicant']));
+    }
+  }, []);
   return (
     <Box>
       <Formik
@@ -122,7 +127,7 @@ const AddApplicantReference = () => {
                       {id
                         ? `Send Interview Result (${
                             applicant.applicantInfo.questions &&
-                            applicant.applicantInfo.questions.filter((item) => item.status !== 2).length
+                            applicant.applicantInfo.questions.filter((item) => item.status && item.status !== 2).length
                           }/${applicant.applicantInfo.questions && applicant.applicantInfo.questions.length} answered)`
                         : 'Submit'}
                     </Button>
