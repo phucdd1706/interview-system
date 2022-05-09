@@ -82,6 +82,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
           close: false
         })
       );
+      // document.location.reload();
       handleDialogOpen();
     }
   });
