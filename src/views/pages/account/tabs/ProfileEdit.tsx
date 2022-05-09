@@ -52,7 +52,7 @@ const Gender: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   phone: yup.string().required('Phone is required'),
-  // dob: yup.date().required('Date of Birth is required'),
+  dob: yup.date().required('Date of Birth is required'),
   gender: yup.string().required('Gender is required')
 });
 
