@@ -29,7 +29,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
 import { UserProfile } from 'types/user-profile';
-import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
@@ -54,7 +54,11 @@ const validationSchema = yup.object({
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  username: yup.string().trim().max(50, 'Maximum 50 characters').required('Username is required'),
+  username: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
+    .required('Username is required'),
   email: yup
     .string()
     .max(50, 'Maximum 50 characters')
@@ -140,7 +144,6 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       addCus(values);
     }
   });
-
   return (
     <Dialog
       open={open}
@@ -160,7 +163,6 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
         }
       }}
     >
-      {console.log(formik.values)}
       {open && (
         <>
           <Box sx={{ p: 3 }}>

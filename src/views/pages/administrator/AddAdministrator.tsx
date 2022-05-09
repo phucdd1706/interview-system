@@ -33,7 +33,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { addAdministrator, editAdministrator, getAdministratorList } from 'store/slices/user';
 
 import { Administrator, SelectProps, UserFilter } from 'types/user';
-import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
@@ -80,7 +80,11 @@ const validationSchema = yup.object({
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  username: yup.string().trim().max(50, 'Maximum 50 characters').required('Username is required'),
+  username: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
+    .required('Username is required'),
   email: yup
     .string()
     .max(50, 'Maximum 50 characters')
@@ -90,13 +94,12 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  password: yup.string().trim().min(6, 'Minimum 6 characters').required('Password is required'),
+  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
-  phone: yup.string().matches(isPhone, 'Enter the correct format phone').required('Phone is required'),
-  dob: yup.string().required('Date of Birth is required'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });

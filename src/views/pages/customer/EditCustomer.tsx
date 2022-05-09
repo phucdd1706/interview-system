@@ -30,7 +30,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 import { useState } from 'react';
-import { isEmail, isFullName, isPhone } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
 
 interface Props {
   customer: UserProfile;
@@ -87,12 +87,11 @@ const validationSchema = yup.object({
     .min(3, 'Minimum 3 characters')
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  username: yup.string().trim().max(50, 'Maximum 50 characters').required('Username is required'),
-  password: yup.string().trim().min(6, 'Your Password mus be at least 6 character').required('Password is required'),
-  password_confirmation: yup
+  username: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Password do not match')
-    .required('Confirm password is required'),
+    .max(50, 'Maximum 50 characters')
+    .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
+    .required('Username is required'),
   email: yup
     .string()
     .max(50, 'Maximum 50 characters')
@@ -103,6 +102,8 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().min(6, 'Minimum 6 characters'),
+  password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Password do not match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
   status: yup.string().required('Status is required')
