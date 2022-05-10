@@ -15,13 +15,13 @@ import {
   MenuItem
 } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import ProfileFemale from 'assets/images/logo/profile-female.png';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'store';
 import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
-import { handleAnswerStatus, handleInterviewNote } from 'store/slices/applicant/applicantReferences';
+import { handleAnswerStatus, handleInterviewNote, sortDataByKey } from 'store/slices/applicant/applicantReferences';
+import { activeItem } from 'store/slices/menu';
 import MainCard from 'ui-component/cards/MainCard';
 import personalDetail from './personalDetailGroup';
 import { axiosPut } from 'utils/helpers/axios';
@@ -36,6 +36,7 @@ const Interview = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     id && dispatch(getInterviewDataThunk(id));
+    dispatch(activeItem(['interview']));
   }, [id]);
 
   const getEvaluateValue = (candidate_id: number) => {
@@ -92,19 +93,86 @@ const Interview = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ width: '50px' }}>STT</TableCell>
-                  <TableCell>Question</TableCell>
-                  <TableCell>Language</TableCell>
-                  <TableCell>Rank</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell sx={{ width: '100px' }}>Evaluate</TableCell>
+                  <TableCell
+                    sx={{
+                      width: '50px'
+                    }}
+                  >
+                    STT
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: '#f6f6f6'
+                      }
+                    }}
+                    onClick={() => {
+                      dispatch(sortDataByKey('question_content'));
+                    }}
+                  >
+                    Question
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: '#f6f6f6'
+                      }
+                    }}
+                    onClick={() => {
+                      dispatch(sortDataByKey('language_id'));
+                    }}
+                  >
+                    Language
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: '#f6f6f6'
+                      }
+                    }}
+                    onClick={() => {
+                      dispatch(sortDataByKey('rank_id'));
+                    }}
+                  >
+                    Rank
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: '#f6f6f6'
+                      }
+                    }}
+                    onClick={() => {
+                      dispatch(sortDataByKey('type'));
+                    }}
+                  >
+                    Type
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      width: '100px',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: '#f6f6f6'
+                      }
+                    }}
+                    onClick={() => {
+                      dispatch(sortDataByKey('status'));
+                    }}
+                  >
+                    Evaluate
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {interviewQuestions.map((question, index) =>
                   question.questions.base.map((base, baseIndex) => (
                     <TableRow
-                      key={base.id}
+                      key={base.candidate_id}
                       sx={{
                         '&:hover': {
                           backgroundColor: '#f6f6f6'

@@ -101,6 +101,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
   gender: yup.string().required('Gender is required'),
+  dob: yup.string().required('Date of Birth is required'),
   type: yup.string().required('Type is required')
 });
 

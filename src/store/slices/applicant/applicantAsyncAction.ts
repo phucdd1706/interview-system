@@ -45,7 +45,7 @@ export const getInterviewDataThunk = createAsyncThunk('applicant/getInterviewDat
   const applicantInfo = { ...data.success };
   const { candidate_question } = applicantInfo;
   const interviewQuestions: QuestionType[] =
-    candidate_question.map((element: any) => ({ ...element.question, status: element.status, candidate_id: element.id })) || [];
+    candidate_question.map((element: any) => ({ ...element.question, status: element.status || 0, candidate_id: element.id })) || [];
   const questionStack = {
     language: '',
     questions: {
@@ -62,7 +62,7 @@ export const getInterviewDataThunk = createAsyncThunk('applicant/getInterviewDat
   });
   const questions = candidate_question.map((element: any) => ({
     question_id: element.id,
-    status: element.status
+    status: element.status || 0
   }));
   applicantDataInit.time = applicantDataInit.time.split('.')[0];
   return data && dispatch(setInterviewData({ applicant: { ...applicantDataInit }, interviewQuestions: [{ ...questionStack }], questions }));

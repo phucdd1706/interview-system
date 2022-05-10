@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'utils/axios';
 import { DefaultRootStateProps } from 'types';
 import { dispatch } from 'store';
-import { Profile, ChangePassword } from 'types/profile';
+import { Profile, ChangePassword, Payload } from 'types/profile';
 
 export const PROFILE_URL = `${process.env.REACT_APP_API_URL}/v1/profile`;
 
@@ -48,13 +48,21 @@ export function editProfile(profile: Profile) {
   };
 }
 
-export function changeNewPassword(changePassword: ChangePassword) {
+export function changeNewPassword(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${PROFILE_URL}`, changePassword);
-      dispatch(slice.actions.changePasswordSuccess(response.data.success.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const res = await axios
+      .put(`${PROFILE_URL}`, params)
+      .then((result) => {
+        dispatch(slice.actions.changePasswordSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(slice.actions.hasError(err));
+        return err;
+      });
+    if (callback) {
+      callback(res);
     }
   };
 }
