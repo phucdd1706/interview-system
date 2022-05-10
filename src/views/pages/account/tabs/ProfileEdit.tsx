@@ -44,10 +44,6 @@ const Gender: SelectProps[] = [
   {
     value: 'female',
     label: 'Female'
-  },
-  {
-    value: null,
-    label: 'N/A'
   }
 ];
 
