@@ -193,6 +193,7 @@ const DepartmentList = ({ department, index, departFilter }: Props) => {
       {openDepartmentDrawer && (
         <AddDepartment
           department={department}
+          edit={edit}
           open={openDepartmentDrawer}
           handleDrawerOpen={handleDepartmentDrawerOpen}
           departFilter={departFilter}

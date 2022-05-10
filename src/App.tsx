@@ -10,15 +10,19 @@ import ThemeCustomization from 'themes';
 import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
 import Snackbar from 'ui-component/extended/Snackbar';
 import Index from 'views/pages/history';
-import { Route } from 'react-router-dom';
+import { Route, useNavigate } from 'react-router-dom';
 import { activeItem } from 'store/slices/menu';
 
 const currentRoute = window.location.href.split('/').pop();
 const App = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log('currentRoute', currentRoute);
   useEffect(() => {
-    dispatch(activeItem([currentRoute]));
+    if (currentRoute) {
+      dispatch(activeItem([currentRoute]));
+    } else {
+      navigate('/dashboard');
+    }
   }, []);
   return (
     <ThemeCustomization>

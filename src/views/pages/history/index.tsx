@@ -52,6 +52,10 @@ const SortStatus: Status[] = [
   {
     value: 1,
     label: 'Complete'
+  },
+  {
+    value: 2,
+    label: 'Cancelled'
   }
 ];
 
