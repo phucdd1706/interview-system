@@ -46,7 +46,7 @@ const Type: SelectProps[] = [
   },
   {
     value: 1,
-    label: 'Advanced'
+    label: 'Forcus'
   }
 ];
 
