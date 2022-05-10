@@ -18,3 +18,8 @@ export type ChangePassword = {
   password?: string;
   password_confirmation?: string;
 };
+
+export interface Payload {
+  params?: ChangePassword;
+  callback?: (response: any) => void;
+}

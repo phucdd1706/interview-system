@@ -13,6 +13,8 @@ import { gridSpacing } from 'store/constant';
 import useAuth from 'hooks/useAuth';
 import { dispatch } from 'store';
 import { changeNewPassword } from 'store/slices/profile';
+import { ChangePassword } from 'types/profile';
+import { openSnackbar } from 'store/slices/snackbar';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required')
@@ -22,7 +24,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 ));
 
-export default function ChangePassword() {
+export default function ChangePasswordd() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -49,6 +51,29 @@ export default function ChangePassword() {
     event.preventDefault();
   };
 
+  const changePass = (values: ChangePassword) => {
+    dispatch(
+      changeNewPassword({
+        params: values,
+        callback: (res) => {
+          if (res?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Change Password Success',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+          }
+        }
+      })
+    );
+  };
   const formik = useFormik({
     initialValues: {
       name: user?.name,
@@ -60,7 +85,7 @@ export default function ChangePassword() {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(changeNewPassword(values));
+      changePass(values);
       handleClickChange();
     }
   });
@@ -128,11 +153,11 @@ export default function ChangePassword() {
                 Clear
               </Button>
             </Grid>
-            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+            {/* <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                 Change Password Successfully!
               </Alert>
-            </Snackbar>
+            </Snackbar> */}
           </Grid>
         </form>
       </MainCard>
