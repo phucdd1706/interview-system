@@ -25,7 +25,7 @@ interface DashboardMenuProps {
 
 const dashboard: DashboardMenuProps = {
   id: 'dashboard',
-  title: <FormattedMessage id="dashboard" />,
+  title: '',
   type: 'group',
   children: [
     {
