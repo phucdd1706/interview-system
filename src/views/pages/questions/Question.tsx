@@ -46,11 +46,18 @@ const Question = ({ question, index }: Props) => {
   const questionState = useSelector((state: RootState) => state.question);
   const theme = useTheme();
   const [openQuestionDrawer, setOpenQuestionDrawer] = useState<boolean>(false);
+  const [edit, setEdit] = useState(false);
   const handleQuestionDrawerOpen = () => {
     setOpenQuestionDrawer((prevState) => !prevState);
   };
 
-  const editQuestion = () => {
+  const editQuestion = async () => {
+    await setEdit(true);
+    setOpenQuestionDrawer((prevState) => !prevState);
+  };
+
+  const openPropertyModal = async () => {
+    await setEdit(false);
     setOpenQuestionDrawer((prevState) => !prevState);
   };
 
@@ -97,69 +104,30 @@ const Question = ({ question, index }: Props) => {
             underline="hover"
             color="default"
             sx={{
-              paddingRight: 2,
               overflow: 'hidden',
               display: 'block',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              whiteSpace: 'break-word',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
+            onClick={openPropertyModal}
           >
             {question.question_content}
           </Link>
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {question.rank?.name}
-          </Link>
+          {question.rank?.name}
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {question.department?.name}
-          </Link>
+          {question.department?.name}
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {question.language?.name}
-          </Link>
+          {question.language?.name}
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           {question.type === 0 && 'Basic'}
-          {question.type === 1 && 'Advanced'}
+          {question.type === 1 && 'Forcus'}
         </TableCell>
         <TableCell component="th" scope="row">
           {moment(question.updated_at).format('DD/MM/yy hh:mm')}
@@ -239,7 +207,15 @@ const Question = ({ question, index }: Props) => {
           {openModal && <AlertQuestionDelete open={openModal} handleClose={handleModalClose} indexId={index} />}
         </TableCell>
       </TableRow>
-      <EditQuestion question={question} open={openQuestionDrawer} handleDrawerOpen={handleQuestionDrawerOpen} indexId={index} />
+      {openQuestionDrawer && (
+        <EditQuestion
+          question={question}
+          edit={edit}
+          open={openQuestionDrawer}
+          handleDrawerOpen={handleQuestionDrawerOpen}
+          indexId={index}
+        />
+      )}
     </>
   );
 };

@@ -28,15 +28,27 @@ import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
 // PROJECT IMPORTS
-import useAuth from 'hooks/useAuth';
-// import { getProfile } from '../../../../store/slices/profile';
+// import useAuth from 'hooks/useAuth';
 import User from 'assets/images/users/user-round.svg';
 import MainCard from 'ui-component/cards/MainCard';
 import ProfileEdit from './ProfileEdit';
+import { useDispatch, useSelector } from 'store';
+import { getProfile } from 'store/slices/profile';
 
 export default function Profile() {
   const theme = useTheme();
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.userProfile);
+
+  const getUserProfile = async () => {
+    await dispatch(getProfile());
+  };
+
+  useEffect(() => {
+    getUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const handleDialogOpen = () => {
@@ -44,8 +56,8 @@ export default function Profile() {
   };
 
   const userStr: string = user?.dob!;
-  const d = new Date(userStr);
-  const dobLocale = d.toLocaleDateString();
+  const d = userStr ? new Date(userStr) : 'N/A';
+  const dobLocale = (d !== 'N/A' && d.toLocaleDateString()) || d;
 
   const [displayGender, setDisplayGender] = React.useState<string>('');
   useEffect(() => {
@@ -173,7 +185,7 @@ export default function Profile() {
                     </TableRow>
                   </TableBody>
                 </Table>
-                <ProfileEdit open={openDialog} handleDialogOpen={handleDialogOpen} />
+                <ProfileEdit open={openDialog} handleDialogOpen={handleDialogOpen} getUserProfile={getUserProfile} user={user} />
               </TableContainer>
             </CardContent>
           </MainCard>

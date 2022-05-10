@@ -39,7 +39,7 @@ const PageNotFound = () => {
             color="secondary"
             sx={{ marginTop: '3em !important', fontSize: 22, padding: '0.5em 1.5em', backgroundColor: '#00abff' }}
             onClick={() => {
-              navigate('/dashboard/analytics', { replace: true });
+              navigate('/dashboard', { replace: true });
             }}
           >
             Back To Dashboard

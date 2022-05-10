@@ -1,8 +1,8 @@
 import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
 import { Autocomplete, Box, Button, Card, Chip, Grid, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { RefObject } from '../SelectDialog';
-import DatePicker from '@mui/lab/DatePicker/DatePicker';
-import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import DesktopTimePicker from '@mui/lab/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
@@ -47,7 +47,7 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
       case 3:
         setOpenEndDatePicker(() => !openEndDatePicker);
         break;
-      case 44:
+      case 4:
         setOpenEndTimePicker(() => !openEndTimePicker);
         break;
       default:
@@ -59,67 +59,67 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
 
   return (
     <Card>
-      <Grid container justifyContent="flex-start" alignItems="center">
-        <Grid item container justifyContent="flex-start" alignItems="center" md={12}>
-          <Grid item alignItems="center" md={1.3}>
-            <AccessTimeIcon fontSize="small" />
-          </Grid>
-          <Grid item md={1.3}>
-            <Typography variant="subtitle1">Start: </Typography>
-          </Grid>
-          <Grid item md={5}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                open={openStartDatePicker}
-                onClose={() => setOpenStartDatePicker(false)}
-                label="Basic example"
-                value={startTime}
-                onChange={(newValue) => {
-                  setStartTime(newValue);
-                }}
-                renderInput={({ inputRef, inputProps, disabled, onChange, value }) => (
-                  <Box ref={inputRef} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <input style={{ display: 'none' }} onChange={onChange} disabled={disabled} {...inputProps} />
-                    {inputProps?.endAdornment}
-                    <Tabs
-                      // value={tabsValue}
-                      onChange={handleChange}
-                      variant="fullWidth"
-                      sx={{
-                        '& .MuiTabs-indicator': {
-                          height: 0
-                        },
-                        '& .MuiTab-root.Mui-selected': {
-                          backgroundColor: theme.palette.primary.light
-                        },
-                        "& button[aria-selected='true']": {
-                          borderRadius: 1.5
-                        }
-                      }}
-                    >
-                      {/* <Tab label="Interview" value="1" /> */}
-                      <Tab
-                        label={
-                          startTime?.toLocaleString('en-US', {
-                            weekday: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                            month: 'long'
-                          }) || ''
-                        }
-                        value={1}
-                      />
-                    </Tabs>
-                  </Box>
-                )}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item>
-            <Typography> : </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Grid container justifyContent="flex-start" alignItems="center">
+          <Grid item container justifyContent="flex-start" alignItems="center" md={12}>
+            <Grid item alignItems="center" md={1.3}>
+              <AccessTimeIcon fontSize="small" />
+            </Grid>
+            <Grid item md={1.3}>
+              <Typography variant="subtitle1">Start: </Typography>
+            </Grid>
+            <Grid item md={5}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  open={openStartDatePicker}
+                  onClose={() => setOpenStartDatePicker(false)}
+                  label="Basic example"
+                  value={startTime}
+                  onChange={(newValue) => {
+                    setStartTime(newValue);
+                  }}
+                  renderInput={({ inputRef, inputProps, disabled, onChange, value }) => (
+                    <Box ref={inputRef} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <input style={{ display: 'none' }} onChange={onChange} disabled={disabled} {...inputProps} />
+                      {inputProps?.endAdornment}
+                      <Tabs
+                        // value={tabsValue}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        sx={{
+                          '& .MuiTabs-indicator': {
+                            height: 0
+                          },
+                          '& .MuiTab-root.Mui-selected': {
+                            backgroundColor: theme.palette.primary.light
+                          },
+                          "& button[aria-selected='true']": {
+                            borderRadius: 1.5
+                          }
+                        }}
+                      >
+                        {/* <Tab label="Interview" value="1" /> */}
+                        <Tab
+                          label={
+                            startTime?.toLocaleString('en-US', {
+                              weekday: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                              month: 'long'
+                            }) || ''
+                          }
+                          value={1}
+                        />
+                      </Tabs>
+                    </Box>
+                  )}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item>
+              <Typography> : </Typography>
+            </Grid>
+            <Grid item md={3}>
               <DesktopTimePicker
                 open={openStartTimePicker}
                 onClose={() => setOpenStartTimePicker(false)}
@@ -160,18 +160,16 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
                   </Box>
                 )}
               />
-            </LocalizationProvider>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item container justifyContent="flex-start" alignItems="center">
-          <Grid item alignItems="center" md={1.3}>
-            <></>
-          </Grid>
-          <Grid item md={1.3}>
-            <Typography variant="subtitle1">End: </Typography>
-          </Grid>
-          <Grid item md={5}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Grid item container justifyContent="flex-start" alignItems="center">
+            <Grid item alignItems="center" md={1.3}>
+              <></>
+            </Grid>
+            <Grid item md={1.3}>
+              <Typography variant="subtitle1">End: </Typography>
+            </Grid>
+            <Grid item md={5}>
               <DatePicker
                 open={openEndDatePicker}
                 onClose={() => setOpenEndDatePicker(false)}
@@ -216,13 +214,11 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
                   </Box>
                 )}
               />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item>
-            <Typography> : </Typography>
-          </Grid>
-          <Grid item md={3}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            </Grid>
+            <Grid item>
+              <Typography> : </Typography>
+            </Grid>
+            <Grid item md={3}>
               <DesktopTimePicker
                 open={openEndTimePicker}
                 onClose={() => setOpenEndTimePicker(false)}
@@ -257,60 +253,60 @@ const InterviewTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<Ref
                           hour: 'numeric', // numeric, 2-digit
                           minute: 'numeric' // numeric, 2-digit
                         })}
-                        value={2}
+                        value={4}
                       />
                     </Tabs>
                   </Box>
                 )}
               />
-            </LocalizationProvider>
+            </Grid>
+          </Grid>
+          <Grid item container justifyContent="flex-start" alignItems="center">
+            <Grid item md={1.3}>
+              <MeetingRoomIcon />
+            </Grid>
+            <Grid item md={9.1}>
+              <Button fullWidth variant="contained" target="_blank" href="https://meet.google.com/">
+                Add Google Meet
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
+            <Grid item md={1.3}>
+              <PeopleAltOutlinedIcon />
+            </Grid>
+            <Grid item md={9.1}>
+              <Autocomplete
+                multiple
+                id="tags-filled"
+                options={candidateList.map((option) => option.name)}
+                defaultValue={[candidateList[0].name]}
+                freeSolo
+                renderTags={(value: readonly string[], getTagProps) =>
+                  value.map((option: string, index: number) => <Chip variant="outlined" label={option} {...getTagProps({ index })} />)
+                }
+                renderInput={(params) => <TextField {...params} variant="filled" label="Add Candidate" placeholder="Candidates" />}
+              />
+            </Grid>
+          </Grid>
+          <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
+            <Grid item md={1.3}>
+              <AddLocationIcon />
+            </Grid>
+            <Grid item md={9.1}>
+              <TextField fullWidth label="Add Location" size="small" />
+            </Grid>
+          </Grid>
+          <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
+            <Grid item md={1.3}>
+              <SubjectIcon />
+            </Grid>
+            <Grid item md={9.1}>
+              <TextField fullWidth label="Add More Description" size="small" />
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item container justifyContent="flex-start" alignItems="center">
-          <Grid item md={1.3}>
-            <MeetingRoomIcon />
-          </Grid>
-          <Grid item md={9.1}>
-            <Button fullWidth variant="contained" target="_blank" href="https://meet.google.com/">
-              Add Google Meet
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
-          <Grid item md={1.3}>
-            <PeopleAltOutlinedIcon />
-          </Grid>
-          <Grid item md={9.1}>
-            <Autocomplete
-              multiple
-              id="tags-filled"
-              options={candidateList.map((option) => option.name)}
-              defaultValue={[candidateList[0].name]}
-              freeSolo
-              renderTags={(value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => <Chip variant="outlined" label={option} {...getTagProps({ index })} />)
-              }
-              renderInput={(params) => <TextField {...params} variant="filled" label="Add Candidate" placeholder="Candidates" />}
-            />
-          </Grid>
-        </Grid>
-        <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
-          <Grid item md={1.3}>
-            <AddLocationIcon />
-          </Grid>
-          <Grid item md={9.1}>
-            <TextField fullWidth label="Add Location" size="small" />
-          </Grid>
-        </Grid>
-        <Grid item container justifyContent="flex-start" alignItems="center" marginTop={2}>
-          <Grid item md={1.3}>
-            <SubjectIcon />
-          </Grid>
-          <Grid item md={9.1}>
-            <TextField fullWidth label="Add More Description" size="small" />
-          </Grid>
-        </Grid>
-      </Grid>
+      </LocalizationProvider>
     </Card>
   );
 });

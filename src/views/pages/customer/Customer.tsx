@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ButtonBase, Chip, IconButton, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
+import { ButtonBase, Chip, IconButton, Link, Menu, MenuItem, Stack, TableCell, TableRow, Typography, useTheme } from '@mui/material';
 // PROJECT IMPORTS
 import { UserProfile } from 'types/user-profile';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
@@ -71,9 +71,9 @@ const Customer = ({ customer, index }: Props) => {
         </TableCell>
         <TableCell
           sx={{
-            width: 110,
-            minWidth: 110,
-            maxWidth: 'calc(100vw - 850px)',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
             cursor: 'pointer',
             ':hover': { color: 'primary.main', textDecoration: 'underline' }
           }}
@@ -83,8 +83,8 @@ const Customer = ({ customer, index }: Props) => {
         >
           {customer.name}
         </TableCell>
-        <TableCell>{customer.username}</TableCell>
-        <TableCell>{customer.email}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{customer.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{customer.email}</TableCell>
         <TableCell>{customer.phone}</TableCell>
         <TableCell>{customer.dob ? moment(customer.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>
@@ -92,8 +92,12 @@ const Customer = ({ customer, index }: Props) => {
           {customer.gender === 'female' && 'Female'}
           {(customer.gender === null || customer.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(customer.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{moment(customer.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell component="th" scope="row">
+          {moment(customer.created_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(customer.updated_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
         <TableCell>
           {customer.status === 0 && (
             <Chip

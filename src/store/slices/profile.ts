@@ -1,3 +1,4 @@
+import { ME_URL } from 'contexts/JWTContext';
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -11,7 +12,8 @@ export const PROFILE_URL = `${process.env.REACT_APP_API_URL}/v1/profile`;
 
 const initialState: DefaultRootStateProps['profile'] = {
   error: null,
-  profiles: []
+  profiles: [],
+  userProfile: null
 };
 
 const slice = createSlice({
@@ -26,6 +28,9 @@ const slice = createSlice({
     },
     changePasswordSuccess(state, action) {
       state.profiles = action.payload;
+    },
+    getProfileSuccess(state, action) {
+      state.userProfile = action.payload;
     }
   }
 });
@@ -58,6 +63,17 @@ export function changeNewPassword(payload: Payload) {
       });
     if (callback) {
       callback(res);
+    }
+  };
+}
+
+export function getProfile() {
+  return async () => {
+    try {
+      const response = await axios.get(ME_URL);
+      dispatch(slice.actions.getProfileSuccess(response.data.success));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
     }
   };
 }

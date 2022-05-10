@@ -2,8 +2,8 @@ import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
 import { Box, Card, Grid, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { RefObject } from '../SelectDialog';
 
-import DatePicker from '@mui/lab/DatePicker/DatePicker';
-import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import DesktopTimePicker from '@mui/lab/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -32,6 +32,12 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
         break;
       case 2:
         setOpenStartTimePicker(() => !openStartTimePicker);
+        break;
+      case 3:
+        setOpenEndDatePicker(() => !openEndDatePicker);
+        break;
+      case 4:
+        setOpenEndTimePicker(() => !openEndTimePicker);
         break;
       default:
         console.error('Some Error Occurred While Choose Date or Time');
@@ -238,7 +244,7 @@ const EventTabs = forwardRef((props: { selectInfo: any }, selectRef: Ref<RefObje
                           hour: 'numeric', // numeric, 2-digit
                           minute: 'numeric' // numeric, 2-digit
                         })}
-                        value={2}
+                        value={4}
                       />
                     </Tabs>
                   </Box>

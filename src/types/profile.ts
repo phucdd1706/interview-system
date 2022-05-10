@@ -1,6 +1,9 @@
+import { UserProfile } from './user-profile';
+
 export interface ProfileStateProps {
   profiles: Profile[];
   error: object | string | null;
+  userProfile?: UserProfile | null | undefined;
 }
 
 export type Profile = {

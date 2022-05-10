@@ -32,6 +32,7 @@ import { PutRank } from 'store/slices/rank';
 interface EditRankProps {
   rank: RankType;
   open: boolean;
+  edit?: boolean;
   handleDrawerOpen: () => void;
 }
 
@@ -47,12 +48,12 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required'),
+  name: Yup.string().trim().max(50).required('Name is required'),
+  description: Yup.string().trim().max(255).required('Description is required'),
   status: Yup.number().required('Status is required')
 });
 
-const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
+const EditRank = ({ rank, open, edit, handleDrawerOpen }: EditRankProps) => {
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -150,7 +151,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit "${rank.name}"`}
+                    {`${edit ? 'Edit' : 'Rank'} "${rank.name}"`}
                   </Typography>
                   <Button
                     variant="text"
@@ -173,9 +174,14 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                     <TextField
                       fullWidth
                       id="name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       name="name"
-                      label="Name"
                       value={formik.values.name}
+                      inputProps={{ readOnly: !edit }}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
                       helperText={(formik.touched.name && formik.errors.name) || errors.name}
@@ -186,8 +192,13 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       fullWidth
                       id="description"
                       name="description"
-                      label="Description"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Description
+                        </span>
+                      }
                       value={formik.values.description}
+                      inputProps={{ readOnly: !edit }}
                       onChange={formik.handleChange}
                       error={formik.touched.description && Boolean(formik.errors.description)}
                       helperText={formik.touched.description && formik.errors.description}
@@ -200,6 +211,7 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                         name="status"
                         displayEmpty
                         value={formik.values.status}
+                        readOnly={!edit}
                         onChange={formik.handleChange}
                         inputProps={{ 'aria-label': 'Without label' }}
                       >
@@ -211,13 +223,15 @@ const EditRank = ({ rank, open, handleDrawerOpen }: EditRankProps) => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <AnimateButton>
-                      <Button fullWidth variant="contained" type="submit">
-                        Save
-                      </Button>
-                    </AnimateButton>
-                  </Grid>
+                  {edit && (
+                    <Grid item xs={12}>
+                      <AnimateButton>
+                        <Button fullWidth variant="contained" type="submit">
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </DialogContent>
             </LocalizationProvider>

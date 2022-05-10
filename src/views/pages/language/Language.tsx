@@ -27,7 +27,7 @@ const Language = ({ language, index, getList }: Props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const languageState = useSelector((state: RootState) => state.language);
-
+  const [edit, setEdit] = useState(false);
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -70,7 +70,13 @@ const Language = ({ language, index, getList }: Props) => {
     );
   };
 
-  const handleVisibleModal = () => {
+  const handleVisibleModal = async () => {
+    await setEdit(true);
+    setVisibleAdd((prevState) => !prevState);
+  };
+
+  const openPropertyModal = async () => {
+    await setEdit(false);
     setVisibleAdd((prevState) => !prevState);
   };
 
@@ -158,30 +164,41 @@ const Language = ({ language, index, getList }: Props) => {
             <Typography variant="body2">{index + 20 * (languageState?.currentPage - 1) + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell sx={{ width: '20%', overflow: 'hidden' }} component="th" scope="row">
+        {/* There're no onClick Dialog */}
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
             sx={{
               overflow: 'hidden',
               display: 'block',
+              maxWidth: '285px',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
+            onClick={openPropertyModal}
           >
-            {language?.name}
+            {language.name}
           </Link>
         </TableCell>
-        <TableCell>{language?.description}</TableCell>
+        <TableCell sx={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '624px' }}>{language?.description}</TableCell>
         <TableCell>{moment(language?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{moment(language?.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(language?.status)}</TableCell>
         <TableCell align="center">{renderMenuButton()}</TableCell>
         {openModal && <AlertDelete name={language?.name} open={openModal} handleClose={handleRemove} />}
       </TableRow>
-      <AddLanguage visible={visibleAdd} dataEdit={language} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
+      {visibleAdd && (
+        <AddLanguage
+          visible={visibleAdd}
+          edit={edit}
+          dataEdit={language}
+          handleVisibleModal={handleVisibleModal}
+          getList={() => getList()}
+        />
+      )}
     </>
   );
 };

@@ -18,15 +18,16 @@ import { useState } from 'react';
 interface AddRankProps {
   open: boolean;
   filter: RankFilter;
+  edit?: boolean;
   handleDrawerOpen: () => void;
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
+  name: Yup.string().trim().max(50).required('Name is required'),
+  description: Yup.string().trim().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
 });
 
-const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
+const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<any>({});
   const Notification = (color: string, message: string) => {
@@ -138,8 +139,12 @@ const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
                     <TextField
                       fullWidth
                       id="name"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Name
+                        </span>
+                      }
                       name="name"
-                      label="Name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
@@ -151,7 +156,11 @@ const AddRank = ({ open, handleDrawerOpen, filter }: AddRankProps) => {
                       fullWidth
                       id="description"
                       name="description"
-                      label="Description"
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Description
+                        </span>
+                      }
                       value={formik.values.description}
                       onChange={formik.handleChange}
                       error={(formik.touched.description && Boolean(formik.errors.description)) || errors.description}

@@ -24,14 +24,16 @@ import { useFormik } from 'formik';
 // PROJECT IMPORTS
 import { gridSpacing } from 'store/constant';
 import { SelectProps } from 'types/customer';
-import useAuth from 'hooks/useAuth';
 import { dispatch } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
 import { editProfile } from 'store/slices/profile';
+import { isFullName, isPhone } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
   handleDialogOpen: () => void;
+  getUserProfile: () => any;
+  user: any;
 }
 
 const Gender: SelectProps[] = [
@@ -42,34 +44,35 @@ const Gender: SelectProps[] = [
   {
     value: 'female',
     label: 'Female'
-  },
-  {
-    value: null,
-    label: 'N/A'
   }
 ];
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  phone: yup.string().required('Phone is required'),
-  // dob: yup.date().required('Date of Birth is required'),
+  name: yup
+    .string()
+    .max(50, 'Maximum 50 characters')
+    .min(3, 'Minimum 3 characters')
+    .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
+    .required('Name is required'),
+  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  dob: yup.date().required('Date of Birth is required'),
   gender: yup.string().required('Gender is required')
 });
 
-const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
-  const { user } = useAuth();
-
+const ProfileEdit = ({ open, handleDialogOpen, getUserProfile, user }: Props) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: user?.name,
       phone: user?.phone,
-      dob: '',
+      dob: user?.dob,
       gender: user?.gender
     },
     validationSchema,
-    onSubmit: (values) => {
-      dispatch(editProfile(values));
+    onSubmit: async (values) => {
+      await dispatch(editProfile(values)).then(() => {
+        getUserProfile();
+      });
       dispatch(
         openSnackbar({
           open: true,
@@ -170,6 +173,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}

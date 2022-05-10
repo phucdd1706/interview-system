@@ -233,7 +233,7 @@ const Departments = () => {
               ))}
           </TableBody>
         </Table>
-        <AddDepartment open={openDrawer} handleDrawerOpen={handleDrawerOpen} departFilter={departFilter} department={{}} />
+        <AddDepartment open={openDrawer} edit handleDrawerOpen={handleDrawerOpen} departFilter={departFilter} department={{}} />
       </TableContainer>
       {data?.length === 0 && (
         <div className="noData">

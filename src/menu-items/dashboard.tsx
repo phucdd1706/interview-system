@@ -25,15 +25,15 @@ interface DashboardMenuProps {
 
 const dashboard: DashboardMenuProps = {
   id: 'dashboard',
-  title: <FormattedMessage id="dashboard" />,
+  title: '',
   type: 'group',
   children: [
     {
-      id: 'analytics',
-      title: <FormattedMessage id="analytics" />,
+      id: 'dashboard',
+      title: <FormattedMessage id="dashboard" />,
       type: 'item',
-      url: '/dashboard/analytics',
-      icon: icons.IconDeviceAnalytics,
+      url: '/dashboard',
+      icon: icons.IconDashboard,
       breadcrumbs: true
     }
   ]

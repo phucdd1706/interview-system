@@ -88,15 +88,15 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
     <>
       <TableRow hover key={index}>
         <TableCell sx={{ pl: 3 }}>
-          <Stack direction="row" spacing={0.5} style={{ marginLeft: '15px' }}>
+          <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2">{(administratorState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
         <TableCell
           sx={{
-            width: 110,
-            minWidth: 110,
-            maxWidth: 'calc(100vw - 850px)',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
             cursor: 'pointer',
             ':hover': { color: 'primary.main', textDecoration: 'underline' }
           }}
@@ -106,8 +106,8 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
         >
           {administrator.name}
         </TableCell>
-        <TableCell>{administrator.username}</TableCell>
-        <TableCell>{administrator.email}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{administrator.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{administrator.email}</TableCell>
         <TableCell>{administrator.phone}</TableCell>
         <TableCell>{administrator.dob ? moment(administrator.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>
@@ -115,8 +115,12 @@ const Administrator = ({ administrator, index, adminFilter }: Props) => {
           {administrator.gender === 'female' && 'Female'}
           {(administrator.gender === null || administrator.gender === 'none') && 'N/A'}
         </TableCell>
-        <TableCell>{moment(administrator.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
+        <TableCell component="th" scope="row">
+          {moment(administrator.created_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {moment(administrator.updated_at).format('DD/MM/YYYY HH:mm')}
+        </TableCell>
         <TableCell>
           {administrator.status === 0 && (
             <Chip

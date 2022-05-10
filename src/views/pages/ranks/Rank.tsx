@@ -42,12 +42,19 @@ const Rank = ({ rank, index }: Props) => {
   };
   const rankState = useSelector((state: RootState) => state.rank);
   const theme = useTheme();
+  const [edit, setEdit] = useState<boolean>(false);
   const [openRankDrawer, setOpenRankDrawer] = useState<boolean>(false);
   const handleRankDrawerOpen = () => {
     setOpenRankDrawer((prevState) => !prevState);
   };
 
-  const editRank = () => {
+  const editRank = async () => {
+    await setEdit(true);
+    setOpenRankDrawer((prevState) => !prevState);
+  };
+
+  const openPropertyModal = async () => {
+    await setEdit(false);
     setOpenRankDrawer((prevState) => !prevState);
   };
 
@@ -87,30 +94,34 @@ const Rank = ({ rank, index }: Props) => {
             <Typography variant="body2">{20 * (rankState.currentPage - 1) + index + 1}</Typography>
           </Stack>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell sx={{ width: '20%', overflow: 'hidden', maxWidth: 300 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
             sx={{
               overflow: 'hidden',
+              maxWidth: '285px',
               display: 'block',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
+            onClick={openPropertyModal}
           >
             {rank.name}
           </Link>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 250 }} component="th" scope="row">
           <Link
             underline="hover"
             color="default"
             sx={{
               overflow: 'hidden',
               display: 'block',
+              maxWidth: '624px',
               textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
               ':hover': { color: 'primary.main' },
               cursor: 'pointer'
             }}
@@ -196,7 +207,7 @@ const Rank = ({ rank, index }: Props) => {
           {openModal && <AlertRankDelete name={rank.name} open={openModal} handleClose={handleModalClose} />}
         </TableCell>
       </TableRow>
-      <EditRank rank={rank} open={openRankDrawer} handleDrawerOpen={handleRankDrawerOpen} />
+      <EditRank rank={rank} edit={edit} open={openRankDrawer} handleDrawerOpen={handleRankDrawerOpen} />
     </>
   );
 };

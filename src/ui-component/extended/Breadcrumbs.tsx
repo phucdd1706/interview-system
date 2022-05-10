@@ -165,7 +165,7 @@ const Breadcrumbs = ({
                   maxItems={maxItems || 8}
                   separator={separatorIcon}
                 >
-                  <Typography component={Link} to="/" color="inherit" variant="subtitle1" sx={linkSX}>
+                  <Typography component={Link} to="/dashboard" color="inherit" variant="subtitle1" sx={linkSX}>
                     {icons && <HomeTwoToneIcon sx={iconStyle} />}
                     {icon && <HomeIcon sx={{ ...iconStyle, mr: 0 }} />}
                     {!icon && 'Dashboard'}

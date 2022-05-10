@@ -100,16 +100,14 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().max(2).max(50).matches(isFullName, 'Sorry, only letters (a-z) are allowed ').required('Name is required'),
-    email: yup
+    name: yup
       .string()
-      .matches(
-        isEmail,
-        'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
-      )
-      .email('Please enter a valid email')
-      .max(40)
-      .required('Email is required'),
+      .trim()
+      .min(3, 'Name must have at least 3 characters')
+      .max(50, `Maximum characters allowed is 50`)
+      .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
+      .required('Name is required'),
+    email: yup.string().email('Please enter a valid email').required('Email is required'),
     phone: yup
       .string()
       .max(10, 'Please enter the correct phone number format')
@@ -119,9 +117,9 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .string()
       .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
       .required('Age is required'),
-    time: yup.string().required('Interview time is required'),
-    address: yup.string().max(255),
-    note: yup.string().max(255)
+    time: yup.string().trim().required('Interview time is required'),
+    address: yup.string().trim().max(255),
+    note: yup.string().trim().max(255)
   });
 
   const formik = useFormik({
@@ -277,6 +275,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
                     <TextField
                       id="email"
                       name="email"
+                      type="email"
                       value={formik?.values?.email}
                       label={
                         <span>
