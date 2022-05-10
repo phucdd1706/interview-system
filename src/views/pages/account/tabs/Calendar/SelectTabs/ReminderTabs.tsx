@@ -19,8 +19,8 @@ import {
 } from '@mui/material';
 import { RefObject } from '../SelectDialog';
 
-import DatePicker from '@mui/lab/DatePicker/DatePicker';
-import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import DesktopTimePicker from '@mui/lab/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';

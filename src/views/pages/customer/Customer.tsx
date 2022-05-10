@@ -69,75 +69,24 @@ const Customer = ({ customer, index }: Props) => {
             <Typography variant="body2">{(customerState.currentPage - 1) * 20 + index + 1}</Typography>
           </Stack>
         </TableCell>
-        {/* sx={{ width: 110, minWidth: 110, maxWidth: 200 }} */}
-        <TableCell sx={{ width: 200, minWidth: 200, maxWidth: 200 }} component="th" scope="row" onClick={handleCustomerDrawerOpen}>
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {customer.name}
-          </Link>
+        <TableCell
+          sx={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            maxWidth: '185px',
+            cursor: 'pointer',
+            ':hover': { color: 'primary.main', textDecoration: 'underline' }
+          }}
+          component="th"
+          scope="row"
+          onClick={handleCustomerDrawerOpen}
+        >
+          {customer.name}
         </TableCell>
-        {/* sx={{ width: 110, minWidth: 110, maxWidth: 250 }} */}
-        <TableCell sx={{ width: 250, minWidth: 250, maxWidth: 250 }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {customer.username}
-          </Link>
-        </TableCell>
-        <TableCell sx={{ width: 250, minWidth: 250, maxWidth: 250 }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {customer.email}
-          </Link>
-        </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
-          <Link
-            underline="hover"
-            color="default"
-            sx={{
-              overflow: 'hidden',
-              display: 'block',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              ':hover': { color: 'primary.main' },
-              cursor: 'pointer'
-            }}
-          >
-            {customer.phone}
-          </Link>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {customer.dob ? moment(customer.dob).format('DD/MM/YYYY') : 'N/A'}
-        </TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{customer.username}</TableCell>
+        <TableCell sx={{ textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '290px' }}>{customer.email}</TableCell>
+        <TableCell>{customer.phone}</TableCell>
+        <TableCell>{customer.dob ? moment(customer.dob).format('DD/MM/YYYY') : 'N/A'}</TableCell>
         <TableCell>
           {customer.gender === 'male' && 'Male'}
           {customer.gender === 'female' && 'Female'}

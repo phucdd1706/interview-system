@@ -37,6 +37,7 @@ interface EditQuestionProps {
   question: QuestionType;
   open: boolean;
   indexId: number;
+  edit?: boolean;
   handleDrawerOpen: () => void;
 }
 const Type: SelectProps[] = [
@@ -61,8 +62,18 @@ const Status: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  rank_id: Yup.string().trim().required('Rank is required'),
-  department_id: Yup.string().trim().required('Department is required'),
+  rank_id: Yup.string()
+    .trim()
+    .when('type', {
+      is: (type: string) => type !== '0',
+      then: Yup.string().required('Rank is required')
+    }),
+  department_id: Yup.string()
+    .trim()
+    .when('type', {
+      is: (type: string) => type !== '0',
+      then: Yup.string().required('Department is required')
+    }),
   language_id: Yup.string().trim().required('Language is required'),
   question_content: Yup.string()
     .trim()
@@ -72,7 +83,7 @@ const validationSchema = Yup.object({
   status: Yup.string().trim().required('Question status is required')
 });
 
-const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestionProps) => {
+const EditQuestion = ({ question, open, edit, handleDrawerOpen, indexId }: EditQuestionProps) => {
   const [errors, setErrors] = useState<any>({});
   const changeModal = (type: string) => {
     if (type === 'close') {
@@ -138,6 +149,23 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
     }
   });
 
+  const handleTypeOptions = (value: string | number) => {
+    switch (value) {
+      case 0:
+        formik.setFieldValue('type', 0);
+        formik.setFieldValue('rank_id', '');
+        formik.setFieldValue('department_id', '');
+        break;
+      case 1:
+        formik.setFieldValue('type', 1);
+        formik.setFieldValue('rank_id', '');
+        formik.setFieldValue('department_id', '');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -160,6 +188,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
       {open && (
         <>
           <Box sx={{ p: 3 }}>
+            {console.log(formik.values)}
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
               <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
@@ -174,7 +203,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
                       verticalAlign: 'middle'
                     }}
                   >
-                    {`Edit "Question ${20 * (questionState.currentPage - 1) + indexId + 1}"`}
+                    {`${edit ? 'Edit' : ''} "Question ${20 * (questionState.currentPage - 1) + indexId + 1}"`}
                   </Typography>
                   <Button
                     variant="text"
@@ -194,30 +223,55 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
                   <Grid item xs={12}>
-                    <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
-                    {formik.touched.rank_id && formik.errors.rank_id && (
-                      <FormHelperText error id="standard-weight-helper-text-rank-login">
-                        {formik.errors.rank_id}
-                      </FormHelperText>
-                    )}
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
+                          <span style={{ color: '#f44336' }}>*</span> Type
+                        </span>
+                      </InputLabel>
+                      <Select
+                        id="type"
+                        name="type"
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Type
+                          </span>
+                        }
+                        displayEmpty
+                        value={formik.values.type}
+                        readOnly={!edit}
+                        onChange={(e) => handleTypeOptions(e.target.value)}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                      >
+                        {Type.map((typee: SelectProps, index: number) => (
+                          <MenuItem key={index} value={typee.value}>
+                            {typee.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <DepartmentSelect
-                      fullWidth
-                      size="medium"
-                      change={formik.handleChange}
-                      values={formik.values?.department_id}
-                      formik={formik}
-                    />
-                    {formik.touched.department_id && formik.errors.department_id && (
-                      <FormHelperText error id="standard-weight-helper-text-rank-login">
-                        {formik.errors.department_id}
-                      </FormHelperText>
-                    )}
-                  </Grid>
+                  {formik.values.type !== 0 && (
+                    <>
+                      <Grid item xs={12}>
+                        <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <DepartmentSelect
+                          fullWidth
+                          readonly={!edit}
+                          size="medium"
+                          change={formik.handleChange}
+                          values={formik.values?.department_id}
+                          formik={formik}
+                        />
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xs={12}>
                     <LanguageSelect
                       fullWidth
+                      readonly={!edit}
                       size="medium"
                       change={formik.handleChange}
                       values={formik.values?.language_id}
@@ -241,40 +295,13 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
                           </span>
                         }
                         value={formik.values.question_content}
+                        inputProps={{ readOnly: !edit }}
                         error={
                           (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
                         }
                         helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
                         onChange={formik.handleChange}
                       />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
-                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
-                          <span style={{ color: '#f44336' }}>*</span> Type
-                        </span>
-                      </InputLabel>
-                      <Select
-                        id="type"
-                        name="type"
-                        label={
-                          <span>
-                            <span style={{ color: 'red' }}>*</span> Type
-                          </span>
-                        }
-                        displayEmpty
-                        value={formik.values.type}
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                      >
-                        {Type.map((typee: SelectProps, index: number) => (
-                          <MenuItem key={index} value={typee.value}>
-                            {typee.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
@@ -294,6 +321,7 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
                         }
                         displayEmpty
                         value={formik.values.status}
+                        readOnly={!edit}
                         onChange={formik.handleChange}
                         inputProps={{ 'aria-label': 'Without label' }}
                       >
@@ -305,13 +333,15 @@ const EditQuestion = ({ question, open, handleDrawerOpen, indexId }: EditQuestio
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <AnimateButton>
-                      <Button fullWidth variant="contained" type="submit">
-                        Save
-                      </Button>
-                    </AnimateButton>
-                  </Grid>
+                  {edit && (
+                    <Grid item xs={12}>
+                      <AnimateButton>
+                        <Button fullWidth variant="contained" type="submit">
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Grid>
+                  )}
                 </Grid>
               </DialogContent>
             </LocalizationProvider>

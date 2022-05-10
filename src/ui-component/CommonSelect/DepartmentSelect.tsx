@@ -13,9 +13,10 @@ interface Props {
   size: 'small' | 'medium' | undefined;
   change: (e: any) => void;
   formik: any;
+  readonly?: boolean;
 }
 
-const DepartmentSelect = ({ change, values, fullWidth, size, formik }: Props) => {
+const DepartmentSelect = ({ change, values, readonly, fullWidth, size, formik }: Props) => {
   const dispatch = useDispatch();
   const [data, setData] = useState<Department[]>([]);
 
@@ -62,6 +63,7 @@ const DepartmentSelect = ({ change, values, fullWidth, size, formik }: Props) =>
           }
           onChange={change}
           value={values}
+          readOnly={readonly}
           error={formik?.touched?.department_id && Boolean(formik?.errors?.department_id)}
           MenuProps={MenuProps}
         >

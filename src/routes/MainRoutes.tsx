@@ -28,10 +28,6 @@ const MainRoutes = {
   ),
   children: [
     {
-      path: '/dashboard/analytics',
-      element: <Dashboard />
-    },
-    {
       path: '/dashboard',
       element: <Dashboard />
     },

@@ -41,7 +41,7 @@ interface AddQuestionProps {
 
 const Type: SelectProps[] = [
   {
-    value: 0,
+    value: '0',
     label: 'Basic'
   },
   {
@@ -51,8 +51,18 @@ const Type: SelectProps[] = [
 ];
 
 const validationSchema = Yup.object({
-  rank_id: Yup.string().trim().required('Rank is required'),
-  department_id: Yup.string().trim().required('Department is required'),
+  rank_id: Yup.string()
+    .trim()
+    .when('type', {
+      is: (type: string) => type !== '0',
+      then: Yup.string().required('Rank is required')
+    }),
+  department_id: Yup.string()
+    .trim()
+    .when('type', {
+      is: (type: string) => type !== '0',
+      then: Yup.string().required('Department is required')
+    }),
   language_id: Yup.string().trim().required('Language is required'),
   question_content: Yup.string()
     .trim()
@@ -118,6 +128,21 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
       AddQuest(values);
     }
   });
+
+  const handleTypeOptions = (value: string) => {
+    switch (value) {
+      case '0':
+        formik.setFieldValue('type', '0');
+        formik.setFieldValue('rank_id', '');
+        formik.setFieldValue('department_id', '');
+        break;
+      case '1':
+        formik.setFieldValue('type', '1');
+        break;
+      default:
+        break;
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -139,6 +164,7 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
       {open && (
         <>
           <Box sx={{ p: 3 }}>
+            {console.log('re-render', formik.errors)}
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
               <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
@@ -173,17 +199,55 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
                   <Grid item xs={12}>
-                    <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
+                          <span style={{ color: '#f44336' }}>*</span> Type
+                        </span>
+                      </InputLabel>
+                      <Select
+                        id="type"
+                        size="medium"
+                        name="type"
+                        value={formik.values.type}
+                        label={
+                          <span>
+                            <span style={{ color: 'red' }}>*</span> Type
+                          </span>
+                        }
+                        onChange={(e) => handleTypeOptions(e.target.value)}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        error={formik.touched.type && Boolean(formik.errors.type)}
+                      >
+                        {Type.map((typee: SelectProps, index: number) => (
+                          <MenuItem key={index} value={typee.value}>
+                            {typee.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {formik.touched.type && formik.errors.type && (
+                        <FormHelperText error id="standard-weight-helper-text-rank-login">
+                          {formik.errors.type}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                   </Grid>
-                  <Grid item xs={12}>
-                    <DepartmentSelect
-                      fullWidth
-                      size="medium"
-                      change={formik.handleChange}
-                      values={formik.values?.department_id}
-                      formik={formik}
-                    />
-                  </Grid>
+                  {formik.values.type !== '0' && (
+                    <>
+                      <Grid item xs={12}>
+                        <RankSelect fullWidth size="medium" change={formik.handleChange} values={formik.values?.rank_id} formik={formik} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <DepartmentSelect
+                          fullWidth
+                          size="medium"
+                          change={formik.handleChange}
+                          values={formik.values?.department_id}
+                          formik={formik}
+                        />
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xs={12}>
                     <LanguageSelect
                       fullWidth
@@ -212,40 +276,6 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
                         value={formik.values.question_content}
                         onChange={formik.handleChange}
                       />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
-                        <span style={{ color: formik && formik.touched.type && Boolean(formik.errors.type) ? '#f44336' : '' }}>
-                          <span style={{ color: '#f44336' }}>*</span> Type
-                        </span>
-                      </InputLabel>
-                      <Select
-                        id="type"
-                        size="medium"
-                        name="type"
-                        value={formik.values.type}
-                        label={
-                          <span>
-                            <span style={{ color: 'red' }}>*</span> Type
-                          </span>
-                        }
-                        onChange={formik.handleChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        error={formik.touched.type && Boolean(formik.errors.type)}
-                      >
-                        {Type.map((typee: SelectProps, index: number) => (
-                          <MenuItem key={index} value={typee.value}>
-                            {typee.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {formik.touched.type && formik.errors.type && (
-                        <FormHelperText error id="standard-weight-helper-text-rank-login">
-                          {formik.errors.type}
-                        </FormHelperText>
-                      )}
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
