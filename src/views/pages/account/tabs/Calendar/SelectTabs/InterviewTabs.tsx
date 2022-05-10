@@ -1,8 +1,8 @@
 import React, { forwardRef, Ref, useImperativeHandle, useState } from 'react';
 import { Autocomplete, Box, Button, Card, Chip, Grid, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { RefObject } from '../SelectDialog';
-import DatePicker from '@mui/lab/DatePicker/DatePicker';
-import DesktopTimePicker from '@mui/lab/DesktopTimePicker/DesktopTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import DesktopTimePicker from '@mui/lab/DesktopTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
