@@ -13,9 +13,10 @@ interface Props {
   size: 'small' | 'medium' | undefined;
   change: (e: any) => void;
   formik: any;
+  readonly?: boolean;
 }
 
-const LanguageSelect = ({ change, values, size, formik, fullWidth }: Props) => {
+const LanguageSelect = ({ change, values, readonly, size, formik, fullWidth }: Props) => {
   const dispatch = useDispatch();
   const [data, setData] = useState<Languages[]>([]);
 
@@ -61,6 +62,7 @@ const LanguageSelect = ({ change, values, size, formik, fullWidth }: Props) => {
               <span style={{ color: '#f44336' }}>*</span> Language
             </span>
           }
+          readOnly={readonly}
           onChange={change}
           value={values}
           fullWidth={fullWidth}

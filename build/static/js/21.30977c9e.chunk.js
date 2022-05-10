@@ -1,2 +1,0 @@
-(this["webpackJsonpinterview-manager-system"]=this["webpackJsonpinterview-manager-system"]||[]).push([[21],{686:function(e,n,t){"use strict";t.r(n);var i=t(309),c=t(133),s=t(1);n.default=function(){return Object(s.jsx)(c.a,{children:Object(s.jsx)(i.a,{sx:{textAlign:"center"},children:"H\u1ec7 th\u1ed1ng qu\u1ea3n l\xfd ph\u1ecfng v\u1ea5n BeetSoft ch\xfac b\u1ea1n c\xf3 m\u1ed9t ng\xe0y l\xe0m vi\u1ec7c vui v\u1ebb, hi\u1ec7u qu\u1ea3 !"})})}}}]);
-//# sourceMappingURL=21.30977c9e.chunk.js.map
