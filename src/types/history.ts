@@ -19,7 +19,7 @@ export interface Candidates {
 export interface Question {
   id?: number;
   candidate_id?: number;
-  status?: string | number;
+  status: string | number;
   created_at?: string;
   updated_at?: string;
   question_id?: number;

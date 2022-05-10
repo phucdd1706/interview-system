@@ -107,9 +107,10 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .max(50, `Maximum characters allowed is 50`)
       .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
       .required('Name is required'),
-    email: yup.string().email('Please enter a valid email').required('Email is required'),
+    email: yup.string().trim().email('Please enter a valid email').required('Email is required'),
     phone: yup
       .string()
+      .trim()
       .max(10, 'Please enter the correct phone number format')
       .matches(isPhone, 'Please enter the correct phone number format')
       .required('Phone is required'),

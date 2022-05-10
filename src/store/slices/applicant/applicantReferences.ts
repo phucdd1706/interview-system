@@ -4,7 +4,7 @@ import { ResponseInterviewQuestion, InterviewQuestions, QuestionStackInterface }
 import { axiosGet, axiosPost } from 'utils/helpers/axios';
 import { QuestionType } from 'types/question';
 // THIRD-PARTY
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
@@ -118,19 +118,20 @@ const applicantReferences = createSlice({
           });
         });
       });
+    },
+    sortDataByKey(state, action: { payload: 'status' | 'rank_id' | 'language_id' | 'type' | 'question_content' }) {
+      const base = [...state.interviewQuestions[0].questions.base];
+      // @ts-ignore: Unreachable code error
+      if (base[0][action.payload] > base[base.length - 1][action.payload]) {
+        base.sort((a, b) => Number(a[action.payload]) - Number(b[action.payload]));
+      } else {
+        base.sort((a, b) => Number(b[action.payload]) - Number(a[action.payload]));
+      }
+      Object.assign(state.interviewQuestions[0].questions, { base });
+    },
+    handleInterviewNote(state, action: { payload: string }) {
+      state.applicantInfo.note = action.payload;
     }
-    //   handleInterviewQuestionNotes(state, action: { payload: { id: string; notes: string } }) {
-    //     const { id, notes } = action.payload;
-    //     state.interviewQuestions.map((item) => {
-    //       item.questions.map((question) => {
-    //         if (question.id === id) {
-    //           question.notes = notes;
-    //         }
-    //         return question;
-    //       });
-    //       return item;
-    //     });
-    //   }
   }
 });
 
@@ -141,12 +142,12 @@ export const {
   addInterviewQuestions,
   deleteInterviewQuestions,
   handleAnswerStatus,
-  // handleInterviewQuestionNotes,
   setApplicantInfo,
   setInterviewData,
-  // setReferenceEvaluate,
   setQuestions,
-  questionsInit
+  questionsInit,
+  sortDataByKey,
+  handleInterviewNote
 } = applicantReferences.actions;
 
 // ASYNC ACTIONS

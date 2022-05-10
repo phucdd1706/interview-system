@@ -41,7 +41,7 @@ export type QuestionType = {
   language_id?: number | string;
   question_content?: string;
   type?: number | string;
-  status?: number | string;
+  status: number | string;
   language?: Languages;
   rank?: RankType;
   department?: Department;
