@@ -118,19 +118,10 @@ const applicantReferences = createSlice({
           });
         });
       });
+    },
+    handleInterviewNote(state, action: { payload: string }) {
+      state.applicantInfo.note = action.payload;
     }
-    //   handleInterviewQuestionNotes(state, action: { payload: { id: string; notes: string } }) {
-    //     const { id, notes } = action.payload;
-    //     state.interviewQuestions.map((item) => {
-    //       item.questions.map((question) => {
-    //         if (question.id === id) {
-    //           question.notes = notes;
-    //         }
-    //         return question;
-    //       });
-    //       return item;
-    //     });
-    //   }
   }
 });
 
@@ -141,12 +132,11 @@ export const {
   addInterviewQuestions,
   deleteInterviewQuestions,
   handleAnswerStatus,
-  // handleInterviewQuestionNotes,
   setApplicantInfo,
   setInterviewData,
-  // setReferenceEvaluate,
   setQuestions,
-  questionsInit
+  questionsInit,
+  handleInterviewNote
 } = applicantReferences.actions;
 
 // ASYNC ACTIONS

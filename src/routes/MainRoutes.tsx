@@ -5,6 +5,7 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/route-guard/AuthGuard';
+import Interview from 'views/pages/interview';
 
 const Dashboard = Loadable(lazy(() => import('views/dashboard')));
 const History = Loadable(lazy(() => import('views/pages/history/index')));
@@ -74,14 +75,13 @@ const MainRoutes = {
       path: '/applicant',
       role: 2,
       exact: true,
-      element: <AddNewApplicant />,
-      children: [
-        {
-          path: '/applicant/:id',
-          role: 2,
-          element: <AddNewApplicant />
-        }
-      ]
+      element: <AddNewApplicant />
+    },
+    {
+      path: '/interview/:id',
+      role: 2,
+      exact: true,
+      element: <Interview />
     }
   ]
 };

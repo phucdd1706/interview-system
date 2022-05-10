@@ -66,7 +66,8 @@ const AddApplicantReference = () => {
               rank_advanced_id: Yup.string().required('Rank advanced is required')
             })
           ),
-          time: Yup.string().required('Time is required')
+          time: Yup.string().required('Time is required'),
+          note: Yup.string().max(255)
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
