@@ -236,7 +236,6 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
           </Box>
           <Divider />
           <form onSubmit={formik.handleSubmit}>
-            {console.log(formik.values)}
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
