@@ -165,7 +165,7 @@ const AddInProgress = ({ dataEdit, visible, edit, handleVisibleModal, getList }:
                       verticalAlign: 'middle'
                     }}
                   >
-                    {dataEdit?.id ? `${edit ? 'Edit' : 'Language'} "${dataEdit?.name}"` : 'Add new department'}
+                    {dataEdit?.id ? `${edit ? 'Edit' : 'Language'} "${dataEdit?.name}"` : 'Add New Language'}
                   </Typography>
                   <Button
                     variant="text"

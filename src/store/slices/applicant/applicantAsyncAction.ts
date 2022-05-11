@@ -62,7 +62,8 @@ export const getInterviewDataThunk = createAsyncThunk('applicant/getInterviewDat
   });
   const questions = candidate_question.map((element: any) => ({
     question_id: element.id,
-    status: element.status || 0
+    status: element.status || 0,
+    type: element.question.type
   }));
   applicantDataInit.time = applicantDataInit.time.split('.')[0];
   return data && dispatch(setInterviewData({ applicant: { ...applicantDataInit }, interviewQuestions: [{ ...questionStack }], questions }));

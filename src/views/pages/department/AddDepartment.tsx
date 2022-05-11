@@ -166,7 +166,7 @@ const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department 
                       verticalAlign: 'middle'
                     }}
                   >
-                    {department?.id ? `${edit ? 'Edit' : 'Department'} "${department?.name}"` : 'Add new department'}
+                    {department?.id ? `${edit ? 'Edit' : 'Department'} "${department?.name}"` : 'Add New Department'}
                   </Typography>{' '}
                   <Button
                     variant="text"

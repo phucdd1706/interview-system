@@ -17,7 +17,7 @@ import { applicantInit } from 'store/slices/applicant/applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
 import { axiosPost, axiosPut } from 'utils/helpers/axios';
 import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
-import { isPhone, isFullName } from 'utils/regexHelper';
+import { isPhone, isFullName, emailRegEx } from 'utils/regexHelper';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -53,13 +53,18 @@ const AddApplicantReference = () => {
             .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
             .required('Name is required'),
           age: Yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
-          email: Yup.string().trim().email('Email is not valid').required('Email is required'),
+          email: Yup.string()
+            .trim()
+            .email('Email is not valid')
+            .matches(emailRegEx, 'Email is not valid')
+            .max(50)
+            .required('Email is required'),
           phone: Yup.string()
             .trim()
             .max(10, 'Please enter the correct phone number format')
             .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
-          address: Yup.string().max(255),
+          address: Yup.string().trim().max(255),
           applyPosition: Yup.array().of(
             Yup.object().shape({
               language_id: Yup.string().required('Language is required'),
@@ -68,7 +73,7 @@ const AddApplicantReference = () => {
             })
           ),
           time: Yup.string().required('Time is required'),
-          note: Yup.string().max(255)
+          note: Yup.string().trim().max(255)
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);

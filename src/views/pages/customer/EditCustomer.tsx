@@ -13,6 +13,8 @@ import {
   Divider,
   FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
   MenuItem,
   Select,
   Stack,
@@ -30,7 +32,8 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { UserProfile } from 'types/user-profile';
 import { useState } from 'react';
-import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName, passwordRegEx } from 'utils/regexHelper';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
   customer: UserProfile;
@@ -102,7 +105,7 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters'),
+  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
   password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Password do not match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
@@ -110,11 +113,18 @@ const validationSchema = yup.object({
 });
 
 const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+  };
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
+      setShowPassword(false);
       setErrors({});
       formik.resetForm();
     }
@@ -294,6 +304,20 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                           name="password"
                           label="Password"
                           type={showPassword ? 'text' : 'password'}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge="end"
+                                >
+                                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                              </InputAdornment>
+                            )
+                          }}
                           value={formik.values.password}
                           onChange={formik.handleChange}
                           error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
@@ -307,6 +331,20 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                           name="password_confirmation"
                           label="Confirm Password"
                           type={showPassword ? 'text' : 'password'}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={handleClickShowPassword}
+                                  onMouseDown={handleMouseDownPassword}
+                                  edge="end"
+                                >
+                                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                              </InputAdornment>
+                            )
+                          }}
                           value={formik.values.password_confirmation}
                           onChange={formik.handleChange}
                           error={

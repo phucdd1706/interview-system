@@ -34,7 +34,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { Candidates } from 'types/history';
 import { SelectProps } from 'types/customer';
-import { isPhone, isFullName } from 'utils/regexHelper';
+import { isPhone, isFullName, emailRegEx } from 'utils/regexHelper';
 
 interface Props {
   dataEdit: Candidates;
@@ -107,7 +107,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .max(50, `Maximum characters allowed is 50`)
       .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
       .required('Name is required'),
-    email: yup.string().trim().email('Please enter a valid email').required('Email is required'),
+    email: yup.string().trim().email('Email is not valid').matches(emailRegEx, 'Email is not valid').max(50).required('Email is required'),
     phone: yup
       .string()
       .trim()
@@ -213,7 +213,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
           <Divider />
 
-          <form onSubmit={formik.handleSubmit}>
+          <form noValidate onSubmit={formik.handleSubmit}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
