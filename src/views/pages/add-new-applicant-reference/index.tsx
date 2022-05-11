@@ -17,7 +17,7 @@ import { applicantInit } from 'store/slices/applicant/applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
 import { axiosPost, axiosPut } from 'utils/helpers/axios';
 import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
-import { isPhone } from 'utils/regexHelper';
+import { isPhone, isFullName } from 'utils/regexHelper';
 
 const AddApplicantReference = () => {
   const dispatch = useDispatch();
@@ -50,6 +50,7 @@ const AddApplicantReference = () => {
             .trim()
             .min(3, 'Name must have at least 3 characters')
             .max(50, `Maximum characters allowed is 50`)
+            .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
             .required('Name is required'),
           age: Yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
           email: Yup.string().trim().email('Email is not valid').required('Email is required'),
