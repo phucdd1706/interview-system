@@ -1,11 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // THIRD-PARTY
 import React from 'react';
-import { Grid, Button, FormControl, FormHelperText, Paper, CardHeader, TextField, Snackbar } from '@mui/material';
+import {
+  Grid,
+  Button,
+  FormControl,
+  FormHelperText,
+  Paper,
+  CardHeader,
+  TextField,
+  Snackbar,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
 import { useTheme } from '@mui/system';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
@@ -15,12 +28,13 @@ import { dispatch } from 'store';
 import { changeNewPassword } from 'store/slices/profile';
 import { ChangePassword } from 'types/profile';
 import { openSnackbar } from 'store/slices/snackbar';
+import { passwordRegEx } from 'utils/regexHelper';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   phone: Yup.string().required('Phone is required'),
   gender: Yup.string().required('Gender is required'),
-  password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password: Yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
   password_confirmation: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required')
@@ -36,9 +50,9 @@ export default function ChangePasswordd() {
   const [open, setOpen] = React.useState(false);
   const { user } = useAuth();
 
-  // const handleClickShowPassword = () => {
-  //   setShowPassword(!showPassword);
-  // };
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleClickChange = () => {
     setOpen(true);
@@ -124,6 +138,20 @@ export default function ChangePasswordd() {
                       <span style={{ color: '#f44336' }}>*</span> Password
                     </span>
                   }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
                 {formik.touched.password && formik.errors.password && (
                   <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -146,7 +174,20 @@ export default function ChangePasswordd() {
                       <span style={{ color: '#f44336' }}>*</span> Confirm password
                     </span>
                   }
-                  inputProps={{}}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
                 {formik.touched.password_confirmation && formik.errors.password_confirmation && (
                   <FormHelperText error id="standard-weight-helper-text-password-login">
