@@ -48,16 +48,6 @@ const applicantReferences = createSlice({
           });
         });
       });
-      // action.payload.questions.forEach((question) => {
-      //   state.applicantInfo.questions && question.id && state.applicantInfo.questions.push({ question_id: question.id });
-      // });
-      // state.applicantInfo = action.payload.applicant;
-      // const questions = action.payload.questions.map((element) => Object.keys(element).map((key) => [...element[key]])).flat(2);
-      // state.applicantInfo.questions = [];
-      // questions.forEach((question) => {
-      //   state.applicantInfo.questions && question.id && state.applicantInfo.questions.push({ question_id: question.id });
-      // });
-      // state.applicantInfo.questions = applicantInterviewQuestion;
     },
     setInterviewData(
       state,
