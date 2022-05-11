@@ -5,7 +5,7 @@ import { getSeverityType, getErrMessage } from './errHandle';
 
 export const alertRequestError = (errResponse: AxiosError): void => {
   const severityType = (errResponse.response && getSeverityType(errResponse.response.status)) || 'error';
-  const message = (errResponse.response && getErrMessage(errResponse.response)) || errResponse.message;
+  const message = (errResponse.response && getErrMessage(errResponse.response)) || errResponse.response;
   dispatch(
     openSnackbar({
       open: true,

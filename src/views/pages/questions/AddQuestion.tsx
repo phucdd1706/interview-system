@@ -106,7 +106,7 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
             Notification('success', 'Add new question successfully');
             changeModal('close');
           } else {
-            Notification('error', response?.message);
+            Notification('error', response?.errors.question_content);
             setErrors(response?.errors);
           }
         }
@@ -269,10 +269,8 @@ const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {
                             <span style={{ color: 'red' }}>*</span> Question content
                           </span>
                         }
-                        error={
-                          (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
-                        }
-                        helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
+                        error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
+                        helperText={formik.touched.question_content && formik.errors.question_content}
                         value={formik.values.question_content}
                         onChange={formik.handleChange}
                       />

@@ -142,7 +142,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
               Notification('success', 'Edit administrator successfully!');
               changeModal('close');
             } else {
-              Notification('error', resp?.message);
+              Notification('error', resp?.errors?.username || resp?.errors?.email || resp?.errors?.phone);
               setErrors(resp?.errors);
             }
           }
@@ -158,7 +158,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
               Notification('success', 'Add administrator successfully!');
               changeModal('close');
             } else {
-              Notification('error', resp?.message);
+              Notification('error', resp?.errors?.username || resp?.errors?.email || resp?.errors?.phone);
               setErrors(resp?.errors);
             }
           }
@@ -270,8 +270,8 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                       }
                       value={formik.values.username}
                       onChange={formik.handleChange}
-                      error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
-                      helperText={(formik.touched.username && formik.errors.username) || errors?.username}
+                      error={formik.touched.username && Boolean(formik.errors.username)}
+                      helperText={formik.touched.username && formik.errors.username}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -287,8 +287,8 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                       }
                       value={formik.values.email}
                       onChange={formik.handleChange}
-                      error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
-                      helperText={(formik.touched.email && formik.errors.email) || errors?.email}
+                      error={formik.touched.email && Boolean(formik.errors.email)}
+                      helperText={formik.touched.email && formik.errors.email}
                     />
                   </Grid>
                   {!administrator.id && (
@@ -345,8 +345,8 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                       }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
-                      helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
+                      error={formik.touched.phone && Boolean(formik.errors.phone)}
+                      helperText={formik.touched.phone && formik.errors.phone}
                     />
                   </Grid>
                   <Grid item xs={12}>
