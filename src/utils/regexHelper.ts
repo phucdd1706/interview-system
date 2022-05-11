@@ -6,6 +6,6 @@ const isFullName =
   /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]*$/; // check ten chi bao gom chu (a-z) hoac dau cach tu 2 - 40 ky tu
 const isUserName = /^[a-zA-Z0-9_-]+$/;
 
-const emailRegEx = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z]+$/;
+const emailRegEx = /^[a-zA-Z0-9 @ .]+$/;
 
 export { isEmail, isPhone, isFullName, isUserName, emailRegEx };
