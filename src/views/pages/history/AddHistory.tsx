@@ -213,7 +213,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
 
           <Divider />
 
-          <form onSubmit={formik.handleSubmit}>
+          <form noValidate onSubmit={formik.handleSubmit}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>

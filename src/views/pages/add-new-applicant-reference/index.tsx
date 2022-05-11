@@ -64,7 +64,7 @@ const AddApplicantReference = () => {
             .max(10, 'Please enter the correct phone number format')
             .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
-          address: Yup.string().max(255),
+          address: Yup.string().trim().max(255),
           applyPosition: Yup.array().of(
             Yup.object().shape({
               language_id: Yup.string().required('Language is required'),
@@ -73,7 +73,7 @@ const AddApplicantReference = () => {
             })
           ),
           time: Yup.string().required('Time is required'),
-          note: Yup.string().max(255)
+          note: Yup.string().trim().max(255)
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
