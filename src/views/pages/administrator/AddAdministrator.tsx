@@ -8,6 +8,8 @@ import {
   Divider,
   FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -15,6 +17,8 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -33,7 +37,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { addAdministrator, editAdministrator, getAdministratorList } from 'store/slices/user';
 
 import { Administrator, SelectProps, UserFilter } from 'types/user';
-import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName, passwordRegEx } from 'utils/regexHelper';
 
 interface Props {
   open: boolean;
@@ -96,7 +100,7 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
@@ -108,10 +112,18 @@ const validationSchema = yup.object({
 
 const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, administrator }: Props) => {
   const [errors, setErrors] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+  };
 
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
+      setShowPassword(false);
       setErrors({});
       formik.resetForm();
     }
@@ -298,8 +310,22 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                         fullWidth
                         id="password"
                         name="password"
-                        inputProps={{ readOnly: !editing }}
-                        type="password"
+                        InputProps={{
+                          readOnly: !editing,
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
+                        type={showPassword ? 'text' : 'password'}
                         label={
                           <span>
                             <span style={{ color: '#f44336' }}>*</span> Password
@@ -318,8 +344,22 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                         fullWidth
                         id="password_confirmation"
                         name="password_confirmation"
-                        inputProps={{ readOnly: !editing }}
-                        type="password"
+                        InputProps={{
+                          readOnly: !editing,
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
+                        type={showPassword ? 'text' : 'password'}
                         label={
                           <span>
                             <span style={{ color: '#f44336' }}>*</span> Confirm password

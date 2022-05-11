@@ -12,6 +12,8 @@ import {
   Divider,
   FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
   MenuItem,
   Select,
   Stack,
@@ -29,7 +31,8 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { SelectProps } from 'types/customer';
 import { useState } from 'react';
 import { UserProfile } from 'types/user-profile';
-import { isEmail, isFullName, isPhone, isUserName } from 'utils/regexHelper';
+import { isEmail, isFullName, isPhone, isUserName, passwordRegEx } from 'utils/regexHelper';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
   open: boolean;
@@ -71,7 +74,7 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().trim().min(6, 'Minimum 6 characters').required('Password is required'),
+  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
@@ -83,9 +86,17 @@ const validationSchema = yup.object({
 
 const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
   const [errors, setErrors] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+  };
   const changeModal = (type: string) => {
     if (type === 'close') {
       handleDrawerOpen();
+      setShowPassword(false);
       setErrors({});
       formik.resetForm();
     }
@@ -254,12 +265,26 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="password"
                       name="password"
-                      type="password"
                       label={
                         <span>
                           <span style={{ color: '#f44336' }}>*</span> Password
                         </span>
                       }
+                      type={showPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
                       value={formik.values.password}
                       onChange={formik.handleChange}
                       error={(formik.touched.password && Boolean(formik.errors.password)) || errors?.password}
@@ -271,12 +296,26 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       fullWidth
                       id="password_confirmation"
                       name="password_confirmation"
-                      type="password"
                       label={
                         <span>
                           <span style={{ color: '#f44336' }}>*</span> Confirm password
                         </span>
                       }
+                      type={showPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
                       value={formik.values.password_confirmation}
                       onChange={formik.handleChange}
                       error={
