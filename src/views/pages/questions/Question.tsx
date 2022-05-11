@@ -127,7 +127,7 @@ const Question = ({ question, index }: Props) => {
         </TableCell>
         <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
           {question.type === 0 && 'Basic'}
-          {question.type === 1 && 'Forcus'}
+          {question.type === 1 && 'Focus'}
         </TableCell>
         <TableCell component="th" scope="row">
           {moment(question.updated_at).format('DD/MM/yy hh:mm')}

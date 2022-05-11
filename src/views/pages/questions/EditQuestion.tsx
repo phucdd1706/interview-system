@@ -47,7 +47,7 @@ const Type: SelectProps[] = [
   },
   {
     value: 1,
-    label: 'Forcus'
+    label: 'Focus'
   }
 ];
 const Status: SelectProps[] = [
