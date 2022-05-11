@@ -34,7 +34,7 @@ import { openSnackbar } from 'store/slices/snackbar';
 import { gridSpacing } from 'store/constant';
 import { Candidates } from 'types/history';
 import { SelectProps } from 'types/customer';
-import { isPhone, isFullName, isEmail } from 'utils/regexHelper';
+import { isPhone, isFullName } from 'utils/regexHelper';
 
 interface Props {
   dataEdit: Candidates;
@@ -114,10 +114,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .max(10, 'Please enter the correct phone number format')
       .matches(isPhone, 'Please enter the correct phone number format')
       .required('Phone is required'),
-    age: yup
-      .string()
-      .matches(/^[0-9]{1,2}$/i, 'Age can only enter numbers and less 100')
-      .required('Age is required'),
+    age: yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
     time: yup.string().trim().required('Interview time is required'),
     address: yup.string().trim().max(255),
     note: yup.string().trim().max(255)
