@@ -47,6 +47,8 @@ const Gender: SelectProps[] = [
   }
 ];
 
+const initDate = new Date().toDateString();
+
 const validationSchema = yup.object({
   name: yup
     .string()
@@ -135,7 +137,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
       password: '',
       password_confirmation: '',
       phone: '',
-      dob: '',
+      dob: initDate,
       gender: 'male',
       type: 2
     },

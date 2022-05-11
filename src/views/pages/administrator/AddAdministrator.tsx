@@ -73,6 +73,7 @@ const Status: SelectProps[] = [
     label: 'Active'
   }
 ];
+const initDate = new Date().toDateString();
 const validationSchema = yup.object({
   name: yup
     .string()
@@ -175,7 +176,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
       password: administrator?.id ? 'tuansnn' : '',
       password_confirmation: administrator?.id ? 'tuansnn' : '',
       phone: administrator?.phone,
-      dob: administrator?.dob || '',
+      dob: administrator?.dob || initDate,
       gender: administrator?.gender || 'male',
       status: administrator?.id ? administrator?.status : 1,
       type: administrator?.id ? administrator?.type : 1
