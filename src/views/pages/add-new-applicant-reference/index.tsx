@@ -57,7 +57,7 @@ const AddApplicantReference = () => {
             .trim()
             .email('Email is not valid')
             .matches(emailRegEx, 'Email is not valid')
-            .max(100)
+            .max(50)
             .required('Email is required'),
           phone: Yup.string()
             .trim()
