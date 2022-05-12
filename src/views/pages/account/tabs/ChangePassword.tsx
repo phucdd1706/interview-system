@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // THIRD-PARTY
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Grid,
   Button,
@@ -11,7 +11,8 @@ import {
   TextField,
   Snackbar,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Typography
 } from '@mui/material';
 import { useTheme } from '@mui/system';
 import { useFormik } from 'formik';
@@ -24,8 +25,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 import useAuth from 'hooks/useAuth';
-import { dispatch } from 'store';
-import { changeNewPassword } from 'store/slices/profile';
+import { dispatch, useSelector } from 'store';
+import { changeNewPassword, getProfile } from 'store/slices/profile';
 import { ChangePassword } from 'types/profile';
 import { openSnackbar } from 'store/slices/snackbar';
 import { passwordRegEx } from 'utils/regexHelper';
@@ -34,6 +35,10 @@ const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   phone: Yup.string().required('Phone is required'),
   gender: Yup.string().required('Gender is required'),
+  oldpassword: Yup.string()
+    .min(6, 'Minimum 6 characters')
+    .matches(passwordRegEx, 'only a-z, 0-9 allowed')
+    .required('Old Password is required'),
   password: Yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
   password_confirmation: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Password do not match')
@@ -48,7 +53,12 @@ export default function ChangePasswordd() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = useSelector((state) => state.profile.userProfile);
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -89,6 +99,7 @@ export default function ChangePasswordd() {
                 close: true
               })
             );
+            handleClickChange();
           }
         }
       })
@@ -100,13 +111,13 @@ export default function ChangePasswordd() {
       phone: user?.phone,
       dob: user?.dob,
       gender: user?.gender,
+      oldpassword: '',
       password: '',
       password_confirmation: ''
     },
     validationSchema,
     onSubmit: (values) => {
       changePass(values);
-      handleClickChange();
     }
   });
   return (
@@ -128,6 +139,47 @@ export default function ChangePasswordd() {
               <FormControl fullWidth error={Boolean(formik.touched.password && formik.errors.password)}>
                 {/* <InputLabel htmlFor="outlined-adornment-password">New Password</InputLabel> */}
                 <TextField
+                  id="oldpassword"
+                  value={formik.values.oldpassword}
+                  type={showPassword ? 'text' : 'password'}
+                  name="oldpassword"
+                  onChange={formik.handleChange}
+                  label={
+                    <span>
+                      <span style={{ color: '#f44336' }}>*</span> Old Password
+                    </span>
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                {formik.touched.password && formik.errors.password && (
+                  <FormHelperText error id="standard-weight-helper-text-password-login">
+                    {formik.errors.password}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography> </Typography>
+            </Grid>
+          </Grid>
+          <Grid container rowSpacing={2} columnSpacing={gridSpacing} sx={{ mt: 0.25 }}>
+            <Grid item xs={6}>
+              <FormControl fullWidth error={Boolean(formik.touched.password && formik.errors.password)}>
+                {/* <InputLabel htmlFor="outlined-adornment-password">New Password</InputLabel> */}
+                <TextField
                   id="password"
                   value={formik.values.password}
                   type={showPassword ? 'text' : 'password'}
@@ -135,7 +187,7 @@ export default function ChangePasswordd() {
                   onChange={formik.handleChange}
                   label={
                     <span>
-                      <span style={{ color: '#f44336' }}>*</span> Password
+                      <span style={{ color: '#f44336' }}>*</span> New Password
                     </span>
                   }
                   InputProps={{

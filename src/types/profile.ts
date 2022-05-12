@@ -18,6 +18,7 @@ export type ChangePassword = {
   phone?: string;
   dob?: string;
   gender?: string;
+  oldpassword?: string;
   password?: string;
   password_confirmation?: string;
 };
