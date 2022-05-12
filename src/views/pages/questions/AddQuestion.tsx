@@ -16,7 +16,7 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -50,25 +50,28 @@ const Type: SelectProps[] = [
   }
 ];
 
-const validationSchema = Yup.object({
-  rank_id: Yup.string()
+const validationSchema = yup.object({
+  rank_id: yup
+    .string()
     .trim()
     .when('type', {
       is: (type: string) => type !== '0',
-      then: Yup.string().required('Rank is required')
+      then: yup.string().required('Rank is required')
     }),
-  department_id: Yup.string()
+  department_id: yup
+    .string()
     .trim()
     .when('type', {
       is: (type: string) => type !== '0',
-      then: Yup.string().required('Department is required')
+      then: yup.string().required('Department is required')
     }),
-  language_id: Yup.string().trim().required('Language is required'),
-  question_content: Yup.string()
+  language_id: yup.string().trim().required('Language is required'),
+  question_content: yup
+    .string()
     .trim()
     .max(255, 'content is too long, must be lower than 256 character')
     .required('Question content is required'),
-  type: Yup.string().trim().required('Question type is required')
+  type: yup.string().trim().required('Question type is required')
 });
 
 const AddQuestion = ({ open, handleDrawerOpen, filter }: AddQuestionProps) => {

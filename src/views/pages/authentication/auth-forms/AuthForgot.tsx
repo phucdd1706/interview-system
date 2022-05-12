@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput, Snackbar } from '@mui/material';
 import { Formik } from 'formik';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -43,9 +43,9 @@ function JWTForgot({ forgotProp, ...others }: { forgotProp?: number }): JSX.Elem
           password: '',
           submit: null
         }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+        validationSchema={yup.object().shape({
+          email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          password: yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {

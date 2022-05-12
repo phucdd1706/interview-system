@@ -17,7 +17,7 @@ import {
   Typography
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -47,10 +47,10 @@ const Status: SelectProps[] = [
   }
 ];
 
-const validationSchema = Yup.object({
-  name: Yup.string().trim().max(50).required('Name is required'),
-  description: Yup.string().trim().max(255).required('Description is required'),
-  status: Yup.number().required('Status is required')
+const validationSchema = yup.object({
+  name: yup.string().trim().max(50).required('Name is required'),
+  description: yup.string().trim().max(255).required('Description is required'),
+  status: yup.number().required('Status is required')
 });
 
 const EditRank = ({ rank, open, edit, handleDrawerOpen }: EditRankProps) => {
