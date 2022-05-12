@@ -83,6 +83,7 @@ yarn-error.log*
 
 # Package lock
 package-lock.json
+yarn.lock
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
