@@ -57,7 +57,7 @@ const validationSchema = yup.object({
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  dob: yup.date().required('Date of Birth is required'),
+  dob: yup.date().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required')
 });
 
@@ -67,7 +67,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
 
   useEffect(() => {
     dispatch(getProfile());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     setUser(currUser);
@@ -197,6 +197,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
