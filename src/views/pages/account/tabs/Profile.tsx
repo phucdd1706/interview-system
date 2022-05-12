@@ -1,5 +1,5 @@
 // THIRD-PARTY
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Button,
@@ -39,16 +39,20 @@ export default function Profile() {
   const theme = useTheme();
   // const { user } = useAuth();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.profile.userProfile);
+  const currUser = useSelector((state) => state.profile.userProfile);
+  const [user, setUser] = useState(currUser);
 
-  const getUserProfile = async () => {
-    await dispatch(getProfile());
-  };
+  // const getUserProfile = async () => {
+  //   await dispatch(getProfile());
+  // };
 
   useEffect(() => {
-    getUserProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getProfile());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setUser(currUser);
+  }, [currUser]);
 
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const handleDialogOpen = () => {
@@ -185,7 +189,7 @@ export default function Profile() {
                     </TableRow>
                   </TableBody>
                 </Table>
-                <ProfileEdit open={openDialog} handleDialogOpen={handleDialogOpen} getUserProfile={getUserProfile} user={user} />
+                <ProfileEdit open={openDialog} handleDialogOpen={handleDialogOpen} />
               </TableContainer>
             </CardContent>
           </MainCard>

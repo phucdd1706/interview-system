@@ -79,7 +79,7 @@ const validationSchema = yup.object({
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
-  dob: yup.string().required('Date of Birth is required'),
+  dob: yup.string().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -352,6 +352,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);

@@ -106,7 +106,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
   gender: yup.string().required('Gender is required'),
-  dob: yup.string().required('Date of Birth is required'),
+  dob: yup.string().required('Date of Birth is required').nullable(),
   type: yup.string().required('Type is required')
 });
 
@@ -399,6 +399,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                       }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
                       readOnly={!editing}
                       maxDate={new Date()}
                       onChange={(date) => {
