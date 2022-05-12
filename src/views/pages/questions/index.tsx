@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MainCard from 'ui-component/cards/MainCard';
 import React, { useEffect, useState, useCallback } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import SortStatus from 'views/pages/questions/SortStatus';
+import { SortStatus, typesList } from 'views/pages/questions/SortStatus';
 import {
   Button,
   Fab,
@@ -45,6 +45,7 @@ const initialState: QuestionFilter = {
   rank_id: '',
   department_id: '',
   language_id: '',
+  type: '',
   currentPage: 1
 };
 
@@ -61,8 +62,9 @@ const Questions = () => {
 
   const [filter, setFilter] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorElType, setAnchorElType] = useState<null | HTMLElement>(null);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-
+  const openSortByType = Boolean(anchorElType);
   const openSort = Boolean(anchorEl);
 
   useEffect(() => {
@@ -98,8 +100,21 @@ const Questions = () => {
     setAnchorEl(null);
   };
 
-  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
+  // sort by type
+  const handleClickListType = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElType(event.currentTarget);
+  };
 
+  const handleSortByTypeClose = () => {
+    setAnchorElType(null);
+  };
+
+  const handleMenuTypeClick = (event: React.MouseEvent<HTMLElement>, index: any) => {
+    setFilter({ ...filter, type: index });
+    setAnchorElType(null);
+  };
+
+  const sortLabel = SortStatus.filter((items) => items.value === filter.status);
   const filterData = async () => {
     await dispatch(getQuestionsList(filter));
   };
@@ -162,7 +177,7 @@ const Questions = () => {
     <MainCard
       title={
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={9}>
             <Grid container alignItems="center" justifyContent="space-between" spacing={matchDownMD ? 0.5 : 2}>
               <Grid item>
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={matchDownSM ? 0.5 : spacingMD}>
@@ -251,11 +266,54 @@ const Questions = () => {
                     handleCloseLanguage={handleCloseLanguage}
                     handleLanguageClick={handleLanguageClick}
                   />
+                  <Stack direction="row" alignItems="center" justifyContent="center" sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                    <Typography variant="h5" style={{ width: 'fit-content' }}>
+                      Sort by type:{' '}
+                    </Typography>
+                    <Button
+                      id="demo-positioned-button"
+                      aria-controls="demo-positioned-menu"
+                      aria-haspopup="true"
+                      aria-expanded={openSort ? 'true' : undefined}
+                      onClick={handleClickListType}
+                      sx={{ color: 'grey.500', fontWeight: 400 }}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    >
+                      {typesList.filter((element) => element.value === filter.type)[0].label || 'All'}
+                    </Button>
+                    <Menu
+                      id="demo-positioned-menu"
+                      aria-labelledby="demo-positioned-button"
+                      anchorEl={anchorElType}
+                      open={openSortByType}
+                      onClose={handleSortByTypeClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right'
+                      }}
+                    >
+                      {typesList.map((status, index) => (
+                        <MenuItem
+                          sx={{ p: 1.5 }}
+                          key={index}
+                          selected={status.value === filter.type}
+                          onClick={(event) => handleMenuTypeClick(event, status.value)}
+                        >
+                          {console.log('status: ', status.value === filter.type)}
+                          {status.label}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Stack>
                 </Stack>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+          <Grid item xs={12} sm={3} sx={{ textAlign: 'right' }}>
             <Tooltip title="Add">
               <Fab
                 color="primary"

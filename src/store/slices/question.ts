@@ -55,7 +55,8 @@ export function getQuestionsList(filter?: QuestionFilter) {
     (filter?.rank_id !== '' ? `&rank_id=${filter?.rank_id}` : '') +
     (filter?.department_id !== '' ? `&department_id=${filter?.department_id}` : '') +
     (filter?.language_id !== '' ? `&language_id=${filter?.language_id}` : '') +
-    (filter?.status !== '' ? `&status=${filter?.status}` : '')
+    (filter?.status !== '' ? `&status=${filter?.status}` : '') +
+    (filter?.type !== '' ? `&type=${filter?.type}` : '')
   }&page=${filter?.currentPage}`;
   return async () => {
     try {
