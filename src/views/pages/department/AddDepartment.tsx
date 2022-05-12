@@ -23,7 +23,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 
 // PROJECT IMPORTS
@@ -53,9 +53,9 @@ const Status: SelectProps[] = [
   }
 ];
 
-const validationSchema = Yup.object({
-  name: Yup.string().trim().max(50).required('Name is required'),
-  code: Yup.string().trim().max(255).required('Code is required')
+const validationSchema = yup.object({
+  name: yup.string().trim().max(50).required('Name is required'),
+  code: yup.string().trim().max(255).required('Code is required')
 });
 
 const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department }: AddDepartmentProps) => {

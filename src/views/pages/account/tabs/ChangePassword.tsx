@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/system';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -31,17 +31,25 @@ import { ChangePassword } from 'types/profile';
 import { openSnackbar } from 'store/slices/snackbar';
 import { passwordRegEx } from 'utils/regexHelper';
 
-const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  phone: Yup.string().required('Phone is required'),
-  gender: Yup.string().required('Gender is required'),
-  oldpassword: Yup.string()
+const validationSchema = yup.object({
+  name: yup.string().required('Name is required'),
+  phone: yup.string().required('Phone is required'),
+  gender: yup.string().required('Gender is required'),
+  oldpassword: yup
+    .string()
+    .trim()
     .min(6, 'Minimum 6 characters')
     .matches(passwordRegEx, 'only a-z, 0-9 allowed')
     .required('Old Password is required'),
-  password: Yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
-  password_confirmation: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Password do not match')
+  password: yup
+    .string()
+    .trim()
+    .min(6, 'Minimum 6 characters')
+    .matches(passwordRegEx, 'only a-z, 0-9 allowed')
+    .required('Password is required'),
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required')
 });
 
