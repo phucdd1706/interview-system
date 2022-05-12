@@ -7,9 +7,6 @@ const FormInput = ({ errors, handleBlur, handleChange, touched, values, label, r
       id={`outlined-adornment-${label.split(' ').join('-')}`}
       type={type}
       required={required}
-      onBlur={(e) => {
-        console.log(e.target.value);
-      }}
       InputProps={type === 'number' ? { inputProps: { min: 0, max: 10, readOnly } } : { readOnly }}
       value={values}
       name={name}

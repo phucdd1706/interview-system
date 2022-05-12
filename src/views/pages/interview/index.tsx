@@ -1,3 +1,4 @@
+// THIRD-PARTY
 import {
   Box,
   Button,
@@ -12,21 +13,42 @@ import {
   TableBody,
   TableCell,
   Select,
-  MenuItem
+  MenuItem,
+  Chip
 } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 import { useParams, useNavigate } from 'react-router-dom';
+
+// PROJECT IMPORTS
+import personalDetail from './personalDetailGroup';
+import tableColumns from './tableColumns';
 import { useSelector } from 'store';
-import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
-import { handleAnswerStatus, handleInterviewNote, sortDataByKey } from 'store/slices/applicant/applicantReferences';
+import { axiosPut } from 'utils/helpers/axios';
 import { activeItem } from 'store/slices/menu';
 import MainCard from 'ui-component/cards/MainCard';
-import personalDetail from './personalDetailGroup';
-import { axiosPut } from 'utils/helpers/axios';
+import { handleAnswerStatus, handleInterviewNote, sortDataByKey } from 'store/slices/applicant/applicantReferences';
+import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
 
 type personalKey = 'name' | 'email' | 'phone' | 'address' | 'age' | 'time';
+
+interface ChipByTypeProps {
+  type: 'base' | 'focus' | 'advanced';
+}
+const ChipByType = ({ type }: ChipByTypeProps) => {
+  switch (type) {
+    case 'base':
+      return <Chip size="small" label="Base" sx={{ color: 'white', background: '#03a9f4' }} />;
+    case 'focus':
+      return <Chip size="small" label="Focus" sx={{ color: 'white', background: '#4caf50' }} />;
+    case 'advanced':
+      return <Chip size="small" label="Advanced" sx={{ background: '#f57f17', color: 'white' }} />;
+    default:
+      return null;
+  }
+};
 
 const Interview = () => {
   const { id } = useParams();
@@ -50,11 +72,11 @@ const Interview = () => {
 
   const colorStatus = (status: number) => {
     switch (status) {
-      case 0:
-        return '#2196f3';
-      case 1:
-        return 'red';
       case 2:
+        return '#2196f3';
+      case 0:
+        return 'red';
+      case 1:
         return 'green';
       default:
         return '#2196f3';
@@ -68,7 +90,7 @@ const Interview = () => {
       candidateQuestions: applicantInfo.questions,
       status: 1
     };
-    await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then(() => navigate('/history'));
+    await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete');
     setIsSubmitting(false);
   };
 
@@ -82,7 +104,11 @@ const Interview = () => {
                 {group.render.map((detail) => (
                   <Typography variant="h4" sx={{ width: `calc(100% / ${group.render.length})` }} key={detail.key}>
                     {detail.label}:{' '}
-                    <span style={{ fontWeight: 'initial', textTransform: 'capitalize' }}>{applicantInfo[detail.key as personalKey]}</span>
+                    <span style={{ fontWeight: 'initial', textTransform: 'capitalize' }}>
+                      {detail.key === 'time'
+                        ? moment(applicantInfo[detail.key as personalKey]).format('DD/MM/YYYY HH:mm')
+                        : applicantInfo[detail.key as personalKey]}
+                    </span>
                   </Typography>
                 ))}
               </Stack>
@@ -93,123 +119,70 @@ const Interview = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell
-                    sx={{
-                      width: '50px'
-                    }}
-                  >
-                    STT
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f6f6f6'
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch(sortDataByKey('question_content'));
-                    }}
-                  >
-                    Question
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f6f6f6'
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch(sortDataByKey('language_id'));
-                    }}
-                  >
-                    Language
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f6f6f6'
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch(sortDataByKey('rank_id'));
-                    }}
-                  >
-                    Rank
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f6f6f6'
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch(sortDataByKey('type'));
-                    }}
-                  >
-                    Type
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      width: '100px',
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f6f6f6'
-                      }
-                    }}
-                    onClick={() => {
-                      dispatch(sortDataByKey('status'));
-                    }}
-                  >
-                    Evaluate
-                  </TableCell>
+                  {tableColumns.map((column) => (
+                    <TableCell
+                      key={column.name}
+                      sx={column.sx}
+                      onClick={() => {
+                        column.sort_key &&
+                          dispatch(sortDataByKey(column.sort_key as 'type' | 'status' | 'rank_id' | 'language_id' | 'question_content'));
+                      }}
+                    >
+                      {column.name}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {interviewQuestions.map((question, index) =>
-                  question.questions.base.map((base, baseIndex) => (
-                    <TableRow
-                      key={base.candidate_id}
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: '#f6f6f6'
-                        }
-                      }}
-                    >
-                      <TableCell align="center">{baseIndex + 1}</TableCell>
-                      <TableCell sx={{ maxWidth: '350px', overflow: 'hidden', wordBreak: 'break-word' }}>{base.question_content}</TableCell>
-                      <TableCell>{(base.language && base.language.name) || ''}</TableCell>
-                      <TableCell>{(base.rank && base.rank.name) || ''}</TableCell>
-                      <TableCell sx={{ color: base.type ? 'red' : '#2196f3' }}>{base.type ? 'Advanced' : 'Basic'}</TableCell>
-                      <TableCell>
-                        <Select
-                          fullWidth
-                          labelId="demo-simple-select-standard-label"
-                          value={getEvaluateValue(base.candidate_id || 0) || 0}
-                          sx={{
-                            '& .MuiSelect-standard': {
-                              color: colorStatus(Number(getEvaluateValue(base.candidate_id || 0)) || 0)
-                            }
-                          }}
-                          id="demo-simple-select-standard"
-                          label="Age"
-                          variant="standard"
-                          onChange={(e) => updateEvaluateValue(base.candidate_id || 0, Number(e.target.value))}
-                        >
-                          <MenuItem value={0}>Skip</MenuItem>
-                          <MenuItem value={1} sx={{ color: 'red' }}>
-                            Bad
-                          </MenuItem>
-                          <MenuItem value={2} sx={{ color: 'green' }}>
-                            Good
-                          </MenuItem>
-                        </Select>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                {interviewQuestions.map((question) =>
+                  Object.keys(question.questions).map((key) =>
+                    question.questions[key as 'base' | 'advanced' | 'focus'].map((item, itemIndex) => (
+                      <TableRow
+                        key={item.candidate_id}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: '#f6f6f6'
+                          }
+                        }}
+                      >
+                        <TableCell align="center">{itemIndex + 1}</TableCell>
+                        <TableCell sx={{ maxWidth: '350px', overflow: 'hidden', wordBreak: 'break-word' }}>
+                          {item.question_content}
+                        </TableCell>
+                        <TableCell>{(item.language && item.language.name) || ''}</TableCell>
+                        <TableCell>{(item.rank && item.rank.name) || ''}</TableCell>
+                        <TableCell sx={{ color: item.type ? 'red' : '#2196f3' }}>
+                          <ChipByType type={item.type as 'base' | 'focus' | 'advanced'} />
+                        </TableCell>
+                        <TableCell>
+                          <Select
+                            fullWidth
+                            labelId="demo-simple-select-standard-label"
+                            value={getEvaluateValue(item.candidate_id || 2)}
+                            sx={{
+                              '& .MuiSelect-standard': {
+                                color: colorStatus(Number(getEvaluateValue(item.candidate_id || 2)))
+                              }
+                            }}
+                            id="demo-simple-select-standard"
+                            label="Age"
+                            variant="standard"
+                            onChange={(e) => updateEvaluateValue(item.candidate_id || 0, Number(e.target.value))}
+                          >
+                            <MenuItem value={0} sx={{ color: 'red' }}>
+                              Fail
+                            </MenuItem>
+                            <MenuItem value={1} sx={{ color: 'green' }}>
+                              Pass
+                            </MenuItem>
+                            <MenuItem value={2} sx={{ color: '#2196f3' }}>
+                              Skip
+                            </MenuItem>
+                          </Select>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )
                 )}
               </TableBody>
             </Table>

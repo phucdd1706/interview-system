@@ -28,18 +28,15 @@ const AddApplicantReference = () => {
 
   useEffect(() => {
     if (id) {
+      dispatch(activeItem(['interview']));
+
       dispatch(getInterviewDataThunk(id));
     } else {
+      dispatch(activeItem(['applicant']));
       dispatch(applicantInit());
     }
   }, [id, dispatch]);
-  useEffect(() => {
-    if (id) {
-      dispatch(activeItem(['interview']));
-    } else {
-      dispatch(activeItem(['applicant']));
-    }
-  }, []);
+
   return (
     <Box>
       <Formik

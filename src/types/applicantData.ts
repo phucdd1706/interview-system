@@ -38,7 +38,7 @@ export interface ApplicantInfo {
   phone: string;
   address: string;
   time: string;
-  questions?: Array<{ question_id: number; status?: number | string; type?: number }>;
+  questions?: Array<{ question_id: number; status?: number | string; type?: string }>;
   experiences?: Job[];
   applyPosition: Array<{
     rank_advanced_id: string;

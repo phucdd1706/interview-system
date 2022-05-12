@@ -188,7 +188,6 @@ const EditQuestion = ({ question, open, edit, handleDrawerOpen, indexId }: EditQ
       {open && (
         <>
           <Box sx={{ p: 3 }}>
-            {console.log(formik.values)}
             <Grid container alignItems="center" spacing={0.5} justifyContent="space-between">
               <Grid item sx={{ width: '100%' }}>
                 <Stack direction="row" spacing={0.5} alignItems="center">
