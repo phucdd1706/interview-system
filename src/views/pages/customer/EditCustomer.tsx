@@ -55,10 +55,6 @@ const Type: SelectProps[] = [
 
 const Gender: SelectProps[] = [
   {
-    value: 'none',
-    label: 'N/A'
-  },
-  {
     value: 'male',
     label: 'Male'
   },
