@@ -153,7 +153,7 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
             dispatch(
               openSnackbar({
                 open: true,
-                message: res?.message,
+                message: res?.errors?.username || res?.errors?.email || res?.errors?.phone,
                 anchorOrigin: { vertical: 'top', horizontal: 'right' },
                 variant: 'alert',
                 alert: {
@@ -274,8 +274,8 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       }
                       value={formik.values.username}
                       onChange={formik.handleChange}
-                      error={(formik.touched.username && Boolean(formik.errors.username)) || errors?.username}
-                      helperText={(formik.touched.username && formik.errors.username) || errors?.username}
+                      error={formik.touched.username && Boolean(formik.errors.username)}
+                      helperText={formik.touched.username && formik.errors.username}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -291,8 +291,8 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       }
                       value={formik.values.email}
                       onChange={formik.handleChange}
-                      error={(formik.touched.email && Boolean(formik.errors.email)) || errors?.email}
-                      helperText={(formik.touched.email && formik.errors.email) || errors?.email}
+                      error={formik.touched.email && Boolean(formik.errors.email)}
+                      helperText={formik.touched.email && formik.errors.email}
                     />
                   </Grid>
                   {editing && (
@@ -370,8 +370,8 @@ const EditCustomer = ({ customer, open, editing, handleDrawerOpen }: Props) => {
                       }
                       value={formik.values.phone}
                       onChange={formik.handleChange}
-                      error={(formik.touched.phone && Boolean(formik.errors.phone)) || errors?.phone}
-                      helperText={(formik.touched.phone && formik.errors.phone) || errors?.phone}
+                      error={formik.touched.phone && Boolean(formik.errors.phone)}
+                      helperText={formik.touched.phone && formik.errors.phone}
                     />
                   </Grid>
                   <Grid item xs={12}>

@@ -87,7 +87,7 @@ const EditRank = ({ rank, open, edit, handleDrawerOpen }: EditRankProps) => {
             dispatch(
               openSnackbar({
                 open: true,
-                message: response?.message,
+                message: response.errors.name,
                 anchorOrigin: { vertical: 'top', horizontal: 'right' },
                 variant: 'alert',
                 alert: {
@@ -183,8 +183,8 @@ const EditRank = ({ rank, open, edit, handleDrawerOpen }: EditRankProps) => {
                       value={formik.values.name}
                       inputProps={{ readOnly: !edit }}
                       onChange={formik.handleChange}
-                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
-                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>

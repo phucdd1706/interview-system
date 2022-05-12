@@ -43,7 +43,7 @@ export const axiosPut = async <T>(url: string, data: any, alert?: string, callba
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response);
     });
   return response;
 };
