@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, FormikProps } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 // PROJECT IMPORTS
 import MainCard from 'ui-component/cards/MainCard';
 import ApplicantForm from './applicantInfo/applicantReferenceForm';
@@ -42,35 +42,38 @@ const AddApplicantReference = () => {
       <Formik
         enableReinitialize
         initialValues={applicant.applicantInfo}
-        validationSchema={Yup.object().shape({
-          name: Yup.string()
+        validationSchema={yup.object().shape({
+          name: yup
+            .string()
             .trim()
             .min(3, 'Name must have at least 3 characters')
             .max(50, `Maximum characters allowed is 50`)
             .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
             .required('Name is required'),
-          age: Yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
-          email: Yup.string()
+          age: yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
+          email: yup
+            .string()
             .trim()
             .email('Email is not valid')
             .matches(emailRegEx, 'Email is not valid')
             .max(50)
             .required('Email is required'),
-          phone: Yup.string()
+          phone: yup
+            .string()
             .trim()
-            .max(10, 'Please enter the correct phone number format')
+            .max(11)
             .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
-          address: Yup.string().trim().max(255),
-          applyPosition: Yup.array().of(
-            Yup.object().shape({
-              language_id: Yup.string().required('Language is required'),
-              rank_id: Yup.string().required('Rank is required'),
-              rank_advanced_id: Yup.string().required('Rank advanced is required')
+          address: yup.string().trim().max(255),
+          applyPosition: yup.array().of(
+            yup.object().shape({
+              language_id: yup.string().required('Language is required'),
+              rank_id: yup.string().required('Rank is required'),
+              rank_advanced_id: yup.string().required('Rank advanced is required')
             })
           ),
-          time: Yup.string().required('Time is required'),
-          note: Yup.string().trim().max(255)
+          time: yup.string().required('Time is required'),
+          note: yup.string().trim().max(255)
         })}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);

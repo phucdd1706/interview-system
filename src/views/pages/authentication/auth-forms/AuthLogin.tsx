@@ -1,7 +1,7 @@
 import React from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import {
   Box,
   Button,
@@ -72,9 +72,9 @@ const JWTLogin = ({ loginProp, ...others }: { loginProp?: number }) => {
           password: '',
           submit: null
         }}
-        validationSchema={Yup.object().shape({
-          account: Yup.string().max(255).required('Email/Username is required'),
-          password: Yup.string().max(255).required('Password is required')
+        validationSchema={yup.object().shape({
+          account: yup.string().max(255).required('Email/Username is required'),
+          password: yup.string().trim().min(6).max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {

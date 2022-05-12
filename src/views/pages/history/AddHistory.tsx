@@ -108,12 +108,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
       .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
       .required('Name is required'),
     email: yup.string().trim().email('Email is not valid').matches(emailRegEx, 'Email is not valid').max(50).required('Email is required'),
-    phone: yup
-      .string()
-      .trim()
-      .max(10, 'Please enter the correct phone number format')
-      .matches(isPhone, 'Please enter the correct phone number format')
-      .required('Phone is required'),
+    phone: yup.string().trim().max(11).matches(isPhone, 'Please enter the correct phone number format').required('Phone is required'),
     age: yup.number().max(100, 'Too old').min(0, 'Too young').required('Age is required'),
     time: yup.string().trim().required('Interview time is required'),
     address: yup.string().trim().max(255),

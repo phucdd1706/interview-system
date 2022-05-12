@@ -1,7 +1,7 @@
 // PROJECT IMPORTS
 import { SortStatusProps } from 'types/question';
 
-const SortStatus: SortStatusProps[] = [
+export const SortStatus: SortStatusProps[] = [
   {
     value: '',
     label: 'All'
@@ -16,4 +16,17 @@ const SortStatus: SortStatusProps[] = [
   }
 ];
 
-export default SortStatus;
+export const typesList = [
+  {
+    value: '',
+    label: 'All'
+  },
+  {
+    value: 0,
+    label: 'basic'
+  },
+  {
+    value: 1,
+    label: 'focus'
+  }
+];
