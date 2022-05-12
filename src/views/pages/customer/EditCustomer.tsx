@@ -105,7 +105,7 @@ const validationSchema = yup.object({
     .email('Enter a valid email')
     .required('Email is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
+  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed'),
   password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Password do not match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
