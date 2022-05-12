@@ -2,7 +2,6 @@ import { dispatch } from 'store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { applicantAPI, setApplicantInfo, setInterviewData } from './applicantReferences';
 import { ApplicantInfo } from 'types/applicantData';
-import { QuestionType } from 'types/question';
 import { alertError } from 'utils/helpers/axios/errorAlert';
 
 export const getQuestionsThunk = createAsyncThunk(
@@ -44,12 +43,14 @@ export const getInterviewDataThunk = createAsyncThunk('applicant/getInterviewDat
   const data = await applicantAPI.getInterviewDataThunk(id);
   const applicantInfo = { ...data.success };
   const { candidate_question } = applicantInfo;
-  const interviewQuestions: QuestionType[] =
-    candidate_question.map((element: any) => ({ ...element.question, status: element.status || 0, candidate_id: element.id })) || [];
+  const interivewQuestions = [...candidate_question].map(
+    (element: any) => ({ ...element.question, status: element.status || 0, candidate_id: element.id, type: element.type } || [])
+  );
+
   const questionStack = {
     language: '',
     questions: {
-      base: interviewQuestions,
+      base: interivewQuestions,
       focus: [],
       advanced: []
     }
@@ -62,8 +63,7 @@ export const getInterviewDataThunk = createAsyncThunk('applicant/getInterviewDat
   });
   const questions = candidate_question.map((element: any) => ({
     question_id: element.id,
-    status: element.status || 0,
-    type: element.question.type
+    status: element.status || 2
   }));
   applicantDataInit.time = applicantDataInit.time.split('.')[0];
   return data && dispatch(setInterviewData({ applicant: { ...applicantDataInit }, interviewQuestions: [{ ...questionStack }], questions }));

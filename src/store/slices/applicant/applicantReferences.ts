@@ -4,7 +4,7 @@ import { ResponseInterviewQuestion, InterviewQuestions, QuestionStackInterface }
 import { axiosGet, axiosPost } from 'utils/helpers/axios';
 import { QuestionType } from 'types/question';
 // THIRD-PARTY
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ApplicantDataInterface = {
   applicantInfo: {
@@ -43,7 +43,8 @@ const applicantReferences = createSlice({
           stack.questions[key as 'base' | 'focus' | 'advanced'].forEach((question) => {
             state.applicantInfo.questions &&
               state.applicantInfo.questions.push({
-                question_id: question.id || 0
+                question_id: question.id || 0,
+                type: key
               });
           });
         });

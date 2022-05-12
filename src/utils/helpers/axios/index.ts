@@ -24,7 +24,6 @@ export const axiosGet = async <T>(url: string, alert?: string): Promise<T> => {
   const response = await axiosServices
     .get(url)
     .then((res: any) => {
-      console.log(res);
       alert && alertRequestSuccess(alert);
       return res.data;
     })
