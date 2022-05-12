@@ -116,16 +116,16 @@ const Question = ({ question, index }: Props) => {
             {question.question_content}
           </Link>
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ maxWidth: '110px', textOverflow: 'ellipsis', overflow: 'hidden' }} component="th" scope="row">
           {question.rank?.name}
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ maxWidth: '110px', textOverflow: 'ellipsis', overflow: 'hidden' }} component="th" scope="row">
           {question.department?.name}
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell sx={{ maxWidth: '110px', textOverflow: 'ellipsis', overflow: 'hidden' }} component="th" scope="row">
           {question.language?.name}
         </TableCell>
-        <TableCell sx={{ width: 110, minWidth: 110, maxWidth: 'calc(100vw - 850px)' }} component="th" scope="row">
+        <TableCell component="th" scope="row">
           {question.type === 0 && 'Basic'}
           {question.type === 1 && 'Focus'}
         </TableCell>
