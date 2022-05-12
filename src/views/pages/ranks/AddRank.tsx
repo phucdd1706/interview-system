@@ -61,7 +61,7 @@ const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {
             Notification('success', 'Add new rank successfully');
             changeModal('close');
           } else {
-            Notification('error', response?.message);
+            Notification('error', response?.errors.name);
             setErrors(response?.errors);
           }
         }
@@ -147,8 +147,8 @@ const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {
                       name="name"
                       value={formik.values.name}
                       onChange={formik.handleChange}
-                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors.name}
-                      helperText={(formik.touched.name && formik.errors.name) || errors.name}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -163,8 +163,8 @@ const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {
                       }
                       value={formik.values.description}
                       onChange={formik.handleChange}
-                      error={(formik.touched.description && Boolean(formik.errors.description)) || errors.description}
-                      helperText={(formik.touched.description && formik.errors.description) || errors.description}
+                      error={formik.touched.description && Boolean(formik.errors.description)}
+                      helperText={formik.touched.description && formik.errors.description}
                     />
                   </Grid>
                   <Grid item xs={12}>

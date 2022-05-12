@@ -94,7 +94,7 @@ const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department 
               Notification('success', 'Edit department successfully!');
               changeModal('close');
             } else {
-              Notification('error', resp?.message);
+              Notification('error', resp?.errors.name || resp?.errors.code);
               setErrors(resp?.errors);
             }
           }
@@ -110,7 +110,7 @@ const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department 
               Notification('success', 'Add new record successfully!');
               changeModal('close');
             } else {
-              Notification('error', resp?.message);
+              Notification('error', resp?.errors.name || resp?.errors.code);
               setErrors(resp?.errors);
             }
           }
@@ -192,8 +192,8 @@ const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department 
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       inputProps={{ readOnly: !edit }}
-                      error={(formik.touched.name && Boolean(formik.errors.name)) || errors?.name}
-                      helperText={(formik.touched.name && formik.errors.name) || errors?.name}
+                      error={formik.touched.name && Boolean(formik.errors.name)}
+                      helperText={formik.touched.name && formik.errors.name}
                       fullWidth
                       label={
                         <span>
@@ -215,8 +215,8 @@ const AddDepartment = ({ open, edit, handleDrawerOpen, departFilter, department 
                       onChange={formik.handleChange}
                       value={formik.values.code}
                       inputProps={{ readOnly: !edit }}
-                      error={(formik.touched.code && Boolean(formik.errors.code)) || errors?.code}
-                      helperText={(formik.touched.code && formik.errors.code) || errors?.code}
+                      error={formik.touched.code && Boolean(formik.errors.code)}
+                      helperText={formik.touched.code && formik.errors.code}
                     />
                   </Grid>
                   {department.id && (

@@ -53,7 +53,7 @@ const AddInProgress = ({ dataEdit, visible, edit, handleVisibleModal, getList }:
               openNotification('success', 'Edit language successfully!');
               changeModal('close');
             } else {
-              openNotification('error', res?.message);
+              openNotification('error', res?.errors.name);
               setErrors(res?.errors);
             }
           }
@@ -69,7 +69,7 @@ const AddInProgress = ({ dataEdit, visible, edit, handleVisibleModal, getList }:
               openNotification('success', 'Add language successfully!');
               changeModal('close');
             } else {
-              openNotification('error', res?.message);
+              openNotification('error', res?.errors.name);
               setErrors(res?.errors);
             }
           }
@@ -198,8 +198,8 @@ const AddInProgress = ({ dataEdit, visible, edit, handleVisibleModal, getList }:
                     }
                     fullWidth
                     onChange={formik.handleChange}
-                    error={(formik?.touched?.name && Boolean(formik?.errors?.name)) || errors?.name}
-                    helperText={(formik?.touched?.name && formik?.errors?.name) || errors?.name}
+                    error={formik?.touched?.name && Boolean(formik?.errors?.name)}
+                    helperText={formik?.touched?.name && formik?.errors?.name}
                   />
                 </Grid>
                 <Grid item xs={12} xl={12}>

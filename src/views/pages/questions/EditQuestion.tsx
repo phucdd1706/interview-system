@@ -3,6 +3,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -295,10 +296,8 @@ const EditQuestion = ({ question, open, edit, handleDrawerOpen, indexId }: EditQ
                         }
                         value={formik.values.question_content}
                         inputProps={{ readOnly: !edit }}
-                        error={
-                          (formik && formik.touched.question_content && Boolean(formik.errors.question_content)) || errors.question_content
-                        }
-                        helperText={(formik.touched.question_content && formik.errors.question_content) || errors.question_content}
+                        error={formik && formik.touched.question_content && Boolean(formik.errors.question_content)}
+                        helperText={formik.touched.question_content && formik.errors.question_content}
                         onChange={formik.handleChange}
                       />
                     </FormControl>
