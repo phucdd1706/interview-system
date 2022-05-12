@@ -7,6 +7,6 @@ const isFullName =
 const isUserName = /^[a-zA-Z0-9_-]+$/;
 
 const emailRegEx = /^[a-zA-Z0-9 @ .]+$/;
-const passwordRegEx = /^[a-zA-Z0-9]+$/;
+const passwordRegEx = /^[*]+$/;
 
 export { isEmail, isPhone, isFullName, isUserName, emailRegEx, passwordRegEx };
