@@ -66,35 +66,38 @@ const colorStatus = (status: number) => {
 
 interface InterviewDialogProps {
   handleClose: () => void;
-  message: string;
+  message: {
+    rank: string;
+    status: string;
+  };
 }
 
 const InterviewDialog = ({ handleClose, message }: InterviewDialogProps) => {
   const navigate = useNavigate();
-  const handleMessage = (dialogMessage: string) => {
-    switch (dialogMessage) {
+  const handleMessage = (dialogMessage: { rank: string; status: string }) => {
+    switch (dialogMessage.status) {
       case 'fail':
         return (
           <Typography variant="body1" component="p" sx={{ color: '#e53935' }}>
-            [Failed]: Knowledge of the applicant is not enough to be selected.
+            [Failed]: Knowledge of the applicant is not enough for rank <span style={{ fontWeight: 'bold' }}>{dialogMessage.rank}</span>.
           </Typography>
         );
       case 'pass':
         return (
           <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
-            [Passed]: Knowledge of the applicant is good, enough to be selected.
+            [Passed]: Knowledge of the applicant is eligible for rank {dialogMessage.rank}.
           </Typography>
         );
       case 'advance':
         return (
           <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
-            [Passed]: Applicant has a solid knowledge and can apply to a higher rank.
+            [Passed]: Applicant has a solid knowledge and eligible for rank {dialogMessage.rank}.
           </Typography>
         );
       default:
         return (
           <Typography variant="body1" component="p" color="success">
-            {dialogMessage}
+            {dialogMessage.status}
           </Typography>
         );
     }
@@ -132,9 +135,12 @@ const Interview = () => {
   const navigate = useNavigate();
   const { applicantInfo, interviewQuestions } = useSelector((state) => state.applicant);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState('');
-  const handleDialogOpen = (message: string) => setDialogMessage(message);
-  const handleDialogClose = () => setDialogMessage('');
+  const [dialogMessage, setDialogMessage] = useState({
+    rank: '',
+    status: ''
+  });
+  const handleDialogOpen = (message: { rank: string; status: string }) => setDialogMessage(message);
+  const handleDialogClose = () => setDialogMessage({ rank: '', status: '' });
   const dispatch = useDispatch();
   useEffect(() => {
     id && dispatch(getInterviewDataThunk(id));
@@ -157,7 +163,13 @@ const Interview = () => {
       status: 1
     };
     await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then((res: any) => {
-      handleDialogOpen(res.message || 'No message');
+      console.log(res);
+      const filterRank = res.message === 'advance' ? 'advanced' : 'focus';
+      const questionInRank = res.success.candidate_question.find((element: any) => element.type === filterRank);
+      const getRank = questionInRank.question.rank.name;
+      console.log(getRank);
+      console.log('questionInRank', questionInRank);
+      handleDialogOpen({ rank: getRank, status: res.message || 'No message' });
     });
     setIsSubmitting(false);
   };
@@ -281,7 +293,7 @@ const Interview = () => {
               </Button>
             </AnimateButton>
           </Box>
-          {dialogMessage && <InterviewDialog message={dialogMessage} handleClose={handleDialogClose} />}
+          {dialogMessage.status && <InterviewDialog message={dialogMessage} handleClose={handleDialogClose} />}
         </>
       ) : (
         <Typography variant="h4">No data</Typography>
