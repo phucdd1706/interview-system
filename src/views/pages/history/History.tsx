@@ -155,7 +155,6 @@ const History = ({ history, index, getList }: Props) => {
         <TableCell align="center">{renderMenuButton()}</TableCell>
       </TableRow>
       <AddHistory visible={visibleAdd} dataEdit={history} handleVisibleModal={handleVisibleModal} getList={() => getList()} />
-      <QuestionModal visible={visibleQuestionModal} dataCandidate={history} handleVisibleQuestionModal={handleVisibleQuestionModal} />
     </>
   );
 };

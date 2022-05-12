@@ -6,7 +6,6 @@ import {
   Stack,
   Typography,
   Divider,
-  Grid,
   Table,
   TableHead,
   TableRow,
@@ -14,7 +13,9 @@ import {
   TableCell,
   Select,
   MenuItem,
-  Chip
+  Chip,
+  Dialog,
+  DialogTitle
 } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useEffect, useState } from 'react';
@@ -50,17 +51,95 @@ const ChipByType = ({ type }: ChipByTypeProps) => {
   }
 };
 
+const colorStatus = (status: number) => {
+  switch (status) {
+    case 2:
+      return '#2196f3';
+    case 0:
+      return 'red';
+    case 1:
+      return 'green';
+    default:
+      return '#2196f3';
+  }
+};
+
+interface InterviewDialogProps {
+  handleClose: () => void;
+  message: string;
+}
+
+const InterviewDialog = ({ handleClose, message }: InterviewDialogProps) => {
+  const navigate = useNavigate();
+  const handleMessage = (dialogMessage: string) => {
+    switch (dialogMessage) {
+      case 'fail':
+        return (
+          <Typography variant="body1" component="p" sx={{ color: '#e53935' }}>
+            [Failed]: Knowledge of the applicant is not enough to be selected.
+          </Typography>
+        );
+      case 'pass':
+        return (
+          <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
+            [Passed]: Knowledge of the applicant is good, enough to be selected.
+          </Typography>
+        );
+      case 'advance':
+        return (
+          <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
+            [Passed]: Applicant has a solid knowledge and can apply to a higher rank.
+          </Typography>
+        );
+      default:
+        return (
+          <Typography variant="body1" component="p" color="success">
+            {dialogMessage}
+          </Typography>
+        );
+    }
+  };
+  return (
+    <Dialog onClose={handleClose} open={Boolean(message)}>
+      <DialogTitle>Reference Evaluate</DialogTitle>
+      <Divider />
+      <Box sx={{ minWidth: 300, padding: '16px 24px' }}>
+        {handleMessage(message)}
+        <Box marginTop={6}>
+          <AnimateButton>
+            <Button
+              disableElevation
+              fullWidth
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={async () => {
+                await handleClose();
+                navigate('/history');
+              }}
+            >
+              go to history
+            </Button>
+          </AnimateButton>
+        </Box>
+      </Box>
+    </Dialog>
+  );
+};
+
 const Interview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { applicantInfo, interviewQuestions } = useSelector((state) => state.applicant);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+  const handleDialogOpen = (message: string) => setDialogMessage(message);
+  const handleDialogClose = () => setDialogMessage('');
   const dispatch = useDispatch();
   useEffect(() => {
     id && dispatch(getInterviewDataThunk(id));
     dispatch(activeItem(['interview']));
-  }, [id]);
-
+  }, [id, dispatch]);
   const getEvaluateValue = (candidate_id: number) => {
     const result = applicantInfo.questions && [...applicantInfo.questions].find((question) => question.question_id === candidate_id);
     return result && result.status;
@@ -70,19 +149,6 @@ const Interview = () => {
     dispatch(handleAnswerStatus({ id: candidate_id, status: value }));
   };
 
-  const colorStatus = (status: number) => {
-    switch (status) {
-      case 2:
-        return '#2196f3';
-      case 0:
-        return 'red';
-      case 1:
-        return 'green';
-      default:
-        return '#2196f3';
-    }
-  };
-
   const sendInterviewResult = async () => {
     await setIsSubmitting(true);
     const data = {
@@ -90,7 +156,9 @@ const Interview = () => {
       candidateQuestions: applicantInfo.questions,
       status: 1
     };
-    await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete');
+    await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then((res: any) => {
+      handleDialogOpen(res.message || 'No message');
+    });
     setIsSubmitting(false);
   };
 
@@ -213,6 +281,7 @@ const Interview = () => {
               </Button>
             </AnimateButton>
           </Box>
+          {dialogMessage && <InterviewDialog message={dialogMessage} handleClose={handleDialogClose} />}
         </>
       ) : (
         <Typography variant="h4">No data</Typography>
