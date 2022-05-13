@@ -29,6 +29,7 @@ import { RootState, useDispatch, useSelector } from 'store/index';
 import { Candidates, SearchValues, Status } from 'types/history';
 import { fetchCandidates } from 'store/slices/history';
 import History from 'views/pages/history/History';
+import { activeItem } from 'store/slices/menu';
 import { gridSpacing } from '../../../store/constant';
 import 'assets/scss/style.scss';
 import NoDataImg from 'assets/images/logo/nodata.png';
@@ -80,6 +81,7 @@ const Index = () => {
 
   useEffect(() => {
     getList();
+    dispatch(activeItem(['history']));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

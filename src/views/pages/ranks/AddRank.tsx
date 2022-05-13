@@ -1,7 +1,7 @@
 // THIRD-PARTY
 import { Box, Button, Dialog, DialogContent, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 
 // PROJECT IMPORTS
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -22,9 +22,9 @@ interface AddRankProps {
   handleDrawerOpen: () => void;
 }
 
-const validationSchema = Yup.object({
-  name: Yup.string().trim().max(50).required('Name is required'),
-  description: Yup.string().trim().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
+const validationSchema = yup.object({
+  name: yup.string().trim().max(50).required('Name is required'),
+  description: yup.string().trim().max(255, 'content is too long, must be lower than 256 character').required('Description is required')
 });
 
 const AddRank = ({ open, edit, handleDrawerOpen, filter }: AddRankProps) => {

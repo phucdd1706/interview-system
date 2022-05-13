@@ -24,16 +24,18 @@ import { useFormik } from 'formik';
 // PROJECT IMPORTS
 import { gridSpacing } from 'store/constant';
 import { SelectProps } from 'types/customer';
-import { dispatch } from 'store';
+import { dispatch, useSelector } from 'store';
 import { openSnackbar } from 'store/slices/snackbar';
-import { editProfile } from 'store/slices/profile';
+import { editProfile, getProfile } from 'store/slices/profile';
 import { isFullName, isPhone } from 'utils/regexHelper';
+import { ChangePassword } from 'types/profile';
+import { useEffect, useState } from 'react';
 
 interface Props {
   open: boolean;
   handleDialogOpen: () => void;
-  getUserProfile: () => any;
-  user: any;
+  // getUserProfile: () => any;
+  // user: any;
 }
 
 const Gender: SelectProps[] = [
@@ -55,11 +57,22 @@ const validationSchema = yup.object({
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
   phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
-  dob: yup.date().required('Date of Birth is required'),
+  dob: yup.date().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required')
 });
 
-const ProfileEdit = ({ open, handleDialogOpen, getUserProfile, user }: Props) => {
+const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
+  const currUser = useSelector((state) => state.profile.userProfile);
+  const [user, setUser] = useState(currUser);
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
+
+  useEffect(() => {
+    setUser(currUser);
+  }, [currUser]);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -69,25 +82,36 @@ const ProfileEdit = ({ open, handleDialogOpen, getUserProfile, user }: Props) =>
       gender: user?.gender
     },
     validationSchema,
-    onSubmit: async (values) => {
-      await dispatch(editProfile(values)).then(() => {
-        getUserProfile();
-      });
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: 'Edit Success',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          variant: 'alert',
-          alert: {
-            color: 'success'
-          },
-          close: false
-        })
-      );
+    onSubmit: (values) => {
+      onEditProfile(values);
       handleDialogOpen();
+      formik.resetForm();
     }
   });
+
+  const onEditProfile = async (values: ChangePassword) => {
+    await dispatch(
+      editProfile({
+        params: values,
+        callback: (res) => {
+          if (res?.data?.success) {
+            dispatch(
+              openSnackbar({
+                open: true,
+                message: 'Edit Success',
+                anchorOrigin: { vertical: 'top', horizontal: 'right' },
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                },
+                close: true
+              })
+            );
+          }
+        }
+      })
+    );
+  };
 
   return (
     <Dialog
@@ -173,11 +197,19 @@ const ProfileEdit = ({ open, handleDialogOpen, getUserProfile, user }: Props) =>
                       label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
-                      renderInput={(props) => <TextField fullWidth {...props} />}
+                      renderInput={(props) => (
+                        <TextField
+                          fullWidth
+                          {...props}
+                          error={formik.values.dob === null}
+                          helperText={formik.touched.dob && formik.errors.dob}
+                        />
+                      )}
                     />
                   </Grid>
                   <Grid item xs={12}>

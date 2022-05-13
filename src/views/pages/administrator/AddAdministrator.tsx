@@ -7,6 +7,7 @@ import {
   DialogContent,
   Divider,
   FormControl,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -99,14 +100,14 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  phone: yup.string().required('Phone is required').max(10, 'Maximum 10 characters').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
+  phone: yup.string().trim().required('Phone is required').max(11).matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().trim().min(6).max(255).required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
   gender: yup.string().required('Gender is required'),
-  dob: yup.string().required('Date of Birth is required'),
+  dob: yup.string().required('Date of Birth is required').nullable(),
   type: yup.string().required('Type is required')
 });
 
@@ -249,7 +250,7 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
             </Grid>
           </Box>
           <Divider />
-          <form onSubmit={formik.handleSubmit}>
+          <form noValidate onSubmit={formik.handleSubmit}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DialogContent>
                 <Grid container spacing={gridSpacing} sx={{ mt: 0.25 }}>
@@ -391,28 +392,37 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <DesktopDatePicker
-                      label={
-                        <span>
-                          <span style={{ color: '#f44336' }}>*</span> Date of Birth
-                        </span>
-                      }
-                      value={formik.values.dob}
-                      inputFormat="dd/MM/yyyy"
-                      readOnly={!editing}
-                      maxDate={new Date()}
-                      onChange={(date) => {
-                        formik.setFieldValue('dob', date);
-                      }}
-                      renderInput={(props) => (
-                        <TextField
-                          error={(formik.touched.dob && Boolean(formik.errors.dob)) || errors?.dob}
-                          helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
-                          fullWidth
-                          {...props}
-                        />
+                    <FormControl fullWidth error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}>
+                      <DesktopDatePicker
+                        label={
+                          <span>
+                            <span style={{ color: '#f44336' }}>*</span> Date of Birth
+                          </span>
+                        }
+                        value={formik.values.dob}
+                        inputFormat="dd/MM/yyyy"
+                        allowSameDateSelection
+                        readOnly={!editing}
+                        maxDate={new Date()}
+                        onChange={(date) => {
+                          formik.setFieldValue('dob', date);
+                        }}
+                        renderInput={(props) => (
+                          <TextField
+                            error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                            // error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                            // helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
+                            fullWidth
+                            {...props}
+                          />
+                        )}
+                      />
+                      {formik.touched.dob && formik.errors.dob && (
+                        <FormHelperText error id="helper-text-dob">
+                          {formik.errors.dob}
+                        </FormHelperText>
                       )}
-                    />
+                    </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>

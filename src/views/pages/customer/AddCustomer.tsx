@@ -73,13 +73,13 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  phone: yup.string().required('Phone is required').max(10, 'Maximum 10 characters').matches(isPhone, 'Enter the correct format phone'),
-  password: yup.string().min(6, 'Minimum 6 characters').matches(passwordRegEx, 'only a-z, 0-9 allowed').required('Password is required'),
+  phone: yup.string().required('Phone is required').max(11).matches(isPhone, 'Enter the correct format phone'),
+  password: yup.string().trim().min(6).max(255).required('Password is required'),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
-  dob: yup.string().required('Date of Birth is required'),
+  dob: yup.string().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -352,6 +352,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       }
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
                       maxDate={new Date()}
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);

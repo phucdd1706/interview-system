@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ME_URL } from 'contexts/JWTContext';
 // THIRD-PARTY
 import { createSlice } from '@reduxjs/toolkit';
@@ -37,13 +38,21 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export function editProfile(profile: Profile) {
+export function editProfile(payload: Payload) {
   return async () => {
-    try {
-      const response = await axios.put(`${PROFILE_URL}`, profile);
-      dispatch(slice.actions.editProfileSuccess(response.data.success.data));
-    } catch (error) {
-      dispatch(slice.actions.hasError(error));
+    const { params, callback } = payload;
+    const res = await axios
+      .put(`${PROFILE_URL}`, params)
+      .then((result) => {
+        dispatch(slice.actions.editProfileSuccess(result.data.success));
+        return result;
+      })
+      .catch((err) => {
+        dispatch(slice.actions.hasError(err));
+        return err;
+      });
+    if (callback) {
+      callback(res);
     }
   };
 }
