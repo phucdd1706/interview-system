@@ -48,7 +48,7 @@ export default function Profile() {
 
   useEffect(() => {
     dispatch(getProfile());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     setUser(currUser);
