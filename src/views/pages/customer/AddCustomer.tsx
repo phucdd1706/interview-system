@@ -79,7 +79,7 @@ const validationSchema = yup.object({
     .string()
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
-  dob: yup.string().required('Date of Birth is required').nullable(),
+  dob: yup.date().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required')
 });
@@ -350,6 +350,7 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                           <span style={{ color: '#f44336' }}>*</span> Date of Birth
                         </span>
                       }
+                      // label="Date of Birth"
                       value={formik.values.dob}
                       inputFormat="dd/MM/yyyy"
                       allowSameDateSelection
@@ -359,10 +360,10 @@ const AddCustomer = ({ open, handleDrawerOpen }: Props) => {
                       }}
                       renderInput={(props) => (
                         <TextField
-                          error={(formik.touched.dob && Boolean(formik.errors.dob)) || errors?.dob}
-                          helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
                           fullWidth
                           {...props}
+                          error={formik.values.dob === null}
+                          helperText={formik.touched.dob && formik.errors.dob}
                         />
                       )}
                     />

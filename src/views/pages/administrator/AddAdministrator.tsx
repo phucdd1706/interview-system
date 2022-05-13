@@ -107,7 +107,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Password do not match')
     .required('Confirm password is required'),
   gender: yup.string().required('Gender is required'),
-  dob: yup.string().required('Date of Birth is required').nullable(),
+  dob: yup.date().required('Date of Birth is required').nullable(),
   type: yup.string().required('Type is required')
 });
 
@@ -392,37 +392,29 @@ const AddAdministrator = ({ open, editing, handleDrawerOpen, adminFilter, admini
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <FormControl fullWidth error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}>
-                      <DesktopDatePicker
-                        label={
-                          <span>
-                            <span style={{ color: '#f44336' }}>*</span> Date of Birth
-                          </span>
-                        }
-                        value={formik.values.dob}
-                        inputFormat="dd/MM/yyyy"
-                        allowSameDateSelection
-                        readOnly={!editing}
-                        maxDate={new Date()}
-                        onChange={(date) => {
-                          formik.setFieldValue('dob', date);
-                        }}
-                        renderInput={(props) => (
-                          <TextField
-                            error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}
-                            // error={Boolean(formik.touched.dob && formik.errors.dob) || errors?.dob}
-                            // helperText={(formik.touched.dob && formik.errors.dob) || errors?.dob}
-                            fullWidth
-                            {...props}
-                          />
-                        )}
-                      />
-                      {formik.touched.dob && formik.errors.dob && (
-                        <FormHelperText error id="helper-text-dob">
-                          {formik.errors.dob}
-                        </FormHelperText>
+                    <DesktopDatePicker
+                      label={
+                        <span>
+                          <span style={{ color: '#f44336' }}>*</span> Date of Birth
+                        </span>
+                      }
+                      // label="Date of Birth"
+                      value={formik.values.dob}
+                      inputFormat="dd/MM/yyyy"
+                      allowSameDateSelection
+                      maxDate={new Date()}
+                      onChange={(date) => {
+                        formik.setFieldValue('dob', date);
+                      }}
+                      renderInput={(props) => (
+                        <TextField
+                          fullWidth
+                          {...props}
+                          error={formik.values.dob === null}
+                          helperText={formik.touched.dob && formik.errors.dob}
+                        />
                       )}
-                    </FormControl>
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
