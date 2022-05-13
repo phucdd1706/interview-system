@@ -75,7 +75,10 @@ const History = ({ history, index, getList }: Props) => {
           }}
         >
           <Link to={`/interview/${history?.id}`} style={{ textDecoration: 'none', color: '#616161' }}>
-            <EventAvailableIcon fontSize="small" sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1 }} />
+            <EventAvailableIcon
+              fontSize="small"
+              sx={{ color: history?.status ? '#00C853' : '#ffc107', mr: 1, position: 'relative', top: 5 }}
+            />
             {history?.status ? 'Edit Result' : 'Interview'}
           </Link>
         </MenuItem>
