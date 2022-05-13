@@ -172,9 +172,9 @@ export default function ChangePasswordd() {
                     )
                   }}
                 />
-                {formik.touched.password && formik.errors.password && (
-                  <FormHelperText error id="standard-weight-helper-text-password-login">
-                    {formik.errors.password}
+                {formik.touched.oldpassword && formik.errors.oldpassword && (
+                  <FormHelperText error id="standard-weight-helper-text-oldpassword-login">
+                    {formik.errors.oldpassword}
                   </FormHelperText>
                 )}
               </FormControl>
