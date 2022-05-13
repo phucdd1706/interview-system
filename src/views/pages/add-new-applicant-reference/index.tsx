@@ -64,7 +64,7 @@ const AddApplicantReference = () => {
             .max(11)
             .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
-          address: yup.string().trim().max(255),
+          address: yup.string().trim().max(150),
           applyPosition: yup.array().of(
             yup.object().shape({
               language_id: yup.string().required('Language is required'),

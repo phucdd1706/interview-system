@@ -32,6 +32,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
   const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
   const { language } = useSelector((state) => state.language);
   const { ranks } = useSelector((state) => state.rank);
+  const [languageOptions, setLanguageOptions] = React.useState<Languages[]>(language);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   React.useEffect(() => {
     axios.all([axiosServices.get('/v1/languages/all'), axiosServices.get('/v1/ranks/all')]).then((res) => {
@@ -44,6 +45,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
       (item: { language_id: string; rank_id: string; rank_advanced_id: string }) =>
         item.language_id && item.rank_id && item.rank_advanced_id
     );
+    console.log(values.applyPosition);
     if (isReady) {
       setIsSubmitting(true);
       await dispatch(getInterviewQuestionThunk(values));
@@ -52,6 +54,16 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
       alertError('Please select all field in apply position');
     }
   };
+  React.useEffect(() => {
+    setLanguageOptions(language);
+  }, [language]);
+  React.useEffect(() => {
+    const languageSelected = values.applyPosition.map((item: any) => item.language_id);
+    if (languageSelected.length > 0) {
+      const remoteLanguageSelected = language.filter((item: Languages) => !languageSelected.includes(item.id));
+      setLanguageOptions(remoteLanguageSelected);
+    }
+  }, [values, language]);
   return (
     <Box>
       <>
@@ -91,7 +103,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                     <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={language}
+                          options={[...languageOptions].sort((a: Languages, b: Languages) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
@@ -113,7 +127,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={ranks}
+                          options={[...ranks].sort((a: RankType, b: RankType) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
@@ -133,7 +149,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={ranks}
+                          options={[...ranks].sort((a: RankType, b: RankType) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
                           }}

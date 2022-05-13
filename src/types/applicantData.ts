@@ -38,7 +38,7 @@ export interface ApplicantInfo {
   phone: string;
   address: string;
   time: string;
-  questions?: Array<{ question_id: number; status?: number | string; type?: string }>;
+  questions?: Array<{ question_id: number; status?: number | string; type?: string; language_id?: number }>;
   experiences?: Job[];
   applyPosition: Array<{
     rank_advanced_id: string;
@@ -57,7 +57,7 @@ export interface ApplicantDataAPI {
   phone: string;
   address: string;
   time: string;
-  questions?: Array<{ question_id: number; status?: number | string }>;
+  questions?: Array<{ question_id: number; status?: number | string; type?: string; language_id?: number }>;
   experiences?: Job[];
   applyPosition?: Array<{
     rank_advanced_id: string;
