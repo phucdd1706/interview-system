@@ -150,7 +150,7 @@ const History = ({ history, index, getList }: Props) => {
         <TableCell>{history?.age}</TableCell>
         <TableCell>{moment(history?.time).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{moment(history?.created_at).format('DD/MM/YYYY HH:mm')}</TableCell>
-        <TableCell>{history?.status ? moment(history?.updated_at).format('DD/MM/YYYY HH:mm') : 'N/A'}</TableCell>
+        <TableCell>{moment(history?.updated_at).format('DD/MM/YYYY HH:mm')}</TableCell>
         <TableCell>{renderStatus(history?.status)}</TableCell>
         <TableCell align="center">{renderMenuButton()}</TableCell>
       </TableRow>
