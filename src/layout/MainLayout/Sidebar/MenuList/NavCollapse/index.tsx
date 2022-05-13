@@ -32,7 +32,7 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
 
   useEffect(() => {
     const childrens = menu.children ? menu.children : [];
-    childrens.forEach((item: any) => {
+    const isSelected = childrens.some((item: any) => {
       if (pathname && pathname.includes('product-details')) {
         if (item.url && item.url.includes('product-details')) {
           setOpen(true);
@@ -40,8 +40,14 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
       }
       if (item.url === pathname) {
         setOpen(true);
+        setSelected(menu.id);
+        return true;
       }
+      return false;
     });
+    if (!isSelected) {
+      setSelected(null);
+    }
   }, [pathname, menu.children]);
 
   // menu collapse & item
@@ -80,13 +86,14 @@ const NavCollapse = ({ menu, level }: NavCollapseProps) => {
           borderRadius: `${borderRadius}px`,
           mb: 0.5,
           alignItems: 'flex-start',
-          backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
+          backgroundColor: !selected ? 'transparent !important' : 'inherit',
           py: level > 1 ? 1 : 1.25,
           pl: `${level * 24}px`
         }}
         selected={selected === menu.id}
         onClick={handleClick}
       >
+        {console.log(selected)}
         <ListItemIcon sx={{ my: 'auto', minWidth: !menu.icon ? 18 : 36 }}>{menuIcon}</ListItemIcon>
         <ListItemText
           primary={
