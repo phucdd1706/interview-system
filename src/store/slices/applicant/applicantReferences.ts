@@ -111,12 +111,19 @@ const applicantReferences = createSlice({
       });
     },
     sortDataByKey(state, action: { payload: 'status' | 'rank_id' | 'language_id' | 'type' | 'question_content' }) {
+      console.table(action.payload);
       const base = [...state.interviewQuestions[0].questions.base];
       // @ts-ignore: Unreachable code error
       if (base[0][action.payload] > base[base.length - 1][action.payload]) {
-        base.sort((a, b) => Number(a[action.payload]) - Number(b[action.payload]));
+        base.sort((a: QuestionType, b: QuestionType) =>
+          // @ts-ignore: Unreachable code error
+          a[action.payload] !== undefined && b[action.payload] !== undefined && a[action.payload] > b[action.payload] ? 1 : -1
+        );
       } else {
-        base.sort((a, b) => Number(b[action.payload]) - Number(a[action.payload]));
+        base.sort((a: QuestionType, b: QuestionType) =>
+          // @ts-ignore: Unreachable code error
+          a[action.payload] !== undefined && b[action.payload] !== undefined && a[action.payload] < b[action.payload] ? 1 : -1
+        );
       }
       Object.assign(state.interviewQuestions[0].questions, { base });
     },

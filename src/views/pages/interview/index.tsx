@@ -15,8 +15,10 @@ import {
   MenuItem,
   Chip,
   Dialog,
-  DialogTitle
+  DialogTitle,
+  TableContainer
 } from '@mui/material';
+import { FixedSizeList as List } from 'react-window';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -151,8 +153,8 @@ const Interview = () => {
     return result && result.status;
   };
 
-  const updateEvaluateValue = (candidate_id: number, value: number) => {
-    dispatch(handleAnswerStatus({ id: candidate_id, status: value }));
+  const updateEvaluateValue = async (candidate_id: number, value: number) => {
+    await dispatch(handleAnswerStatus({ id: candidate_id, status: value }));
   };
 
   const sendInterviewResult = async () => {
@@ -179,9 +181,19 @@ const Interview = () => {
             {personalDetail.map((group) => (
               <Stack direction="row" key={group.label}>
                 {group.render.map((detail) => (
-                  <Typography variant="h4" sx={{ width: `calc(100% / ${group.render.length})` }} key={detail.key}>
+                  <Typography
+                    variant="h4"
+                    sx={{ width: `calc(100% / ${group.render.length})`, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    key={detail.key}
+                  >
                     {detail.label}:{' '}
-                    <span style={{ fontWeight: 'initial', textTransform: 'capitalize' }}>
+                    <span
+                      style={{
+                        fontWeight: 'initial',
+                        textTransform: 'capitalize',
+                        wordBreak: 'break-all'
+                      }}
+                    >
                       {detail.key === 'time'
                         ? moment(applicantInfo[detail.key as personalKey]).format('DD/MM/YYYY HH:mm')
                         : applicantInfo[detail.key as personalKey]}
@@ -192,77 +204,95 @@ const Interview = () => {
             ))}
           </Stack>
           <Divider sx={{ marginTop: 6 }} />
-          <Box>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {tableColumns.map((column) => (
-                    <TableCell
-                      key={column.name}
-                      sx={column.sx}
-                      onClick={() => {
-                        column.sort_key &&
-                          dispatch(sortDataByKey(column.sort_key as 'type' | 'status' | 'rank_id' | 'language_id' | 'question_content'));
-                      }}
-                    >
-                      {column.name}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {interviewQuestions.map((question) =>
-                  Object.keys(question.questions).map((key) =>
-                    question.questions[key as 'base' | 'advanced' | 'focus'].map((item, itemIndex) => (
-                      <TableRow
-                        key={item.candidate_id}
-                        sx={{
-                          '&:hover': {
-                            backgroundColor: '#f6f6f6'
-                          }
+          <Box
+            sx={{
+              maxHeight: '800px',
+              overflow: 'hidden'
+            }}
+          >
+            <TableContainer
+              sx={{
+                maxHeight: '600px',
+                '&::-webkit-scrollbar': {
+                  width: '5px'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: 'rgba(100,100,100,0.5)',
+                  borderRadius: '3px'
+                }
+              }}
+            >
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {tableColumns.map((column) => (
+                      <TableCell
+                        key={column.name}
+                        sx={column.sx}
+                        onClick={() => {
+                          column.sort_key &&
+                            dispatch(sortDataByKey(column.sort_key as 'type' | 'status' | 'rank_id' | 'language_id' | 'question_content'));
                         }}
                       >
-                        <TableCell align="center">{itemIndex + 1}</TableCell>
-                        <TableCell sx={{ maxWidth: '350px', overflow: 'hidden', wordBreak: 'break-word' }}>
-                          {item.question_content}
-                        </TableCell>
-                        <TableCell>{(item.language && item.language.name) || ''}</TableCell>
-                        <TableCell>{(item.rank && item.rank.name) || ''}</TableCell>
-                        <TableCell sx={{ color: item.type ? 'red' : '#2196f3' }}>
-                          <ChipByType type={item.type as 'base' | 'focus' | 'advanced'} />
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            fullWidth
-                            labelId="demo-simple-select-standard-label"
-                            value={getEvaluateValue(item.candidate_id || 2)}
-                            sx={{
-                              '& .MuiSelect-standard': {
-                                color: colorStatus(Number(getEvaluateValue(item.candidate_id || 2)))
-                              }
-                            }}
-                            id="demo-simple-select-standard"
-                            label="Age"
-                            variant="standard"
-                            onChange={(e) => updateEvaluateValue(item.candidate_id || 0, Number(e.target.value))}
-                          >
-                            <MenuItem value={0} sx={{ color: 'red' }}>
-                              Fail
-                            </MenuItem>
-                            <MenuItem value={1} sx={{ color: 'green' }}>
-                              Pass
-                            </MenuItem>
-                            <MenuItem value={2} sx={{ color: '#2196f3' }}>
-                              Skip
-                            </MenuItem>
-                          </Select>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )
-                )}
-              </TableBody>
-            </Table>
+                        {column.name}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {interviewQuestions.map((question) =>
+                    Object.keys(question.questions).map((key) =>
+                      question.questions[key as 'base' | 'advanced' | 'focus'].map((item, itemIndex) => (
+                        <TableRow
+                          key={item.candidate_id}
+                          sx={{
+                            '&:hover': {
+                              backgroundColor: '#f6f6f6'
+                            }
+                          }}
+                        >
+                          <TableCell align="center">{itemIndex + 1}</TableCell>
+                          <TableCell sx={{ maxWidth: '350px', overflow: 'hidden', wordBreak: 'break-word' }}>
+                            {item.question_content}
+                          </TableCell>
+                          <TableCell>{(item.language && item.language.name) || ''}</TableCell>
+                          <TableCell>{(item.rank && item.rank.name) || ''}</TableCell>
+                          <TableCell sx={{ color: item.type ? 'red' : '#2196f3' }}>
+                            <ChipByType type={item.type as 'base' | 'focus' | 'advanced'} />
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              fullWidth
+                              labelId="demo-simple-select-standard-label"
+                              value={getEvaluateValue(item.candidate_id || 2)}
+                              sx={{
+                                '& .MuiSelect-standard': {
+                                  color: colorStatus(Number(getEvaluateValue(item.candidate_id || 2)))
+                                }
+                              }}
+                              id="demo-simple-select-standard"
+                              label="Age"
+                              variant="standard"
+                              onChange={(e) => updateEvaluateValue(item.candidate_id || 0, Number(e.target.value))}
+                            >
+                              <MenuItem value={0} sx={{ color: 'red' }}>
+                                Fail
+                              </MenuItem>
+                              <MenuItem value={1} sx={{ color: 'green' }}>
+                                Pass
+                              </MenuItem>
+                              <MenuItem value={2} sx={{ color: '#2196f3' }}>
+                                Skip
+                              </MenuItem>
+                            </Select>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Box>
           <Box marginTop={6}>
             <TextareaAutosize

@@ -202,7 +202,14 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
                       onChange={(date) => {
                         formik.setFieldValue('dob', date);
                       }}
-                      renderInput={(props) => <TextField fullWidth {...props} />}
+                      renderInput={(props) => (
+                        <TextField
+                          fullWidth
+                          {...props}
+                          error={formik.values.dob === null}
+                          helperText={formik.touched.dob && formik.errors.dob}
+                        />
+                      )}
                     />
                   </Grid>
                   <Grid item xs={12}>

@@ -45,6 +45,7 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
       (item: { language_id: string; rank_id: string; rank_advanced_id: string }) =>
         item.language_id && item.rank_id && item.rank_advanced_id
     );
+    console.log(values.applyPosition);
     if (isReady) {
       setIsSubmitting(true);
       await dispatch(getInterviewQuestionThunk(values));
@@ -102,7 +103,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                     <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ flexGrow: 1 }}>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={languageOptions}
+                          options={[...languageOptions].sort((a: Languages, b: Languages) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].language_id`, (value && value.id) || '');
                           }}
@@ -124,7 +127,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={ranks}
+                          options={[...ranks].sort((a: RankType, b: RankType) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_id`, (value && value.id) || '');
                           }}
@@ -144,7 +149,9 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
                       </FormControl>
                       <FormControl fullWidth error={Boolean(touched.applyPosition && errors.applyPosition)}>
                         <Autocomplete
-                          options={ranks}
+                          options={[...ranks].sort((a: RankType, b: RankType) =>
+                            a.name !== undefined && b.name !== undefined && a.name > b.name ? 1 : -1
+                          )}
                           onChange={(event, value) => {
                             setFieldValue(`applyPosition[${index}].rank_advanced_id`, (value && value.id) || '');
                           }}
