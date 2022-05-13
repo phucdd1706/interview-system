@@ -18,11 +18,6 @@ interface Props {
 
 const QuestionStack = ({ questionStack, interviewing, onClickAddButton, onClickDeleteButton }: Props) => (
   <Box>
-    <Stack direction="row" marginBottom={2}>
-      <Typography variant="h3" component="h3" sx={{ flexGrow: 1 }}>
-        {questionStack.language}
-      </Typography>
-    </Stack>
     <Stack direction="column" spacing={2}>
       {Object.keys(questionStack.questions).map((key: string) => (
         <Box key={`${questionStack.language}-${key}`}>

@@ -303,7 +303,6 @@ const Questions = () => {
                           selected={status.value === filter.type}
                           onClick={(event) => handleMenuTypeClick(event, status.value)}
                         >
-                          {console.log('status: ', status.value === filter.type)}
                           {status.label}
                         </MenuItem>
                       ))}

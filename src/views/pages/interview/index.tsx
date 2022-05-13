@@ -163,12 +163,9 @@ const Interview = () => {
       status: 1
     };
     await axiosPut(`${process.env.REACT_APP_API_URL}/v1/client/candidates/${id}`, data, 'Complete').then((res: any) => {
-      console.log(res);
       const filterRank = res.message === 'advance' ? 'advanced' : 'focus';
       const questionInRank = res.success.candidate_question.find((element: any) => element.type === filterRank);
       const getRank = questionInRank.question.rank.name;
-      console.log(getRank);
-      console.log('questionInRank', questionInRank);
       handleDialogOpen({ rank: getRank, status: res.message || 'No message' });
     });
     setIsSubmitting(false);
