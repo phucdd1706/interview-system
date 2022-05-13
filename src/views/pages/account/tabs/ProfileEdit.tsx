@@ -65,8 +65,12 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
   const currUser = useSelector((state) => state.profile.userProfile);
   const [user, setUser] = useState(currUser);
 
+  const getUserProfile = async () => {
+    await dispatch(getProfile());
+  };
+
   useEffect(() => {
-    dispatch(getProfile());
+    getUserProfile();
   }, []);
 
   useEffect(() => {
@@ -82,12 +86,26 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
       gender: user?.gender
     },
     validationSchema,
-    onSubmit: (values) => {
-      onEditProfile(values);
-      handleDialogOpen();
+    onSubmit: async (values) => {
+      await onEditProfile(values);
       formik.resetForm();
     }
   });
+
+  const Notification = (color: string, message: string) => {
+    dispatch(
+      openSnackbar({
+        open: true,
+        message,
+        anchorOrigin: { vertical: 'top', horizontal: 'right' },
+        variant: 'alert',
+        alert: {
+          color
+        },
+        close: true
+      })
+    );
+  };
 
   const onEditProfile = async (values: ChangePassword) => {
     await dispatch(
@@ -95,18 +113,14 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
         params: values,
         callback: (res) => {
           if (res?.data?.success) {
-            dispatch(
-              openSnackbar({
-                open: true,
-                message: 'Edit Success',
-                anchorOrigin: { vertical: 'top', horizontal: 'right' },
-                variant: 'alert',
-                alert: {
-                  color: 'success'
-                },
-                close: true
-              })
-            );
+            getUserProfile();
+            Notification('success', 'Edit Success');
+            handleDialogOpen();
+            formik.resetForm();
+          } else if (res?.message === 'The given data was invalid.') {
+            Notification('error', 'Phone Number has already been taken');
+          } else {
+            Notification('error', res?.message);
           }
         }
       })
