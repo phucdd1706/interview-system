@@ -187,13 +187,7 @@ const Interview = () => {
                     key={detail.key}
                   >
                     {detail.label}:{' '}
-                    <span
-                      style={{
-                        fontWeight: 'initial',
-                        textTransform: 'capitalize',
-                        wordBreak: 'break-all'
-                      }}
-                    >
+                    <span style={{ fontWeight: 'initial', textTransform: 'capitalize', wordWrap: 'break-word' }}>
                       {detail.key === 'time'
                         ? moment(applicantInfo[detail.key as personalKey]).format('DD/MM/YYYY HH:mm')
                         : applicantInfo[detail.key as personalKey]}
