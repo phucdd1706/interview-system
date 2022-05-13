@@ -112,7 +112,7 @@ const ProfileEdit = ({ open, handleDialogOpen }: Props) => {
       })
     );
   };
-  console.log(formik.values.dob);
+
   return (
     <Dialog
       open={open}
