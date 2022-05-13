@@ -18,6 +18,9 @@ const personalDetail = [
         key: 'phone',
         label: 'Phone Number',
         type: 'tel',
+        inputProps: {
+          startAdornment: '(+84)'
+        },
         required: true
       }
     ]
