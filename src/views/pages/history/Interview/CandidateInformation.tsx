@@ -41,7 +41,7 @@ const CandidateInformation = ({ dataCandidate }: Props) => {
             <Typography variant="h4">Name:</Typography>
           </Grid>
           <Grid item xs={7} sm={4}>
-            {dataCandidate?.name}
+            <p style={{ whiteSpace: 'break-spaces' }}>{dataCandidate?.name}</p>
           </Grid>
           <Grid item xs={5} sm={2}>
             <Typography variant="h4">Age:</Typography>
@@ -56,7 +56,7 @@ const CandidateInformation = ({ dataCandidate }: Props) => {
             <Typography variant="h4">Email:</Typography>
           </Grid>
           <Grid item xs={7} sm={4}>
-            {dataCandidate?.email}
+            <p style={{ whiteSpace: 'break-spaces' }}>{dataCandidate?.email}</p>
           </Grid>
           <Grid item xs={5} sm={2}>
             <Typography variant="h4">Phone:</Typography>
@@ -80,7 +80,7 @@ const CandidateInformation = ({ dataCandidate }: Props) => {
             <Typography variant="h4">Address:</Typography>
           </Grid>
           <Grid item xs={7} sm={10}>
-            {dataCandidate?.address}
+            <p style={{ whiteSpace: 'break-spaces' }}>{dataCandidate?.address}</p>
           </Grid>
         </Grid>
 
@@ -89,7 +89,7 @@ const CandidateInformation = ({ dataCandidate }: Props) => {
             <Typography variant="h4">Note:</Typography>
           </Grid>
           <Grid item xs={7} sm={10} xl={10}>
-            {dataCandidate?.note}
+            <p style={{ whiteSpace: 'break-spaces' }}>{dataCandidate?.note}</p>
           </Grid>
         </Grid>
       </Grid>
