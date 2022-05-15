@@ -103,7 +103,7 @@ const AddHistory = ({ dataEdit, visible, handleVisibleModal, getList }: Props) =
     name: yup
       .string()
       .trim()
-      .min(3, 'Name must have at least 3 characters')
+      .min(2, 'Name must have at least 2 characters')
       .max(50, `Maximum characters allowed is 50`)
       .matches(isFullName, 'Sorry, only letters (a-z) are allowed')
       .required('Name is required'),
