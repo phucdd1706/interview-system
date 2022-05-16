@@ -14,11 +14,8 @@ import {
   Select,
   MenuItem,
   Chip,
-  Dialog,
-  DialogTitle,
   TableContainer
 } from '@mui/material';
-import { FixedSizeList as List } from 'react-window';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -34,6 +31,7 @@ import { activeItem } from 'store/slices/menu';
 import MainCard from 'ui-component/cards/MainCard';
 import { handleAnswerStatus, handleInterviewNote, sortDataByKey } from 'store/slices/applicant/applicantReferences';
 import { getInterviewDataThunk } from 'store/slices/applicant/applicantAsyncAction';
+import InterviewDialog from './dialogMessage';
 
 type personalKey = 'name' | 'email' | 'phone' | 'address' | 'age' | 'time';
 
@@ -64,72 +62,6 @@ const colorStatus = (status: number) => {
     default:
       return '#2196f3';
   }
-};
-
-interface InterviewDialogProps {
-  handleClose: () => void;
-  message: {
-    rank: string;
-    status: string;
-  };
-}
-
-const InterviewDialog = ({ handleClose, message }: InterviewDialogProps) => {
-  const navigate = useNavigate();
-  const handleMessage = (dialogMessage: { rank: string; status: string }) => {
-    switch (dialogMessage.status) {
-      case 'fail':
-        return (
-          <Typography variant="body1" component="p" sx={{ color: '#e53935' }}>
-            [Failed]: Knowledge of the applicant is not enough for rank <span style={{ fontWeight: 'bold' }}>{dialogMessage.rank}</span>.
-          </Typography>
-        );
-      case 'pass':
-        return (
-          <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
-            [Passed]: Knowledge of the applicant is eligible for rank {dialogMessage.rank}.
-          </Typography>
-        );
-      case 'advance':
-        return (
-          <Typography variant="body1" component="p" sx={{ color: '#43a047' }}>
-            [Passed]: Applicant has a solid knowledge and eligible for rank {dialogMessage.rank}.
-          </Typography>
-        );
-      default:
-        return (
-          <Typography variant="body1" component="p" color="success">
-            {dialogMessage.status}
-          </Typography>
-        );
-    }
-  };
-  return (
-    <Dialog onClose={handleClose} open={Boolean(message)}>
-      <DialogTitle>Reference Evaluate</DialogTitle>
-      <Divider />
-      <Box sx={{ minWidth: 300, padding: '16px 24px' }}>
-        {handleMessage(message)}
-        <Box marginTop={6}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              size="large"
-              variant="contained"
-              color="primary"
-              onClick={async () => {
-                await handleClose();
-                navigate('/history');
-              }}
-            >
-              go to history
-            </Button>
-          </AnimateButton>
-        </Box>
-      </Box>
-    </Dialog>
-  );
 };
 
 const Interview = () => {
