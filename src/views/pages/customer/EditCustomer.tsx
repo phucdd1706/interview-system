@@ -103,11 +103,7 @@ const validationSchema = yup.object({
     )
     .email('Enter a valid email')
     .required('Email is required'),
-<<<<<<< HEAD
   phone: yup.string().trim().required('Phone is required').max(11).matches(isPhone, 'Enter the correct format phone'),
-=======
-  phone: yup.string().required('Phone is required').max(12).matches(isPhone, 'Enter the correct format phone'),
->>>>>>> 0619a7e1d13f58e3e29457b48f89868762514593
   password: yup.string().trim().min(6).max(255),
   password_confirmation: yup
     .string()
