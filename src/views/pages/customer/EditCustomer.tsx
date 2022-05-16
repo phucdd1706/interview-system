@@ -82,27 +82,33 @@ const Status: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup
     .string()
-    .max(50, 'Maximum 50 characters')
-    .min(3, 'Minimum 3 characters')
+    .trim()
+    .min(2, 'Name must have at least 2 characters')
+    .max(50, `Maximum characters allowed is 50`)
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
   username: yup
     .string()
-    .max(50, 'Maximum 50 characters')
+    .trim()
+    .max(50, `Maximum characters allowed is 50`)
     .matches(isUserName, 'The username must only contain letters, numbers, dashes and underscores.')
     .required('Username is required'),
   email: yup
     .string()
-    .max(50, 'Maximum 50 characters')
+    .trim()
+    .max(50, `Maximum characters allowed is 50`)
     .matches(
       isEmail,
       'Sorry, first character of email must be an letters (a-z) or number (0-9), letters(a-z), numbers (0-9), periods (.) are allowed'
     )
     .email('Enter a valid email')
     .required('Email is required'),
-  phone: yup.string().required('Phone is required').max(12).matches(isPhone, 'Enter the correct format phone'),
+  phone: yup.string().trim().required('Phone is required').max(11).matches(isPhone, 'Enter the correct format phone'),
   password: yup.string().trim().min(6).max(255),
-  password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Password do not match'),
+  password_confirmation: yup
+    .string()
+    .trim()
+    .oneOf([yup.ref('password'), null], 'Password do not match'),
   gender: yup.string().required('Gender is required'),
   type: yup.string().required('Type is required'),
   status: yup.string().required('Status is required')

@@ -52,11 +52,12 @@ const Gender: SelectProps[] = [
 const validationSchema = yup.object({
   name: yup
     .string()
-    .max(50, 'Maximum 50 characters')
-    .min(3, 'Minimum 3 characters')
+    .trim()
+    .min(2, 'Name must have at least 2 characters')
+    .max(50, `Maximum characters allowed is 50`)
     .matches(isFullName, 'Sorry, only letters (a-z) are allowed ')
     .required('Name is required'),
-  phone: yup.string().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
+  phone: yup.string().trim().required('Phone is required').matches(isPhone, 'Enter the correct format phone'),
   dob: yup.date().required('Date of Birth is required').nullable(),
   gender: yup.string().required('Gender is required')
 });
