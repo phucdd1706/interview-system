@@ -71,12 +71,13 @@ const ApplicantForm = ({ interviewing, errors, handleBlur, handleChange, handleS
           const { render } = row;
           return (
             <Stack direction={matchDownMD ? 'column' : 'row'} spacing={2} sx={{ paddingBottom: 2 }} key={row.label}>
-              {render.map((item: { key: string; label: string; type: string; required?: boolean }) => {
+              {render.map((item: { key: string; label: string; type: string; required?: boolean; inputProps?: any }) => {
                 const key: personalDetailType = item.key as personalDetailType;
                 const { label, type, required } = item;
                 return (
                   <FormInput
                     key={`${row.label}-${label}`}
+                    InputProps={{ ...item.inputProps }}
                     touched={touched[key]}
                     errors={errors[key]}
                     label={label}

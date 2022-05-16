@@ -61,7 +61,7 @@ const AddApplicantReference = () => {
           phone: yup
             .string()
             .trim()
-            .max(11)
+            .max(12)
             .matches(isPhone, 'Please enter the correct phone number format')
             .required('Phone number is required'),
           address: yup.string().trim().max(150),
